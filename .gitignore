@@ -369,6 +369,8 @@ serena/
 
 # Screenshots
 *.png
+# But include texture files
+!resources/textures/**/*.png
 
 # Large texture files (DDS files)
 *.dds
