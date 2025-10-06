@@ -2,7 +2,130 @@
 #include "StringUtility.h"
 #include "SrvManager.h"
 
+// stb_image for HDR loading (without implementation, already defined in Model.cpp)
+#include "../../../externals/tinygltf/stb_image.h"
+
 using namespace StringUtility;
+
+// HDRLoader名前空間の実装
+namespace HDRLoader {
+    bool LoadHDRImage(const std::string& filePath, DirectX::ScratchImage& image) {
+        int width, height, channels;
+        float* data = stbi_loadf(filePath.c_str(), &width, &height, &channels, 4);
+
+        if (!data) {
+            OutputDebugStringA(("HDRLoader: Failed to load HDR file: " + filePath + "\n").c_str());
+            return false;
+        }
+
+        // ScratchImageを初期化 (RGBA32フォーマット)
+        HRESULT hr = image.Initialize2D(DXGI_FORMAT_R32G32B32A32_FLOAT, width, height, 1, 1);
+        if (FAILED(hr)) {
+            stbi_image_free(data);
+            OutputDebugStringA("HDRLoader: Failed to initialize ScratchImage\n");
+            return false;
+        }
+
+        // データをコピー
+        memcpy(image.GetPixels(), data, width * height * 4 * sizeof(float));
+        stbi_image_free(data);
+
+        OutputDebugStringA(("HDRLoader: Successfully loaded HDR image: " + filePath + " (" + std::to_string(width) + "x" + std::to_string(height) + ")\n").c_str());
+        return true;
+    }
+
+    bool ConvertEquirectangularToCubemap(const DirectX::ScratchImage& equirectangular, DirectX::ScratchImage& cubemap) {
+        const DirectX::TexMetadata& srcMeta = equirectangular.GetMetadata();
+
+        // Cubemapのサイズを決定（元の高さの半分をキューブの一辺とする）
+        size_t cubeFaceSize = srcMeta.height / 2;
+
+        // Cubemap用のScratchImageを初期化 (6面分のarray)
+        HRESULT hr = cubemap.Initialize2D(
+            DXGI_FORMAT_R32G32B32A32_FLOAT,
+            cubeFaceSize,
+            cubeFaceSize,
+            6, // 6 faces
+            1  // 1 mip level
+        );
+
+        if (FAILED(hr)) {
+            OutputDebugStringA("HDRLoader: Failed to initialize cubemap ScratchImage\n");
+            return false;
+        }
+
+        const float* srcData = reinterpret_cast<const float*>(equirectangular.GetPixels());
+
+        // 各キューブ面を生成
+        for (size_t face = 0; face < 6; ++face) {
+            const DirectX::Image* cubeFaceImage = cubemap.GetImage(0, face, 0);
+            float* dstData = reinterpret_cast<float*>(cubeFaceImage->pixels);
+
+            for (size_t y = 0; y < cubeFaceSize; ++y) {
+                for (size_t x = 0; x < cubeFaceSize; ++x) {
+                    // UV座標を-1から1に正規化
+                    float u = (static_cast<float>(x) + 0.5f) / cubeFaceSize * 2.0f - 1.0f;
+                    float v = (static_cast<float>(y) + 0.5f) / cubeFaceSize * 2.0f - 1.0f;
+
+                    // キューブ面の方向ベクトルを計算
+                    float dirX = 0, dirY = 0, dirZ = 0;
+                    switch (face) {
+                        case 0: // +X
+                            dirX = 1.0f; dirY = -v; dirZ = -u;
+                            break;
+                        case 1: // -X
+                            dirX = -1.0f; dirY = -v; dirZ = u;
+                            break;
+                        case 2: // +Y
+                            dirX = u; dirY = 1.0f; dirZ = v;
+                            break;
+                        case 3: // -Y
+                            dirX = u; dirY = -1.0f; dirZ = -v;
+                            break;
+                        case 4: // +Z
+                            dirX = u; dirY = -v; dirZ = 1.0f;
+                            break;
+                        case 5: // -Z
+                            dirX = -u; dirY = -v; dirZ = -1.0f;
+                            break;
+                    }
+
+                    // 方向ベクトルを正規化
+                    float len = sqrtf(dirX * dirX + dirY * dirY + dirZ * dirZ);
+                    dirX /= len;
+                    dirY /= len;
+                    dirZ /= len;
+
+                    // 球面座標に変換
+                    float theta = atan2f(dirZ, dirX); // -π to π
+                    float phi = asinf(dirY);          // -π/2 to π/2
+
+                    // Equirectangular UVに変換（V座標を反転）
+                    float srcU = (theta + 3.14159265f) / (2.0f * 3.14159265f);
+                    float srcV = 1.0f - (phi + 3.14159265f / 2.0f) / 3.14159265f;
+
+                    // 元画像からサンプリング
+                    int srcX = static_cast<int>(srcU * srcMeta.width) % static_cast<int>(srcMeta.width);
+                    int srcY = static_cast<int>(srcV * srcMeta.height) % static_cast<int>(srcMeta.height);
+
+                    if (srcX < 0) srcX += static_cast<int>(srcMeta.width);
+                    if (srcY < 0) srcY += static_cast<int>(srcMeta.height);
+
+                    size_t srcIndex = (srcY * srcMeta.width + srcX) * 4;
+                    size_t dstIndex = (y * cubeFaceSize + x) * 4;
+
+                    dstData[dstIndex + 0] = srcData[srcIndex + 0]; // R
+                    dstData[dstIndex + 1] = srcData[srcIndex + 1]; // G
+                    dstData[dstIndex + 2] = srcData[srcIndex + 2]; // B
+                    dstData[dstIndex + 3] = srcData[srcIndex + 3]; // A
+                }
+            }
+        }
+
+        OutputDebugStringA(("HDRLoader: Successfully converted equirectangular to cubemap (" + std::to_string(cubeFaceSize) + "x" + std::to_string(cubeFaceSize) + " per face)\n").c_str());
+        return true;
+    }
+}
 
 TextureManager* TextureManager::instance = nullptr;
 
@@ -98,16 +221,31 @@ bool TextureManager::LoadTexture(const std::string& filePath)
         DirectX::ScratchImage image{};
         std::wstring filePathW = ConvertString(filePath);
         HRESULT hr;
-        
-        // 拡張子を確認してDDSかWICファイルかを判断
-        if (filePath.ends_with(".dds")) {
+
+        // 拡張子を確認してDDS、HDR、WICファイルかを判断
+        if (filePath.ends_with(".hdr")) {
+            // HDRファイルの場合はstb_imageを使用
+            DirectX::ScratchImage equirectangular{};
+            if (!HDRLoader::LoadHDRImage(filePath, equirectangular)) {
+                OutputDebugStringA(("ERROR: TextureManager::LoadTexture - Failed to load HDR file: " + filePath + "\n").c_str());
+                throw std::runtime_error("Failed to load HDR file");
+            }
+
+            // EquirectangularをCubemapに変換
+            if (!HDRLoader::ConvertEquirectangularToCubemap(equirectangular, image)) {
+                OutputDebugStringA(("ERROR: TextureManager::LoadTexture - Failed to convert HDR to cubemap: " + filePath + "\n").c_str());
+                throw std::runtime_error("Failed to convert HDR to cubemap");
+            }
+
+            hr = S_OK; // HDR読み込み成功
+        } else if (filePath.ends_with(".dds")) {
             // DDSファイルの場合はLoadFromDDSFileを使用
             hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);
         } else {
             // 通常のファイル（png, jpegなど）の場合はLoadFromWICFileを使用
             hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
         }
-        
+
         if (FAILED(hr)) {
             OutputDebugStringA(("ERROR: TextureManager::LoadTexture - Failed to load from file: " + filePath + "\n").c_str());
             // DDSファイルの読み込みに失敗した場合はアサート
@@ -157,10 +295,11 @@ bool TextureManager::LoadTexture(const std::string& filePath)
 
         // SRVの設定（Cubemapかどうかで分岐）
         // 複数の条件でCubemapを判定
-        bool isCubemap = textureData.metadata.IsCubemap() || 
+        bool isCubemap = textureData.metadata.IsCubemap() ||
                         (textureData.metadata.arraySize == 6 && textureData.metadata.dimension == DirectX::TEX_DIMENSION_TEXTURE2D) ||
-                        (filePath.ends_with(".dds") && 
-                         (filePath.find("cubemap") != std::string::npos || 
+                        filePath.ends_with(".hdr") || // HDRファイルは常にCubemap
+                        (filePath.ends_with(".dds") &&
+                         (filePath.find("cubemap") != std::string::npos ||
                           filePath.find("cube") != std::string::npos ||
                           filePath.find("skybox") != std::string::npos ||
                           filePath.find("airport") != std::string::npos ||

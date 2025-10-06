@@ -208,30 +208,40 @@ void Skybox::LoadCubemap(const std::string& filePath) {
     cubemapLoaded_ = false;
     cubemapSrvIndex_ = UINT32_MAX;
     cubemapFilePath_ = filePath;
-    
+
     // 基本的な安全性チェック
     if (!textureManager_) {
         OutputDebugStringA("Skybox: TextureManagerが無効です\n");
         environmentTextureLoaded_ = false;
         return;
     }
-    
+
     // ファイルの存在確認
     DWORD fileAttributes = GetFileAttributesA(filePath.c_str());
     if (fileAttributes == INVALID_FILE_ATTRIBUTES) {
-        OutputDebugStringA(("Skybox: DDSファイルが見つかりません: " + filePath + "\n").c_str());
+        OutputDebugStringA(("Skybox: ファイルが見つかりません: " + filePath + "\n").c_str());
         environmentTextureLoaded_ = false;
         return;
     }
-    
-    // DDSファイルを読み込み
+
+    // ファイル形式を判定
+    std::string fileType = "Unknown";
+    if (filePath.ends_with(".dds")) {
+        fileType = "DDS";
+    } else if (filePath.ends_with(".hdr")) {
+        fileType = "HDR";
+    }
+
+    OutputDebugStringA(("Skybox: " + fileType + "ファイルを読み込み中: " + filePath + "\n").c_str());
+
+    // Cubemapファイルを読み込み (DDS/HDR両方対応)
     bool loadResult = textureManager_->LoadTexture(filePath);
     if (!loadResult) {
-        OutputDebugStringA(("Skybox: DDSファイルの読み込みに失敗しました: " + filePath + "\n").c_str());
+        OutputDebugStringA(("Skybox: " + fileType + "ファイルの読み込みに失敗しました: " + filePath + "\n").c_str());
         environmentTextureLoaded_ = false;
         return;
     }
-    
+
     // CubemapのSRVインデックスを取得
     uint32_t srvIndex = textureManager_->GetSrvIndex(filePath);
     if (srvIndex == UINT32_MAX) {
@@ -239,16 +249,16 @@ void Skybox::LoadCubemap(const std::string& filePath) {
         environmentTextureLoaded_ = false;
         return;
     }
-    
+
     // 全ての検証が成功した場合のみ設定を適用
     cubemapSrvIndex_ = srvIndex;
     cubemapLoaded_ = true;
-    
+
     // 環境マップの自動管理機能：現在のテクスチャパスを静的変数に保存
     currentEnvironmentTexturePath_ = filePath;
     environmentTextureLoaded_ = true;
-    
-    OutputDebugStringA(("Skybox: Cubemap読み込み成功: " + filePath + ", SRVIndex: " + std::to_string(cubemapSrvIndex_) + "\n").c_str());
+
+    OutputDebugStringA(("Skybox: " + fileType + " Cubemap読み込み成功: " + filePath + ", SRVIndex: " + std::to_string(cubemapSrvIndex_) + "\n").c_str());
     OutputDebugStringA(("Skybox: 環境マップが自動設定されました: " + filePath + "\n").c_str());
 }
 

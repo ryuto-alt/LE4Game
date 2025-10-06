@@ -20,7 +20,7 @@ void GamePlayScene::Initialize() {
     fpsCamera_->Initialize(true); 
 
     player_ = std::make_unique<Player>();
-    player_->Initialize(camera_, true, true); // コリジョン有効、環境マップ有効
+    player_->Initialize(camera_, true, false); // コリジョン有効、環境マップ無効
     player_->SetupCamera(engine);
 
     groundModel_ = engine->CreateAnimatedModel();
@@ -28,8 +28,8 @@ void GamePlayScene::Initialize() {
 
     ground_ = engine->CreateObject3D();
 
-    // 環境マップを先に設定（SetModelの前に）
-    Object3d::SetEnvTex("Resources/Models/skybox/rostock_laage_airport_4k.dds");
+    // 環境マップをHDRファイルで設定
+    Object3d::SetEnvTex("Resources/Models/skybox/warm_restaurant_night_2k.hdr");
     ground_->EnableEnv(true);
     ground_->SetModel(static_cast<Model*>(groundModel_.get()));
     ground_->SetCamera(camera_);
@@ -60,7 +60,7 @@ void GamePlayScene::Initialize() {
 
     objeObject_ = engine->CreateObject3D();
 
-    // 環境マップを先に設定（SetModelの前に）
+    // 環境マップを有効化
     objeObject_->EnableEnv(true);
     objeObject_->SetModel(static_cast<Model*>(objeModel_.get()));
     objeObject_->SetCamera(camera_);
@@ -70,9 +70,9 @@ void GamePlayScene::Initialize() {
     objeObject_->SetEnableAnimation(false);
     objeObject_->EnableCollision(true, "Object");
 
-    // Skyboxの初期化
+    // SkyboxをHDRファイルで初期化
     skybox_ = engine->CreateSkybox();
-    engine->LoadSkybox(skybox_.get(), "Resources/Models/skybox/rostock_laage_airport_4k.dds");
+    engine->LoadSkybox(skybox_.get(), "Resources/Models/skybox/warm_restaurant_night_2k.hdr");
     skyboxEnabled_ = true;
 
     // FPSカメラのマウスルックを有効化してマウスカーソルを非表示

@@ -8,6 +8,12 @@
 
 class SrvManager;
 
+// HDR読み込み用のヘルパー関数
+namespace HDRLoader {
+    bool LoadHDRImage(const std::string& filePath, DirectX::ScratchImage& image);
+    bool ConvertEquirectangularToCubemap(const DirectX::ScratchImage& equirectangular, DirectX::ScratchImage& cubemap);
+}
+
 class TextureManager
 {
 private:
