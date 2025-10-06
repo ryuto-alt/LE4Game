@@ -380,7 +380,7 @@ void DirectXCommon::End()
 	ID3D12CommandList* commandLists[] = { commandList.Get() };
 	commandQueue->ExecuteCommandLists(1, commandLists);
 	//GPUとOSに画面の交換を行う通知する
-	swapChain->Present(1, 0);
+	swapChain->Present(0, 0);
 	//Fenceの値の更新
 	fenceValue++;
 	//GPUがここまでたどりついた時に、Fenceの値を指定したあたいにC:\Program Files\Blender Foundation\Blender 4.4\4.4\scripts\addons_core\level_editor.py代入するようにsignalを送る
