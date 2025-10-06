@@ -118,7 +118,7 @@ void Object3d::Initialize(DirectXCommon* dxCommon, SpriteCommon* spriteCommon) {
 	TextureManager::GetInstance()->LoadDefaultTexture();
 	
 	// デフォルト環境マップテクスチャを事前にロード
-	std::string defaultEnvMap = "Resources/Models/skybox/tex.dds";
+	std::string defaultEnvMap = "Resources/Models/skybox/warm_restaurant_night_2k.hdr";
 	DWORD envMapAttribs = GetFileAttributesA(defaultEnvMap.c_str());
 	if (envMapAttribs != INVALID_FILE_ATTRIBUTES) {
 		TextureManager::GetInstance()->LoadTexture(defaultEnvMap);
@@ -504,7 +504,7 @@ void Object3d::Draw() {
 	// グローバル環境マップテクスチャを使用
 	std::string envTexturePath = globalEnvironmentTexturePath_;
 	if (envTexturePath.empty() || !TextureManager::GetInstance()->IsTextureExists(envTexturePath)) {
-		envTexturePath = "Resources/Models/skybox/tex.dds";
+		envTexturePath = "Resources/Models/skybox/warm_restaurant_night_2k.hdr";
 
 		if (!TextureManager::GetInstance()->IsTextureExists(envTexturePath)) {
 			TextureManager::GetInstance()->LoadTexture(envTexturePath);
@@ -723,7 +723,7 @@ void Object3d::EnableCollision(bool enabled, const std::string& name) {
 }
 
 // 静的メンバ変数の定義
-std::string Object3d::globalEnvironmentTexturePath_ = "Resources/Models/skybox/tex.dds";
+std::string Object3d::globalEnvironmentTexturePath_ = "Resources/Models/skybox/warm_restaurant_night_2k.hdr";
 
 void Object3d::SetEnvTex(const std::string& texturePath) {
 	globalEnvironmentTexturePath_ = texturePath;

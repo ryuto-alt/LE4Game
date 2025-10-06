@@ -28,9 +28,9 @@ void GamePlayScene::Initialize() {
 
     ground_ = engine->CreateObject3D();
 
-    // 環境マップをHDRファイルで設定（起動速度のため無効化）
-    //Object3d::SetEnvTex("Resources/Models/skybox/warm_restaurant_night_2k.hdr");
-    ground_->EnableEnv(false);
+    // 環境マップをHDRファイルで設定
+    Object3d::SetEnvTex("Resources/Models/skybox/warm_restaurant_night_2k.hdr");
+    ground_->EnableEnv(true);
     ground_->SetModel(static_cast<Model*>(groundModel_.get()));
     ground_->SetCamera(camera_);
     ground_->SetEnableLighting(true);
@@ -61,7 +61,7 @@ void GamePlayScene::Initialize() {
     objeObject_ = engine->CreateObject3D();
 
     // 環境マップを有効化
-    objeObject_->EnableEnv(false);
+    objeObject_->EnableEnv(true);
     objeObject_->SetModel(static_cast<Model*>(objeModel_.get()));
     objeObject_->SetCamera(camera_);
     objeObject_->SetPosition({0.0f, 0.0f, 5.0f});
@@ -72,7 +72,7 @@ void GamePlayScene::Initialize() {
 
     // SkyboxをDDSファイルで初期化
     skybox_ = engine->CreateSkybox();
-    engine->LoadSkybox(skybox_.get(), "Resources/Models/skybox/tex.dds");
+    engine->LoadSkybox(skybox_.get(), "Resources/Models/skybox/warm_restaurant_night_2k.hdr");
     skyboxEnabled_ = true;
 
     // FPSカメラのマウスルックを有効化してマウスカーソルを非表示

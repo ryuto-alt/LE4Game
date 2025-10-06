@@ -108,7 +108,7 @@ void Player::Initialize(Camera* camera, bool enableCollision, bool enableEnviron
         
         // 環境マップの設定
         if (enableEnvironmentMap) {
-            Object3d::SetEnvTex("Resources/Models/skybox/tex.dds");
+            Object3d::SetEnvTex("Resources/Models/skybox/warm_restaurant_night_2k.hdr");
             object3d_->EnableEnv(true);
         } else {
             object3d_->EnableEnv(false);
