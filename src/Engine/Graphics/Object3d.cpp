@@ -78,6 +78,7 @@ void Object3d::Initialize(DirectXCommon* dxCommon, SpriteCommon* spriteCommon) {
 	materialData_->alphaMode = 0; // OPAQUE
 	materialData_->doubleSided = 0;
 	materialData_->enableEnvironmentMap = 0; // デフォルトでオフ
+	materialData_->environmentMapIntensity = 0.3f; // デフォルト強度
 	materialData_->uvTransform = MakeIdentity4x4();
 
 	// 変換行列リソースの作成
@@ -742,5 +743,12 @@ void Object3d::EnableEnv(bool enable) {
 		OutputDebugStringA(("Object3d::EnableEnv - " + std::string(enable ? "Enabled" : "Disabled") + "\n").c_str());
 	} else {
 		OutputDebugStringA("Object3d::EnableEnv - WARNING: materialData_ is null\n");
+	}
+}
+
+void Object3d::SetEnvironmentMapIntensity(float intensity) {
+	environmentMapIntensity_ = std::clamp(intensity, 0.0f, 1.0f);
+	if (materialData_) {
+		materialData_->environmentMapIntensity = environmentMapIntensity_;
 	}
 }

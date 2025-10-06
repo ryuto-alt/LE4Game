@@ -78,7 +78,10 @@ void GamePlayScene::Initialize() {
     // FPSカメラのマウスルックを有効化してマウスカーソルを非表示
     if (fpsCamera_) {
         fpsCamera_->SetMouseLookEnabled(true);
+#ifndef _DEBUG
+        // Releaseビルドのみマウスカーソルを非表示
         engine->SetMouseCursor(false);
+#endif
     }
 }
 
@@ -129,6 +132,29 @@ void GamePlayScene::Update() {
         skybox_->Update();
     }
     player_->Update(engine);
+
+    // ImGui: 環境マップ強度調整
+#ifdef _DEBUG
+    ImGui::Begin("Environment Map Settings");
+
+    // Ground
+    if (ground_ && ground_->IsEnvEnabled()) {
+        float groundIntensity = ground_->GetEnvironmentMapIntensity();
+        if (ImGui::SliderFloat("Ground Env Intensity", &groundIntensity, 0.0f, 1.0f)) {
+            ground_->SetEnvironmentMapIntensity(groundIntensity);
+        }
+    }
+
+    // Object
+    if (objeObject_ && objeObject_->IsEnvEnabled()) {
+        float objeIntensity = objeObject_->GetEnvironmentMapIntensity();
+        if (ImGui::SliderFloat("Object Env Intensity", &objeIntensity, 0.0f, 1.0f)) {
+            objeObject_->SetEnvironmentMapIntensity(objeIntensity);
+        }
+    }
+
+    ImGui::End();
+#endif
 }
 
 void GamePlayScene::Draw() {

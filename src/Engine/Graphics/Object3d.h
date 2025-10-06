@@ -70,6 +70,10 @@ public:
     // 環境マップの有効/無効（個別モデルごと）
     void EnableEnv(bool enable);
     bool IsEnvEnabled() const { return enableEnvironmentMap_; }
+
+    // 環境マップの反射強度設定 (0.0～1.0)
+    void SetEnvironmentMapIntensity(float intensity);
+    float GetEnvironmentMapIntensity() const { return environmentMapIntensity_; }
     
     // アニメーション行列の設定
     void SetAnimationMatrix(const Matrix4x4& animationMatrix) { animationMatrix_ = animationMatrix; }
@@ -145,6 +149,9 @@ private:
 
     // 環境マップの有効/無効フラグ（個別）
     bool enableEnvironmentMap_ = false;
+
+    // 環境マップの反射強度 (0.0～1.0)
+    float environmentMapIntensity_ = 0.3f;
 
     // グローバル環境マップテクスチャパス（静的・全モデル共通）
     static std::string globalEnvironmentTexturePath_;

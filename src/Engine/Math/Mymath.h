@@ -170,7 +170,7 @@ struct Material {
 
     // パディングとして追加のフラグを配置
     int32_t enableEnvironmentMap; // 環境マップの有効/無効
-    float padding;
+    float environmentMapIntensity; // 環境マップの反射強度 (0.0～1.0)
 };
 
 struct TransformationMatrix {
