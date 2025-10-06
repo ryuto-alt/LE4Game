@@ -18,7 +18,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         // シーンマネージャーの初期化（内部でLogoシーンに設定される）
         engine->GetSceneManager()->Initialize();
-
+                
         // ゲームループの実行
         engine->Run();
 

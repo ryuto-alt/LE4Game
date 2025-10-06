@@ -1,38 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" xmlns:atg="http://atg.xbox.com" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{f4d68f4f-adbe-40a1-b052-f2e4cae3b5ae}</UniqueIdentifier>
+      <UniqueIdentifier>{68652706-b700-4472-9af7-a56a482bd896}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{b42472b0-7a63-47b0-b77f-4ffe492471a0}</UniqueIdentifier>
+      <UniqueIdentifier>{9b7fcbc5-2533-4b88-b75b-d4803e55fa7c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Shaders">
-      <UniqueIdentifier>{1838e3e6-1f80-4713-9a98-41ea7e654d12}</UniqueIdentifier>
+      <UniqueIdentifier>{eb989628-e889-44bf-837a-05c9f09b258e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Auxiliary">
+      <UniqueIdentifier>{b21bd310-5ba0-485c-82e2-9621564caf70}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{f4d68f4f-adbe-40a1-b052-f2e4cae3b5ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{b42472b0-7a63-47b0-b77f-4ffe492471a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shaders">
-      <UniqueIdentifier>{1838e3e6-1f80-4713-9a98-41ea7e654d12}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shaders\Compiled">
-      <UniqueIdentifier>{7c13ba68-1ec8-4710-a8dd-cd973621b725}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shaders\Symbols">
-      <UniqueIdentifier>{fbc9373c-d511-4fd1-a7b8-d55df1b27d2e}</UniqueIdentifier>
-    </Filter>
+    <CLInclude Include="DirectXTex.h">
+      <Filter>Header Files</Filter>
+    </CLInclude>
+    <CLInclude Include="DirectXTex.inl">
+      <Filter>Header Files</Filter>
+    </CLInclude>
+    <ClCompile Include="BC4BC5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClInclude Include="BCDirectCompute.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <CLInclude Include="DDS.h">
+      <Filter>Source Files</Filter>
+    </CLInclude>
+    <CLInclude Include="DirectXTexP.h">
+      <Filter>Source Files</Filter>
+    </CLInclude>
+    <ClInclude Include="filters.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <CLInclude Include="scoped.h">
+      <Filter>Source Files</Filter>
+    </CLInclude>
+    <ClInclude Include="..\Auxiliary\DirectXTexXbox.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\d3dx12.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BC4BC5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BC6HBC7.cpp">
@@ -50,9 +65,6 @@
     <ClCompile Include="DirectXTexConvert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DirectXTexD3D11.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DirectXTexDDS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -62,7 +74,7 @@
     <ClCompile Include="DirectXTexImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DirectXTexMipmaps.cpp">
+    <ClCompile Include="DirectXTexMipMaps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DirectXTexMisc.cpp">
@@ -89,40 +101,25 @@
     <ClCompile Include="DirectXTexHDR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DirectXTexD3D12.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\Auxiliary\DirectXTexXboxDDS.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Auxiliary\DirectXTexXboxDetile.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Auxiliary\DirectXTexXboxImage.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Auxiliary\DirectXTexXboxTile.cpp">
+      <Filter>Auxiliary</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DirectXTex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BC.h">
+    <CLInclude Include="BC.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCDirectCompute.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DDS.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXTexP.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="filters.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scoped.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="d3dx12.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
+    </CLInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DirectXTex.inl">
-      <Filter>Header Files</Filter>
-    </None>
     <None Include="Shaders\CompileShaders.cmd">
       <Filter>Source Files\Shaders</Filter>
     </None>
@@ -132,5 +129,6 @@
     <None Include="Shaders\BC7Encode.hlsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
+    <None Include="..\README.md" />
   </ItemGroup>
 </Project>

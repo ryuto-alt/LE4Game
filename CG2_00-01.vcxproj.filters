@@ -227,6 +227,15 @@
     <ClCompile Include="src\Engine\Graphics\Skybox.cpp">
       <Filter>src\Game\SkyBox</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\PostProcess.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\GameObject\FPSCamera.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\scene\LogoScene.cpp">
+      <Filter>src\Game\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -396,6 +405,11 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\Skybox.h">
       <Filter>src\Game\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\PostProcess.h" />
+    <ClInclude Include="src\Game\GameObject\FPSCamera.h" />
+    <ClInclude Include="src\Game\scene\LogoScene.h">
+      <Filter>src\Game\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
