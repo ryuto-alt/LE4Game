@@ -1,5 +1,6 @@
 #include "UnoEngine.h"
 #include "AABBCollision.h" // AABBコリジョンシステム
+#include "InstancedRenderer.h"
 #include <cassert>
 #include <algorithm>
 #include <cctype>
@@ -370,19 +371,25 @@ std::unique_ptr<Object3d> UnoEngine::CreateObject3D() {
 
 std::unique_ptr<Model> UnoEngine::LoadModel(const std::string& modelPath) {
     auto model = std::make_unique<Model>();
-    
+
     // Modelを初期化（DirectXCommonを渡す）
     model->Initialize(dxCommon_.get());
-    
+
     // パスの解析
     size_t lastSlash = modelPath.find_last_of("/\\");
-    std::string directoryPath = (lastSlash != std::string::npos) ? 
+    std::string directoryPath = (lastSlash != std::string::npos) ?
         modelPath.substr(0, lastSlash + 1) : "";
-    std::string filename = (lastSlash != std::string::npos) ? 
+    std::string filename = (lastSlash != std::string::npos) ?
         modelPath.substr(lastSlash + 1) : modelPath;
-    
+
     model->LoadFromObj(directoryPath, filename);
     return model;
+}
+
+std::unique_ptr<InstancedRenderer> UnoEngine::CreateInstancedRenderer(size_t maxInstances) {
+    auto renderer = std::make_unique<InstancedRenderer>();
+    renderer->Initialize(dxCommon_.get(), spriteCommon_.get(), maxInstances);
+    return renderer;
 }
 
 // === アニメーションシステム ===

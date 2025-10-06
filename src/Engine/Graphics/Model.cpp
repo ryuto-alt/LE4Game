@@ -170,6 +170,12 @@ void Model::LoadFromGltf(const std::string& directoryPath, const std::string& fi
 			meshIndex++;
 		}
 
+		// インスタンシング描画用に最初のメッシュをvertexBufferView_に設定
+		if (!vertexBufferViews_.empty()) {
+			vertexBufferView_ = vertexBufferViews_[0];
+			vertexResource_ = vertexResources_[0];
+		}
+
 		// マテリアルテンプレートリソースの作成
 		materialTemplateResources_.resize(modelData_.materialTemplates.size());
 		for (size_t i = 0; i < modelData_.materialTemplates.size(); i++) {
@@ -235,6 +241,12 @@ void Model::CreateVertexBuffer() {
 
 		OutputDebugStringA(("Model::CreateVertexBuffer - Total " +
 			std::to_string(vertexResources_.size()) + " buffers created\n").c_str());
+
+		// インスタンシング描画用に最初のメッシュをvertexBufferView_に設定
+		if (!vertexBufferViews_.empty()) {
+			vertexBufferView_ = vertexBufferViews_[0];
+			vertexResource_ = vertexResources_[0];
+		}
 	}
 	else {
 		// シングルマテリアルモード（従来通り）

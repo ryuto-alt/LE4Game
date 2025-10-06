@@ -123,6 +123,7 @@
     <ClCompile Include="src\Engine\Core\Framework.cpp" />
     <ClCompile Include="src\Engine\Graphics\D3DResourceCheck.cpp" />
     <ClCompile Include="src\Engine\Graphics\DirectXCommon.cpp" />
+    <ClCompile Include="src\Engine\Graphics\InstancedRenderer.cpp" />
     <ClCompile Include="src\Engine\Graphics\Model.cpp" />
     <ClCompile Include="src\Engine\Graphics\Object3d.cpp" />
     <ClCompile Include="src\Engine\Graphics\RenderingPipeline.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="src\Engine\Core\Framework.h" />
     <ClInclude Include="src\Engine\Graphics\D3DResourceCheck.h" />
     <ClInclude Include="src\Engine\Graphics\DirectXCommon.h" />
+    <ClInclude Include="src\Engine\Graphics\InstancedRenderer.h" />
     <ClInclude Include="src\Engine\Graphics\Model.h" />
     <ClInclude Include="src\Engine\Graphics\Object3d.h" />
     <ClInclude Include="src\Engine\Graphics\RenderingPipeline.h" />
@@ -274,6 +276,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Resources\shaders\PBRObject3d.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PBRInstancedObject3d.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

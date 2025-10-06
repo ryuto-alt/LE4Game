@@ -4,6 +4,7 @@
 #include "GameObject/FPSCamera.h"
 #include "Skybox.h"
 #include "Manager/LightManager.h"
+#include "InstancedRenderer.h"
 #include <memory>
 
 class GamePlayScene : public IScene {
@@ -29,6 +30,24 @@ private:
 
     std::unique_ptr<Object3d> objeObject_;
     std::unique_ptr<AnimatedModel> objeModel_;
+
+    // 草オブジェクト（インスタンシング描画）
+    std::unique_ptr<AnimatedModel> grassModel_;
+    std::unique_ptr<InstancedRenderer> grassRenderer_;
+    struct GrassInstance {
+        Vector3 position;
+        Vector3 scale;
+    };
+    std::vector<GrassInstance> grassInstances_;
+
+    // ドラゴンオブジェクト（インスタンシング描画）
+    std::unique_ptr<AnimatedModel> dragonModel_;
+    std::unique_ptr<InstancedRenderer> dragonRenderer_;
+    struct DragonInstance {
+        Vector3 position;
+        Vector3 scale;
+    };
+    std::vector<DragonInstance> dragonInstances_;
 
     bool skyboxEnabled_ = false;
 

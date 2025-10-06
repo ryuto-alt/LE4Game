@@ -164,6 +164,7 @@ public:
     // === 3Dオブジェクト作成システム ===
     std::unique_ptr<Object3d> CreateObject3D();
     std::unique_ptr<Model> LoadModel(const std::string& modelPath);
+    std::unique_ptr<class InstancedRenderer> CreateInstancedRenderer(size_t maxInstances = 10000);
     
     // === アニメーションシステム ===
     std::unique_ptr<AnimatedModel> CreateAnimatedModel();
