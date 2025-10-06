@@ -76,8 +76,8 @@ void DirectXCommon::DeviceInitialize()
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
 		//デバッグレイヤーを有効にする
 		debugController->EnableDebugLayer();
-		//さらにGPU側でもチェックを行うようにする
-		debugController->SetEnableGPUBasedValidation(TRUE);
+		//GPU側のチェックは重いので無効化
+		//debugController->SetEnableGPUBasedValidation(TRUE);
 	}
 #endif
 

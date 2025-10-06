@@ -603,6 +603,24 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 			// テクスチャファイル名をログに出力
 			OutputDebugStringA(("MTL Parser: Found texture reference: " + textureFilename + "\n").c_str());
 
+			// 絶対パスかどうかをチェック (Windows: C:/ または C:\, Unix: /)
+			bool isAbsolutePath = false;
+			if (textureFilename.length() >= 3 && textureFilename[1] == ':' && (textureFilename[2] == '/' || textureFilename[2] == '\\')) {
+				isAbsolutePath = true; // Windows絶対パス
+			}
+			else if (textureFilename.length() >= 1 && textureFilename[0] == '/') {
+				isAbsolutePath = true; // Unix絶対パス
+			}
+
+			// 絶対パスの場合はファイル名だけを抽出
+			if (isAbsolutePath) {
+				size_t lastSlash = textureFilename.find_last_of("/\\");
+				if (lastSlash != std::string::npos) {
+					textureFilename = textureFilename.substr(lastSlash + 1);
+					OutputDebugStringA(("MTL Parser: Absolute path detected, extracted filename: " + textureFilename + "\n").c_str());
+				}
+			}
+
 			// 連結してファイルパスにする
 			materialData.textureFilePath = directoryPath + "/" + textureFilename;
 
