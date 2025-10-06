@@ -257,18 +257,19 @@ bool TextureManager::LoadTexture(const std::string& filePath)
 
         // ミニマップの作成
         DirectX::ScratchImage mipImages{};
-        
+
         // DDSファイルで既に圧縮されている場合はそのまま使用、それ以外はミップマップ生成
         if (DirectX::IsCompressed(image.GetMetadata().format)) {
             // 圧縮フォーマットならそのまま使う
             mipImages = std::move(image);
         } else {
             // 非圧縮フォーマットならミップマップを生成
-            hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
+            // TEX_FILTER_DEFAULT（より高速）に変更、またはミップマップなしも検討
+            hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, mipImages);
             if (FAILED(hr)) {
                 char errorMsg[512];
-                sprintf_s(errorMsg, "ERROR: TextureManager::LoadTexture - Failed to generate mipmaps for: %s (HRESULT: 0x%08X, Format: %d, Width: %zu, Height: %zu)\n",
-                    filePath.c_str(), hr, image.GetMetadata().format, image.GetMetadata().width, image.GetMetadata().height);
+                sprintf_s(errorMsg, "WARNING: TextureManager::LoadTexture - Failed to generate mipmaps for: %s (HRESULT: 0x%08X), using without mipmaps\n",
+                    filePath.c_str(), hr);
                 OutputDebugStringA(errorMsg);
                 // ミップマップ生成に失敗した場合は元の画像をそのまま使用
                 mipImages = std::move(image);
@@ -282,8 +283,14 @@ bool TextureManager::LoadTexture(const std::string& filePath)
         textureData.resource = dxCommon_->CreateTextureResource(textureData.metadata);
 
         Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = dxCommon_->UploadTextureData(textureData.resource, mipImages);
-        // テクスチャアップロード後は必ずCommandKickが必要
-        dxCommon_->CommandKick();
+
+        // バッチモードでない場合のみCommandKickを実行
+        if (!batchMode_) {
+            dxCommon_->CommandKick();
+        } else {
+            // バッチモードの場合は中間リソースを保持
+            pendingIntermediateResources_.push_back(intermediateResource);
+        }
 
         // SRVを作成
         textureData.srvIndex = srvManager_->Allocate();
@@ -501,11 +508,17 @@ uint32_t TextureManager::GetSrvIndex(const std::string& filePath)
 }
 
 void TextureManager::BeginBatch() {
-    // バッチ処理のスタブ（将来の拡張用）
+    batchMode_ = true;
+    pendingIntermediateResources_.clear();
 }
 
 void TextureManager::EndBatch() {
-    // バッチ処理のスタブ（将来の拡張用）
+    if (batchMode_ && !pendingIntermediateResources_.empty()) {
+        // バッチ処理の最後に一度だけCommandKick
+        dxCommon_->CommandKick();
+        pendingIntermediateResources_.clear();
+    }
+    batchMode_ = false;
 }
 
 bool TextureManager::LoadTextureDeferred(const std::string& filePath) {

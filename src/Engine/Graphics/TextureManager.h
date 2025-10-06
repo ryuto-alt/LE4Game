@@ -75,10 +75,10 @@ public:
 
     // バッチ処理の開始
     void BeginBatch();
-    
+
     // バッチ処理の終了（ここでCommandKickを実行）
     void EndBatch();
-    
+
     // バッチ処理用のテクスチャ読み込み（CommandKickを遅延）
     bool LoadTextureDeferred(const std::string& filePath);
 
@@ -87,4 +87,10 @@ private:
     std::unordered_map<std::string, TextureData> textureDatas;
     DirectXCommon* dxCommon_ = nullptr;
     SrvManager* srvManager_ = nullptr;
+
+    // バッチモードフラグ
+    bool batchMode_ = false;
+
+    // バッチモード時の中間リソース保持用
+    std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> pendingIntermediateResources_;
 };

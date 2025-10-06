@@ -754,6 +754,9 @@ ModelData Model::LoadGltfFile(const std::string& directoryPath, const std::strin
 	}
 
 	// マテリアルの読み込み
+	// バッチ処理を開始（複数のテクスチャを一度にロード）
+	TextureManager::GetInstance()->BeginBatch();
+
 	if (scene->mNumMaterials == 0) {
 		// デフォルトマテリアルを作成
 		MaterialData matData;
@@ -819,7 +822,7 @@ ModelData Model::LoadGltfFile(const std::string& directoryPath, const std::strin
 					}
 				}
 
-				// テクスチャ読み込み
+				// テクスチャ読み込み（バッチモードで実行）
 				TextureManager::GetInstance()->LoadTexture(matData.textureFilePath);
 				OutputDebugStringA(("Model: Loaded texture: " + matData.textureFilePath + "\n").c_str());
 			}
@@ -851,6 +854,9 @@ ModelData Model::LoadGltfFile(const std::string& directoryPath, const std::strin
 			}
 		}
 	}
+
+	// バッチ処理を終了（ここで一度だけCommandKickが実行される）
+	TextureManager::GetInstance()->EndBatch();
 
 	OutputDebugStringA(("Model: Loaded " + std::to_string(modelData.materials.size()) + " materials total\n").c_str());
 	OutputDebugStringA(("Model: Loaded " + std::to_string(modelData.matVertexData.size()) + " meshes total\n").c_str());
