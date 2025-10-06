@@ -55,8 +55,8 @@ void InstancedRenderer::Initialize(DirectXCommon* dxCommon, SpriteCommon* sprite
     materialData_->enableLighting = 1;
     materialData_->alphaMode = 0;
     materialData_->doubleSided = 0;
-    materialData_->enableEnvironmentMap = 1;
-    materialData_->environmentMapIntensity = 0.3f;
+    materialData_->enableEnvironmentMap = 0; // インスタンス描画では環境マップを無効化してパフォーマンス向上
+    materialData_->environmentMapIntensity = 0.0f;
     materialData_->uvTransform = MakeIdentity4x4();
 
     // ライトリソースの作成
@@ -103,32 +103,16 @@ void InstancedRenderer::AddInstanceWithLOD(const Vector3& position, const Matrix
     float lod1DistSq = lod1Distance_ * lod1Distance_;
     float lod2DistSq = lod2Distance_ * lod2Distance_;
 
-    // LOD0: 近距離 - 全て描画
-    if (distanceSq < lod0DistSq) {
-        instanceDataPtr_[instanceCount_].world = worldMatrix;
-        instanceDataPtr_[instanceCount_].color = color;
-        instanceCount_++;
-    }
-    // LOD1: 中距離 - 50%間引き（市松模様パターン）
-    else if (distanceSq < lod1DistSq) {
-        // 位置のハッシュ値を使って決定論的に50%間引き
-        int hash = static_cast<int>(position.x * 100.0f) + static_cast<int>(position.z * 100.0f);
-        if (hash % 2 == 0) {
-            instanceDataPtr_[instanceCount_].world = worldMatrix;
-            instanceDataPtr_[instanceCount_].color = color;
-            instanceCount_++;
-        }
-    }
-    // LOD2: 遠距離 - 75%間引き（4つに1つだけ描画）
-    else if (distanceSq < lod2DistSq) {
-        int hash = static_cast<int>(position.x * 100.0f) + static_cast<int>(position.z * 100.0f);
-        if (hash % 4 == 0) {
-            instanceDataPtr_[instanceCount_].world = worldMatrix;
-            instanceDataPtr_[instanceCount_].color = color;
-            instanceCount_++;
-        }
-    }
-    // それ以上の距離 - 描画しない
+    // カリングなし - 全て描画（パフォーマンス最適化は別の方法で行う）
+    instanceDataPtr_[instanceCount_].world = worldMatrix;
+    instanceDataPtr_[instanceCount_].color = color;
+    instanceCount_++;
+
+    // 念のため距離チェック（使わないが将来用）
+    (void)distanceSq;
+    (void)lod0DistSq;
+    (void)lod1DistSq;
+    (void)lod2DistSq;
 }
 
 void InstancedRenderer::Clear() {
@@ -178,35 +162,29 @@ void InstancedRenderer::Draw(Model* model, Camera* camera, const DirectionalLigh
     dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2,
         TextureManager::GetInstance()->GetSrvHandleGPU("white1x1.png"));
 
-    // 環境マップテクスチャ（t2）- 初期化済み前提で毎フレームチェック不要
-    static const std::string envTexturePath = "Resources/Models/skybox/warm_restaurant_night_2k.hdr";
-    dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(6,
-        TextureManager::GetInstance()->GetSrvHandleGPU(envTexturePath));
+    // 環境マップテクスチャ（t2）- パフォーマンス向上のため無効化
+    // static const std::string envTexturePath = "Resources/Models/skybox/warm_restaurant_night_2k.hdr";
+    // dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(6,
+    //     TextureManager::GetInstance()->GetSrvHandleGPU(envTexturePath));
 
     // マルチメッシュのインスタンシング描画
     const ModelData& modelData = model->GetModelData();
 
-    // マルチマテリアルモデルの場合、全メッシュを描画
+    // マルチマテリアルモデルの場合、最初のメッシュのみ描画（超高速化）
     if (!modelData.matVertexData.empty()) {
         const auto& vertexBufferViews = model->GetVertexBufferViews();
 
-        size_t meshIndex = 0;
-        for (auto it = modelData.matVertexData.begin(); it != modelData.matVertexData.end(); ++it, ++meshIndex) {
-            if (meshIndex >= vertexBufferViews.size()) break;
-
+        if (!vertexBufferViews.empty()) {
+            auto it = modelData.matVertexData.begin();
             const MaterialVertexData& meshData = it->second;
 
-            // マテリアル情報を更新（各メッシュのマテリアルを使用）
+            // 最初のマテリアルのみ使用
             if (meshData.materialIndex < modelData.materials.size()) {
                 const MaterialData& meshMaterial = modelData.materials[meshData.materialIndex];
 
                 materialData_->baseColorFactor = meshMaterial.baseColorFactor;
                 materialData_->metallicFactor = meshMaterial.metallicFactor;
                 materialData_->roughnessFactor = meshMaterial.roughnessFactor;
-                materialData_->normalScale = meshMaterial.normalScale;
-                materialData_->occlusionStrength = meshMaterial.occlusionStrength;
-                materialData_->emissiveFactor = meshMaterial.emissiveFactor;
-                materialData_->alphaCutoff = meshMaterial.alphaCutoff;
                 materialData_->hasBaseColorTexture = 0;
 
                 // テクスチャの設定
@@ -218,22 +196,19 @@ void InstancedRenderer::Draw(Model* model, Camera* camera, const DirectionalLigh
                             TextureManager::GetInstance()->GetSrvHandleGPU(texturePath));
                     }
                 } else {
-                    // テクスチャがない場合は白テクスチャを使用
                     dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2,
                         TextureManager::GetInstance()->GetSrvHandleGPU("white1x1.png"));
                 }
             }
 
-            // 各メッシュの頂点バッファを設定
+            // 最初のメッシュの頂点バッファを設定
             D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
-                vertexBufferViews[meshIndex],
+                vertexBufferViews[0],
                 instanceBufferView_
             };
             dxCommon_->GetCommandList()->IASetVertexBuffers(0, 2, vbvs);
 
-            // このメッシュの頂点数を取得
             UINT vertexCount = static_cast<UINT>(meshData.vertices.size());
-
             if (vertexCount > 0) {
                 dxCommon_->GetCommandList()->DrawInstanced(
                     vertexCount,

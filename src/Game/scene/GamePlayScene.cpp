@@ -101,12 +101,12 @@ void GamePlayScene::Initialize() {
     dragonModel_ = engine->CreateAnimatedModel();
     dragonModel_->LoadFromFile("Resources/Models/dragon", "dragon.gltf");
 
-    // ドラゴン用インスタンシング描画レンダラーを作成（20000個対応）
-    dragonRenderer_ = engine->CreateInstancedRenderer(20000);
+    // ドラゴン用インスタンシング描画レンダラーを作成（10000個対応）
+    dragonRenderer_ = engine->CreateInstancedRenderer(10000);
 
-    // ドラゴンを広範囲に20000個配置（約141x141グリッド）
-    const int dragonGridX = 141;
-    const int dragonGridZ = 141;
+    // ドラゴンを広範囲に10000個配置（約100x100グリッド）
+    const int dragonGridX = 100;
+    const int dragonGridZ = 100;
     const float dragonAreaSize = 5000.0f; // 範囲を広げる
     const float dragonSpacingX = dragonAreaSize / (dragonGridX - 1);
     const float dragonSpacingZ = dragonAreaSize / (dragonGridZ - 1);
@@ -115,8 +115,8 @@ void GamePlayScene::Initialize() {
     const float dragonY = 15.0f; // 地面より高く配置
 
     int dragonCount = 0;
-    for (int z = 0; z < dragonGridZ && dragonCount < 20000; z++) {
-        for (int x = 0; x < dragonGridX && dragonCount < 20000; x++) {
+    for (int z = 0; z < dragonGridZ && dragonCount < 10000; z++) {
+        for (int x = 0; x < dragonGridX && dragonCount < 10000; x++) {
             DragonInstance instance;
             instance.position = { dragonStartX + x * dragonSpacingX, dragonY, dragonStartZ + z * dragonSpacingZ };
             instance.scale = { 1.0f, 1.0f, 1.0f };
@@ -316,63 +316,15 @@ void GamePlayScene::Draw() {
         }
     }
 
-    // 草オブジェクトの描画（インスタンシング描画 + LODシステム）
-    if (grassRenderer_ && grassModel_ && lightManager_) {
-        grassRenderer_->Clear();
+    // 草オブジェクトの描画を無効化
+    // if (grassRenderer_ && grassModel_ && lightManager_) {
+    //     ...
+    // }
 
-        // ライト情報を取得
-        const DirectionalLight& dirLight = lightManager_->GetDirectionalLight();
-        const SpotLight& spotLight = lightManager_->GetSpotLight();
-
-        // カメラ位置を取得
-        Vector3 cameraPos = camera_->GetTranslate();
-
-        // LOD距離を設定（近距離50m、中距離150m、遠距離300m）
-        grassRenderer_->SetLODDistances(50.0f, 150.0f, 300.0f);
-
-        // LODシステムを使ってインスタンスを追加
-        for (const auto& instance : grassInstances_) {
-            Matrix4x4 worldMatrix = {
-                instance.scale.x, 0.0f, 0.0f, 0.0f,
-                0.0f, instance.scale.y, 0.0f, 0.0f,
-                0.0f, 0.0f, instance.scale.z, 0.0f,
-                instance.position.x, instance.position.y, instance.position.z, 1.0f
-            };
-            grassRenderer_->AddInstanceWithLOD(instance.position, worldMatrix, cameraPos, {1.0f, 1.0f, 1.0f, 1.0f});
-        }
-
-        // 一括描画
-        grassRenderer_->Draw(static_cast<Model*>(grassModel_.get()), camera_, dirLight, spotLight);
-    }
-
-    // ドラゴンオブジェクトの描画（インスタンシング描画 + LODシステム）
-    if (dragonRenderer_ && dragonModel_ && lightManager_) {
-        dragonRenderer_->Clear();
-
-        // ライト情報を取得
-        const DirectionalLight& dirLight = lightManager_->GetDirectionalLight();
-        const SpotLight& spotLight = lightManager_->GetSpotLight();
-
-        // カメラ位置を取得
-        Vector3 cameraPos = camera_->GetTranslate();
-
-        // LOD距離を設定（ドラゴンは大きいので遠くまで見える設定）
-        dragonRenderer_->SetLODDistances(100.0f, 300.0f, 600.0f);
-
-        // LODシステムを使ってインスタンスを追加
-        for (const auto& instance : dragonInstances_) {
-            Matrix4x4 worldMatrix = {
-                instance.scale.x, 0.0f, 0.0f, 0.0f,
-                0.0f, instance.scale.y, 0.0f, 0.0f,
-                0.0f, 0.0f, instance.scale.z, 0.0f,
-                instance.position.x, instance.position.y, instance.position.z, 1.0f
-            };
-            dragonRenderer_->AddInstanceWithLOD(instance.position, worldMatrix, cameraPos, {1.0f, 1.0f, 1.0f, 1.0f});
-        }
-
-        // 一括描画
-        dragonRenderer_->Draw(static_cast<Model*>(dragonModel_.get()), camera_, dirLight, spotLight);
-    }
+    // ドラゴンオブジェクトの描画を無効化
+    // if (dragonRenderer_ && dragonModel_ && lightManager_) {
+    //     ...
+    // }
 
     player_->DrawUI();
 
@@ -483,5 +435,37 @@ void GamePlayScene::UpdateCamera() {
 }
 
 void GamePlayScene::DrawUI() {
-    // DrawUI関数は空に（デバッグ情報はUpdate関数内で表示）
+#ifdef _DEBUG
+    ImGui::Begin("フラスタムカリング統計");
+
+    ImGui::TextColored(ImVec4(0.4f, 1.0f, 0.4f, 1.0f), "■ カリング統計");
+    ImGui::Spacing();
+
+    // オブジェクト統計
+    ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.2f, 1.0f), "【オブジェクト】");
+    ImGui::Text("  総数:     %d", cullingStats_.totalObjects);
+    ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "  表示:     %d", cullingStats_.visibleObjects);
+    ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "  カリング: %d", cullingStats_.culledObjects);
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    // メッシュ統計
+    ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.2f, 1.0f), "【メッシュ】");
+    ImGui::Text("  総数:     %d", cullingStats_.totalMeshes);
+    ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "  表示:     %d", cullingStats_.visibleMeshes);
+    ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "  カリング: %d", cullingStats_.culledMeshes);
+
+    // カリング効率
+    if (cullingStats_.totalMeshes > 0) {
+        float cullingRate = (float)cullingStats_.culledMeshes / (float)cullingStats_.totalMeshes * 100.0f;
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.2f, 1.0f), "カリング率: %.1f%%", cullingRate);
+    }
+
+    ImGui::End();
+#endif
 }

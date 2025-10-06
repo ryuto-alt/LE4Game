@@ -32,6 +32,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 	PBRPipelineInitialize();
 	PBRSkinningPipelineInitialize();
 	PBRInstancedPipelineInitialize();
+	FastInstancedPipelineInitialize();
 }
 
 
@@ -621,4 +622,100 @@ void SpriteCommon::PBRInstancedPipelineInitialize()
 	}
 
 	OutputDebugStringA("SpriteCommon::PBRInstancedPipelineInitialize - PBR instanced pipeline created successfully\n");
+}
+
+void SpriteCommon::FastInstancedPipelineInitialize() {
+	HRESULT hr;
+
+	// InputLayoutの設定（PBRInstancedと同じ）
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[8] = {};
+	inputElementDescs[0].SemanticName = "POSITION";
+	inputElementDescs[0].SemanticIndex = 0;
+	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+	inputElementDescs[1].SemanticName = "TEXCOORD";
+	inputElementDescs[1].SemanticIndex = 0;
+	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+	inputElementDescs[2].SemanticName = "NORMAL";
+	inputElementDescs[2].SemanticIndex = 0;
+	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+	inputElementDescs[2].InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
+
+	for (int i = 0; i < 4; i++) {
+		inputElementDescs[3 + i].SemanticName = "WORLD";
+		inputElementDescs[3 + i].SemanticIndex = i;
+		inputElementDescs[3 + i].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		inputElementDescs[3 + i].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[3 + i].InputSlot = 1;
+		inputElementDescs[3 + i].InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA;
+		inputElementDescs[3 + i].InstanceDataStepRate = 1;
+	}
+
+	inputElementDescs[7].SemanticName = "COLOR";
+	inputElementDescs[7].SemanticIndex = 0;
+	inputElementDescs[7].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	inputElementDescs[7].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+	inputElementDescs[7].InputSlot = 1;
+	inputElementDescs[7].InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA;
+	inputElementDescs[7].InstanceDataStepRate = 1;
+
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
+	inputLayoutDesc.pInputElementDescs = inputElementDescs;
+	inputLayoutDesc.NumElements = _countof(inputElementDescs);
+
+	// BlendState（アルファブレンド有効）
+	D3D12_BLEND_DESC blendDesc{};
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+	blendDesc.RenderTarget[0].BlendEnable = TRUE;
+	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+
+	// RasterizerState
+	D3D12_RASTERIZER_DESC rasterizerDesc{};
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+
+	// 軽量シェーダーをコンパイル
+	IDxcBlob* vertexshaderBlob = dxCommon_->CompileShader(L"Resources/shaders/PBRInstancedObject3d.VS.hlsl", L"vs_6_0");
+	assert(vertexshaderBlob != nullptr);
+	IDxcBlob* pixelShaderBlob = dxCommon_->CompileShader(L"Resources/shaders/FastInstancedObject3d.PS.hlsl", L"ps_6_0");
+	assert(pixelShaderBlob != nullptr);
+
+	// DepthStencilState
+	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+
+	// PSO生成
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
+	graphicsPipelineStateDesc.pRootSignature = rootSignature.Get();
+	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
+	graphicsPipelineStateDesc.VS = { vertexshaderBlob->GetBufferPointer(), vertexshaderBlob->GetBufferSize() };
+	graphicsPipelineStateDesc.PS = { pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize() };
+	graphicsPipelineStateDesc.BlendState = blendDesc;
+	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
+	graphicsPipelineStateDesc.NumRenderTargets = 1;
+	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	graphicsPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	graphicsPipelineStateDesc.SampleDesc.Count = 1;
+	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+	graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
+	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+	hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&fastInstancedPipelineState));
+	assert(SUCCEEDED(hr));
+
+	if (vertexshaderBlob) vertexshaderBlob->Release();
+	if (pixelShaderBlob) pixelShaderBlob->Release();
+
+	OutputDebugStringA("SpriteCommon::FastInstancedPipelineInitialize - Fast instanced pipeline created successfully\n");
 }

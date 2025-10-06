@@ -37,6 +37,9 @@ public:
 	// PBRインスタンシングパイプラインを取得
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> GetPBRInstancedPipelineState() const { return pbrInstancedPipelineState; }
 
+	// 軽量インスタンシングパイプラインを取得
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> GetFastInstancedPipelineState() const { return fastInstancedPipelineState; }
+
 private:
 	// ルートシグネチャの作成
 	void RootSignatureInitialize();
@@ -56,6 +59,9 @@ private:
 	// PBRインスタンシング用パイプライン
 	void PBRInstancedPipelineInitialize();
 
+	// 軽量インスタンシング用パイプライン
+	void FastInstancedPipelineInitialize();
+
 private:
 	DirectXCommon* dxCommon_ = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature = nullptr;
@@ -64,4 +70,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> pbrPipelineState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> pbrSkinningPipelineState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> pbrInstancedPipelineState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> fastInstancedPipelineState = nullptr;
 };
