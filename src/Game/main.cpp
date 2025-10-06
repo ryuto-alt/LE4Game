@@ -2,6 +2,12 @@
 #include "UnoEngine.h"
 #include "D3DResourceCheck.h"
 
+// NVIDIAのOptimusとAMDのPowerXpressに高性能GPUを使うように指示
+extern "C" {
+    __declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+    __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
+
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     // リソースリーク検出用
     D3DResourceLeakChecker leakCheck;

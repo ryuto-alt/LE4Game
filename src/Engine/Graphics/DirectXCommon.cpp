@@ -98,7 +98,10 @@ void DirectXCommon::DeviceInitialize()
 		hr = useAdapter->GetDesc3(&adapterDesc);
 		assert(SUCCEEDED(hr));
 		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
-			Log(ConvertString(std::format(L"Use Adapter:{}\n", adapterDesc.Description)));
+			Log(ConvertString(std::format(L"Use Adapter: {}\n", adapterDesc.Description)));
+			Log(std::format("Dedicated Video Memory: {} MB\n", adapterDesc.DedicatedVideoMemory / 1024 / 1024));
+			Log(std::format("Dedicated System Memory: {} MB\n", adapterDesc.DedicatedSystemMemory / 1024 / 1024));
+			Log(std::format("Shared System Memory: {} MB\n", adapterDesc.SharedSystemMemory / 1024 / 1024));
 			break;
 		}
 		useAdapter = nullptr;
