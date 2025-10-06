@@ -114,6 +114,7 @@ void Player::Initialize(Camera* camera, bool enableCollision, bool enableEnviron
             object3d_->EnableEnv(false);
             OutputDebugStringA("Player: Environment map is disabled\n");
         }
+
     }
 
     // コリジョン設定
