@@ -133,8 +133,21 @@ void GamePlayScene::Update() {
     }
     player_->Update(engine);
 
-    // ImGui: 環境マップ強度調整
+    // ImGui: FPS表示と環境マップ強度調整
 #ifdef _DEBUG
+    // FPS表示（2秒ごとに更新）
+    float deltaTime = engine->GetDeltaTime();
+    fpsUpdateTimer_ += deltaTime;
+    if (fpsUpdateTimer_ >= 2.0f) {
+        displayedFps_ = (deltaTime > 0.0f) ? (1.0f / deltaTime) : 0.0f;
+        fpsUpdateTimer_ = 0.0f;
+    }
+
+    ImGui::Begin("Debug Info");
+    ImGui::Text("FPS: %.1f", displayedFps_);
+    ImGui::Text("DeltaTime: %.3f ms", deltaTime * 1000.0f);
+    ImGui::End();
+
     ImGui::Begin("Environment Map Settings");
 
     // Ground

@@ -33,4 +33,8 @@ private:
     bool skyboxEnabled_ = false;
 
     std::unique_ptr<FPSCamera> fpsCamera_;
+
+    // FPS表示用
+    float displayedFps_ = 0.0f;
+    float fpsUpdateTimer_ = 0.0f;
 };
