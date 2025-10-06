@@ -29,6 +29,7 @@ public:
     // マウス視点のON/OFF
     void SetMouseLookEnabled(bool enabled) { mouseLookEnabled_ = enabled; }
     bool IsMouseLookEnabled() const { return mouseLookEnabled_; }
+    void ToggleMouseLook();
 
 private:
     bool isFPSMode_ = false;           // true: 一人称, false: 三人称

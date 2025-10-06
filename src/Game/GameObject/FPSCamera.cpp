@@ -84,3 +84,16 @@ void FPSCamera::UpdateCameraRotation(Camera* camera, UnoEngine* engine) {
         }
     }
 }
+
+void FPSCamera::ToggleMouseLook() {
+    mouseLookEnabled_ = !mouseLookEnabled_;
+
+    UnoEngine* engine = UnoEngine::GetInstance();
+    if (engine) {
+        if (mouseLookEnabled_) {
+            engine->SetMouseCursor(false);
+        } else {
+            engine->SetMouseCursor(true);
+        }
+    }
+}
