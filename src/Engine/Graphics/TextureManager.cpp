@@ -266,8 +266,12 @@ bool TextureManager::LoadTexture(const std::string& filePath)
             // 非圧縮フォーマットならミップマップを生成
             hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
             if (FAILED(hr)) {
-                OutputDebugStringA("ERROR: TextureManager::LoadTexture - Failed to generate mipmaps\n");
-                throw std::runtime_error("Failed to generate mipmaps");
+                char errorMsg[512];
+                sprintf_s(errorMsg, "ERROR: TextureManager::LoadTexture - Failed to generate mipmaps for: %s (HRESULT: 0x%08X, Format: %d, Width: %zu, Height: %zu)\n",
+                    filePath.c_str(), hr, image.GetMetadata().format, image.GetMetadata().width, image.GetMetadata().height);
+                OutputDebugStringA(errorMsg);
+                // ミップマップ生成に失敗した場合は元の画像をそのまま使用
+                mipImages = std::move(image);
             }
         }
 
