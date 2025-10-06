@@ -30,7 +30,7 @@ void GamePlayScene::Initialize() {
 
     // 環境マップを先に設定（SetModelの前に）
     Object3d::SetEnvTex("Resources/Models/skybox/rostock_laage_airport_4k.dds");
-    ground_->EnableEnv(false);
+    ground_->EnableEnv(true);
     ground_->SetModel(static_cast<Model*>(groundModel_.get()));
     ground_->SetCamera(camera_);
     ground_->SetEnableLighting(true);
@@ -61,7 +61,7 @@ void GamePlayScene::Initialize() {
     objeObject_ = engine->CreateObject3D();
 
     // 環境マップを先に設定（SetModelの前に）
-    objeObject_->EnableEnv(false);  // 全オブジェクトで統一
+    objeObject_->EnableEnv(true);
     objeObject_->SetModel(static_cast<Model*>(objeModel_.get()));
     objeObject_->SetCamera(camera_);
     objeObject_->SetPosition({0.0f, 0.0f, 5.0f});
@@ -70,6 +70,9 @@ void GamePlayScene::Initialize() {
     objeObject_->SetEnableAnimation(false);
     objeObject_->EnableCollision(true, "Object");
 
+    // Skyboxの初期化
+    skybox_ = engine->CreateSkybox();
+    engine->LoadSkybox(skybox_.get(), "Resources/Models/skybox/rostock_laage_airport_4k.dds");
     skyboxEnabled_ = true;
 
     // FPSカメラのマウスルックを有効化してマウスカーソルを非表示

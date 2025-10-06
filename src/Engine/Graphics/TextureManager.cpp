@@ -80,7 +80,11 @@ bool TextureManager::LoadTexture(const std::string& filePath)
     // ファイルが存在するか確認
     DWORD fileAttributes = GetFileAttributesA(filePath.c_str());
     if (fileAttributes == INVALID_FILE_ATTRIBUTES) {
-        // OutputDebugStringA(("WARNING: TextureManager::LoadTexture - File not found: " + filePath + "\n").c_str());
+        OutputDebugStringA(("ERROR: TextureManager::LoadTexture - File not found: " + filePath + "\n").c_str());
+        // DDSファイルが見つからない場合はアサート
+        if (filePath.ends_with(".dds")) {
+            assert(false && "DDS file not found!");
+        }
         // デフォルトテクスチャを読み込む
         LoadDefaultTexture();
         return false;
@@ -106,6 +110,10 @@ bool TextureManager::LoadTexture(const std::string& filePath)
         
         if (FAILED(hr)) {
             OutputDebugStringA(("ERROR: TextureManager::LoadTexture - Failed to load from file: " + filePath + "\n").c_str());
+            // DDSファイルの読み込みに失敗した場合はアサート
+            if (filePath.ends_with(".dds")) {
+                assert(false && "Failed to load DDS file!");
+            }
             throw std::runtime_error("Failed to load texture from file");
         }
 

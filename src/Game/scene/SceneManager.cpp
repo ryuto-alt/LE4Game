@@ -15,8 +15,8 @@ SceneManager* SceneManager::GetInstance() {
 }
 
 void SceneManager::Initialize() {
-    // 最初のシーンをLogoに設定
-    nextScene_ = "Logo";
+    // 最初のシーンをGamePlayに設定
+    nextScene_ = "GamePlay";
 
     // デバッグ出力
     OutputDebugStringA("SceneManager initialized successfully\n");
