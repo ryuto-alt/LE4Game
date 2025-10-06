@@ -59,7 +59,7 @@ void Ground::Initialize(Camera* camera, DirectXCommon* dxCommon, bool enableColl
         // 環境マップの設定
         if (enableEnvironmentMap) {
             OutputDebugStringA("Ground: Environment map is enabled\n");
-            Object3d::SetEnvTex("Resources/Models/skybox/rostock_laage_airport_4k.dds");
+            Object3d::SetEnvTex("Resources/Models/skybox/tex.dds");
             object3d_->EnableEnv(true);
         } else {
             object3d_->EnableEnv(false);
