@@ -73,7 +73,7 @@ void GamePlayScene::Initialize() {
     // SkyboxをHDRファイルで初期化
     skybox_ = engine->CreateSkybox();
     engine->LoadSkybox(skybox_.get(), "Resources/Models/skybox/warm_restaurant_night_2k.hdr");
-    skyboxEnabled_ = true;
+    skyboxEnabled_ = false;
 
     // FPSカメラのマウスルックを有効化してマウスカーソルを非表示
     if (fpsCamera_) {
