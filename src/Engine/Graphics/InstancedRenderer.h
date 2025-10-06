@@ -27,11 +27,21 @@ public:
     // インスタンスの追加
     void AddInstance(const Matrix4x4& worldMatrix, const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
+    // LOD付きインスタンスの追加（カメラからの距離を計算して自動でLOD判定）
+    void AddInstanceWithLOD(const Vector3& position, const Matrix4x4& worldMatrix, const Vector3& cameraPos, const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
+
     // インスタンスのクリア
     void Clear();
 
     // 描画
     void Draw(Model* model, Camera* camera, const DirectionalLight& dirLight, const SpotLight& spotLight);
+
+    // LOD設定
+    void SetLODDistances(float lod0Distance, float lod1Distance, float lod2Distance) {
+        lod0Distance_ = lod0Distance;
+        lod1Distance_ = lod1Distance;
+        lod2Distance_ = lod2Distance;
+    }
 
     // インスタンス数の取得
     size_t GetInstanceCount() const { return instanceCount_; }
@@ -47,6 +57,11 @@ private:
 
     size_t maxInstances_;
     size_t instanceCount_;
+
+    // LOD設定
+    float lod0Distance_; // LOD0の最大距離（近距離）
+    float lod1Distance_; // LOD1の最大距離（中距離）
+    float lod2Distance_; // LOD2の最大距離（遠距離）
 
     // 共通リソース
     Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;

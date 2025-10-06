@@ -9,7 +9,7 @@ InstancedRenderer::InstancedRenderer()
     : dxCommon_(nullptr), spriteCommon_(nullptr), instanceDataPtr_(nullptr),
       maxInstances_(0), instanceCount_(0), materialData_(nullptr),
       directionalLightData_(nullptr), spotLightData_(nullptr), cameraData_(nullptr),
-      viewProjectionData_(nullptr) {
+      viewProjectionData_(nullptr), lod0Distance_(50.0f), lod1Distance_(150.0f), lod2Distance_(300.0f) {
 }
 
 InstancedRenderer::~InstancedRenderer() {
@@ -84,6 +84,51 @@ void InstancedRenderer::AddInstance(const Matrix4x4& worldMatrix, const Vector4&
     instanceDataPtr_[instanceCount_].world = worldMatrix;
     instanceDataPtr_[instanceCount_].color = color;
     instanceCount_++;
+}
+
+void InstancedRenderer::AddInstanceWithLOD(const Vector3& position, const Matrix4x4& worldMatrix, const Vector3& cameraPos, const Vector4& color) {
+    if (instanceCount_ >= maxInstances_) {
+        OutputDebugStringA("Warning: Instance buffer is full!\n");
+        return;
+    }
+
+    // カメラからの距離を計算
+    float dx = position.x - cameraPos.x;
+    float dy = position.y - cameraPos.y;
+    float dz = position.z - cameraPos.z;
+    float distanceSq = dx * dx + dy * dy + dz * dz;
+
+    // LOD判定（距離の2乗で比較して高速化）
+    float lod0DistSq = lod0Distance_ * lod0Distance_;
+    float lod1DistSq = lod1Distance_ * lod1Distance_;
+    float lod2DistSq = lod2Distance_ * lod2Distance_;
+
+    // LOD0: 近距離 - 全て描画
+    if (distanceSq < lod0DistSq) {
+        instanceDataPtr_[instanceCount_].world = worldMatrix;
+        instanceDataPtr_[instanceCount_].color = color;
+        instanceCount_++;
+    }
+    // LOD1: 中距離 - 50%間引き（市松模様パターン）
+    else if (distanceSq < lod1DistSq) {
+        // 位置のハッシュ値を使って決定論的に50%間引き
+        int hash = static_cast<int>(position.x * 100.0f) + static_cast<int>(position.z * 100.0f);
+        if (hash % 2 == 0) {
+            instanceDataPtr_[instanceCount_].world = worldMatrix;
+            instanceDataPtr_[instanceCount_].color = color;
+            instanceCount_++;
+        }
+    }
+    // LOD2: 遠距離 - 75%間引き（4つに1つだけ描画）
+    else if (distanceSq < lod2DistSq) {
+        int hash = static_cast<int>(position.x * 100.0f) + static_cast<int>(position.z * 100.0f);
+        if (hash % 4 == 0) {
+            instanceDataPtr_[instanceCount_].world = worldMatrix;
+            instanceDataPtr_[instanceCount_].color = color;
+            instanceCount_++;
+        }
+    }
+    // それ以上の距離 - 描画しない
 }
 
 void InstancedRenderer::Clear() {
