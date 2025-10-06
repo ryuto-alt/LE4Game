@@ -58,6 +58,9 @@ void Camera::Update() {
 
     // ビュープロジェクション行列の計算
     viewProjectionMatrix_ = Multiply(viewMatrix_, projectionMatrix_);
+
+    // フラスタムの更新
+    frustum_.BuildFromViewProjection(viewProjectionMatrix_);
 }
 
 // セッター
@@ -380,34 +383,34 @@ void Camera::UpdateOrbitCamera() {
     float sinY = sinf(orbitAngleY_);
     float cosX = cosf(orbitAngleX_);
     float sinX = sinf(orbitAngleX_);
-    
+
     // 簡素化されたオービット座標系計算（安定した距離と高さ）
     Vector3 offset;
     offset.x = orbitDistance_ * sinY * cosX;
     offset.y = orbitDistance_ * sinX;
     offset.z = orbitDistance_ * cosY * cosX;
-    
+
     // ターゲット位置の高さを考慮してカメラ位置を決定
     Vector3 targetWithHeight = orbitTarget_;
     targetWithHeight.y += orbitHeight_;
-    
+
     // 最終的なカメラ位置
     Vector3 newPosition = targetWithHeight + offset;
-    
+
     // カメラの位置を設定
     transform_.translate = newPosition;
-    
+
     // カメラの向きをターゲット（プレイヤー）を向くように設定
     Vector3 lookAtTarget = orbitTarget_;
     lookAtTarget.y += 1.0f;  // プレイヤーの少し上を見る
-    
+
     Vector3 direction = lookAtTarget - newPosition;
     float length = sqrtf(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
     if (length > 0.0001f) {
         direction.x /= length;
         direction.y /= length;
         direction.z /= length;
-        
+
         // Y方向の制限（真下を向かないようにする）
         if (direction.y < -0.8f) {
             direction.y = -0.8f;
@@ -419,10 +422,27 @@ void Camera::UpdateOrbitCamera() {
                 direction.z /= newLength;
             }
         }
-        
+
         // 方向ベクトルから回転角度を計算
         transform_.rotate.y = atan2f(direction.x, direction.z);
         transform_.rotate.x = asinf(-direction.y);
         transform_.rotate.z = 0.0f;
     }
+}
+
+// フラスタムカリング関連
+const Frustum& Camera::GetFrustum() const {
+    return frustum_;
+}
+
+bool Camera::IsPointInFrustum(const Vector3& point) const {
+    return frustum_.IsPointInside(point);
+}
+
+bool Camera::IsAABBInFrustum(const Vector3& min, const Vector3& max) const {
+    return frustum_.IsAABBInside(min, max);
+}
+
+bool Camera::IsSphereInFrustum(const Vector3& center, float radius) const {
+    return frustum_.IsSphereInside(center, radius);
 }

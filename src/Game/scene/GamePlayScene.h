@@ -37,4 +37,15 @@ private:
     // FPS表示用
     float displayedFps_ = 0.0f;
     float fpsUpdateTimer_ = 0.0f;
+
+    // フラスタムカリング統計
+    struct CullingStats {
+        int totalObjects = 0;
+        int visibleObjects = 0;
+        int culledObjects = 0;
+        int totalMeshes = 0;
+        int visibleMeshes = 0;
+        int culledMeshes = 0;
+    };
+    CullingStats cullingStats_;
 };

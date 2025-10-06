@@ -29,6 +29,7 @@ public:
     void Update(const Matrix4x4& viewMatrix, const Matrix4x4& projectionMatrix);
     // 描画処理
     void Draw();
+    void Draw(Camera* camera, int* visibleMeshCount = nullptr, int* culledMeshCount = nullptr);
 
     // カメラ関連のメソッド
     void SetCamera(Camera* camera);

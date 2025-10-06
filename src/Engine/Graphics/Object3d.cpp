@@ -615,6 +615,189 @@ void Object3d::Draw() {
 	}
 }
 
+void Object3d::Draw(Camera* camera, int* visibleMeshCount, int* culledMeshCount) {
+	assert(dxCommon_);
+	assert(model_);
+	assert(camera);
+
+	// パイプラインの設定
+	bool usePBR = false;
+	if (model_) {
+		const MaterialData& material = model_->GetMaterial();
+		usePBR = material.isPBR;
+	}
+
+	bool useAnimation = enableAnimation_ && animatedModel_;
+
+	if (usePBR && useAnimation) {
+		dxCommon_->GetCommandList()->SetPipelineState(spriteCommon_->GetPBRSkinningPipelineState().Get());
+	}
+	else if (usePBR) {
+		dxCommon_->GetCommandList()->SetPipelineState(spriteCommon_->GetPBRPipelineState().Get());
+	}
+	else if (useAnimation) {
+		dxCommon_->GetCommandList()->SetPipelineState(spriteCommon_->GetSkinningPipelineState().Get());
+	}
+	else {
+		dxCommon_->GetCommandList()->SetPipelineState(spriteCommon_->GetGraphicsPipelineState().Get());
+	}
+
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	const ModelData& modelData = model_->GetModelData();
+	bool isMultiMaterial = !modelData.matVertexData.empty();
+
+	// 共通のバッファを設定
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(5, spotLightResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, cameraResource_->GetGPUVirtualAddress());
+
+	// 環境マップテクスチャ
+	std::string envTexturePath = globalEnvironmentTexturePath_;
+	if (envTexturePath.empty() || !TextureManager::GetInstance()->IsTextureExists(envTexturePath)) {
+		envTexturePath = "Resources/Models/skybox/warm_restaurant_night_2k.hdr";
+		if (!TextureManager::GetInstance()->IsTextureExists(envTexturePath)) {
+			TextureManager::GetInstance()->LoadTexture(envTexturePath);
+		}
+	}
+	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(6,
+		TextureManager::GetInstance()->GetSrvHandleGPU(envTexturePath));
+
+	// パレットSRVの設定（アニメーション用）
+	if (useAnimation) {
+		AnimatedModel* animModel = static_cast<AnimatedModel*>(animatedModel_);
+		const SkinCluster& skinCluster = animModel->GetSkinCluster();
+		if (skinCluster.paletteSrvHandle.second.ptr != 0) {
+			dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(4, skinCluster.paletteSrvHandle.second);
+		}
+	}
+
+	// マルチマテリアル対応: メッシュごとにカリング判定
+	if (isMultiMaterial) {
+		const std::vector<D3D12_VERTEX_BUFFER_VIEW>& vbViews = model_->GetVertexBufferViews();
+		size_t meshIndex = 0;
+
+		for (const auto& matDataPair : modelData.matVertexData) {
+			const MaterialVertexData& matVertexData = matDataPair.second;
+			size_t materialIndex = matVertexData.materialIndex;
+
+			if (materialIndex >= modelData.materials.size() || meshIndex >= vbViews.size()) {
+				meshIndex++;
+				continue;
+			}
+
+			// メッシュごとのバウンディングボックスを計算
+			Vector3 meshMin = {FLT_MAX, FLT_MAX, FLT_MAX};
+			Vector3 meshMax = {-FLT_MAX, -FLT_MAX, -FLT_MAX};
+
+			for (const auto& vertex : matVertexData.vertices) {
+				// ワールド変換を適用（vertex.positionはVector4）
+				Vector4 localPos = vertex.position;
+				Matrix4x4 world = transformationMatrixData_->World;
+
+				float x = localPos.x * world.m[0][0] + localPos.y * world.m[1][0] + localPos.z * world.m[2][0] + localPos.w * world.m[3][0];
+				float y = localPos.x * world.m[0][1] + localPos.y * world.m[1][1] + localPos.z * world.m[2][1] + localPos.w * world.m[3][1];
+				float z = localPos.x * world.m[0][2] + localPos.y * world.m[1][2] + localPos.z * world.m[2][2] + localPos.w * world.m[3][2];
+				float w = localPos.x * world.m[0][3] + localPos.y * world.m[1][3] + localPos.z * world.m[2][3] + localPos.w * world.m[3][3];
+
+				Vector3 worldPos = {x / w, y / w, z / w};
+
+				meshMin.x = (std::min)(meshMin.x, worldPos.x);
+				meshMin.y = (std::min)(meshMin.y, worldPos.y);
+				meshMin.z = (std::min)(meshMin.z, worldPos.z);
+				meshMax.x = (std::max)(meshMax.x, worldPos.x);
+				meshMax.y = (std::max)(meshMax.y, worldPos.y);
+				meshMax.z = (std::max)(meshMax.z, worldPos.z);
+			}
+
+			// フラスタムカリング判定
+			if (!camera->IsAABBInFrustum(meshMin, meshMax)) {
+				if (culledMeshCount) (*culledMeshCount)++;
+				meshIndex++;
+				continue;
+			}
+
+			if (visibleMeshCount) (*visibleMeshCount)++;
+
+			// 頂点バッファを設定
+			if (useAnimation) {
+				AnimatedModel* animModel = static_cast<AnimatedModel*>(animatedModel_);
+				const SkinCluster& skinCluster = animModel->GetSkinCluster();
+				D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
+					vbViews[meshIndex],
+					skinCluster.influenceBufferView
+				};
+				dxCommon_->GetCommandList()->IASetVertexBuffers(0, 2, vbvs);
+			}
+			else {
+				dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vbViews[meshIndex]);
+			}
+
+			// テクスチャをセット
+			const MaterialData& currentMaterial = modelData.materials[materialIndex];
+			std::string currentTexturePath = currentMaterial.textureFilePath;
+
+			if (currentTexturePath.empty()) {
+				currentTexturePath = TextureManager::GetInstance()->GetDefaultTexturePath();
+			}
+			else if (!TextureManager::GetInstance()->IsTextureExists(currentTexturePath)) {
+				currentTexturePath = TextureManager::GetInstance()->GetDefaultTexturePath();
+			}
+
+			dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2,
+				TextureManager::GetInstance()->GetSrvHandleGPU(currentTexturePath));
+
+			// 描画
+			uint32_t vertexCount = static_cast<uint32_t>(matVertexData.vertices.size());
+			dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
+
+			meshIndex++;
+		}
+	}
+	else {
+		// シングルメッシュの場合は単純なAABBチェック
+		Vector3 pos = transform_.translate;
+		Vector3 scale = transform_.scale;
+		Vector3 min = pos - scale * 0.5f;
+		Vector3 max = pos + scale * 0.5f;
+
+		if (camera->IsAABBInFrustum(min, max)) {
+			if (visibleMeshCount) (*visibleMeshCount)++;
+
+			if (useAnimation) {
+				AnimatedModel* animModel = static_cast<AnimatedModel*>(animatedModel_);
+				const SkinCluster& skinCluster = animModel->GetSkinCluster();
+				D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
+					model_->GetVBView(),
+					skinCluster.influenceBufferView
+				};
+				dxCommon_->GetCommandList()->IASetVertexBuffers(0, 2, vbvs);
+			}
+			else {
+				dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &model_->GetVBView());
+			}
+
+			std::string texturePath = model_->GetTextureFilePath();
+			if (texturePath.empty()) {
+				texturePath = TextureManager::GetInstance()->GetDefaultTexturePath();
+			}
+			else if (!TextureManager::GetInstance()->IsTextureExists(texturePath)) {
+				texturePath = TextureManager::GetInstance()->GetDefaultTexturePath();
+			}
+
+			dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2,
+				TextureManager::GetInstance()->GetSrvHandleGPU(texturePath));
+
+			dxCommon_->GetCommandList()->DrawInstanced(model_->GetVertexCount(), 1, 0, 0);
+		}
+		else {
+			if (culledMeshCount) (*culledMeshCount)++;
+		}
+	}
+}
+
 void Object3d::SkeletonUpdate(Skeleton& skeleton)
 {
 	// ← ここでサイズを合わせるのが絶対必要！！

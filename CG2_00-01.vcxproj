@@ -118,6 +118,7 @@
     <ClCompile Include="src\Engine\Audio\SpatialAudioSource.cpp" />
     <ClCompile Include="src\Engine\Audio\WaveFile.cpp" />
     <ClCompile Include="src\Engine\Camera\Camera.cpp" />
+    <ClCompile Include="src\Engine\Camera\Frustum.cpp" />
     <ClCompile Include="src\Engine\Collision\AABBCollision.cpp" />
     <ClCompile Include="src\Engine\Core\Framework.cpp" />
     <ClCompile Include="src\Engine\Graphics\D3DResourceCheck.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="src\Engine\Audio\SpatialAudioSource.h" />
     <ClInclude Include="src\Engine\Audio\WaveFile.h" />
     <ClInclude Include="src\Engine\Camera\Camera.h" />
+    <ClInclude Include="src\Engine\Camera\Frustum.h" />
     <ClInclude Include="src\Engine\Collision\AABBCollision.h" />
     <ClInclude Include="src\Engine\Collision\CollisionPrimitive.h" />
     <ClInclude Include="src\Engine\Core\Framework.h" />

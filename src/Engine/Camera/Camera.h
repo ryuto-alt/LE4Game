@@ -1,6 +1,7 @@
 #pragma once
 #include "Mymath.h"
 #include "Mymath.h"
+#include "Frustum.h"
 #include <Windows.h>
 
 // カメラモードの定数
@@ -83,6 +84,12 @@ public:
     float GetNearClip() const;
     float GetFarClip() const;
 
+    // フラスタムカリング関連
+    const Frustum& GetFrustum() const;
+    bool IsPointInFrustum(const Vector3& point) const;
+    bool IsAABBInFrustum(const Vector3& min, const Vector3& max) const;
+    bool IsSphereInFrustum(const Vector3& center, float radius) const;
+
 private:
     // ビュー行列関連データ
     Transform transform_;       // カメラのトランスフォーム
@@ -118,6 +125,9 @@ private:
     HWND windowHandle_;         // ウィンドウハンドル
     POINT lastMousePos_;        // 前回のマウス位置
     RECT windowRect_;           // ウィンドウ矩形
+
+    // フラスタムカリング
+    Frustum frustum_;           // 視錐台
 };
 
 // 静的なデフォルトカメラの定義

@@ -143,9 +143,46 @@ void GamePlayScene::Update() {
         fpsUpdateTimer_ = 0.0f;
     }
 
-    ImGui::Begin("Debug Info");
+    ImGui::Begin("デバッグ情報");
     ImGui::Text("FPS: %.1f", displayedFps_);
-    ImGui::Text("DeltaTime: %.3f ms", deltaTime * 1000.0f);
+    ImGui::Text("フレーム時間: %.3f ms", deltaTime * 1000.0f);
+
+    // フラスタムカリング情報
+    ImGui::Separator();
+    ImGui::TextColored(ImVec4(0.4f, 1.0f, 0.4f, 1.0f), "■ フラスタムカリング統計");
+    ImGui::Spacing();
+
+    // オブジェクト統計
+    ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.2f, 1.0f), "【オブジェクト】");
+    ImGui::Text("  総数: %d", cullingStats_.totalObjects);
+    ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "  描画中: %d", cullingStats_.visibleObjects);
+    ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "  カリング済: %d", cullingStats_.culledObjects);
+
+    ImGui::Spacing();
+
+    // メッシュ統計
+    ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.2f, 1.0f), "【メッシュ (個別パーツ)】");
+    ImGui::Text("  総数: %d", cullingStats_.totalMeshes);
+    ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "  描画中: %d", cullingStats_.visibleMeshes);
+    ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "  カリング済: %d", cullingStats_.culledMeshes);
+
+    if (cullingStats_.totalMeshes > 0) {
+        float cullPercentage = (float)cullingStats_.culledMeshes / (float)cullingStats_.totalMeshes * 100.0f;
+        ImGui::Spacing();
+        ImGui::TextColored(ImVec4(0.5f, 0.8f, 1.0f, 1.0f), "  カリング率: %.1f%%", cullPercentage);
+
+        // プログレスバーで視覚化
+        float visibleRatio = (float)cullingStats_.visibleMeshes / (float)cullingStats_.totalMeshes;
+        ImGui::ProgressBar(visibleRatio, ImVec2(-1, 0), "");
+        ImGui::SameLine(0, 5);
+        ImGui::Text("描画率");
+    }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "※フリーカメラで視点を動かすと");
+    ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "  画面外のメッシュが非表示になります");
+
     ImGui::End();
 
     ImGui::Begin("Environment Map Settings");
@@ -171,23 +208,63 @@ void GamePlayScene::Update() {
 }
 
 void GamePlayScene::Draw() {
+    // カリング統計をリセット
+    cullingStats_.totalObjects = 0;
+    cullingStats_.visibleObjects = 0;
+    cullingStats_.culledObjects = 0;
+    cullingStats_.totalMeshes = 0;
+    cullingStats_.visibleMeshes = 0;
+    cullingStats_.culledMeshes = 0;
+
     if (skyboxEnabled_ && skybox_) {
         skybox_->Draw(camera_);
     }
 
     spriteCommon_->CommonDraw();
 
+    // 地面の描画（メッシュ単位でカリング）
     if (ground_) {
-        ground_->Draw();
+        cullingStats_.totalObjects++;
+        int visibleMeshes = 0;
+        int culledMeshes = 0;
+        ground_->Draw(camera_, &visibleMeshes, &culledMeshes);
+
+        cullingStats_.totalMeshes += (visibleMeshes + culledMeshes);
+        cullingStats_.visibleMeshes += visibleMeshes;
+        cullingStats_.culledMeshes += culledMeshes;
+
+        if (visibleMeshes > 0) {
+            cullingStats_.visibleObjects++;
+        } else {
+            cullingStats_.culledObjects++;
+        }
     }
 
-    // FPSモード以外でプレイヤーを描画
+    // FPSモード以外でプレイヤーを描画（メッシュ単位でカリング）
     if (!fpsCamera_ || !fpsCamera_->IsFPSMode()) {
-        player_->Draw();
+        cullingStats_.totalObjects++;
+        int visibleMeshes = 0;
+        int culledMeshes = 0;
+        player_->Draw();  // Playerは内部でカリング処理している想定
+        cullingStats_.visibleObjects++;
     }
 
+    // オブジェクトの描画（メッシュ単位でカリング）
     if (objeObject_) {
-        objeObject_->Draw();
+        cullingStats_.totalObjects++;
+        int visibleMeshes = 0;
+        int culledMeshes = 0;
+        objeObject_->Draw(camera_, &visibleMeshes, &culledMeshes);
+
+        cullingStats_.totalMeshes += (visibleMeshes + culledMeshes);
+        cullingStats_.visibleMeshes += visibleMeshes;
+        cullingStats_.culledMeshes += culledMeshes;
+
+        if (visibleMeshes > 0) {
+            cullingStats_.visibleObjects++;
+        } else {
+            cullingStats_.culledObjects++;
+        }
     }
 
     player_->DrawUI();
@@ -250,6 +327,40 @@ void GamePlayScene::HandleInput() {
             }
         }
     }
+
+#ifdef _DEBUG
+    // フリーカメラモード時のWASD移動
+    if (camera_ && camera_->IsFreeCameraMode()) {
+        float moveSpeed = 0.1f;
+
+        // Shiftキーで高速移動
+        if (engine->IsKeyPressed(DIK_LSHIFT) || engine->IsKeyPressed(DIK_RSHIFT)) {
+            moveSpeed *= 3.0f;
+        }
+
+        // WASD移動
+        if (engine->IsKeyPressed(DIK_W)) {
+            camera_->MoveForward(moveSpeed);
+        }
+        if (engine->IsKeyPressed(DIK_S)) {
+            camera_->MoveForward(-moveSpeed);
+        }
+        if (engine->IsKeyPressed(DIK_A)) {
+            camera_->MoveRight(-moveSpeed);
+        }
+        if (engine->IsKeyPressed(DIK_D)) {
+            camera_->MoveRight(moveSpeed);
+        }
+
+        // スペース/Ctrlで上下移動
+        if (engine->IsKeyPressed(DIK_SPACE)) {
+            camera_->MoveUp(moveSpeed);
+        }
+        if (engine->IsKeyPressed(DIK_LCONTROL) || engine->IsKeyPressed(DIK_RCONTROL)) {
+            camera_->MoveUp(-moveSpeed);
+        }
+    }
+#endif
 }
 
 void GamePlayScene::UpdateCamera() {
