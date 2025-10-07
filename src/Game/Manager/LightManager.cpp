@@ -41,9 +41,9 @@ void LightManager::Initialize() {
     srand(static_cast<unsigned int>(time(nullptr)));
 }
 
-void LightManager::Update() {
+void LightManager::Update(UnoEngine* engine) {
     UpdateLightIntensity();
-    UpdateFlickerEffect();
+    UpdateFlickerEffect(engine);
 }
 
 void LightManager::DrawImGui() {
@@ -154,8 +154,8 @@ void LightManager::UpdateLightIntensity() {
     }
 }
 
-void LightManager::UpdateFlickerEffect() {
-    const float deltaTime = 0.016f;  // 約60FPSと仮定
+void LightManager::UpdateFlickerEffect(UnoEngine* engine) {
+    const float deltaTime = engine->GetDeltaTime();
 
     // 点滅タイマーを進める
     blinkTimer_ += deltaTime;

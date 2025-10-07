@@ -346,8 +346,8 @@ void DirectXCommon::Initialize(WinApp* winApp)
 
 	InitializeFixFPS();
 
-	// デフォルトで144FPSに設定（マシンスペックに左右されず、滑らかに動作）
-	SetMaxFPS(144.0f);
+	// デフォルトで2000FPSに設定
+	SetMaxFPS(2000.0f);
 
 	DeviceInitialize();
 	CommandInitialize();
