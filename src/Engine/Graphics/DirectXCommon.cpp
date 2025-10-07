@@ -418,14 +418,17 @@ void DirectXCommon::End()
 	swapChain->Present(0, 0);
 	//Fenceの値の更新
 	fenceValue++;
-	//GPUがここまでたどりついた時に、Fenceの値を指定したあたいにC:\Program Files\Blender Foundation\Blender 4.4\4.4\scripts\addons_core\level_editor.py代入するようにsignalを送る
+	//GPUがここまでたどりついた時に、Fenceの値を指定した値に代入するようにsignalを送る
 	commandQueue->Signal(fence.Get(), fenceValue);
-	//Fenceの値が指定したSignal値にたどり着いているか確認する
-		//GetCompletebValueの初期値はFence作成時に渡した初期値
-	if (fence->GetCompletedValue() < fenceValue) {
-		//指定したSignalにたどりついていないので、たどり着くまで待つようにイベントを設定する
-		fence->SetEventOnCompletion(fenceValue, fenceEvent);
-		//イベントを待つ
+
+	// 高FPS化: GPU同期待ちを削除（非同期レンダリング）
+	// フレームバッファが追いつくまで待つ代わりに、常に次のフレームを準備
+	const UINT64 currentFenceValue = fence->GetCompletedValue();
+	const UINT64 frameLatency = 3; // 最大3フレームまでGPUに先行させる
+
+	// GPU が3フレーム以上遅れている場合のみ待機
+	if (fenceValue > currentFenceValue + frameLatency) {
+		fence->SetEventOnCompletion(fenceValue - frameLatency, fenceEvent);
 		WaitForSingleObject(fenceEvent, INFINITE);
 	}
 
