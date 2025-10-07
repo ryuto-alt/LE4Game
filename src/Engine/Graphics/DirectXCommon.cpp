@@ -421,13 +421,10 @@ void DirectXCommon::End()
 	//GPUがここまでたどりついた時に、Fenceの値を指定した値に代入するようにsignalを送る
 	commandQueue->Signal(fence.Get(), fenceValue);
 
-	// 安定性最優先: フレームレイテンシを厳しく制限
-	// 他のアプリ（ブラウザ等）との競合を考慮し、GPUリソースを確実に管理
-	const UINT64 currentFenceValue = fence->GetCompletedValue();
-	const UINT64 frameLatency = 1;  // 1フレームまで先行を許可（最大安定性）
-	if (fenceValue > currentFenceValue + frameLatency) {
-		// GPUが1フレーム以上遅れている場合は必ず待機
-		fence->SetEventOnCompletion(fenceValue - frameLatency, fenceEvent);
+	// CommandAllocatorをResetする前に、使用中のコマンドが完全に完了するまで待機
+	// これにより COMMAND_ALLOCATOR_SYNC エラーを防ぐ
+	if (fence->GetCompletedValue() < fenceValue) {
+		fence->SetEventOnCompletion(fenceValue, fenceEvent);
 		WaitForSingleObject(fenceEvent, INFINITE);
 	}
 
