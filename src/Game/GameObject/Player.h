@@ -100,7 +100,7 @@ private:
     float rotationSmoothingSpeed_ = 17.0f;
     
     // 移動関連
-    const float moveSpeed_ = 3.0f;
+    const float moveSpeed_ = 4.5f;
     const float sneakSpeedMultiplier_ = 0.5f;
     const float runSpeedMultiplier_ = 2.0f;
     bool isMoving_ = false;
