@@ -92,7 +92,7 @@ void GamePlayScene::Initialize() {
 
     // ポストプロセスで魚眼レンズエフェクトを有効化
     if (postProcess_) {
-        postProcess_->SetFisheyeStrength(0.55f);  // 魚眼レンズの強度（控えめに）
+        // 魚眼レンズの初期強度はメンバ変数で管理
         postProcess_->SetHorrorParams(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);  // ホラーエフェクトはオフ
     }
 }
@@ -100,6 +100,16 @@ void GamePlayScene::Initialize() {
 
 void GamePlayScene::Update() {
     UnoEngine* engine = UnoEngine::GetInstance();
+
+    // ImGuiで魚眼レンズ強度を調整
+    ImGui::Begin("Fisheye Settings");
+    ImGui::SliderFloat("Fisheye Strength", &fisheyeStrength_, 0.0f, 100.0f);
+    ImGui::End();
+
+    // 魚眼強度を適用
+    if (postProcess_) {
+        postProcess_->SetFisheyeStrength(fisheyeStrength_);
+    }
 
     HandleInput();
     player_->HandleInput(engine);

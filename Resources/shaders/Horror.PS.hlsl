@@ -117,13 +117,12 @@ PixelShaderOutput main(VertexShaderOutput input)
 
         // 魚眼レンズの開口角（視野角）を計算
         // fisheyeStrengthが大きいほど広角になる
-        float aperture = lerp(100.0, 178.0, fisheyeStrength);
+        float aperture = lerp(150.0, 178.0, fisheyeStrength);
         float apertureHalf = 0.5 * aperture * (3.14159265 / 180.0);
         float maxFactor = sin(apertureHalf);
 
         // 魚眼レンズの有効範囲を設定（画面外まで拡張）
-        float fisheyeRadius = 1.5; // 魚眼レンズの範囲（画面の対角線より大きく）
-
+        float fisheyeRadius = 1.5; 
         // 歪みを適用する範囲内かチェック
         if (d < fisheyeRadius)
         {
@@ -141,33 +140,9 @@ PixelShaderOutput main(VertexShaderOutput input)
         // else: 範囲外はそのまま（歪みなし）
     }
 
-    // VHS風の歪み効果
-    for (float i = 0.0; i < 0.71; i += 0.1313)
-    {
-        float d = fmod(time * i * 0.1, 1.7);
-        float o = sin(1.0 - tan(time * 0.024 * i));
-        o *= distortionAmount * 0.02;
-        uv.x += verticalBar(d, uv.y, o);
-    }
-    
-    // スキャンライン効果
-    float scanline = sin(uv.y * 800.0) * 0.04;
-    
-    // ノイズ効果
-    float32_t2 noiseCoord = float32_t2(time * 0.00001, uv.y * 25.0);
-    float noise = rand(noiseCoord);
-    uv.x += noise * noiseIntensity * 0.02;
-    
-    // 静的ノイズ
-    float staticNoise = rand(uv + time * 0.1);
-    staticNoise = (staticNoise - 0.5) * noiseIntensity * 0.5;
-    
     // 色収差効果を適用
     float aberrationAmount = 1.0 + distortionAmount * 2.0;
     float32_t3 color = chromaticAberration(uv, aberrationAmount);
-    
-    // スキャンラインとノイズを追加
-    color = color * (1.0 + scanline) + staticNoise;
     
     // 血のエフェクトを適用
     color = bloodEffect(input.texcoord, color, bloodAmount);

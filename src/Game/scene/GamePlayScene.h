@@ -34,4 +34,7 @@ private:
 
     std::unique_ptr<FPSCamera> fpsCamera_;
     std::unique_ptr<PostProcess> postProcess_;
+
+    // 魚眼レンズ強度（ImGui用）
+    float fisheyeStrength_ = 2.58f;
 };
