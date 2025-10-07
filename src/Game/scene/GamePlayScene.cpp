@@ -1,13 +1,17 @@
 #include "GamePlayScene.h"
-#ifdef _DEBUG
 #include "imgui.h"
-#endif
 #include "UnoEngine.h"
 #include "SceneManager.h"
 #include "InstancedRenderer.h"
 
 void GamePlayScene::Initialize() {
     UnoEngine* engine = UnoEngine::GetInstance();
+
+    // 必須ポインタのnullチェック
+    if (!dxCommon_ || !srvManager_ || !camera_) {
+        OutputDebugStringA("GamePlayScene::Initialize - Critical error: Required pointers are null!\n");
+        return;
+    }
 
     // ポストプロセス初期化
     postProcess_ = std::make_unique<PostProcess>();

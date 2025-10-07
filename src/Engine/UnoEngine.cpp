@@ -53,9 +53,7 @@ void UnoEngine::Initialize() {
         // TextureManager::GetInstance()->LoadDefaultTexture();
 
         // ImGuiの初期化
-#ifdef _DEBUG
         InitializeImGui();
-#endif
 
         // 入力初期化
         input_ = std::make_unique<Input>();
@@ -196,10 +194,8 @@ void UnoEngine::Draw() {
         Particle3DManager::GetInstance()->Draw(camera_.get());
 
         // ImGuiの準備と描画
-#ifdef _DEBUG
         ImGui::Render();
         ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), dxCommon_->GetCommandList());
-#endif
 
         // 描画終了
         dxCommon_->End();
@@ -240,11 +236,9 @@ void UnoEngine::Finalize() {
         camera_.reset();
 
         // ImGuiの解放（DirectX12リソースを使用しているため早めに）
-#ifdef _DEBUG
         ImGui_ImplDX12_Shutdown();
         ImGui_ImplWin32_Shutdown();
         ImGui::DestroyContext();
-#endif
 
         // テクスチャマネージャの解放（シングルトンを強制破棄）
         TextureManager::GetInstance()->Finalize();
@@ -279,11 +273,9 @@ void UnoEngine::Run() {
     // ゲームループ
     while (!IsEndRequested()) {
         // ImGuiの新しいフレーム
-#ifdef _DEBUG
         ImGui_ImplDX12_NewFrame();
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
-#endif
 
         // 更新
         Update();
@@ -501,7 +493,6 @@ void UnoEngine::UpdateSpatialAudio() {
 }
 
 void UnoEngine::InitializeImGui() {
-#ifdef _DEBUG
     try {
         // ImGui初期化
         IMGUI_CHECKVERSION();
@@ -575,7 +566,6 @@ void UnoEngine::InitializeImGui() {
     catch (const std::exception&) {
         // エラーは無視
     }
-#endif
 }
 
 // === スムージングシステム実装 ===
