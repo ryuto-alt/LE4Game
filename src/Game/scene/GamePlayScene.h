@@ -37,4 +37,5 @@ private:
 
     // 魚眼レンズ強度（ImGui用）
     float fisheyeStrength_ = 2.58f;
+    float fisheyeRadius_ = 1.5f;  // 魚眼レンズの範囲
 };

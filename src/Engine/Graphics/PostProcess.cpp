@@ -48,6 +48,7 @@ void PostProcess::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
     currentParams_.bloodAmount = 0.4f;
     currentParams_.vignetteIntensity = 0.0f;
     currentParams_.fisheyeStrength = 0.0f;  // デフォルトはオフ
+    currentParams_.fisheyeRadius = 1.5f;    // デフォルトの範囲
 
     *horrorParamsData_ = currentParams_;
 }
@@ -259,6 +260,14 @@ void PostProcess::SetHorrorParams(float time, float noise, float distortion, flo
 
 void PostProcess::SetFisheyeStrength(float strength) {
     currentParams_.fisheyeStrength = strength;
+
+    if (horrorParamsData_) {
+        *horrorParamsData_ = currentParams_;
+    }
+}
+
+void PostProcess::SetFisheyeRadius(float radius) {
+    currentParams_.fisheyeRadius = radius;
 
     if (horrorParamsData_) {
         *horrorParamsData_ = currentParams_;

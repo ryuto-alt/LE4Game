@@ -236,6 +236,12 @@
     <ClCompile Include="src\Game\scene\LogoScene.cpp">
       <Filter>src\Game\scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Camera\Frustum.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\InstancedRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -411,6 +417,8 @@
     <ClInclude Include="src\Game\scene\LogoScene.h">
       <Filter>src\Game\scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Camera\Frustum.h" />
+    <ClInclude Include="src\Engine\Graphics\InstancedRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -457,6 +465,12 @@
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\Skybox.VS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\Horror.PS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PBRInstancedObject3d.VS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>

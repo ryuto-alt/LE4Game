@@ -78,7 +78,7 @@ void GamePlayScene::Initialize() {
     // SkyboxをDDSファイルで初期化
     skybox_ = engine->CreateSkybox();
     engine->LoadSkybox(skybox_.get(), "Resources/Models/skybox/warm_restaurant_night_2k.hdr");
-    skyboxEnabled_ = true;
+    skyboxEnabled_ = false;
 
     // FPSカメラのマウスルックを有効化
     if (fpsCamera_) {
@@ -101,14 +101,16 @@ void GamePlayScene::Initialize() {
 void GamePlayScene::Update() {
     UnoEngine* engine = UnoEngine::GetInstance();
 
-    // ImGuiで魚眼レンズ強度を調整
+    // ImGuiで魚眼レンズ強度と範囲を調整
     ImGui::Begin("Fisheye Settings");
     ImGui::SliderFloat("Fisheye Strength", &fisheyeStrength_, 0.0f, 100.0f);
+    ImGui::SliderFloat("Fisheye Radius", &fisheyeRadius_, 0.1f, 3.0f);
     ImGui::End();
 
-    // 魚眼強度を適用
+    // 魚眼強度と範囲を適用
     if (postProcess_) {
         postProcess_->SetFisheyeStrength(fisheyeStrength_);
+        postProcess_->SetFisheyeRadius(fisheyeRadius_);
     }
 
     HandleInput();

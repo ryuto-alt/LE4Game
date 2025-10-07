@@ -16,7 +16,8 @@ cbuffer HorrorParams : register(b0)
     float32_t bloodAmount;     // 血のエフェクトの強度 (0.0 - 1.0)
     float32_t vignetteIntensity; // ビネットの強度 (0.0 - 1.0)
     float32_t fisheyeStrength; // 魚眼レンズの強度 (0.0 - 1.0)
-    float32_t2 padding;        // パディング
+    float32_t fisheyeRadius;   // 魚眼レンズの範囲 (0.0 - 3.0)
+    float32_t padding;         // パディング
 };
 
 // RenderTextureをサンプリングするためのテクスチャとサンプラー
@@ -117,12 +118,13 @@ PixelShaderOutput main(VertexShaderOutput input)
 
         // 魚眼レンズの開口角（視野角）を計算
         // fisheyeStrengthが大きいほど広角になる
-        float aperture = lerp(150.0, 178.0, fisheyeStrength);
+        // 強度が1.0を超える場合も対応
+        float aperture = 150.0 + fisheyeStrength * 28.0;  // 150度から始まり、強度に応じて増加
+        aperture = min(aperture, 179.9);  // 最大179.9度に制限
         float apertureHalf = 0.5 * aperture * (3.14159265 / 180.0);
         float maxFactor = sin(apertureHalf);
 
-        // 魚眼レンズの有効範囲を設定（画面外まで拡張）
-        float fisheyeRadius = 1.5; 
+        // 魚眼レンズの有効範囲（シェーダー定数から取得）
         // 歪みを適用する範囲内かチェック
         if (d < fisheyeRadius)
         {
