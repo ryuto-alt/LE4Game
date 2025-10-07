@@ -30,6 +30,10 @@ public:
     void SetNearClip(float nearClip);
     void SetFarClip(float farClip);
 
+    // 魚眼レンズエフェクト関連
+    void SetFisheyeStrength(float strength);
+    float GetFisheyeStrength() const;
+
     // マウス視点移動関連
     void ProcessMouseInput(float deltaX, float deltaY);
     void SetMouseSensitivity(float sensitivity);
@@ -128,6 +132,9 @@ private:
 
     // フラスタムカリング
     Frustum frustum_;           // 視錐台
+
+    // 魚眼レンズエフェクト
+    float fisheyeStrength_;     // 魚眼レンズの強度（0.0: オフ、1.0: 最大）
 };
 
 // 静的なデフォルトカメラの定義

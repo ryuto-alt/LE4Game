@@ -29,6 +29,7 @@ struct SpotLight
 struct CameraData
 {
     float32_t3 worldPosition;
+    float32_t fisheyeStrength;
 };
 
 ConstantBuffer<Material> gMaterial : register(b0);

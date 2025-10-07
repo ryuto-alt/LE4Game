@@ -15,7 +15,8 @@ cbuffer HorrorParams : register(b0)
     float32_t distortionAmount;// 歪みの強度 (0.0 - 1.0)
     float32_t bloodAmount;     // 血のエフェクトの強度 (0.0 - 1.0)
     float32_t vignetteIntensity; // ビネットの強度 (0.0 - 1.0)
-    float32_t3 padding;        // パディング
+    float32_t fisheyeStrength; // 魚眼レンズの強度 (0.0 - 1.0)
+    float32_t2 padding;        // パディング
 };
 
 // RenderTextureをサンプリングするためのテクスチャとサンプラー
@@ -103,7 +104,43 @@ PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
     float32_t2 uv = input.texcoord;
-    
+
+    // 魚眼レンズエフェクト（ポストプロセス）
+    // 正しい魚眼レンズの実装: 半球面への投影
+    if (fisheyeStrength > 0.0)
+    {
+        // UV座標を-1～1の範囲に変換（中心を原点に）
+        float32_t2 xy = (uv - 0.5) * 2.0;
+
+        // 中心からの距離
+        float d = length(xy);
+
+        // 魚眼レンズの開口角（視野角）を計算
+        // fisheyeStrengthが大きいほど広角になる
+        float aperture = lerp(100.0, 178.0, fisheyeStrength);
+        float apertureHalf = 0.5 * aperture * (3.14159265 / 180.0);
+        float maxFactor = sin(apertureHalf);
+
+        // 魚眼レンズの有効範囲を設定（画面外まで拡張）
+        float fisheyeRadius = 1.5; // 魚眼レンズの範囲（画面の対角線より大きく）
+
+        // 歪みを適用する範囲内かチェック
+        if (d < fisheyeRadius)
+        {
+            // 半球面への投影を計算
+            float scaledD = d * maxFactor / fisheyeRadius;
+            scaledD = min(scaledD, 0.99); // sqrtの範囲エラー防止
+            float z = sqrt(1.0 - scaledD * scaledD);
+            float r = atan2(scaledD, z) / 3.14159265;
+            float phi = atan2(xy.y, xy.x);
+
+            // 極座標から直交座標に戻す（範囲に合わせてスケール）
+            uv.x = r * cos(phi) * (fisheyeRadius / maxFactor) + 0.5;
+            uv.y = r * sin(phi) * (fisheyeRadius / maxFactor) + 0.5;
+        }
+        // else: 範囲外はそのまま（歪みなし）
+    }
+
     // VHS風の歪み効果
     for (float i = 0.0; i < 0.71; i += 0.1313)
     {

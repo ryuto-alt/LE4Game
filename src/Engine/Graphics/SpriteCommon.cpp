@@ -123,9 +123,9 @@ void SpriteCommon::RootSignatureInitialize()
 	rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameters[6].DescriptorTable.pDescriptorRanges = &descriptorRange[2];
 	rootParameters[6].DescriptorTable.NumDescriptorRanges = 1;
-	//rootParameters[7]設定（カメラデータ）
+	//rootParameters[7]設定（カメラデータ - 頂点シェーダーとピクセルシェーダー両方で使用）
 	rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;  // 両方で使用
 	rootParameters[7].Descriptor.ShaderRegister = 3;
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメーター配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ

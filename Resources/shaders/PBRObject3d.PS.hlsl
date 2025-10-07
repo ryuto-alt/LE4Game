@@ -69,6 +69,7 @@ struct SpotLight
 struct CameraData
 {
     float32_t3 worldPosition;
+    float32_t fisheyeStrength;
 };
 
 // PBR計算のヘルパー関数

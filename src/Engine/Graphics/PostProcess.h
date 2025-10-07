@@ -15,7 +15,8 @@ public:
         float distortionAmount;
         float bloodAmount;
         float vignetteIntensity;
-        float padding[3];  // 16バイト境界に合わせる
+        float fisheyeStrength;  // 魚眼レンズの強度
+        float padding[2];  // 16バイト境界に合わせる
     };
 
     PostProcess() = default;
@@ -28,6 +29,7 @@ public:
     void PostDraw();
 
     void SetHorrorParams(float time, float noise, float distortion, float blood, float vignette = 0.0f);
+    void SetFisheyeStrength(float strength);
 
     D3D12_CPU_DESCRIPTOR_HANDLE GetRTVHandle() const { return rtvHandle_; }
     ID3D12Resource* GetRenderTarget() const { return renderTargetResource_.Get(); }

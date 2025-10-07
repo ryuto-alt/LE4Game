@@ -9,6 +9,10 @@
 void GamePlayScene::Initialize() {
     UnoEngine* engine = UnoEngine::GetInstance();
 
+    // ポストプロセス初期化
+    postProcess_ = std::make_unique<PostProcess>();
+    postProcess_->Initialize(dxCommon_, srvManager_);
+
     // 背景色を黒に設定
     //dxCommon_->SetClearColor(0.1f, 0.25f, 0.5f, 1.0f);
     dxCommon_->SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -80,6 +84,17 @@ void GamePlayScene::Initialize() {
     if (fpsCamera_) {
         fpsCamera_->SetMouseLookEnabled(true);
     }
+
+    // 魚眼レンズエフェクトを設定
+    if (camera_) {
+        camera_->SetFov(1.8f);  // 約103度の広角
+    }
+
+    // ポストプロセスで魚眼レンズエフェクトを有効化
+    if (postProcess_) {
+        postProcess_->SetFisheyeStrength(0.55f);  // 魚眼レンズの強度（控えめに）
+        postProcess_->SetHorrorParams(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);  // ホラーエフェクトはオフ
+    }
 }
 
 
@@ -132,6 +147,11 @@ void GamePlayScene::Update() {
 }
 
 void GamePlayScene::Draw() {
+    // ポストプロセス用のレンダーターゲットに描画
+    if (postProcess_) {
+        postProcess_->PreDraw();
+    }
+
     if (skyboxEnabled_ && skybox_) {
         skybox_->Draw(camera_);
     }
@@ -148,6 +168,11 @@ void GamePlayScene::Draw() {
 
     if (objeObject_) {
         objeObject_->Draw(camera_);
+    }
+
+    // ポストプロセスを適用して画面に描画
+    if (postProcess_) {
+        postProcess_->PostDraw();
     }
 
     player_->DrawUI();
@@ -176,6 +201,7 @@ void GamePlayScene::Finalize() {
     skybox_.reset();
     lightManager_.reset();
     fpsCamera_.reset();
+    postProcess_.reset();
 }
 
 void GamePlayScene::HandleInput() {

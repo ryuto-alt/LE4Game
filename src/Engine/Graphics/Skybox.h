@@ -69,6 +69,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
     Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
     Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixResource_;
+    Microsoft::WRL::ComPtr<ID3D12Resource> cameraResource_;
 
     D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
     D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
@@ -77,6 +78,12 @@ private:
     uint32_t* indexData_ = nullptr;
     Material* materialData_ = nullptr;
     TransformationMatrix* transformationMatrixData_ = nullptr;
+
+    struct CameraData {
+        Vector3 worldPosition;
+        float fisheyeStrength;
+    };
+    CameraData* cameraData_ = nullptr;
 
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
     Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_;

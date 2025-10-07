@@ -113,6 +113,7 @@ void Object3d::Initialize(DirectXCommon* dxCommon, SpriteCommon* spriteCommon) {
 	// カメラデータの書き込み
 	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
 	cameraData_->worldPosition = { 0.0f, 0.0f, 0.0f };
+	cameraData_->fisheyeStrength = 0.0f;  // 初期値は魚眼レンズオフ
 	
 	// デフォルトテクスチャを事前にロードして描画中の動的SRV作成を避ける
 	TextureManager::GetInstance()->LoadDefaultTexture();
@@ -406,6 +407,7 @@ void Object3d::Update() {
 	// カメラの位置情報を更新
 	if (cameraData_ && camera_) {
 		cameraData_->worldPosition = camera_->GetTranslate();
+		cameraData_->fisheyeStrength = camera_->GetFisheyeStrength();
 	}
 	
 	// 環境マップの有効/無効を更新（PBR実装では使用しない）

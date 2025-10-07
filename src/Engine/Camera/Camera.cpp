@@ -19,7 +19,8 @@ Camera::Camera() :
     orbitAngleY_(0.52f),  // 30度右から見る角度
     windowHandle_(nullptr),
     lastMousePos_({0, 0}),
-    windowRect_({0, 0, 0, 0})
+    windowRect_({0, 0, 0, 0}),
+    fisheyeStrength_(0.0f)  // 初期状態では魚眼レンズオフ
 {
     // トランスフォームの初期設定
     transform_.scale = { 1.0f, 1.0f, 1.0f };
@@ -445,4 +446,13 @@ bool Camera::IsAABBInFrustum(const Vector3& min, const Vector3& max) const {
 
 bool Camera::IsSphereInFrustum(const Vector3& center, float radius) const {
     return frustum_.IsSphereInside(center, radius);
+}
+
+// 魚眼レンズエフェクト関連
+void Camera::SetFisheyeStrength(float strength) {
+    fisheyeStrength_ = strength;
+}
+
+float Camera::GetFisheyeStrength() const {
+    return fisheyeStrength_;
 }

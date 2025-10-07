@@ -128,6 +128,7 @@ private:
     // カメラデータ
     struct CameraData {
         Vector3 worldPosition;
+        float fisheyeStrength;  // 魚眼レンズの強度
     };
     CameraData* cameraData_;
 

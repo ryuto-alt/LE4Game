@@ -5,6 +5,7 @@
 #include "Skybox.h"
 #include "Manager/LightManager.h"
 #include "InstancedRenderer.h"
+#include "PostProcess.h"
 #include <memory>
 
 class GamePlayScene : public IScene {
@@ -32,4 +33,5 @@ private:
     bool skyboxEnabled_ = false;
 
     std::unique_ptr<FPSCamera> fpsCamera_;
+    std::unique_ptr<PostProcess> postProcess_;
 };

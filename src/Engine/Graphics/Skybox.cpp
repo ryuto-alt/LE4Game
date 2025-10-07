@@ -100,6 +100,12 @@ void Skybox::CreateMaterial() {
 
     transformationMatrixResource_ = dxCommon_->CreateBufferResource(sizeof(TransformationMatrix));
     transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
+
+    // カメラデータリソースの作成
+    cameraResource_ = dxCommon_->CreateBufferResource(sizeof(CameraData));
+    cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
+    cameraData_->worldPosition = { 0.0f, 0.0f, 0.0f };
+    cameraData_->fisheyeStrength = 0.0f;
 }
 
 void Skybox::CreateRootSignature() {
@@ -110,7 +116,7 @@ void Skybox::CreateRootSignature() {
     descriptorRange[0].RegisterSpace = 0;
     descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-    D3D12_ROOT_PARAMETER rootParameters[3] = {};
+    D3D12_ROOT_PARAMETER rootParameters[4] = {};
     rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
     rootParameters[0].Descriptor.ShaderRegister = 0;
@@ -123,6 +129,11 @@ void Skybox::CreateRootSignature() {
     rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
     rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;
     rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+
+    // カメラデータ用のCBV（b3レジスタ）
+    rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+    rootParameters[3].Descriptor.ShaderRegister = 3;
 
     D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
     staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
@@ -309,6 +320,12 @@ void Skybox::Draw(Camera* camera) {
     transformationMatrixData_->WVP = worldViewProjectionMatrix;
     transformationMatrixData_->World = worldMatrix;
 
+    // カメラデータの更新
+    if (cameraData_ && camera) {
+        cameraData_->worldPosition = camera->GetTranslate();
+        cameraData_->fisheyeStrength = camera->GetFisheyeStrength();
+    }
+
     // ルートシグネチャとパイプラインステートを設定
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
     commandList->SetPipelineState(graphicsPipelineState_.Get());
@@ -319,7 +336,7 @@ void Skybox::Draw(Camera* camera) {
     // 定数バッファとSRVを設定
     commandList->SetGraphicsRootConstantBufferView(0, transformationMatrixResource_->GetGPUVirtualAddress());
     commandList->SetGraphicsRootConstantBufferView(1, materialResource_->GetGPUVirtualAddress());
-    
+
     // SRVManagerの有効性を再確認してからディスクリプタテーブルを設定
     if (srvManager_) {
         srvManager_->SetGraphicsRootDescriptorTable(2, cubemapSrvIndex_);
@@ -327,6 +344,9 @@ void Skybox::Draw(Camera* camera) {
         OutputDebugStringA("Skybox: SrvManagerが無効のため、ディスクリプタテーブル設定をスキップ\n");
         return;
     }
+
+    // カメラデータのCBVを設定（b3レジスタ）
+    commandList->SetGraphicsRootConstantBufferView(3, cameraResource_->GetGPUVirtualAddress());
 
     commandList->DrawIndexedInstanced(kNumIndices, 1, 0, 0, 0);
     // 描画完了のメッセージは頻繁すぎるため無効化
