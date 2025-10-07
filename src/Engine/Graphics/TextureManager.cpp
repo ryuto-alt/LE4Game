@@ -285,11 +285,8 @@ bool TextureManager::LoadTexture(const std::string& filePath)
         // テクスチャリソース作成失敗時の処理
         if (!textureData.resource) {
             OutputDebugStringA(("ERROR: TextureManager::LoadTexture - Failed to create texture resource for: " + filePath + "\n").c_str());
-            // 白いダミーテクスチャのSRVインデックスを返す
-            if (IsTextureExists(GetDefaultTexturePath())) {
-                return GetSrvIndex(GetDefaultTexturePath());
-            }
-            return 0; // デフォルトテクスチャもない場合は0を返す
+            LoadDefaultTexture(); // デフォルトテクスチャを確保
+            return false; // 失敗を返す
         }
 
         Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = dxCommon_->UploadTextureData(textureData.resource, mipImages);
@@ -297,11 +294,8 @@ bool TextureManager::LoadTexture(const std::string& filePath)
         // アップロード失敗時の処理
         if (!intermediateResource) {
             OutputDebugStringA(("ERROR: TextureManager::LoadTexture - Failed to upload texture data for: " + filePath + "\n").c_str());
-            // 白いダミーテクスチャのSRVインデックスを返す
-            if (IsTextureExists(GetDefaultTexturePath())) {
-                return GetSrvIndex(GetDefaultTexturePath());
-            }
-            return 0; // デフォルトテクスチャもない場合は0を返す
+            LoadDefaultTexture(); // デフォルトテクスチャを確保
+            return false; // 失敗を返す
         }
 
         // バッチモードでない場合のみCommandKickを実行

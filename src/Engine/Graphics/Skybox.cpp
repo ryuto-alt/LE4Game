@@ -248,8 +248,25 @@ void Skybox::LoadCubemap(const std::string& filePath) {
     // Cubemapファイルを読み込み (DDS/HDR両方対応)
     bool loadResult = textureManager_->LoadTexture(filePath);
     if (!loadResult) {
-        OutputDebugStringA(("Skybox: " + fileType + "ファイルの読み込みに失敗しました: " + filePath + "\n").c_str());
+        OutputDebugStringA(("WARNING: Skybox: " + fileType + "ファイルの読み込みに失敗しました: " + filePath + "\n").c_str());
+        OutputDebugStringA("Skybox: デフォルトテクスチャにフォールバックします\n");
+
+        // デフォルトテクスチャにフォールバック
+        std::string defaultPath = textureManager_->GetDefaultTexturePath();
+        if (textureManager_->IsTextureExists(defaultPath)) {
+            uint32_t defaultSrvIndex = textureManager_->GetSrvIndex(defaultPath);
+            if (defaultSrvIndex != UINT32_MAX) {
+                cubemapSrvIndex_ = defaultSrvIndex;
+                cubemapLoaded_ = true;
+                environmentTextureLoaded_ = false; // 環境マップとしては無効
+                OutputDebugStringA("Skybox: デフォルトテクスチャで描画を続行します\n");
+                return;
+            }
+        }
+
+        // デフォルトテクスチャも取得できない場合
         environmentTextureLoaded_ = false;
+        cubemapLoaded_ = false;
         return;
     }
 
@@ -258,6 +275,7 @@ void Skybox::LoadCubemap(const std::string& filePath) {
     if (srvIndex == UINT32_MAX) {
         OutputDebugStringA(("Skybox: 無効なSRVインデックスが返されました: " + filePath + "\n").c_str());
         environmentTextureLoaded_ = false;
+        cubemapLoaded_ = false;
         return;
     }
 
