@@ -131,6 +131,22 @@ void Player::Update(UnoEngine* engine) {
 
     const float deltaTime = engine->GetDeltaTime();
 
+    // デバッグ: デルタタイムをファイルに出力
+    static int frameCount = 0;
+    if (frameCount++ % 60 == 0) {
+        char debugMsg[128];
+        sprintf_s(debugMsg, "DeltaTime: %.6f seconds (FPS: %.1f)\n", deltaTime, 1.0f / deltaTime);
+        OutputDebugStringA(debugMsg);
+
+        // ファイルに追記
+        FILE* file = nullptr;
+        fopen_s(&file, "Deltatime.txt", "a");
+        if (file) {
+            fprintf(file, "Frame %d: DeltaTime: %.6f seconds (FPS: %.1f)\n", frameCount, deltaTime, 1.0f / deltaTime);
+            fclose(file);
+        }
+    }
+
     // 移動前の位置を保存
     previousPosition_ = position_;
 

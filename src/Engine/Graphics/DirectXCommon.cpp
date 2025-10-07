@@ -345,6 +345,10 @@ void DirectXCommon::Initialize(WinApp* winApp)
 	winApp_ = winApp;
 
 	InitializeFixFPS();
+
+	// デフォルトで144FPSに設定（マシンスペックに左右されず、滑らかに動作）
+	SetMaxFPS(144.0f);
+
 	DeviceInitialize();
 	CommandInitialize();
 	SwapChainInitialize();
@@ -479,25 +483,42 @@ void DirectXCommon::InitializeFixFPS()
 
 void DirectXCommon::UpdateFixFPS()
 {
-	//1/60秒ピッタリの時間
-	const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 120.0f));
-	//1/60秒よりわずかに短い時間
-	const std::chrono::microseconds kMInCheckTime(uint64_t(1000000.0f / 120.0f));
-	//現在時間を取得する
+	// 現在時間を取得
 	std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-	//前回記録からの経過時間を取得する
+	// 前回記録からの経過時間を取得
 	std::chrono::microseconds elapsed =
 		std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
-	//1/60秒(よりわずかに短い時間)経っていない場合
-	if (elapsed < kMInCheckTime) {
-		//1/60秒経過するまで微小なスリープを繰り返す
-		while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
-			//1マイクロ秒スリープ
-			std::this_thread::sleep_for(std::chrono::microseconds(1));
+
+	// FPS上限が設定されている場合、目標フレーム時間まで待機
+	if (targetFrameTime_ > 0.0f) {
+		float elapsedSeconds = elapsed.count() / 1000000.0f;
+		float waitTime = targetFrameTime_ - elapsedSeconds;
+
+		if (waitTime > 0.0f) {
+			// マイクロ秒単位でスリープ
+			std::chrono::microseconds waitDuration(static_cast<long long>(waitTime * 1000000.0f));
+			std::this_thread::sleep_for(waitDuration);
+
+			// 待機後の時間を再取得
+			now = std::chrono::steady_clock::now();
+			elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
 		}
 	}
-	//現在の時間を記録をする
-	reference_ = std::chrono::steady_clock::now();
+
+	// デルタタイムを秒単位で計算
+	deltaTime_ = elapsed.count() / 1000000.0f;
+
+	// 現在の時間を次回の基準時間として記録
+	reference_ = now;
+
+	// デルタタイムの上限を設定（異常値を防ぐ）
+	if (deltaTime_ > 0.1f) {
+		deltaTime_ = 1.0f / 60.0f;  // 異常に大きい場合は60FPS相当に
+	}
+	// デルタタイムの下限を設定（0除算を防ぐ）
+	if (deltaTime_ < 0.0001f) {
+		deltaTime_ = 0.0001f;
+	}
 }
 
 

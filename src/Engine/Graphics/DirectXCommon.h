@@ -107,6 +107,18 @@ public:
 	// スワップチェーンへのアクセス
 	IDXGISwapChain4* GetSwapChain() const { return swapChain.Get(); }
 
+	// デルタタイムの取得
+	float GetDeltaTime() const { return deltaTime_; }
+
+	// FPS上限の設定（0で上限なし）
+	void SetMaxFPS(float maxFPS) {
+		if (maxFPS > 0.0f) {
+			targetFrameTime_ = 1.0f / maxFPS;
+		} else {
+			targetFrameTime_ = 0.0f;
+		}
+	}
+
 private:
 	//WindowsAPI
 	WinApp* winApp_ = nullptr;
@@ -148,6 +160,8 @@ private:
 	D3D12_RESOURCE_BARRIER barrier{};
 
 	std::chrono::steady_clock::time_point reference_;
+	float deltaTime_ = 0.0f;
+	float targetFrameTime_ = 0.0f;  // 目標フレーム時間（秒）0.0fは上限なし
 
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
 

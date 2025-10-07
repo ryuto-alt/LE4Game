@@ -206,8 +206,10 @@ public:
     float SmoothRotation(float current, float target, float speed, float deltaTime);
     
     // === 時間管理 ===
-    // デルタタイムを取得（秒単位）
+    // デルタタイムを取得（秒単位、60FPS固定）
     float GetDeltaTime() const { return deltaTime_; }
+    // 実際のデルタタイムを取得（1500FPS相当）
+    float GetRealDeltaTime() const { return realDeltaTime_; }
     // 前フレームからの経過時間を更新（フレーム開始時に呼ぶ）
     void UpdateDeltaTime();
     
@@ -266,5 +268,5 @@ private:
     
     // 時間管理
     float deltaTime_ = 0.0f;  // 前フレームからの経過時間（秒）
-    std::chrono::steady_clock::time_point lastFrameTime_;  // 前フレームの時刻
+    float realDeltaTime_ = 0.0f;  // 実際のデルタタイム（内部用）
 };

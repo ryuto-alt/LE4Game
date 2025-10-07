@@ -61,7 +61,7 @@ void TitleScene::Initialize() {
 void TitleScene::Update() {
     camera_->Update();
 
-    float deltaTime = 1.0f / 60.0f;
+    float deltaTime = dxCommon_->GetDeltaTime();
 
     // 初回砂嵐エフェクト
     if (showInitialNoise_) {
@@ -174,7 +174,7 @@ void TitleScene::Update() {
     noiseSprite_->Update();
 
     // ホラーエフェクトのパラメータ更新
-    time_ += 1.0f / 60.0f;
+    time_ += deltaTime;
     horrorEffect_->SetHorrorParams(
         time_,
         0.4f,  // ノイズ強度

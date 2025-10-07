@@ -127,7 +127,7 @@ void UnoEngine::Update() {
             return;
         }
 
-        // 入力更新
+        // 入力更新（常に実行）
         input_->Update();
 
         // F11キーでフルスクリーン切り替え
@@ -140,7 +140,7 @@ void UnoEngine::Update() {
             srvManager_->PreDraw();
         }
 
-        // カメラの更新
+        // カメラの更新（常に実行して滑らかな視点移動を実現）
         camera_->Update();
 
         // パーティクルマネージャーの更新
@@ -160,7 +160,7 @@ void UnoEngine::Update() {
         // 3D空間オーディオの更新
         UpdateSpatialAudio();
 
-        // シーンマネージャーの更新
+        // シーンマネージャーの更新（常に実行）
         SceneManager::GetInstance()->Update();
 
         // SceneManagerからの終了リクエストをチェック
@@ -607,30 +607,16 @@ float UnoEngine::SmoothRotation(float current, float target, float speed, float 
 }
 
 void UnoEngine::UpdateDeltaTime() {
-    // 初回呼び出し時の処理
-    static bool firstCall = true;
-    if (firstCall) {
-        lastFrameTime_ = std::chrono::steady_clock::now();
-        deltaTime_ = 1.0f / 120.0f; // 初回は120FPSと仮定
-        firstCall = false;
-        return;
+    // DirectXCommonから実際の経過時間を取得
+    realDeltaTime_ = dxCommon_->GetDeltaTime();
+
+    // デルタタイムは実際の経過時間を使用
+    deltaTime_ = realDeltaTime_;
+
+    // デルタタイムの下限を設定（0除算を防ぐ）
+    if (deltaTime_ < 0.0001f) {
+        deltaTime_ = 0.0001f;
     }
-    
-    // 現在時刻を取得
-    auto currentTime = std::chrono::steady_clock::now();
-    
-    // 前フレームからの経過時間を計算（マイクロ秒→秒に変換）
-    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - lastFrameTime_);
-    deltaTime_ = elapsed.count() / 1000000.0f;
-    
-    // デルタタイムの上限を設定（1/30秒 = 約33.3ms）
-    // これにより、デバッグ時の一時停止などで極端に大きな値にならないようにする
-    if (deltaTime_ > 1.0f / 30.0f) {
-        deltaTime_ = 1.0f / 30.0f;
-    }
-    
-    // 次フレームのために現在時刻を保存
-    lastFrameTime_ = currentTime;
 }
 
 // === 簡易化API実装 ===

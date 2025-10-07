@@ -52,7 +52,7 @@ void LogoScene::Initialize() {
 void LogoScene::Update() {
     camera_->Update();
 
-    float deltaTime = 1.0f / 60.0f;
+    float deltaTime = dxCommon_->GetDeltaTime();
 
     switch (fadeState_) {
     case FadeState::Wait:
