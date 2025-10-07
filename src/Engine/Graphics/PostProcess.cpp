@@ -31,15 +31,48 @@ void PostProcess::Finalize() {
 }
 
 void PostProcess::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
+    OutputDebugStringA("PostProcess::Initialize() started\n");
+
     dxCommon_ = dxCommon;
     srvManager_ = srvManager;
 
+    // リソース作成前にデバイスの有効性を確認
+    if (!dxCommon_ || !dxCommon_->GetDevice()) {
+        OutputDebugStringA("ERROR: PostProcess::Initialize - DirectXCommon or Device is null - Post-processing will be disabled\n");
+        isEnabled_ = false;
+        return;
+    }
+
     CreateRenderTarget();
+
+    // CreateRenderTargetが失敗した場合は初期化を中断
+    if (!isEnabled_) {
+        OutputDebugStringA("PostProcess::Initialize - CreateRenderTarget failed, skipping further initialization\n");
+        return;
+    }
+
     CreatePipeline();
+
+    // CreatePipelineが失敗した場合は初期化を中断
+    if (!isEnabled_) {
+        OutputDebugStringA("PostProcess::Initialize - CreatePipeline failed, skipping further initialization\n");
+        return;
+    }
 
     // Constant Buffer作成
     horrorParamsResource_ = dxCommon_->CreateBufferResource(sizeof(HorrorParams));
-    horrorParamsResource_->Map(0, nullptr, reinterpret_cast<void**>(&horrorParamsData_));
+    if (!horrorParamsResource_) {
+        OutputDebugStringA("WARNING: PostProcess::Initialize - Failed to create constant buffer - Post-processing will be disabled\n");
+        isEnabled_ = false;
+        return;
+    }
+
+    HRESULT hr = horrorParamsResource_->Map(0, nullptr, reinterpret_cast<void**>(&horrorParamsData_));
+    if (FAILED(hr) || !horrorParamsData_) {
+        OutputDebugStringA("WARNING: PostProcess::Initialize - Failed to map constant buffer - Post-processing will be disabled\n");
+        isEnabled_ = false;
+        return;
+    }
 
     // デフォルトパラメータ
     currentParams_.time = 0.0f;
@@ -51,6 +84,8 @@ void PostProcess::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
     currentParams_.fisheyeRadius = 1.5f;    // デフォルトの範囲
 
     *horrorParamsData_ = currentParams_;
+
+    OutputDebugStringA("PostProcess::Initialize() completed successfully\n");
 }
 
 void PostProcess::CreateRenderTarget() {
@@ -61,7 +96,18 @@ void PostProcess::CreateRenderTarget() {
     rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
     rtvHeapDesc.NumDescriptors = 1;
     hr = dxCommon_->GetDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap_));
-    assert(SUCCEEDED(hr));
+
+    if (FAILED(hr)) {
+        OutputDebugStringA("WARNING: PostProcess::CreateRenderTarget - Failed to create RTV descriptor heap\n");
+        char errorMsg[256];
+        sprintf_s(errorMsg, "HRESULT: 0x%08X - Post-processing will be disabled\n", hr);
+        OutputDebugStringA(errorMsg);
+        OutputDebugStringA("Continuing without post-processing effects...\n");
+
+        // クラッシュせずに機能縮退モードで続行
+        isEnabled_ = false;
+        return;
+    }
 
     // レンダーターゲット用のテクスチャリソースを作成
     D3D12_RESOURCE_DESC resourceDesc{};
@@ -92,11 +138,29 @@ void PostProcess::CreateRenderTarget() {
         &clearValue,
         IID_PPV_ARGS(&renderTargetResource_)
     );
-    assert(SUCCEEDED(hr));
 
-    // RTVを作成
-    rtvHandle_ = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-    dxCommon_->GetDevice()->CreateRenderTargetView(renderTargetResource_.Get(), nullptr, rtvHandle_);
+    if (FAILED(hr)) {
+        OutputDebugStringA("WARNING: PostProcess::CreateRenderTarget - Failed to create render target resource\n");
+        char errorMsg[256];
+        sprintf_s(errorMsg, "HRESULT: 0x%08X, Size: %llux%llu - Post-processing will be disabled\n", hr,
+            static_cast<unsigned long long>(resourceDesc.Width),
+            static_cast<unsigned long long>(resourceDesc.Height));
+        OutputDebugStringA(errorMsg);
+
+        // クラッシュせずに機能縮退モードで続行
+        isEnabled_ = false;
+        return;
+    }
+
+    // RTVを作成（nullptrチェック追加）
+    if (rtvDescriptorHeap_) {
+        rtvHandle_ = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+        dxCommon_->GetDevice()->CreateRenderTargetView(renderTargetResource_.Get(), nullptr, rtvHandle_);
+    } else {
+        OutputDebugStringA("WARNING: rtvDescriptorHeap_ is nullptr - Post-processing will be disabled\n");
+        isEnabled_ = false;
+        return;
+    }
 
     // SRVを作成（SrvManagerを使用）
     if (!srvAllocated_) {
@@ -152,11 +216,17 @@ void PostProcess::CreatePipeline() {
         if (errorBlob) {
             OutputDebugStringA(static_cast<char*>(errorBlob->GetBufferPointer()));
         }
-        assert(false);
+        OutputDebugStringA("WARNING: PostProcess::CreatePipeline - Failed to serialize root signature - Post-processing will be disabled\n");
+        isEnabled_ = false;
+        return;
     }
 
     hr = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
-    assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        OutputDebugStringA("WARNING: PostProcess::CreatePipeline - Failed to create root signature - Post-processing will be disabled\n");
+        isEnabled_ = false;
+        return;
+    }
 
     // シェーダーコンパイル
     Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = dxCommon_->CompileShader(L"Resources/shaders/Fullscreen.VS.hlsl", L"vs_6_0");
@@ -183,10 +253,19 @@ void PostProcess::CreatePipeline() {
     pipelineStateDesc.InputLayout.NumElements = 0;
 
     hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&pipelineStateDesc, IID_PPV_ARGS(&pipelineState_));
-    assert(SUCCEEDED(hr));
+    if (FAILED(hr)) {
+        OutputDebugStringA("WARNING: PostProcess::CreatePipeline - Failed to create pipeline state - Post-processing will be disabled\n");
+        isEnabled_ = false;
+        return;
+    }
 }
 
 void PostProcess::PreDraw() {
+    // ポストプロセスが無効の場合は何もしない
+    if (!isEnabled_) {
+        return;
+    }
+
     auto commandList = dxCommon_->GetCommandList();
 
     // リソースバリア：PIXEL_SHADER_RESOURCEからRENDER_TARGETへ（2フレーム目以降用）
@@ -205,6 +284,11 @@ void PostProcess::PreDraw() {
 }
 
 void PostProcess::PostDraw() {
+    // ポストプロセスが無効の場合は何もしない
+    if (!isEnabled_) {
+        return;
+    }
+
     auto commandList = dxCommon_->GetCommandList();
 
     // リソースバリア：RENDER_TARGETからPIXEL_SHADER_RESOURCEへ

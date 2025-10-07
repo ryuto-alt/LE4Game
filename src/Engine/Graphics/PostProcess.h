@@ -35,6 +35,7 @@ public:
 
     D3D12_CPU_DESCRIPTOR_HANDLE GetRTVHandle() const { return rtvHandle_; }
     ID3D12Resource* GetRenderTarget() const { return renderTargetResource_.Get(); }
+    bool IsEnabled() const { return isEnabled_; }
 
 private:
     void CreateRenderTarget();
@@ -64,4 +65,7 @@ private:
     HorrorParams currentParams_{};
 
     uint32_t backBufferIndex_ = 0;
+
+    // 機能縮退フラグ（リソース作成失敗時にfalseになる）
+    bool isEnabled_ = true;
 };

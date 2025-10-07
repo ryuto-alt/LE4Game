@@ -7,11 +7,21 @@
 #include "Logger.h"
 #include "StringUtility.h"
 #include "SrvManager.h"
+#include "MultiThreadCommandList.h"
+#include "PlacedResourceAllocator.h"
+#include "BarrierBatcher.h"
+#include "GPUDrivenCulling.h"
+#include "VariableRateShading.h"
+#include "DepthPrepass.h"
+#include "AsyncComputeScheduler.h"
+#include "PerformanceProfiler.h"
 
 
 using namespace Microsoft::WRL;
 using namespace Logger;
 using namespace StringUtility;
+
+DirectXCommon::DirectXCommon() = default;
 
 DirectXCommon::~DirectXCommon() {
     // GPUの処理が完了するまで待機
@@ -65,7 +75,9 @@ DirectXCommon::~DirectXCommon() {
     swapChain.Reset();
     commandQueue.Reset();
     commandList.Reset();
-    commandAllocator.Reset();
+    for (auto& allocator : commandAllocators) {
+        allocator.Reset();
+    }
     device.Reset();
     dxgiFactory.Reset();
 }
@@ -102,6 +114,21 @@ void DirectXCommon::DeviceInitialize()
 			Log(std::format("Dedicated Video Memory: {} MB\n", adapterDesc.DedicatedVideoMemory / 1024 / 1024));
 			Log(std::format("Dedicated System Memory: {} MB\n", adapterDesc.DedicatedSystemMemory / 1024 / 1024));
 			Log(std::format("Shared System Memory: {} MB\n", adapterDesc.SharedSystemMemory / 1024 / 1024));
+
+			// VRAM使用状況を確認
+			DXGI_QUERY_VIDEO_MEMORY_INFO memInfo = {};
+			if (SUCCEEDED(useAdapter->QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &memInfo))) {
+				Log(std::format("Current VRAM Usage: {} MB / {} MB\n",
+					memInfo.CurrentUsage / 1024 / 1024,
+					memInfo.Budget / 1024 / 1024));
+				Log(std::format("Available VRAM: {} MB\n",
+					(memInfo.Budget - memInfo.CurrentUsage) / 1024 / 1024));
+
+				// VRAM不足の警告
+				if (memInfo.CurrentUsage > memInfo.Budget * 0.8) {
+					OutputDebugStringA("WARNING: VRAM usage is high (>80%)! Close other GPU applications.\n");
+				}
+			}
 			break;
 		}
 		useAdapter = nullptr;
@@ -165,12 +192,16 @@ void DirectXCommon::CommandInitialize()
 	hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue));
 	//生成がうまくできなかった
 	assert(SUCCEEDED(hr));
-	//コマンドアロケーターを生成する
-	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
-	//コマンドアロケーターの生成がうまく行かなった
-	assert(SUCCEEDED(hr));
-	//コマンドリストを生成する
-	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator.Get(), nullptr,
+
+	//各フレームバッファ用のコマンドアロケーターを生成する
+	for (uint32_t i = 0; i < kMaxFramesInFlight; ++i) {
+		hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocators[i]));
+		//コマンドアロケーターの生成がうまく行かなった
+		assert(SUCCEEDED(hr));
+	}
+
+	//コマンドリストを生成する（最初のアロケーターを使用）
+	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocators[0].Get(), nullptr,
 		IID_PPV_ARGS(&commandList));
 	//コマンドリストの生成がうまく行かなかったので起動できない
 	assert(SUCCEEDED(hr));
@@ -361,11 +392,30 @@ void DirectXCommon::Initialize(WinApp* winApp)
 	ScissorInitialize();
 	DxcCompilerInitialize();
 	// ImguiInitializeは後ほど別途ImGuiManagerクラスを作成して管理する
+
+	// 最適化システムの初期化
+	InitializeOptimizations();
 }
 
 
 void DirectXCommon::Begin()
 {
+	// 最適化フレーム開始
+	if (performanceProfiler_) {
+		performanceProfiler_->BeginFrame();
+		performanceProfiler_->BeginCPUScope("Frame");
+	}
+
+	// バリアバッチャーをリセット
+	if (barrierBatcher_) {
+		barrierBatcher_->Reset();
+	}
+
+	// GPU駆動カリングをリセット
+	if (gpuDrivenCulling_) {
+		gpuDrivenCulling_->Reset();
+	}
+
 	//これから書き込むバックバッファのインデックスを取得する
 	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
 	//今回のバリアはTransition
@@ -400,6 +450,11 @@ void DirectXCommon::Begin()
 
 void DirectXCommon::End()
 {
+	// バリアバッチャーをフラッシュ
+	if (barrierBatcher_) {
+		barrierBatcher_->Flush(commandList.Get());
+	}
+
 	//バックバッファのインデックスを取得する
 	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
 	//画面に描く処理はすべて終わり、画面に映すので、状態遷移
@@ -421,18 +476,40 @@ void DirectXCommon::End()
 	//GPUがここまでたどりついた時に、Fenceの値を指定した値に代入するようにsignalを送る
 	commandQueue->Signal(fence.Get(), fenceValue);
 
-	// CommandAllocatorをResetする前に、使用中のコマンドが完全に完了するまで待機
-	// これにより COMMAND_ALLOCATOR_SYNC エラーを防ぐ
-	if (fence->GetCompletedValue() < fenceValue) {
-		fence->SetEventOnCompletion(fenceValue, fenceEvent);
+	// フレームバッファリング: N フレーム前の完了を待つ
+	// これにより GPU と CPU が並列動作し、フレームレートが向上
+	UINT currentBackBufferIndex = swapChain->GetCurrentBackBufferIndex();
+	uint64_t& currentFrameFenceValue = frameFenceValues[currentBackBufferIndex];
+
+	// このバックバッファが前回使用された時のフェンス値を待つ
+	if (currentFrameFenceValue != 0 && fence->GetCompletedValue() < currentFrameFenceValue) {
+		fence->SetEventOnCompletion(currentFrameFenceValue, fenceEvent);
 		WaitForSingleObject(fenceEvent, INFINITE);
 	}
 
+	// 現在のフレームのフェンス値を記録
+	currentFrameFenceValue = fenceValue;
+
+	// マルチスレッドコマンドリストをリセット (GPU完了後、初期化済みの場合のみ)
+	// 注: 現在は軽量化のため遅延初期化されている
+	// if (multiThreadCommandList_) {
+	// 	multiThreadCommandList_->Reset();
+	// }
+
 	UpdateFixFPS();
+
+	// プロファイリング終了 (GPU待機後に計測)
+	if (performanceProfiler_) {
+		performanceProfiler_->EndCPUScope("Frame");
+		performanceProfiler_->EndFrame();
+	}
+
 	//次のフレーム用のコマンドリストを準備
-	hr = commandAllocator->Reset();
+	// 現在のバックバッファインデックスに対応するコマンドアロケーターを使用
+	UINT nextBackBufferIndex = swapChain->GetCurrentBackBufferIndex();
+	hr = commandAllocators[nextBackBufferIndex]->Reset();
 	assert(SUCCEEDED(hr));
-	hr = commandList->Reset(commandAllocator.Get(), nullptr);
+	hr = commandList->Reset(commandAllocators[nextBackBufferIndex].Get(), nullptr);
 	assert(SUCCEEDED(hr));
 }
 
@@ -651,17 +728,40 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateTextureResource(cons
 		D3D12_RESOURCE_STATE_COPY_DEST,
 		nullptr,//Clear最適値。使わないのでnullptr
 		IID_PPV_ARGS(&resource));
-	assert(SUCCEEDED(hr));
+
+	if (FAILED(hr)) {
+		OutputDebugStringA("ERROR: DirectXCommon::CreateTextureResource - Failed to create texture resource\n");
+		char errorMsg[256];
+		sprintf_s(errorMsg, "HRESULT: 0x%08X, Size: %llux%llu, MipLevels: %u\n", hr,
+			static_cast<unsigned long long>(resourceDesc.Width),
+			static_cast<unsigned long long>(resourceDesc.Height),
+			resourceDesc.MipLevels);
+		OutputDebugStringA(errorMsg);
+		return nullptr;
+	}
+
 	return resource;
 }
 
 
 Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages)
 {
+	// textureがnullptrの場合はエラー
+	if (!texture) {
+		OutputDebugStringA("ERROR: DirectXCommon::UploadTextureData - texture is nullptr\n");
+		return nullptr;
+	}
+
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 	DirectX::PrepareUpload(device.Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
 	uint64_t intermediateSize = GetRequiredIntermediateSize(texture.Get(), 0, UINT(subresources.size()));
 	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = CreateBufferResource(intermediateSize);
+
+	if (!intermediateResource) {
+		OutputDebugStringA("ERROR: DirectXCommon::UploadTextureData - Failed to create intermediate buffer\n");
+		return nullptr;
+	}
+
 	UpdateSubresources(commandList.Get(), texture.Get(), intermediateResource.Get(), 0, 0, UINT(subresources.size()), subresources.data());
 	D3D12_RESOURCE_BARRIER barrier{};
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
@@ -712,9 +812,11 @@ void DirectXCommon::CommandKick()
 		WaitForSingleObject(fenceEvent, INFINITE);
 	}
 	//次のフレーム用のコマンドリストを準備
-	hr = commandAllocator->Reset();
+	// 現在のバックバッファインデックスに対応するコマンドアロケーターを使用
+	UINT currentBackBufferIndex = swapChain->GetCurrentBackBufferIndex();
+	hr = commandAllocators[currentBackBufferIndex]->Reset();
 	assert(SUCCEEDED(hr));
-	hr = commandList->Reset(commandAllocator.Get(), nullptr);
+	hr = commandList->Reset(commandAllocators[currentBackBufferIndex].Get(), nullptr);
 	assert(SUCCEEDED(hr));
 }
 void DirectXCommon::ToggleFullscreen()
@@ -730,3 +832,27 @@ bool DirectXCommon::IsFullscreen() const
 	swapChain->GetFullscreenState(&isFullscreen, nullptr);
 	return isFullscreen != FALSE;
 }
+
+void DirectXCommon::InitializeOptimizations()
+{
+	OutputDebugStringA("DirectXCommon: Initializing lightweight optimization systems...\n");
+
+	// 軽量な最適化システムのみを初期化 (起動時間を短縮)
+	barrierBatcher_ = std::make_unique<BarrierBatcher>();
+
+	variableRateShading_ = std::make_unique<VariableRateShading>();
+	variableRateShading_->Initialize(device.Get());
+
+	performanceProfiler_ = std::make_unique<PerformanceProfiler>();
+	performanceProfiler_->Initialize(device.Get(), commandQueue.Get());
+
+	OutputDebugStringA("DirectXCommon: Lightweight optimization systems initialized\n");
+
+	// 重いシステムは必要に応じて遅延初期化
+	// multiThreadCommandList_ - 大規模レンダリング時のみ
+	// placedResourceAllocator_ - 大容量バッファが必要な時のみ
+	// gpuDrivenCulling_ - 大量オブジェクト描画時のみ
+	// depthPrepass_ - 複雑なシーン時のみ
+	// asyncComputeScheduler_ - 非同期処理が必要な時のみ
+}
+

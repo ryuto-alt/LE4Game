@@ -18,6 +18,18 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 #include <vector>
 #include <chrono>
 #include <thread>
+#include <memory>
+
+// 前方宣言
+class MultiThreadCommandList;
+class PlacedResourceAllocator;
+class StagingBufferManager;
+class BarrierBatcher;
+class GPUDrivenCulling;
+class VariableRateShading;
+class DepthPrepassRenderer;
+class AsyncComputeScheduler;
+class PerformanceProfiler;
 
 
 class DirectXCommon
@@ -37,8 +49,8 @@ class DirectXCommon
 
 public:
 	// デフォルトコンストラクタ
-	DirectXCommon() = default;
-	
+	DirectXCommon();
+
 	//デストラクタ
 	~DirectXCommon();
 	
@@ -119,14 +131,29 @@ public:
 		}
 	}
 
+	// 最適化システムの初期化
+	void InitializeOptimizations();
+
+	// 最適化システムへのアクセス
+	MultiThreadCommandList* GetMultiThreadCommandList() { return multiThreadCommandList_.get(); }
+	PlacedResourceAllocator* GetPlacedResourceAllocator() { return placedResourceAllocator_.get(); }
+	BarrierBatcher* GetBarrierBatcher() { return barrierBatcher_.get(); }
+	GPUDrivenCulling* GetGPUDrivenCulling() { return gpuDrivenCulling_.get(); }
+	VariableRateShading* GetVariableRateShading() { return variableRateShading_.get(); }
+	DepthPrepassRenderer* GetDepthPrepass() { return depthPrepass_.get(); }
+	AsyncComputeScheduler* GetAsyncComputeScheduler() { return asyncComputeScheduler_.get(); }
+	PerformanceProfiler* GetPerformanceProfiler() { return performanceProfiler_.get(); }
+
 private:
+	static constexpr uint32_t kMaxFramesInFlight = 2; // バッファリングフレーム数
+
 	//WindowsAPI
 	WinApp* winApp_ = nullptr;
 	HRESULT hr = S_OK;
 
 	Microsoft::WRL::ComPtr< IDXGIFactory7> dxgiFactory = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12Device> device = nullptr;
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator = nullptr;
+	std::array<Microsoft::WRL::ComPtr<ID3D12CommandAllocator>, kMaxFramesInFlight> commandAllocators;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue = nullptr;
 
@@ -148,6 +175,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence = nullptr;
 	HANDLE fenceEvent = nullptr;
 	uint64_t fenceValue = 0;
+	std::array<uint64_t, kMaxFramesInFlight> frameFenceValues = {};
 
 	D3D12_VIEWPORT viewport{};
 
@@ -171,6 +199,17 @@ private:
 #ifdef _DEBUG
 	Microsoft::WRL::ComPtr<ID3D12Debug1> debugController = nullptr;
 #endif
+
+	// 最適化システム
+	std::unique_ptr<MultiThreadCommandList> multiThreadCommandList_;
+	std::unique_ptr<PlacedResourceAllocator> placedResourceAllocator_;
+	std::unique_ptr<StagingBufferManager> stagingBufferManager_;
+	std::unique_ptr<BarrierBatcher> barrierBatcher_;
+	std::unique_ptr<GPUDrivenCulling> gpuDrivenCulling_;
+	std::unique_ptr<VariableRateShading> variableRateShading_;
+	std::unique_ptr<DepthPrepassRenderer> depthPrepass_;
+	std::unique_ptr<AsyncComputeScheduler> asyncComputeScheduler_;
+	std::unique_ptr<PerformanceProfiler> performanceProfiler_;
 
 private:
 

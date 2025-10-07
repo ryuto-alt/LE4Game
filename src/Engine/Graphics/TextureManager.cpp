@@ -282,7 +282,27 @@ bool TextureManager::LoadTexture(const std::string& filePath)
         textureData.metadata = mipImages.GetMetadata();
         textureData.resource = dxCommon_->CreateTextureResource(textureData.metadata);
 
+        // テクスチャリソース作成失敗時の処理
+        if (!textureData.resource) {
+            OutputDebugStringA(("ERROR: TextureManager::LoadTexture - Failed to create texture resource for: " + filePath + "\n").c_str());
+            // 白いダミーテクスチャのSRVインデックスを返す
+            if (IsTextureExists(GetDefaultTexturePath())) {
+                return GetSrvIndex(GetDefaultTexturePath());
+            }
+            return 0; // デフォルトテクスチャもない場合は0を返す
+        }
+
         Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = dxCommon_->UploadTextureData(textureData.resource, mipImages);
+
+        // アップロード失敗時の処理
+        if (!intermediateResource) {
+            OutputDebugStringA(("ERROR: TextureManager::LoadTexture - Failed to upload texture data for: " + filePath + "\n").c_str());
+            // 白いダミーテクスチャのSRVインデックスを返す
+            if (IsTextureExists(GetDefaultTexturePath())) {
+                return GetSrvIndex(GetDefaultTexturePath());
+            }
+            return 0; // デフォルトテクスチャもない場合は0を返す
+        }
 
         // バッチモードでない場合のみCommandKickを実行
         if (!batchMode_) {
@@ -379,28 +399,40 @@ void TextureManager::LoadDefaultTexture()
                     textureData.metadata = mipImages.GetMetadata();
                     textureData.resource = dxCommon_->CreateTextureResource(textureData.metadata);
 
-                    Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = dxCommon_->UploadTextureData(textureData.resource, mipImages);
-                    // デフォルトテクスチャは即座にCommandKick
-                    dxCommon_->CommandKick();
+                    // テクスチャリソース作成失敗時は次の処理へ
+                    if (!textureData.resource) {
+                        OutputDebugStringA("WARNING: Failed to create default texture resource, falling back to programmatic white texture\n");
+                    } else {
+                        Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = dxCommon_->UploadTextureData(textureData.resource, mipImages);
 
-                    // SRVを作成
-                    textureData.srvIndex = srvManager_->Allocate();
-                    textureData.srvHandleCPU = srvManager_->GetCPUDescriptorHandle(textureData.srvIndex);
-                    textureData.srvHandleGPU = srvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
+                        // アップロード失敗時も次の処理へ
+                        if (!intermediateResource) {
+                            OutputDebugStringA("WARNING: Failed to upload default texture data, falling back to programmatic white texture\n");
+                            textureData.resource.Reset(); // リソースをリセット
+                        } else {
+                            // デフォルトテクスチャは即座にCommandKick
+                            dxCommon_->CommandKick();
 
-                    // SRVの設定
-                    srvManager_->CreateSRVForTexture2D(
-                        textureData.srvIndex,
-                        textureData.resource,
-                        textureData.metadata.format,
-                        static_cast<UINT>(textureData.metadata.mipLevels)
-                    );
+                            // SRVを作成
+                            textureData.srvIndex = srvManager_->Allocate();
+                            textureData.srvHandleCPU = srvManager_->GetCPUDescriptorHandle(textureData.srvIndex);
+                            textureData.srvHandleGPU = srvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
 
-                    // マップに追加
-                    textureDatas[defaultTexturePath] = textureData;
+                            // SRVの設定
+                            srvManager_->CreateSRVForTexture2D(
+                                textureData.srvIndex,
+                                textureData.resource,
+                                textureData.metadata.format,
+                                static_cast<UINT>(textureData.metadata.mipLevels)
+                            );
 
-                    // OutputDebugStringA("TextureManager::LoadDefaultTexture - Default texture loaded from file successfully\n");
-                    return;
+                            // マップに追加
+                            textureDatas[defaultTexturePath] = textureData;
+
+                            // OutputDebugStringA("TextureManager::LoadDefaultTexture - Default texture loaded from file successfully\n");
+                            return;
+                        }
+                    }
                 }
             }
         }
@@ -431,8 +463,21 @@ void TextureManager::LoadDefaultTexture()
         textureData.metadata = image.GetMetadata();
         textureData.resource = dxCommon_->CreateTextureResource(textureData.metadata);
 
+        // テクスチャリソース作成失敗時の処理
+        if (!textureData.resource) {
+            OutputDebugStringA("CRITICAL ERROR: TextureManager::LoadDefaultTexture - Failed to create white texture resource\n");
+            // デフォルトテクスチャすら作れない場合は致命的エラー
+            throw std::runtime_error("Failed to create default white texture - system may be out of VRAM");
+        }
+
         // アップロードとSRV作成処理
         Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = dxCommon_->UploadTextureData(textureData.resource, image);
+
+        if (!intermediateResource) {
+            OutputDebugStringA("CRITICAL ERROR: TextureManager::LoadDefaultTexture - Failed to upload white texture data\n");
+            throw std::runtime_error("Failed to upload default white texture - system may be out of VRAM");
+        }
+
         // デフォルトテクスチャは即座にCommandKick
         dxCommon_->CommandKick();
 

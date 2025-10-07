@@ -161,6 +161,14 @@
     <ClCompile Include="src\Engine\Animation\AnimationPlayer.cpp" />
     <ClCompile Include="src\Engine\Animation\AnimationUtility.cpp" />
     <ClCompile Include="src\Engine\Resource\ResourcePreloader.cpp" />
+    <ClCompile Include="src\Engine\Graphics\MultiThreadCommandList.cpp" />
+    <ClCompile Include="src\Engine\Graphics\PlacedResourceAllocator.cpp" />
+    <ClCompile Include="src\Engine\Graphics\BarrierBatcher.cpp" />
+    <ClCompile Include="src\Engine\Graphics\GPUDrivenCulling.cpp" />
+    <ClCompile Include="src\Engine\Graphics\VariableRateShading.cpp" />
+    <ClCompile Include="src\Engine\Graphics\DepthPrepass.cpp" />
+    <ClCompile Include="src\Engine\Graphics\AsyncComputeScheduler.cpp" />
+    <ClCompile Include="src\Engine\Graphics\PerformanceProfiler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -224,6 +232,14 @@
     <ClInclude Include="src\Engine\Animation\AnimationPlayer.h" />
     <ClInclude Include="src\Engine\Animation\AnimationUtility.h" />
     <ClInclude Include="src\Engine\Resource\ResourcePreloader.h" />
+    <ClInclude Include="src\Engine\Graphics\MultiThreadCommandList.h" />
+    <ClInclude Include="src\Engine\Graphics\PlacedResourceAllocator.h" />
+    <ClInclude Include="src\Engine\Graphics\BarrierBatcher.h" />
+    <ClInclude Include="src\Engine\Graphics\GPUDrivenCulling.h" />
+    <ClInclude Include="src\Engine\Graphics\VariableRateShading.h" />
+    <ClInclude Include="src\Engine\Graphics\DepthPrepass.h" />
+    <ClInclude Include="src\Engine\Graphics\AsyncComputeScheduler.h" />
+    <ClInclude Include="src\Engine\Graphics\PerformanceProfiler.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
@@ -250,6 +266,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
     <None Include="Resources\shaders\Skybox.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Resources\shaders\FrustumCulling.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>

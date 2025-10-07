@@ -242,6 +242,30 @@
     <ClCompile Include="src\Engine\Graphics\InstancedRenderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\AsyncComputeScheduler.cpp">
+      <Filter>src\engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\BarrierBatcher.cpp">
+      <Filter>src\engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\DepthPrepass.cpp">
+      <Filter>src\engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\MultiThreadCommandList.cpp">
+      <Filter>src\engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\PerformanceProfiler.cpp">
+      <Filter>src\engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\PlacedResourceAllocator.cpp">
+      <Filter>src\engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\VariableRateShading.cpp">
+      <Filter>src\engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\GPUDrivenCulling.cpp">
+      <Filter>src\engine\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -417,8 +441,36 @@
     <ClInclude Include="src\Game\scene\LogoScene.h">
       <Filter>src\Game\scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Camera\Frustum.h" />
-    <ClInclude Include="src\Engine\Graphics\InstancedRenderer.h" />
+    <ClInclude Include="src\Engine\Graphics\AsyncComputeScheduler.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\BarrierBatcher.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\MultiThreadCommandList.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\PerformanceProfiler.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\DepthPrepass.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\PlacedResourceAllocator.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\VariableRateShading.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Camera\Frustum.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\GPUDrivenCulling.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\InstancedRenderer.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -436,6 +488,9 @@
       <Filter>リソース ファイル</Filter>
     </None>
     <None Include="Resources\shaders\Skybox.hlsli">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Resources\shaders\FrustumCulling.hlsl">
       <Filter>リソース ファイル</Filter>
     </None>
   </ItemGroup>

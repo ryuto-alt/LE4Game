@@ -3,6 +3,7 @@
 #include "UnoEngine.h"
 #include "SceneManager.h"
 #include "InstancedRenderer.h"
+#include "VariableRateShading.h"
 
 void GamePlayScene::Initialize() {
     UnoEngine* engine = UnoEngine::GetInstance();
@@ -165,8 +166,15 @@ void GamePlayScene::Update() {
 }
 
 void GamePlayScene::Draw() {
+    // Variable Rate Shading (VRS) を有効化
+    auto* vrs = dxCommon_->GetVariableRateShading();
+    if (vrs) {
+        // プレイヤーの視点中心を高品質に、周辺を低品質に
+        vrs->SetShadingRate(dxCommon_->GetCommandList(), VariableRateShading::ShadingRate::_2X2);
+    }
+
     // ポストプロセス用のレンダーターゲットに描画
-    if (postProcess_) {
+    if (postProcess_ && postProcess_->IsEnabled()) {
         postProcess_->PreDraw();
     }
 
@@ -189,7 +197,7 @@ void GamePlayScene::Draw() {
     }
 
     // ポストプロセスを適用して画面に描画
-    if (postProcess_) {
+    if (postProcess_ && postProcess_->IsEnabled()) {
         postProcess_->PostDraw();
     }
 
