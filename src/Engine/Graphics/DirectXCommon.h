@@ -107,6 +107,9 @@ public:
 	// スワップチェーンへのアクセス
 	IDXGISwapChain4* GetSwapChain() const { return swapChain.Get(); }
 
+	// リサイズ処理
+	void ResizeBuffers(uint32_t width, uint32_t height);
+
 private:
 	//WindowsAPI
 	WinApp* winApp_ = nullptr;

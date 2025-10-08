@@ -133,6 +133,14 @@ void Input::ResetMouseCenter()
 	SetCursorPos(centerPoint.x, centerPoint.y);
 }
 
+void Input::UpdateWindowCenter()
+{
+	RECT windowRect;
+	GetClientRect(winApp_->GetHwnd(), &windowRect);
+	windowCenter_.x = (windowRect.right - windowRect.left) / 2;
+	windowCenter_.y = (windowRect.bottom - windowRect.top) / 2;
+}
+
 bool Input::IsMouseButtonTriggered(int button)
 {
 	if (button < 0 || button >= 3) return false;

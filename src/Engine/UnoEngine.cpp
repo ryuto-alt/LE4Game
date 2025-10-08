@@ -133,6 +133,17 @@ void UnoEngine::Update() {
         // F11キーでフルスクリーン切り替え
         if (input_->TriggerKey(DIK_F11)) {
             winApp_->ToggleFullscreen();
+            // ウィンドウサイズが変わったのでバッファをリサイズ
+            uint32_t width = winApp_->GetCurrentWindowWidth();
+            uint32_t height = winApp_->GetCurrentWindowHeight();
+            dxCommon_->ResizeBuffers(width, height);
+            // マウス入力のウィンドウ中心座標も更新
+            input_->UpdateWindowCenter();
+            // カメラのアスペクト比も更新
+            if (camera_ && height > 0) {
+                float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+                camera_->SetAspectRatio(aspectRatio);
+            }
         }
 
         // SRVヒープを描画前に明示的に設定

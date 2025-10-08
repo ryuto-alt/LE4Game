@@ -98,12 +98,16 @@ void WinApp::ToggleFullscreen()
 		MONITORINFO monitorInfo = { sizeof(MONITORINFO) };
 		GetMonitorInfo(hMonitor, &monitorInfo);
 
+		// フルスクリーンサイズを保存
+		fullscreenWidth_ = monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left;
+		fullscreenHeight_ = monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top;
+
 		// フルスクリーンサイズに変更（モニターの作業領域全体）
 		SetWindowPos(hwnd, HWND_TOPMOST,
 			monitorInfo.rcMonitor.left,
 			monitorInfo.rcMonitor.top,
-			monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left,
-			monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top,
+			fullscreenWidth_,
+			fullscreenHeight_,
 			SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 
 		isFullscreen_ = true;
@@ -121,6 +125,28 @@ void WinApp::ToggleFullscreen()
 			windowedRect_.bottom - windowedRect_.top,
 			SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 
+		fullscreenWidth_ = 0;
+		fullscreenHeight_ = 0;
 		isFullscreen_ = false;
 	}
+}
+
+uint32_t WinApp::GetCurrentWindowWidth() const
+{
+	if (isFullscreen_ && fullscreenWidth_ > 0) {
+		return fullscreenWidth_;
+	}
+	RECT clientRect;
+	GetClientRect(hwnd, &clientRect);
+	return clientRect.right - clientRect.left;
+}
+
+uint32_t WinApp::GetCurrentWindowHeight() const
+{
+	if (isFullscreen_ && fullscreenHeight_ > 0) {
+		return fullscreenHeight_;
+	}
+	RECT clientRect;
+	GetClientRect(hwnd, &clientRect);
+	return clientRect.bottom - clientRect.top;
 }

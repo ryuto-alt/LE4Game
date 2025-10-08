@@ -38,6 +38,7 @@ public:
 	void SetMouseCursor(bool visible);
 	void GetMouseMovement(float& deltaX, float& deltaY);
 	void ResetMouseCenter();
+	void UpdateWindowCenter(); // ウィンドウ中心座標を更新
 	bool IsMouseButtonTriggered(int button);  // 0:左, 1:右, 2:中
 	bool IsXboxControllerConnected(int playerIndex = 0);
 	bool IsXboxButtonPressed(int button, int playerIndex = 0);

@@ -38,6 +38,14 @@ public:
 	void ToggleFullscreen();
 	bool IsFullscreen() const { return isFullscreen_; }
 
+	// 現在のウィンドウサイズを取得
+	uint32_t GetCurrentWindowWidth() const;
+	uint32_t GetCurrentWindowHeight() const;
+
+	// フルスクリーン時のサイズを取得
+	uint32_t GetFullscreenWidth() const { return fullscreenWidth_; }
+	uint32_t GetFullscreenHeight() const { return fullscreenHeight_; }
+
 private:
 
 	// ウィンドウハンドル
@@ -49,4 +57,6 @@ private:
 	bool isFullscreen_ = false;
 	RECT windowedRect_ = {};
 	LONG windowedStyle_ = 0;
+	uint32_t fullscreenWidth_ = 0;
+	uint32_t fullscreenHeight_ = 0;
 };
