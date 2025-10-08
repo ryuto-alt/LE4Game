@@ -107,6 +107,10 @@ public:
 	// スワップチェーンへのアクセス
 	IDXGISwapChain4* GetSwapChain() const { return swapChain.Get(); }
 
+	// 現在のウィンドウサイズを取得
+	uint32_t GetCurrentWindowWidth() const { return winApp_ ? winApp_->GetCurrentWindowWidth() : 1280; }
+	uint32_t GetCurrentWindowHeight() const { return winApp_ ? winApp_->GetCurrentWindowHeight() : 720; }
+
 	// リサイズ処理
 	void ResizeBuffers(uint32_t width, uint32_t height);
 

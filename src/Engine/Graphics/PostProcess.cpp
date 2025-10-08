@@ -66,8 +66,8 @@ void PostProcess::CreateRenderTarget() {
     // レンダーターゲット用のテクスチャリソースを作成
     D3D12_RESOURCE_DESC resourceDesc{};
     resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-    resourceDesc.Width = 1280;
-    resourceDesc.Height = 720;
+    resourceDesc.Width = dxCommon_->GetCurrentWindowWidth();
+    resourceDesc.Height = dxCommon_->GetCurrentWindowHeight();
     resourceDesc.DepthOrArraySize = 1;
     resourceDesc.MipLevels = 1;
     resourceDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
