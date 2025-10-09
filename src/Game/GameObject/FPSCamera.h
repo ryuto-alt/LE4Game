@@ -32,7 +32,7 @@ public:
     void ToggleMouseLook();
 
     // カメラシェイク
-    void UpdateCameraShake(bool isMoving, bool isRunning);
+    void UpdateCameraShake(bool isMoving, bool isRunning, class UnoEngine* engine);
     Vector3 GetCameraShakeOffset() const { return cameraShakeOffset_; }
 
 private:
@@ -56,4 +56,8 @@ private:
     float walkShakeFrequency_ = 6.0f;    // 歩行時の揺れの速さ
     float runShakeAmplitude_ = 0.025f;   // 走行時の揺れの大きさ
     float runShakeFrequency_ = 15.0f;     // 走行時の揺れの速さ
+
+    // 足音用
+    float previousYOffset_ = 0.0f;  // 前フレームのY方向オフセット
+    bool footSoundLoaded_ = false;  // 足音が読み込まれたかどうか
 };

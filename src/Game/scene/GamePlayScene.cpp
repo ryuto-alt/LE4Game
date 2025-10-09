@@ -114,7 +114,7 @@ void GamePlayScene::Update() {
         fpsCamera_->UpdateCameraRotation(camera_, engine);
 
         // カメラシェイクを更新（プレイヤーの移動状態に基づく）
-        fpsCamera_->UpdateCameraShake(player_->IsMoving(), player_->IsRunning());
+        fpsCamera_->UpdateCameraShake(player_->IsMoving(), player_->IsRunning(), engine);
 
         player_->UpdateFPSCamera(fpsCamera_.get());
         camera_->Update();

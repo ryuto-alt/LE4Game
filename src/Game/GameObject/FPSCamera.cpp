@@ -104,10 +104,16 @@ void FPSCamera::ToggleMouseLook() {
     }
 }
 
-void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning) {
+void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning, UnoEngine* engine) {
     if (!isFPSMode_) {
         cameraShakeOffset_ = {0.0f, 0.0f, 0.0f};
         return;
+    }
+
+    // 足音の読み込み（初回のみ）
+    if (!footSoundLoaded_ && engine) {
+        engine->LoadAudio("footstep", "Resources/Audio/footsound.mp3");
+        footSoundLoaded_ = true;
     }
 
     if (isMoving) {
@@ -124,6 +130,15 @@ void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning) {
         // 左右の揺れも追加（位相をずらす）
         float xOffset = std::sin(shakeTimer_ * frequency * 0.5f) * amplitude * 0.5f;
 
+        // 足音を再生（揺れが下から上に切り替わるタイミング）
+        if (engine && previousYOffset_ < 0.0f && yOffset >= 0.0f) {
+            // 音が再生中でなければ再生
+            if (!engine->IsAudioPlaying("footstep")) {
+                engine->PlayAudio("footstep", false, 0.3f);  // ボリューム30%
+            }
+        }
+
+        previousYOffset_ = yOffset;
         cameraShakeOffset_ = {xOffset, yOffset, 0.0f};
     } else {
         // 停止中の場合、揺れをスムーズに減衰
@@ -137,6 +152,7 @@ void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning) {
             std::abs(cameraShakeOffset_.z) < 0.001f) {
             cameraShakeOffset_ = {0.0f, 0.0f, 0.0f};
             shakeTimer_ = 0.0f;
+            previousYOffset_ = 0.0f;
         }
     }
 }
