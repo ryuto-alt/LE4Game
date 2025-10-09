@@ -87,6 +87,10 @@ void GamePlayScene::Initialize() {
         // 魚眼レンズの初期強度はメンバ変数で管理
         postProcess_->SetHorrorParams(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);  // ホラーエフェクトはオフ
     }
+
+    // BGMの読み込みと再生
+    engine->LoadAudio("stagebgm", "Resources/Audio/stagebgm.mp3");
+    engine->PlayAudio("stagebgm", true, 0.3f);  // ループ再生、ボリューム50%
 }
 
 
@@ -198,6 +202,12 @@ void GamePlayScene::Draw() {
 }
 
 void GamePlayScene::Finalize() {
+    // BGMを停止
+    UnoEngine* engine = UnoEngine::GetInstance();
+    if (engine) {
+        engine->StopAudio("stagebgm");
+    }
+
     if (player_) {
         player_->Finalize();
         player_.reset();
