@@ -45,18 +45,6 @@ void GamePlayScene::Initialize() {
     ground_->SetEnableLighting(true);
     ground_->SetPosition({0.0f, -0.1f, 0.0f});
 
-    // Blenderで設定されたスケール情報を使用
-    const ModelData& modelData = groundModel_->GetModelData();
-    Vector3 blenderScale = modelData.rootTransform.scale;
-
-    // スケールが0の場合はデフォルト値を使用
-    if (blenderScale.x == 0.0f && blenderScale.y == 0.0f && blenderScale.z == 0.0f) {
-        blenderScale = {40.0f, 40.0f, 40.0f};
-    }
-
-    ground_->SetScale(blenderScale);
-    
-
     // 地面の当たり判定を登録
     auto* collisionManager = Collision::AABBCollisionManager::GetInstance();
     if (collisionManager && groundModel_) {

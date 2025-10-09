@@ -31,27 +31,6 @@ void Ground::Initialize(Camera* camera, DirectXCommon* dxCommon, bool enableColl
         object3d_ = engine->CreateObject3D();
         object3d_->SetModel(model_.get());
         object3d_->SetPosition(position_);
-
-        // Blenderで設定されたスケール情報を使用
-        Vector3 blenderScale = modelData.rootTransform.scale;
-
-        // スケールが0の場合はデフォルト値を使用
-        if (blenderScale.x == 0.0f && blenderScale.y == 0.0f && blenderScale.z == 0.0f) {
-            blenderScale = {40.0f, 40.0f, 40.0f};
-            OutputDebugStringA("Ground: Using default scale (40, 40, 40)\n");
-        }
-
-        object3d_->SetScale(blenderScale);
-
-        // デバッグ: 適用されたスケール値を出力
-        sprintf_s(debugMsg, "Ground: Applied scale - X=%.3f, Y=%.3f, Z=%.3f\n",
-                 blenderScale.x, blenderScale.y, blenderScale.z);
-        OutputDebugStringA(debugMsg);
-
-        sprintf_s(debugMsg, "Ground: Position - X=%.3f, Y=%.3f, Z=%.3f\n",
-                 position_.x, position_.y, position_.z);
-        OutputDebugStringA(debugMsg);
-
         object3d_->SetRotation(Vector3{0.0f, 0.0f, 0.0f});
         object3d_->SetEnableLighting(true);
         object3d_->SetCamera(camera_);
