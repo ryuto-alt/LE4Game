@@ -53,7 +53,7 @@ void GamePlayScene::Initialize() {
     }
 
     objeModel_ = engine->CreateAnimatedModel();
-    objeModel_->LoadFromFile("Resources/Models/obje", "object.gltf");
+    objeModel_->LoadFromFile("Resources/Models/stageWall", "stageWall.gltf");
 
     objeObject_ = engine->CreateObject3D();
 

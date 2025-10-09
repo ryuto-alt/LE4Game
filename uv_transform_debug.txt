@@ -1,0 +1,5150 @@
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: None
+BaseColorTexture Index: 0
+=== Base Color Texture Found ===
+Texture Index: 0
+Extensions count: 0
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: None
+BaseColorTexture Index: 0
+=== Base Color Texture Found ===
+Texture Index: 0
+Extensions count: 0
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== UV Transform Debug ===
+Texture Scale: X=1.000, Y=1.000
+Texture Rotation: 0.000 rad
+Texture Offset: X=0.000, Y=0.000
+UV Transform Matrix:
+  [1.000000, 0.000000, 0.000000, 0.000000]
+  [-0.000000, 1.000000, 0.000000, 0.000000]
+  [0.000000, 0.000000, 1.000000, 0.000000]
+  [0.000000, 0.000000, 0.000000, 1.000000]
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Medieval Black Metal Panels
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (0.200, 0.200)
+Offset: (0.000, 0.800)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Medieval Black Metal Panels
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (0.200, 0.200)
+Offset: (0.000, 0.800)
+Rotation: 0.000 rad
+
+=== UV Transform Debug ===
+Texture Scale: X=0.200, Y=0.200
+Texture Rotation: 0.000 rad
+Texture Offset: X=0.000, Y=0.800
+UV Transform Matrix:
+  [0.200000, 0.000000, 0.000000, 0.000000]
+  [-0.000000, 0.200000, 0.800000, 0.000000]
+  [0.000000, 0.000000, 1.000000, 0.000000]
+  [0.000000, 0.000000, 0.000000, 1.000000]
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: None
+BaseColorTexture Index: 0
+=== Base Color Texture Found ===
+Texture Index: 0
+Extensions count: 0
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: None
+BaseColorTexture Index: 0
+=== Base Color Texture Found ===
+Texture Index: 0
+Extensions count: 0
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== UV Transform Debug ===
+Texture Scale: X=1.000, Y=1.000
+Texture Rotation: 0.000 rad
+Texture Offset: X=0.000, Y=0.000
+UV Transform Matrix:
+  [1.000000, 0.000000, 0.000000, 0.000000]
+  [-0.000000, 1.000000, 0.000000, 0.000000]
+  [0.000000, 0.000000, 1.000000, 0.000000]
+  [0.000000, 0.000000, 0.000000, 1.000000]
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Medieval Black Metal Panels
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (0.200, 0.200)
+Offset: (0.000, 0.800)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Medieval Black Metal Panels
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (0.200, 0.200)
+Offset: (0.000, 0.800)
+Rotation: 0.000 rad
+
+=== UV Transform Debug ===
+Texture Scale: X=0.200, Y=0.200
+Texture Rotation: 0.000 rad
+Texture Offset: X=0.000, Y=0.800
+UV Transform Matrix:
+  [0.200000, 0.000000, 0.000000, 0.000000]
+  [-0.000000, 0.200000, 0.800000, 0.000000]
+  [0.000000, 0.000000, 1.000000, 0.000000]
+  [0.000000, 0.000000, 0.000000, 1.000000]
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== ConvertMaterial Called ===
+Material Index: 0
+Material Name: Pink Porcelain Tiles
+BaseColorTexture Index: 1
+=== Base Color Texture Found ===
+Texture Index: 1
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 1
+Material Name: Black Stone tiles -  Bahia black
+BaseColorTexture Index: 3
+=== Base Color Texture Found ===
+Texture Index: 3
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 2
+Material Name: Stone Effect tiles -  Breccia imperiale
+BaseColorTexture Index: 5
+=== Base Color Texture Found ===
+Texture Index: 5
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 3
+Material Name: Digital Camo Basket Weave Fabric
+BaseColorTexture Index: 7
+=== Base Color Texture Found ===
+Texture Index: 7
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 4
+Material Name: Geometric Metal Panel Studs
+BaseColorTexture Index: 9
+=== Base Color Texture Found ===
+Texture Index: 9
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 5
+Material Name: Rough Brick Wall Dark
+BaseColorTexture Index: 10
+=== Base Color Texture Found ===
+Texture Index: 10
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 6
+Material Name: White Subway Tile Paneling
+BaseColorTexture Index: 12
+=== Base Color Texture Found ===
+Texture Index: 12
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 7
+Material Name: Riveted Wood and Metal Panels
+BaseColorTexture Index: 14
+=== Base Color Texture Found ===
+Texture Index: 14
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 8
+Material Name: Glossy Parquet Wood Flooring
+BaseColorTexture Index: 16
+=== Base Color Texture Found ===
+Texture Index: 16
+Extensions count: 0
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 10
+Material Name: Rough Brick Wall Dark.001
+BaseColorTexture Index: 18
+=== Base Color Texture Found ===
+Texture Index: 18
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 9
+Material Name: Rough Brick Wall
+BaseColorTexture Index: 17
+=== Base Color Texture Found ===
+Texture Index: 17
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 11
+Material Name: Geometric Gold Engraved Pattern
+BaseColorTexture Index: 20
+=== Base Color Texture Found ===
+Texture Index: 20
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 12
+Material Name: Black Denim Jeans Fabric
+BaseColorTexture Index: 23
+=== Base Color Texture Found ===
+Texture Index: 23
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 13
+Material Name: Black Denim Jeans Fabric.001
+BaseColorTexture Index: 26
+=== Base Color Texture Found ===
+Texture Index: 26
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 14
+Material Name: Black Denim Jeans Fabric.002
+BaseColorTexture Index: 29
+=== Base Color Texture Found ===
+Texture Index: 29
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 15
+Material Name: Black Denim Jeans Fabric.003
+BaseColorTexture Index: 32
+=== Base Color Texture Found ===
+Texture Index: 32
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 16
+Material Name: Black Denim Jeans Fabric.004
+BaseColorTexture Index: 35
+=== Base Color Texture Found ===
+Texture Index: 35
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 17
+Material Name: Black Denim Jeans Fabric.005
+BaseColorTexture Index: 38
+=== Base Color Texture Found ===
+Texture Index: 38
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== ConvertMaterial Called ===
+Material Index: 18
+Material Name: Black Denim Jeans Fabric.006
+BaseColorTexture Index: 41
+=== Base Color Texture Found ===
+Texture Index: 41
+Extensions count: 1
+Extension name: KHR_texture_transform
+
+=== KHR_texture_transform Found ===
+KHR_texture_transform detected - Offset: (0.000000, 0.800000), Rotation: 0.000000 rad, Scale: (0.200000, 0.200000)
+
+=== TinyGLTF Loaded UV Transform ===
+Scale: (1.000, 1.000)
+Offset: (0.000, 0.000)
+Rotation: 0.000 rad
+
+=== UV Transform Debug ===
+Texture Scale: X=1.000, Y=1.000
+Texture Rotation: 0.000 rad
+Texture Offset: X=0.000, Y=0.000
+UV Transform Matrix:
+  [1.000000, 0.000000, 0.000000, 0.000000]
+  [-0.000000, 1.000000, 0.000000, 0.000000]
+  [0.000000, 0.000000, 1.000000, 0.000000]
+  [0.000000, 0.000000, 0.000000, 1.000000]
+
