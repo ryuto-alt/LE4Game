@@ -39,7 +39,7 @@ void GamePlayScene::Initialize() {
 
     // 環境マップをHDRファイルで設定
     Object3d::SetEnvTex("Resources/Models/skybox/warm_restaurant_night_2k.hdr");
-    ground_->EnableEnv(true);
+    ground_->EnableEnv(false);
     ground_->SetModel(static_cast<Model*>(groundModel_.get()));
     ground_->SetCamera(camera_);
     ground_->SetEnableLighting(true);
@@ -58,7 +58,7 @@ void GamePlayScene::Initialize() {
     objeObject_ = engine->CreateObject3D();
 
     // 環境マップを有効化
-    objeObject_->EnableEnv(true);
+    objeObject_->EnableEnv(false);
     objeObject_->SetModel(static_cast<Model*>(objeModel_.get()));
     objeObject_->SetCamera(camera_);
     objeObject_->SetPosition({0.0f, 0.0f, 5.0f});
@@ -68,9 +68,9 @@ void GamePlayScene::Initialize() {
     objeObject_->EnableCollision(true, "Object");
 
     // SkyboxをDDSファイルで初期化
-    skybox_ = engine->CreateSkybox();
-    engine->LoadSkybox(skybox_.get(), "Resources/Models/skybox/warm_restaurant_night_2k.hdr");
-    skyboxEnabled_ = true;
+    // skybox_ = engine->CreateSkybox();
+    // engine->LoadSkybox(skybox_.get(), "Resources/Models/skybox/warm_restaurant_night_2k.hdr");
+    skyboxEnabled_ = false;
 
     // FPSカメラのマウスルックを有効化
     if (fpsCamera_) {
@@ -96,6 +96,20 @@ void GamePlayScene::Initialize() {
 
 void GamePlayScene::Update() {
     UnoEngine* engine = UnoEngine::GetInstance();
+
+    // ウィンドウサイズが変わったときにPostProcessのレンダーターゲットをリサイズ
+    static uint32_t previousWidth = 0;
+    static uint32_t previousHeight = 0;
+    uint32_t currentWidth = dxCommon_->GetCurrentWindowWidth();
+    uint32_t currentHeight = dxCommon_->GetCurrentWindowHeight();
+
+    if (postProcess_ && (previousWidth != currentWidth || previousHeight != currentHeight)) {
+        if (previousWidth != 0 && previousHeight != 0) {  // 初回は除外
+            postProcess_->ResizeRenderTarget();
+        }
+        previousWidth = currentWidth;
+        previousHeight = currentHeight;
+    }
 
     // ImGuiで魚眼レンズ強度と範囲を調整
     ImGui::Begin("Fisheye Settings");

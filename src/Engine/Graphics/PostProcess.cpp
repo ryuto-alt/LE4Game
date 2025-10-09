@@ -79,9 +79,9 @@ void PostProcess::CreateRenderTarget() {
 
     D3D12_CLEAR_VALUE clearValue{};
     clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-    clearValue.Color[0] = 0.1f;
-    clearValue.Color[1] = 0.25f;
-    clearValue.Color[2] = 0.5f;
+    clearValue.Color[0] = 0.0f;
+    clearValue.Color[1] = 0.0f;
+    clearValue.Color[2] = 0.0f;
     clearValue.Color[3] = 1.0f;
 
     hr = dxCommon_->GetDevice()->CreateCommittedResource(
@@ -194,7 +194,7 @@ void PostProcess::PreDraw() {
     // 簡単のため、常にバリアを張る（初回は何もしない状態から始まるので問題ない）
 
     // レンダーターゲットをクリア
-    float clearColor[] = { 0.1f, 0.25f, 0.5f, 1.0f };
+    float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
     commandList->ClearRenderTargetView(rtvHandle_, clearColor, 0, nullptr);
 
     // Depth Stencilも取得して設定
@@ -202,6 +202,27 @@ void PostProcess::PreDraw() {
 
     // レンダーターゲットを設定（Depth Stencilも指定）
     commandList->OMSetRenderTargets(1, &rtvHandle_, false, &dsvHandle);
+
+    // ビューポートとシザー矩形を設定
+    UINT width = dxCommon_->GetCurrentWindowWidth();
+    UINT height = dxCommon_->GetCurrentWindowHeight();
+
+    D3D12_VIEWPORT viewport{};
+    viewport.Width = static_cast<FLOAT>(width);
+    viewport.Height = static_cast<FLOAT>(height);
+    viewport.TopLeftX = 0;
+    viewport.TopLeftY = 0;
+    viewport.MinDepth = 0.0f;
+    viewport.MaxDepth = 1.0f;
+
+    D3D12_RECT scissorRect{};
+    scissorRect.left = 0;
+    scissorRect.top = 0;
+    scissorRect.right = width;
+    scissorRect.bottom = height;
+
+    commandList->RSSetViewports(1, &viewport);
+    commandList->RSSetScissorRects(1, &scissorRect);
 }
 
 void PostProcess::PostDraw() {
@@ -272,4 +293,13 @@ void PostProcess::SetFisheyeRadius(float radius) {
     if (horrorParamsData_) {
         *horrorParamsData_ = currentParams_;
     }
+}
+
+void PostProcess::ResizeRenderTarget() {
+    // 既存のレンダーターゲットをリセット
+    renderTargetResource_.Reset();
+    rtvDescriptorHeap_.Reset();
+
+    // 新しいサイズでレンダーターゲットを再作成
+    CreateRenderTarget();
 }

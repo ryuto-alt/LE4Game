@@ -33,6 +33,9 @@ public:
     void SetFisheyeStrength(float strength);
     void SetFisheyeRadius(float radius);
 
+    // ウィンドウサイズ変更時に呼び出す
+    void ResizeRenderTarget();
+
     D3D12_CPU_DESCRIPTOR_HANDLE GetRTVHandle() const { return rtvHandle_; }
     ID3D12Resource* GetRenderTarget() const { return renderTargetResource_.Get(); }
 
