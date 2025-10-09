@@ -27,8 +27,8 @@ private:
     std::unique_ptr<Skybox> skybox_;
     std::unique_ptr<LightManager> lightManager_;
 
-    std::unique_ptr<Object3d> objeObject_;
-    std::unique_ptr<AnimatedModel> objeModel_;
+    std::unique_ptr<Object3d> wallObject_;
+    std::unique_ptr<AnimatedModel> wallModel_;
 
     bool skyboxEnabled_ = false;
 

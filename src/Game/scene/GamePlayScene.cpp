@@ -52,20 +52,20 @@ void GamePlayScene::Initialize() {
         collisionManager->RegisterObject(ground_.get(), groundAABB, true, "Ground");
     }
 
-    objeModel_ = engine->CreateAnimatedModel();
-    objeModel_->LoadFromFile("Resources/Models/stageWall", "stageWall.gltf");
+    wallModel_ = engine->CreateAnimatedModel();
+    wallModel_->LoadFromFile("Resources/Models/stageWall", "stageWall.gltf");
 
-    objeObject_ = engine->CreateObject3D();
+    wallObject_ = engine->CreateObject3D();
 
     // 環境マップを有効化
-    objeObject_->EnableEnv(false);
-    objeObject_->SetModel(static_cast<Model*>(objeModel_.get()));
-    objeObject_->SetCamera(camera_);
-    objeObject_->SetPosition({0.0f, 0.0f, 5.0f});
-    objeObject_->SetScale({1.0f, 1.0f, 1.0f});
-    objeObject_->SetEnableLighting(true);
-    objeObject_->SetEnableAnimation(false);
-    objeObject_->EnableCollision(true, "Object");
+    wallObject_->EnableEnv(false);
+    wallObject_->SetModel(static_cast<Model*>(wallModel_.get()));
+    wallObject_->SetCamera(camera_);
+    wallObject_->SetPosition({0.0f, 0.0f, 5.0f});
+    wallObject_->SetScale({1.0f, 1.0f, 1.0f});
+    wallObject_->SetEnableLighting(true);
+    wallObject_->SetEnableAnimation(false);
+    wallObject_->EnableCollision(true, "Object");
 
     // SkyboxをDDSファイルで初期化
     // skybox_ = engine->CreateSkybox();
@@ -160,10 +160,10 @@ void GamePlayScene::Update() {
         ground_->Update();
     }
 
-    if (objeObject_) {
-        objeObject_->SetDirectionalLight(dirLight);
-        objeObject_->SetSpotLight(spotLight);
-        objeObject_->Update();
+    if (wallObject_) {
+        wallObject_->SetDirectionalLight(dirLight);
+        wallObject_->SetSpotLight(spotLight);
+        wallObject_->Update();
     }
 
     if (skyboxEnabled_ && skybox_) {
@@ -192,8 +192,8 @@ void GamePlayScene::Draw() {
         player_->Draw();
     }
 
-    if (objeObject_) {
-        objeObject_->Draw(camera_);
+    if (wallObject_) {
+        wallObject_->Draw(camera_);
     }
 
     // ポストプロセスを適用して画面に描画
@@ -228,8 +228,8 @@ void GamePlayScene::Finalize() {
     }
     ground_.reset();
     groundModel_.reset();
-    objeObject_.reset();
-    objeModel_.reset();
+    wallObject_.reset();
+    wallModel_.reset();
     skybox_.reset();
     lightManager_.reset();
     fpsCamera_.reset();
