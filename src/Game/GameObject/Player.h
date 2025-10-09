@@ -37,6 +37,7 @@ public:
     // 状態取得
     bool IsMoving() const { return isMoving_; }
     bool IsSneaking() const { return isSneaking_; }
+    bool IsRunning() const { return isRunning_; }
     bool IsBlending() const { return isBlending_; }
     float GetBlendProgress() const;
     

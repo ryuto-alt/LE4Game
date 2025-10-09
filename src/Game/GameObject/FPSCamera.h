@@ -31,6 +31,10 @@ public:
     bool IsMouseLookEnabled() const { return mouseLookEnabled_; }
     void ToggleMouseLook();
 
+    // カメラシェイク
+    void UpdateCameraShake(bool isMoving, bool isRunning);
+    Vector3 GetCameraShakeOffset() const { return cameraShakeOffset_; }
+
 private:
     bool isFPSMode_ = false;           // true: 一人称, false: 三人称
     bool mouseLookEnabled_ = false;    // マウスによる視点移動の有効/無効（デフォルトはOFF）
@@ -44,4 +48,12 @@ private:
     // カメラ位置のスムーシング用
     Vector3 previousCameraPosition_ = {0.0f, 0.0f, 0.0f};
     float smoothFactor_ = 0.15f; // スムーシングの強さ (0.0-1.0, 小さいほど滑らか)
+
+    // カメラシェイク用
+    Vector3 cameraShakeOffset_ = {0.0f, 0.0f, 0.0f};
+    float shakeTimer_ = 0.0f;
+    float walkShakeAmplitude_ = 0.008f;  // 歩行時の揺れの大きさ
+    float walkShakeFrequency_ = 6.0f;    // 歩行時の揺れの速さ
+    float runShakeAmplitude_ = 0.025f;   // 走行時の揺れの大きさ
+    float runShakeFrequency_ = 15.0f;     // 走行時の揺れの速さ
 };

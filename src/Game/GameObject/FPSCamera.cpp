@@ -1,4 +1,5 @@
 #include "FPSCamera.h"
+#include <cmath>
 
 FPSCamera::FPSCamera() {
 }
@@ -45,6 +46,11 @@ void FPSCamera::UpdateCamera(Camera* camera, const Vector3& playerPosition, Anim
         smoothedPosition.x = previousCameraPosition_.x + (targetPosition.x - previousCameraPosition_.x) * smoothFactor_;
         smoothedPosition.y = previousCameraPosition_.y + (targetPosition.y - previousCameraPosition_.y) * smoothFactor_;
         smoothedPosition.z = previousCameraPosition_.z + (targetPosition.z - previousCameraPosition_.z) * smoothFactor_;
+
+        // カメラシェイクオフセットを適用
+        smoothedPosition.x += cameraShakeOffset_.x;
+        smoothedPosition.y += cameraShakeOffset_.y;
+        smoothedPosition.z += cameraShakeOffset_.z;
 
         // カメラ位置を設定
         camera->SetTranslate(smoothedPosition);
@@ -94,6 +100,43 @@ void FPSCamera::ToggleMouseLook() {
             engine->SetMouseCursor(false);
         } else {
             engine->SetMouseCursor(true);
+        }
+    }
+}
+
+void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning) {
+    if (!isFPSMode_) {
+        cameraShakeOffset_ = {0.0f, 0.0f, 0.0f};
+        return;
+    }
+
+    if (isMoving) {
+        // 移動中の場合、カメラシェイクを適用
+        float amplitude = isRunning ? runShakeAmplitude_ : walkShakeAmplitude_;
+        float frequency = isRunning ? runShakeFrequency_ : walkShakeFrequency_;
+
+        // タイマーを進める（デルタタイムの代わりに固定値を使用）
+        shakeTimer_ += 0.016f; // 約60FPS想定
+
+        // sin波を使って上下の揺れを作成
+        float yOffset = std::sin(shakeTimer_ * frequency) * amplitude;
+
+        // 左右の揺れも追加（位相をずらす）
+        float xOffset = std::sin(shakeTimer_ * frequency * 0.5f) * amplitude * 0.5f;
+
+        cameraShakeOffset_ = {xOffset, yOffset, 0.0f};
+    } else {
+        // 停止中の場合、揺れをスムーズに減衰
+        cameraShakeOffset_.x *= 0.9f;
+        cameraShakeOffset_.y *= 0.9f;
+        cameraShakeOffset_.z *= 0.9f;
+
+        // 十分小さくなったらリセット
+        if (std::abs(cameraShakeOffset_.x) < 0.001f &&
+            std::abs(cameraShakeOffset_.y) < 0.001f &&
+            std::abs(cameraShakeOffset_.z) < 0.001f) {
+            cameraShakeOffset_ = {0.0f, 0.0f, 0.0f};
+            shakeTimer_ = 0.0f;
         }
     }
 }

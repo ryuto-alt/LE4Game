@@ -112,6 +112,10 @@ void GamePlayScene::Update() {
     if (fpsCamera_ && fpsCamera_->IsFPSMode()) {
         // FPSモード: FPSカメラ専用の更新
         fpsCamera_->UpdateCameraRotation(camera_, engine);
+
+        // カメラシェイクを更新（プレイヤーの移動状態に基づく）
+        fpsCamera_->UpdateCameraShake(player_->IsMoving(), player_->IsRunning());
+
         player_->UpdateFPSCamera(fpsCamera_.get());
         camera_->Update();
     } else {
