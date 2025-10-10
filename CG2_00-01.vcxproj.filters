@@ -69,6 +69,9 @@
     <Filter Include="src\Game\SkyBox">
       <UniqueIdentifier>{5ed5bd49-1719-413f-81e2-b66afd61948c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Game\Enemy">
+      <UniqueIdentifier>{84b91cef-82ef-4bbb-a455-717118ec2970}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -241,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\InstancedRenderer.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\GameObject\Enemy.cpp">
+      <Filter>src\Game\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -419,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Camera\Frustum.h" />
     <ClInclude Include="src\Engine\Graphics\InstancedRenderer.h" />
+    <ClInclude Include="src\Game\GameObject\Enemy.h">
+      <Filter>src\Game\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
