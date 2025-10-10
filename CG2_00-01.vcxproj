@@ -65,12 +65,13 @@
       <AdditionalIncludeDirectories>$(ProjectDir)src\Engine\Graphics;$(ProjectDir)src\Engine\Math;$(ProjectDir)src\Engine\Input;$(ProjectDir)src\Engine\Utility;$(ProjectDir)imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\DirectXTex\Common;$(ProjectDir)src\Engine\Camera;$(ProjectDir)src\Engine\Particle;$(ProjectDir)src\Engine\Audio;$(ProjectDir)src\Engine\core;$(ProjectDir)src\Game\scene;$(ProjectDir)src\Game;$(ProjectDir)src\Engine;$(ProjectDir)src\Engine\Collision;$(ProjectDir)src\Engine\Animation;$(ProjectDir)externals\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalOptions>/ignore:4049 /ignore:4098 /ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <AdditionalLibraryDirectories>$(ProjectDir)externals\assimp\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>WinMainCRTStartup</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll" &amp;&amp; copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dxil.dll" &amp;&amp; xcopy /D /Y /E /I "$(ProjectDir)Resources" "$(TargetDir)Resources"</Command>
@@ -153,6 +154,7 @@
     <ClCompile Include="src\Game\scene\SceneManager.cpp" />
     <ClCompile Include="src\Game\scene\TitleScene.cpp" />
     <ClCompile Include="src\Game\GameObject\Player.cpp" />
+    <ClCompile Include="src\Game\GameObject\Enemy.cpp" />
     <ClCompile Include="src\Game\GameObject\FPSCamera.cpp" />
     <ClCompile Include="src\Game\GameObject\Ground.cpp" />
     <ClCompile Include="src\Game\Manager\LightManager.cpp" />
@@ -215,6 +217,7 @@
     <ClInclude Include="src\Game\scene\SceneManager.h" />
     <ClInclude Include="src\Game\scene\TitleScene.h" />
     <ClInclude Include="src\Game\GameObject\Player.h" />
+    <ClInclude Include="src\Game\GameObject\Enemy.h" />
     <ClInclude Include="src\Game\GameObject\FPSCamera.h" />
     <ClInclude Include="src\Game\GameObject\Ground.h" />
     <ClInclude Include="src\Game\Manager\LightManager.h" />

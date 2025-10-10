@@ -1,53 +1,62 @@
 #pragma once
 #include "UnoEngine.h"
+#include <memory>
 
 class Enemy {
 public:
-    Enemy();
-    ~Enemy();
+	Enemy();
+	~Enemy();
 
-    void Initialize(Camera* camera, const Vector3& position);
-    void Update(float deltaTime);
-    void Draw();
-    void Finalize();
+	void Initialize(Camera* camera = nullptr);
+	void Update();
+	void Draw();
+	void DrawUI();
+	void Finalize();
 
-    // 位置・回転の取得・設定
-    Vector3 GetPosition() const { return position_; }
-    void SetPosition(const Vector3& position);
-    float GetRotationY() const { return rotationY_; }
-    void SetRotation(float rotationY);
+	// Position
+	Vector3 GetPosition() const { return position_; }
+	void SetPosition(const Vector3& position);
 
-    // ライトの設定
-    void SetDirectionalLight(const DirectionalLight& light);
-    void SetSpotLight(const SpotLight& light);
+	// Animation control
+	void PauseAnimation();
+	void PlayAnimation();
+	void ResetAnimation();
+	bool IsAnimationPaused() const { return animationPaused_; }
+	std::string GetCurrentAnimationName() const;
 
-    // アニメーション制御
-    void PauseAnimation();
-    void PlayAnimation();
-    void ResetAnimation();
-    bool IsAnimationPaused() const { return animationPaused_; }
+	// Lighting
+	void SetDirectionalLight(DirectionalLight* light);
+	void SetSpotLight(SpotLight* light);
 
-    // コリジョン用にObject3dを取得
-    Object3d* GetObject() const { return object3d_.get(); }
-    AnimatedModel* GetModel() const { return animatedModel_.get(); }
+	// Environment mapping
+	void EnableEnv(bool enable);
+	bool IsEnvEnabled() const;
+	void SetEnvTex(const std::string& texturePath);
 
-    // ImGui表示
-    void DrawImGui();
+	// Camera
+	void SetCamera(Camera* camera);
+
+	// Getters
+	Object3d* GetObject() { return object3d_.get(); }
+	AnimatedModel* GetModel() { return animatedModel_.get(); }
 
 private:
-    void UpdateAnimation(float deltaTime);
+	void UpdateAnimation();
 
-    // モデル関連
-    std::unique_ptr<Object3d> object3d_;
-    std::unique_ptr<AnimatedModel> animatedModel_;
+	// 3D object and model
+	std::unique_ptr<Object3d> object3d_;
+	std::unique_ptr<AnimatedModel> animatedModel_;
 
-    // 位置・回転
-    Vector3 position_ = Vector3{0.0f, 0.0f, 0.0f};
-    float rotationY_ = 0.0f;
+	// Transform
+	Vector3 position_;
+	float currentRotationY_;
 
-    // アニメーション関連
-    bool animationPaused_ = false;
+	// Animation
+	bool animationPaused_;
+	bool isBlending_;
+	float blendTimer_;
+	const float BLEND_DURATION = 0.3f;
 
-    // カメラ参照
-    Camera* camera_ = nullptr;
+	// Animation toggle for ImGui
+	bool animationEnabled_;
 };

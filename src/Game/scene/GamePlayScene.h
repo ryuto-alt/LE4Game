@@ -1,6 +1,7 @@
 #pragma once
 #include "IScene.h"
 #include "GameObject/Player.h"
+#include "GameObject/Enemy.h"
 #include "GameObject/FPSCamera.h"
 #include "Skybox.h"
 #include "Manager/LightManager.h"
@@ -22,6 +23,7 @@ private:
     void HandleInput();
 
     std::unique_ptr<Player> player_;
+    std::unique_ptr<Enemy> enemy_;
     std::unique_ptr<Object3d> ground_;
     std::unique_ptr<AnimatedModel> groundModel_;
     std::unique_ptr<Skybox> skybox_;

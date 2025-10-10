@@ -549,6 +549,7 @@ void Object3d::Draw() {
 		// マルチマテリアルモード
 		const std::vector<D3D12_VERTEX_BUFFER_VIEW>& vbViews = model_->GetVertexBufferViews();
 		size_t meshIndex = 0;
+		size_t vertexOffset = 0; // 全頂点配列内でのオフセットを追跡
 
 		for (const auto& matDataPair : modelData.matVertexData) {
 			const MaterialVertexData& matVertexData = matDataPair.second;
@@ -566,10 +567,16 @@ void Object3d::Draw() {
 				AnimatedModel* animModel = static_cast<AnimatedModel*>(animatedModel_);
 				const SkinCluster& skinCluster = animModel->GetSkinCluster();
 
+				// インフルエンスバッファビューをこのメッシュの頂点オフセットに合わせて作成
+				D3D12_VERTEX_BUFFER_VIEW meshInfluenceBufferView = skinCluster.influenceBufferView;
+				meshInfluenceBufferView.BufferLocation = skinCluster.influenceBufferView.BufferLocation +
+					(vertexOffset * sizeof(VertexInfluence));
+				meshInfluenceBufferView.SizeInBytes = static_cast<UINT>(sizeof(VertexInfluence) * matVertexData.vertices.size());
+
 				// 頂点バッファとインフルエンスバッファを設定
 				D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
 					vbViews[meshIndex],
-					skinCluster.influenceBufferView
+					meshInfluenceBufferView
 				};
 				dxCommon_->GetCommandList()->IASetVertexBuffers(0, 2, vbvs);
 			}
@@ -608,6 +615,8 @@ void Object3d::Draw() {
 			uint32_t vertexCount = static_cast<uint32_t>(matVertexData.vertices.size());
 			dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
 
+			// 次のメッシュのために頂点オフセットを更新
+			vertexOffset += matVertexData.vertices.size();
 			meshIndex++;
 		}
 	}
@@ -680,6 +689,7 @@ void Object3d::Draw(Camera* camera, int* visibleMeshCount, int* culledMeshCount)
 	if (isMultiMaterial) {
 		const std::vector<D3D12_VERTEX_BUFFER_VIEW>& vbViews = model_->GetVertexBufferViews();
 		size_t meshIndex = 0;
+		size_t vertexOffset = 0; // 全頂点配列内でのオフセットを追跡
 
 		for (const auto& matDataPair : modelData.matVertexData) {
 			const MaterialVertexData& matVertexData = matDataPair.second;
@@ -717,6 +727,8 @@ void Object3d::Draw(Camera* camera, int* visibleMeshCount, int* culledMeshCount)
 			// フラスタムカリング判定
 			if (!camera->IsAABBInFrustum(meshMin, meshMax)) {
 				if (culledMeshCount) (*culledMeshCount)++;
+				// 次のメッシュのために頂点オフセットを更新
+				vertexOffset += matVertexData.vertices.size();
 				meshIndex++;
 				continue;
 			}
@@ -727,9 +739,16 @@ void Object3d::Draw(Camera* camera, int* visibleMeshCount, int* culledMeshCount)
 			if (useAnimation) {
 				AnimatedModel* animModel = static_cast<AnimatedModel*>(animatedModel_);
 				const SkinCluster& skinCluster = animModel->GetSkinCluster();
+
+				// インフルエンスバッファビューをこのメッシュの頂点オフセットに合わせて作成
+				D3D12_VERTEX_BUFFER_VIEW meshInfluenceBufferView = skinCluster.influenceBufferView;
+				meshInfluenceBufferView.BufferLocation = skinCluster.influenceBufferView.BufferLocation +
+					(vertexOffset * sizeof(VertexInfluence));
+				meshInfluenceBufferView.SizeInBytes = static_cast<UINT>(sizeof(VertexInfluence) * matVertexData.vertices.size());
+
 				D3D12_VERTEX_BUFFER_VIEW vbvs[2] = {
 					vbViews[meshIndex],
-					skinCluster.influenceBufferView
+					meshInfluenceBufferView
 				};
 				dxCommon_->GetCommandList()->IASetVertexBuffers(0, 2, vbvs);
 			}
@@ -755,6 +774,8 @@ void Object3d::Draw(Camera* camera, int* visibleMeshCount, int* culledMeshCount)
 			uint32_t vertexCount = static_cast<uint32_t>(matVertexData.vertices.size());
 			dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
 
+			// 次のメッシュのために頂点オフセットを更新
+			vertexOffset += matVertexData.vertices.size();
 			meshIndex++;
 		}
 	}

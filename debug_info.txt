@@ -1,0 +1,688 @@
+=== AnimatedModel Debug Info ===
+Scene: Resources/Models/stageWall
+Meshes: 76
+
+========================================
+Mesh: 立方体.168
+Material Index: 0
+Vertex Offset: 0
+Mesh Vertices: 36
+Total Vertices: 36
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.167
+Material Index: 0
+Vertex Offset: 36
+Mesh Vertices: 36
+Total Vertices: 72
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.165
+Material Index: 0
+Vertex Offset: 72
+Mesh Vertices: 36
+Total Vertices: 108
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.164
+Material Index: 0
+Vertex Offset: 108
+Mesh Vertices: 36
+Total Vertices: 144
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.163
+Material Index: 0
+Vertex Offset: 144
+Mesh Vertices: 36
+Total Vertices: 180
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.162
+Material Index: 0
+Vertex Offset: 180
+Mesh Vertices: 36
+Total Vertices: 216
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.159
+Material Index: 0
+Vertex Offset: 216
+Mesh Vertices: 36
+Total Vertices: 252
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.157
+Material Index: 0
+Vertex Offset: 252
+Mesh Vertices: 36
+Total Vertices: 288
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.155
+Material Index: 0
+Vertex Offset: 288
+Mesh Vertices: 36
+Total Vertices: 324
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.153
+Material Index: 0
+Vertex Offset: 324
+Mesh Vertices: 36
+Total Vertices: 360
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.152
+Material Index: 0
+Vertex Offset: 360
+Mesh Vertices: 36
+Total Vertices: 396
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.150
+Material Index: 0
+Vertex Offset: 396
+Mesh Vertices: 36
+Total Vertices: 432
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.149
+Material Index: 0
+Vertex Offset: 432
+Mesh Vertices: 36
+Total Vertices: 468
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.145
+Material Index: 0
+Vertex Offset: 468
+Mesh Vertices: 36
+Total Vertices: 504
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.148
+Material Index: 0
+Vertex Offset: 504
+Mesh Vertices: 36
+Total Vertices: 540
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.142
+Material Index: 0
+Vertex Offset: 540
+Mesh Vertices: 36
+Total Vertices: 576
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.140
+Material Index: 0
+Vertex Offset: 576
+Mesh Vertices: 36
+Total Vertices: 612
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.139
+Material Index: 0
+Vertex Offset: 612
+Mesh Vertices: 36
+Total Vertices: 648
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.138
+Material Index: 0
+Vertex Offset: 648
+Mesh Vertices: 36
+Total Vertices: 684
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.137
+Material Index: 0
+Vertex Offset: 684
+Mesh Vertices: 36
+Total Vertices: 720
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.136
+Material Index: 0
+Vertex Offset: 720
+Mesh Vertices: 36
+Total Vertices: 756
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.135
+Material Index: 0
+Vertex Offset: 756
+Mesh Vertices: 36
+Total Vertices: 792
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.134
+Material Index: 0
+Vertex Offset: 792
+Mesh Vertices: 36
+Total Vertices: 828
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.132
+Material Index: 0
+Vertex Offset: 828
+Mesh Vertices: 36
+Total Vertices: 864
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.131
+Material Index: 0
+Vertex Offset: 864
+Mesh Vertices: 36
+Total Vertices: 900
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.118
+Material Index: 0
+Vertex Offset: 900
+Mesh Vertices: 36
+Total Vertices: 936
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.130
+Material Index: 0
+Vertex Offset: 936
+Mesh Vertices: 36
+Total Vertices: 972
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.108
+Material Index: 0
+Vertex Offset: 972
+Mesh Vertices: 36
+Total Vertices: 1008
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.114
+Material Index: 0
+Vertex Offset: 1008
+Mesh Vertices: 36
+Total Vertices: 1044
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.106
+Material Index: 0
+Vertex Offset: 1044
+Mesh Vertices: 36
+Total Vertices: 1080
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.111
+Material Index: 0
+Vertex Offset: 1080
+Mesh Vertices: 36
+Total Vertices: 1116
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.110
+Material Index: 0
+Vertex Offset: 1116
+Mesh Vertices: 36
+Total Vertices: 1152
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.103
+Material Index: 0
+Vertex Offset: 1152
+Mesh Vertices: 36
+Total Vertices: 1188
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.129
+Material Index: 0
+Vertex Offset: 1188
+Mesh Vertices: 36
+Total Vertices: 1224
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.101
+Material Index: 0
+Vertex Offset: 1224
+Mesh Vertices: 36
+Total Vertices: 1260
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.097
+Material Index: 0
+Vertex Offset: 1260
+Mesh Vertices: 36
+Total Vertices: 1296
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.121
+Material Index: 0
+Vertex Offset: 1296
+Mesh Vertices: 36
+Total Vertices: 1332
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.092
+Material Index: 0
+Vertex Offset: 1332
+Mesh Vertices: 36
+Total Vertices: 1368
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.090
+Material Index: 0
+Vertex Offset: 1368
+Mesh Vertices: 36
+Total Vertices: 1404
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.089
+Material Index: 0
+Vertex Offset: 1404
+Mesh Vertices: 36
+Total Vertices: 1440
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.088
+Material Index: 0
+Vertex Offset: 1440
+Mesh Vertices: 36
+Total Vertices: 1476
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.087
+Material Index: 0
+Vertex Offset: 1476
+Mesh Vertices: 36
+Total Vertices: 1512
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.086
+Material Index: 0
+Vertex Offset: 1512
+Mesh Vertices: 36
+Total Vertices: 1548
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.085
+Material Index: 0
+Vertex Offset: 1548
+Mesh Vertices: 36
+Total Vertices: 1584
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.166
+Material Index: 0
+Vertex Offset: 1584
+Mesh Vertices: 36
+Total Vertices: 1620
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.083
+Material Index: 0
+Vertex Offset: 1620
+Mesh Vertices: 36
+Total Vertices: 1656
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.079
+Material Index: 0
+Vertex Offset: 1656
+Mesh Vertices: 36
+Total Vertices: 1692
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.076
+Material Index: 0
+Vertex Offset: 1692
+Mesh Vertices: 36
+Total Vertices: 1728
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.075
+Material Index: 0
+Vertex Offset: 1728
+Mesh Vertices: 36
+Total Vertices: 1764
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.120
+Material Index: 0
+Vertex Offset: 1764
+Mesh Vertices: 36
+Total Vertices: 1800
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.073
+Material Index: 0
+Vertex Offset: 1800
+Mesh Vertices: 36
+Total Vertices: 1836
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.070
+Material Index: 0
+Vertex Offset: 1836
+Mesh Vertices: 36
+Total Vertices: 1872
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.069
+Material Index: 0
+Vertex Offset: 1872
+Mesh Vertices: 36
+Total Vertices: 1908
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.068
+Material Index: 0
+Vertex Offset: 1908
+Mesh Vertices: 36
+Total Vertices: 1944
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.067
+Material Index: 0
+Vertex Offset: 1944
+Mesh Vertices: 36
+Total Vertices: 1980
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.119
+Material Index: 0
+Vertex Offset: 1980
+Mesh Vertices: 36
+Total Vertices: 2016
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.064
+Material Index: 0
+Vertex Offset: 2016
+Mesh Vertices: 36
+Total Vertices: 2052
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.146
+Material Index: 0
+Vertex Offset: 2052
+Mesh Vertices: 36
+Total Vertices: 2088
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.063
+Material Index: 0
+Vertex Offset: 2088
+Mesh Vertices: 36
+Total Vertices: 2124
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.057
+Material Index: 0
+Vertex Offset: 2124
+Mesh Vertices: 36
+Total Vertices: 2160
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.062
+Material Index: 0
+Vertex Offset: 2160
+Mesh Vertices: 36
+Total Vertices: 2196
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.054
+Material Index: 0
+Vertex Offset: 2196
+Mesh Vertices: 36
+Total Vertices: 2232
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.127
+Material Index: 0
+Vertex Offset: 2232
+Mesh Vertices: 36
+Total Vertices: 2268
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.061
+Material Index: 0
+Vertex Offset: 2268
+Mesh Vertices: 36
+Total Vertices: 2304
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.038
+Material Index: 0
+Vertex Offset: 2304
+Mesh Vertices: 36
+Total Vertices: 2340
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.160
+Material Index: 0
+Vertex Offset: 2340
+Mesh Vertices: 36
+Total Vertices: 2376
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.126
+Material Index: 0
+Vertex Offset: 2376
+Mesh Vertices: 36
+Total Vertices: 2412
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.021
+Material Index: 0
+Vertex Offset: 2412
+Mesh Vertices: 36
+Total Vertices: 2448
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.052
+Material Index: 0
+Vertex Offset: 2448
+Mesh Vertices: 36
+Total Vertices: 2484
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.037
+Material Index: 0
+Vertex Offset: 2484
+Mesh Vertices: 36
+Total Vertices: 2520
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.034
+Material Index: 0
+Vertex Offset: 2520
+Mesh Vertices: 36
+Total Vertices: 2556
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.017
+Material Index: 1
+Vertex Offset: 2556
+Mesh Vertices: 36
+Total Vertices: 2592
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.048
+Material Index: 1
+Vertex Offset: 2592
+Mesh Vertices: 36
+Total Vertices: 2628
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.015
+Material Index: 1
+Vertex Offset: 2628
+Mesh Vertices: 36
+Total Vertices: 2664
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.014
+Material Index: 1
+Vertex Offset: 2664
+Mesh Vertices: 36
+Total Vertices: 2700
+Bones: 0
+========================================
+
+========================================
+Mesh: 立方体.002
+Material Index: 2
+Vertex Offset: 2700
+Mesh Vertices: 36
+Total Vertices: 2736
+Bones: 0
+========================================
+

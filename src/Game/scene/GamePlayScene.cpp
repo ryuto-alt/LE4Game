@@ -32,6 +32,13 @@ void GamePlayScene::Initialize() {
     player_->Initialize(camera_, true, false); // コリジョン有効、環境マップ無効
     player_->SetupCamera(engine);
 
+    // Enemyの初期化
+    enemy_ = std::make_unique<Enemy>();
+    enemy_->Initialize(camera_);
+    // プレイヤーと同じ位置にスポーン
+    Vector3 playerPos = player_->GetPosition();
+    enemy_->SetPosition(playerPos);
+
     groundModel_ = engine->CreateAnimatedModel();
     groundModel_->LoadFromFile("Resources/Models/ground", "ground.gltf");
 
@@ -154,6 +161,12 @@ void GamePlayScene::Update() {
     player_->SetDirectionalLight(dirLight);
     player_->SetSpotLight(spotLight);
 
+    if (enemy_) {
+        enemy_->SetDirectionalLight(const_cast<DirectionalLight*>(&dirLight));
+        enemy_->SetSpotLight(const_cast<SpotLight*>(&spotLight));
+        enemy_->Update();
+    }
+
     if (ground_) {
         ground_->SetDirectionalLight(dirLight);
         ground_->SetSpotLight(spotLight);
@@ -192,6 +205,10 @@ void GamePlayScene::Draw() {
         player_->Draw();
     }
 
+    if (enemy_) {
+        enemy_->Draw();
+    }
+
     if (wallObject_) {
         wallObject_->Draw(camera_);
     }
@@ -206,6 +223,10 @@ void GamePlayScene::Draw() {
 #ifdef _DEBUG
     if (lightManager_) {
         lightManager_->DrawImGui();
+    }
+
+    if (enemy_) {
+        enemy_->DrawUI();
     }
 
     auto* collisionManager = Collision::AABBCollisionManager::GetInstance();
@@ -225,6 +246,10 @@ void GamePlayScene::Finalize() {
     if (player_) {
         player_->Finalize();
         player_.reset();
+    }
+    if (enemy_) {
+        enemy_->Finalize();
+        enemy_.reset();
     }
     ground_.reset();
     groundModel_.reset();

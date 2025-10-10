@@ -61,27 +61,30 @@ void AnimatedModel::LoadFromFile(const std::string& directoryPath, const std::st
 
 void AnimatedModel::LoadFromGLTFWithAssimp(const std::string& directoryPath, const std::string& filename) {
     // OutputDebugStringA(("AnimatedModel: Loading GLTF with Assimp from " + directoryPath + "/" + filename + "\n").c_str());
-    
+
     std::string fullPath = directoryPath + "/" + filename;
-    
+
+    // Mixamo対応: aiProcess_LimitBoneWeights と aiProcess_PopulateArmatureData を追加
     const aiScene* scene = assimpImporter_.ReadFile(fullPath,
         aiProcess_Triangulate |
-        aiProcess_FlipUVs
+        aiProcess_FlipUVs |
+        aiProcess_LimitBoneWeights |          // ボーンウェイトを4つに制限
+        aiProcess_PopulateArmatureData        // アーマチュアデータを正しく構築(Mixamo対応)
     );
-    
+
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         // OutputDebugStringA(("AnimatedModel: Error loading GLTF file: " + std::string(assimpImporter_.GetErrorString()) + "\n").c_str());
         return;
     }
-    
-    // OutputDebugStringA(("AnimatedModel: Successfully loaded GLTF file\n"));
-    
+
+    OutputDebugStringA(("AnimatedModel: Successfully loaded GLTF file with Mixamo-compatible flags\n"));
+
     ProcessAssimpScene(scene, directoryPath);
-    
+
     Node rootNode = ReadNode(scene->mRootNode);
     skeleton_ = CreateSkeleton(rootNode);
     skinCluster_ = CreateSkinCluster();
-    
+
     for (const Joint& joint : skeleton_.joints) {
         JointTransform transform;
         transform.scale = joint.transform.scale;
@@ -89,7 +92,7 @@ void AnimatedModel::LoadFromGLTFWithAssimp(const std::string& directoryPath, con
         transform.translate = joint.transform.translate;
         initialJointTransforms_[joint.name] = transform;
     }
-    
+
     CreateVertexBuffer();
 }
 
@@ -207,11 +210,29 @@ Node AnimatedModel::ReadNode(aiNode* node)
     aiQuaternion rotation;
 
     node->mTransformation.Decompose(scale, rotation, translate);
+
+    // Mixamo対応: Hipsボーンまたはmixamorig:Hipsの異常なスケールを検出して修正
+    std::string nodeName = node->mName.C_Str();
+    bool isMixamoHips = (nodeName.find("Hips") != std::string::npos ||
+                         nodeName.find("hips") != std::string::npos ||
+                         nodeName.find("mixamorig") != std::string::npos);
+
+    // Mixamoの特徴: 極小スケール(約0.01)を検出
+    bool hasAbnormalScale = (scale.x < 0.1f || scale.y < 0.1f || scale.z < 0.1f);
+
+    if (isMixamoHips && hasAbnormalScale) {
+        // Mixamoのアーマチュア問題を修正: スケールを1.0にリセット
+        OutputDebugStringA(("AnimatedModel: Detected Mixamo armature issue on node: " + nodeName +
+                           ", scale=(" + std::to_string(scale.x) + ", " + std::to_string(scale.y) + ", " +
+                           std::to_string(scale.z) + ") - Fixing to (1,1,1)\n").c_str());
+        scale = {1.0f, 1.0f, 1.0f};
+    }
+
     result.transform.scale = { scale.x, scale.y, scale.z };
-    result.transform.rotate = { rotation.x, -rotation.y, -rotation.z, rotation.w };  
-    result.transform.translate = { -translate.x, translate.y, translate.z };  
+    result.transform.rotate = { rotation.x, -rotation.y, -rotation.z, rotation.w };
+    result.transform.translate = { -translate.x, translate.y, translate.z };
     result.localMatrix = MakeAffineMatrix(result.transform.scale, result.transform.rotate, result.transform.translate);
-    result.name = node->mName.C_Str();
+    result.name = nodeName;
     result.children.resize(node->mNumChildren);
     for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
         result.children[childIndex] = ReadNode(node->mChildren[childIndex]);
@@ -356,6 +377,11 @@ SkinCluster AnimatedModel::CreateSkinCluster()
 void AnimatedModel::ProcessAssimpScene(const aiScene* scene, const std::string& directoryPath) {
     ModelData& modelData = GetModelDataInternal();
 
+    // デバッグ情報をコンソールに出力
+    printf("\n=== AnimatedModel Debug Info ===\n");
+    printf("Scene: %s\n", directoryPath.c_str());
+    printf("Meshes: %d\n\n", scene->mNumMeshes);
+
     // 頂点データをクリア（複数メッシュを結合するため）
     modelData.vertices.clear();
     modelData.matVertexData.clear();
@@ -408,6 +434,9 @@ void AnimatedModel::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene) 
     // このメッシュ用のMaterialVertexDataを作成
     MaterialVertexData matVertexData;
     matVertexData.materialIndex = materialIndex;
+
+    // マルチメッシュ対応: 現在のグローバル頂点オフセットを記録
+    size_t vertexOffset = modelData.vertices.size();
 
     // まず頂点データを頂点インデックス順に格納（ボーンウェイトの参照用）
     std::vector<VertexData> indexedVertices(mesh->mNumVertices);
@@ -477,28 +506,55 @@ void AnimatedModel::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene) 
         aiBone* bone = mesh->mBones[boneIndex];
         std::string jointName = bone->mName.C_Str();
         JointWeightData& jointWeightData = modelData.skinClusterData[jointName];
-        
+
         // OutputDebugStringA(("AnimatedModel: Processing bone: " + jointName + " with " + std::to_string(bone->mNumWeights) + " weights\n").c_str());
-        
+
         // InverseBindPose行列を取得（assimpのOffsetMatrixがInverseBindPose）
         aiMatrix4x4 offsetMatrix = bone->mOffsetMatrix;
-        
+
 
         // InverseBindPose行列を分解して、各成分を変換してから再構築
         aiMatrix4x4 bindPoseMatrix = offsetMatrix.Inverse();
         aiVector3D scale, translate;
         aiQuaternion rotation;
         bindPoseMatrix.Decompose(scale, rotation, translate);
-        
-     
+
+
         Matrix4x4 bindPoseMatrixConverted = MakeAffineMatrix(
             { scale.x, scale.y, scale.z },                              // スケール
             { rotation.x, -rotation.y, -rotation.z, rotation.w },       // 回転（Y,Z成分を反転）
             { -translate.x, translate.y, translate.z }                  // 位置（X座標を反転）
         );
-        
+
         // 逆バインドポーズ行列を格納
-        jointWeightData.inverseBindPoseMatrix = Inverse(bindPoseMatrixConverted);
+        Matrix4x4 currentInverseBindPose = Inverse(bindPoseMatrixConverted);
+
+        // デバッグ: 既存のinverse bind matrixと比較
+        if (!jointWeightData.vertexWeights.empty()) {
+            // 既にこのジョイントが処理されている場合、行列が同じか確認
+            const Matrix4x4& existing = jointWeightData.inverseBindPoseMatrix;
+            bool isSame = true;
+            for (int row = 0; row < 4; row++) {
+                for (int col = 0; col < 4; col++) {
+                    if (std::abs(existing.m[row][col] - currentInverseBindPose.m[row][col]) > 0.0001f) {
+                        isSame = false;
+                        break;
+                    }
+                }
+                if (!isSame) break;
+            }
+
+            if (!isSame) {
+                char debugMsg[256];
+                sprintf_s(debugMsg, "WARNING: Mesh '%s' has different inverseBindMatrix for bone '%s'\n",
+                         utf8.c_str(), jointName.c_str());
+                OutputDebugStringA(debugMsg);
+                printf("%s", debugMsg);
+            }
+        }
+
+        // 常に上書き（最後に処理されたメッシュのものを使用）
+        jointWeightData.inverseBindPoseMatrix = currentInverseBindPose;
         
         // 頂点ウェイト情報を格納
         for (unsigned int weightIndex = 0; weightIndex < bone->mNumWeights; weightIndex++) {
@@ -513,10 +569,10 @@ void AnimatedModel::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene) 
                 
                 for (int i = 0; i < 3; i++) {
                     if (indices[i] == weight.mVertexId) {
-                        // この頂点は modelData.vertices の (faceIndex * 3 + i) 番目に格納されている
+                        // この頂点は modelData.vertices の (vertexOffset + faceIndex * 3 + i) 番目に格納されている
                         VertexWeightData vwd;
                         vwd.weight = weight.mWeight;
-                        vwd.vectorIndex = faceIndex * 3 + i;
+                        vwd.vectorIndex = static_cast<uint32_t>(vertexOffset + faceIndex * 3 + i);
                         jointWeightData.vertexWeights.push_back(vwd);
                     }
                 }
@@ -526,6 +582,21 @@ void AnimatedModel::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene) 
 
     // このメッシュのデータをmatVertexDataに格納
     modelData.matVertexData[meshName] = matVertexData;
+
+    // デバッグ情報をコンソールに出力
+    printf("========================================\n");
+    printf("Mesh: %s\n", utf8.c_str());
+    printf("Material Index: %zu\n", materialIndex);
+    printf("Vertex Offset: %zu\n", vertexOffset);
+    printf("Mesh Vertices: %zu\n", matVertexData.vertices.size());
+    printf("Total Vertices: %zu\n", modelData.vertices.size());
+    printf("Bones: %d\n", mesh->mNumBones);
+
+    for (unsigned int boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++) {
+        aiBone* bone = mesh->mBones[boneIndex];
+        printf("  Bone[%d]: %s (%d weights)\n", boneIndex, bone->mName.C_Str(), bone->mNumWeights);
+    }
+    printf("========================================\n\n");
 
     OutputDebugStringA(("AnimatedModel: Mesh \"" + utf8 + "\" created with " +
         std::to_string(matVertexData.vertices.size()) + " vertices\n").c_str());
