@@ -103,7 +103,7 @@ private:
     // 移動関連
     const float moveSpeed_ = 4.5f;
     const float sneakSpeedMultiplier_ = 0.5f;
-    const float runSpeedMultiplier_ = 2.0f;
+    const float runSpeedMultiplier_ = 1.9f;
     bool isMoving_ = false;
     bool isSneaking_ = false;
     bool isRunning_ = false;

@@ -35,9 +35,11 @@ void GamePlayScene::Initialize() {
     // Enemyの初期化
     enemy_ = std::make_unique<Enemy>();
     enemy_->Initialize(camera_);
-    // プレイヤーと同じ位置にスポーン
+    // プレイヤーから離れた位置にスポーン
     Vector3 playerPos = player_->GetPosition();
-    enemy_->SetPosition(playerPos);
+    enemy_->SetPosition({playerPos.x + 15.0f, playerPos.y, playerPos.z});
+    // プレイヤーへの参照を設定
+    enemy_->SetPlayer(player_.get());
 
     groundModel_ = engine->CreateAnimatedModel();
     groundModel_->LoadFromFile("Resources/Models/ground", "ground.gltf");

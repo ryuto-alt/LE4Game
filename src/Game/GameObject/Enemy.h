@@ -2,6 +2,9 @@
 #include "UnoEngine.h"
 #include <memory>
 
+// Forward declaration
+class Player;
+
 class Enemy {
 public:
 	Enemy();
@@ -37,12 +40,19 @@ public:
 	// Camera
 	void SetCamera(Camera* camera);
 
+	// Player tracking
+	void SetPlayer(Player* player) { player_ = player; }
+
 	// Getters
 	Object3d* GetObject() { return object3d_.get(); }
 	AnimatedModel* GetModel() { return animatedModel_.get(); }
 
+	// Collision response
+	void HandleCollisionResponse();
+
 private:
 	void UpdateAnimation();
+	bool CheckWallAt(const Vector3& position);
 
 	// 3D object and model
 	std::unique_ptr<Object3d> object3d_;
@@ -63,4 +73,14 @@ private:
 
 	// Current animation index for ImGui combo
 	int currentAnimationIndex_;
+
+	// Player tracking
+	Player* player_;
+	float detectionRange_;
+	float moveSpeed_;
+	bool isChasing_;
+
+	// Wall avoidance (for UI/future use)
+	float avoidanceRadius_;
+	float alternativeTimer_;
 };

@@ -17,7 +17,10 @@ Enemy::Enemy()
 	, detectionRange_(20.0f)
 	, moveSpeed_(0.1f)
 	, isChasing_(false)
+	, previousPosition_({0.0f, 0.0f, 0.0f})
 	, avoidanceRadius_(5.0f)
+	, stuckCounter_(0)
+	, alternativeDirection_({0.0f, 0.0f, 0.0f})
 	, alternativeTimer_(0.0f) {
 }
 
@@ -108,6 +111,9 @@ void Enemy::Initialize(Camera* camera) {
 }
 
 void Enemy::Update() {
+	// 前フレームの位置を保存
+	Vector3 oldPosition = position_;
+
 	// 代替経路タイマーの更新
 	if (alternativeTimer_ > 0.0f) {
 		alternativeTimer_ -= 1.0f / 60.0f;
@@ -211,6 +217,8 @@ void Enemy::Update() {
 
 	// 衝突応答処理
 	HandleCollisionResponse();
+
+	previousPosition_ = position_;
 }
 
 void Enemy::UpdateAnimation() {
@@ -530,3 +538,4 @@ void Enemy::HandleCollisionResponse() {
 		if (!hadCollision) break;
 	}
 }
+
