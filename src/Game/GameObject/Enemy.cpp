@@ -274,12 +274,14 @@ void Enemy::SetCamera(Camera* camera) {
 
 void Enemy::ChangeAnimation(const std::string& animationName) {
 	if (animatedModel_) {
-		animatedModel_->ChangeAnimation(animationName);
+		// TransitionToAnimationを使用してスムーズな補間を適用
+		animatedModel_->TransitionToAnimation(animationName, BLEND_DURATION);
 		isBlending_ = true;
 		blendTimer_ = 0.0f;
 
 		char debugMsg[256];
-		sprintf_s(debugMsg, "Enemy: Changed animation to %s\n", animationName.c_str());
+		sprintf_s(debugMsg, "Enemy: Transitioning to animation %s with blend duration %.2fs\n",
+			animationName.c_str(), BLEND_DURATION);
 		OutputDebugStringA(debugMsg);
 	}
 }
