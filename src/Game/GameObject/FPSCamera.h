@@ -55,7 +55,7 @@ private:
     float walkShakeAmplitude_ = 0.008f;  // 歩行時の揺れの大きさ
     float walkShakeFrequency_ = 6.0f;    // 歩行時の揺れの速さ
     float runShakeAmplitude_ = 0.025f;   // 走行時の揺れの大きさ
-    float runShakeFrequency_ = 15.0f;     // 走行時の揺れの速さ
+    float runShakeFrequency_ = 20.0f;     // 走行時の揺れの速さ
 
     // 足音用
     float previousYOffset_ = 0.0f;  // 前フレームのY方向オフセット

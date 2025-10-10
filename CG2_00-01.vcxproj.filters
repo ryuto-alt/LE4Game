@@ -419,7 +419,6 @@
       <Filter>src\Game\SkyBox</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\PostProcess.h" />
-    <ClInclude Include="src\Game\GameObject\FPSCamera.h" />
     <ClInclude Include="src\Game\scene\LogoScene.h">
       <Filter>src\Game\scene</Filter>
     </ClInclude>
@@ -427,6 +426,9 @@
     <ClInclude Include="src\Engine\Graphics\InstancedRenderer.h" />
     <ClInclude Include="src\Game\GameObject\Enemy.h">
       <Filter>src\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\GameObject\FPSCamera.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
