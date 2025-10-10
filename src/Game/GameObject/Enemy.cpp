@@ -8,7 +8,8 @@ Enemy::Enemy()
 	, animationPaused_(false)
 	, isBlending_(false)
 	, blendTimer_(0.0f)
-	, animationEnabled_(true) {
+	, animationEnabled_(true)
+	, currentAnimationIndex_(0) {
 }
 
 Enemy::~Enemy() {
@@ -24,6 +25,17 @@ void Enemy::Initialize(Camera* camera) {
 	// Playerと同じパターン: 読み込んだGLTFのアニメーションを取得して登録
 	Animation walkAnim = animatedModel_->GetAnimationPlayer().GetAnimation();
 	animatedModel_->AddAnimation("Walk", walkAnim);
+
+	// RunアニメーションとScreamアニメーションも読み込む
+	std::unique_ptr<AnimatedModel> runModel = engine->CreateAnimatedModel();
+	runModel->LoadFromFile("Resources/Models/Enemy/EnemyRun", "EnemyRun.gltf");
+	Animation runAnim = runModel->GetAnimationPlayer().GetAnimation();
+	animatedModel_->AddAnimation("Run", runAnim);
+
+	std::unique_ptr<AnimatedModel> screamModel = engine->CreateAnimatedModel();
+	screamModel->LoadFromFile("Resources/Models/Enemy/EnemyScream", "EnemyScream.gltf");
+	Animation screamAnim = screamModel->GetAnimationPlayer().GetAnimation();
+	animatedModel_->AddAnimation("Scream", screamAnim);
 
 	// Playerと同じ: アニメーションを変更して再生
 	animatedModel_->ChangeAnimation("Walk");
@@ -76,7 +88,7 @@ void Enemy::Initialize(Camera* camera) {
 		}
 	}
 
-	OutputDebugStringA("Enemy: Initialization complete with Walk animation\n");
+	OutputDebugStringA("Enemy: Initialization complete with Walk, Run, and Scream animations\n");
 }
 
 void Enemy::Update() {
@@ -131,9 +143,24 @@ void Enemy::DrawUI() {
 		}
 	}
 
-	// 簡易的な情報表示（Run/Screamは未実装）
+	// アニメーション選択
 	ImGui::Separator();
-	ImGui::Text("Note: Only Walk animation is currently loaded");
+	ImGui::Text("Animation Selection");
+
+	if (ImGui::Button("Walk", ImVec2(100, 0))) {
+		ChangeAnimation("Walk");
+		currentAnimationIndex_ = 0;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Run", ImVec2(100, 0))) {
+		ChangeAnimation("Run");
+		currentAnimationIndex_ = 1;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Scream", ImVec2(100, 0))) {
+		ChangeAnimation("Scream");
+		currentAnimationIndex_ = 2;
+	}
 
 	// 位置コントロール
 	ImGui::Separator();
@@ -153,7 +180,8 @@ void Enemy::DrawUI() {
 	if (animatedModel_) {
 		ImGui::Separator();
 		ImGui::Text("Animation Info");
-		ImGui::Text("Current: Walk");
+		std::string currentAnim = GetCurrentAnimationName();
+		ImGui::Text("Current: %s", currentAnim.c_str());
 		ImGui::Text("Paused: %s", animationPaused_ ? "Yes" : "No");
 		ImGui::Text("Enabled: %s", animationEnabled_ ? "Yes" : "No");
 	}
@@ -241,5 +269,17 @@ void Enemy::SetEnvTex(const std::string& texturePath) {
 void Enemy::SetCamera(Camera* camera) {
 	if (object3d_) {
 		object3d_->SetCamera(camera);
+	}
+}
+
+void Enemy::ChangeAnimation(const std::string& animationName) {
+	if (animatedModel_) {
+		animatedModel_->ChangeAnimation(animationName);
+		isBlending_ = true;
+		blendTimer_ = 0.0f;
+
+		char debugMsg[256];
+		sprintf_s(debugMsg, "Enemy: Changed animation to %s\n", animationName.c_str());
+		OutputDebugStringA(debugMsg);
 	}
 }

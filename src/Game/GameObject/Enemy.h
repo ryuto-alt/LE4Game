@@ -23,6 +23,7 @@ public:
 	void ResetAnimation();
 	bool IsAnimationPaused() const { return animationPaused_; }
 	std::string GetCurrentAnimationName() const;
+	void ChangeAnimation(const std::string& animationName);
 
 	// Lighting
 	void SetDirectionalLight(DirectionalLight* light);
@@ -59,4 +60,7 @@ private:
 
 	// Animation toggle for ImGui
 	bool animationEnabled_;
+
+	// Current animation index for ImGui combo
+	int currentAnimationIndex_;
 };
