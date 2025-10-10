@@ -551,15 +551,23 @@ IDxcBlob* DirectXCommon::CompileShader(const std::wstring& filePath, const wchar
 	assert(SUCCEEDED(hr));
 
 	IDxcBlobUtf8* shaderError = nullptr;
-	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
+	IDxcBlobUtf16* pShaderErrorName = nullptr;
+	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), &pShaderErrorName);
 	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
 		Log(shaderError->GetStringPointer());
 		assert(false);
 	}
+	if (pShaderErrorName) {
+		pShaderErrorName->Release();
+	}
 
 	IDxcBlob* shaderBlob = nullptr;
-	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
+	IDxcBlobUtf16* pShaderName = nullptr;
+	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), &pShaderName);
 	assert(SUCCEEDED(hr));
+	if (pShaderName) {
+		pShaderName->Release();
+	}
 	Log(ConvertString(std::format(L"Complete Succeeded,path:{},profile:{}\n", filePath, profile)));
 	
 	// COMオブジェクトの解放

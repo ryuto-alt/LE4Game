@@ -1,9 +1,11 @@
 #pragma once
 #include "UnoEngine.h"
 #include <memory>
+#include <vector>
 
 // Forward declaration
 class Player;
+class NavMesh;
 
 class Enemy {
 public:
@@ -43,6 +45,9 @@ public:
 	// Player tracking
 	void SetPlayer(Player* player) { player_ = player; }
 
+	// NavMesh
+	void SetNavMesh(NavMesh* navMesh) { navMesh_ = navMesh; }
+
 	// Getters
 	Object3d* GetObject() { return object3d_.get(); }
 	AnimatedModel* GetModel() { return animatedModel_.get(); }
@@ -79,6 +84,14 @@ private:
 	float detectionRange_;
 	float moveSpeed_;
 	bool isChasing_;
+
+	// NavMesh pathfinding
+	NavMesh* navMesh_;
+	std::vector<Vector3> currentPath_;
+	int currentWaypointIndex_;
+	float pathUpdateTimer_;
+	Vector3 lastPlayerPosition_;
+	float playerMovementThreshold_;
 
 	// Wall avoidance (for UI/future use)
 	float avoidanceRadius_;

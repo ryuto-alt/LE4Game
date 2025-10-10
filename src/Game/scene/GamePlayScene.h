@@ -7,6 +7,7 @@
 #include "Manager/LightManager.h"
 #include "InstancedRenderer.h"
 #include "PostProcess.h"
+#include "NavMesh.h"
 #include <memory>
 
 class GamePlayScene : public IScene {
@@ -36,6 +37,9 @@ private:
 
     std::unique_ptr<FPSCamera> fpsCamera_;
     std::unique_ptr<PostProcess> postProcess_;
+
+    // NavMesh
+    std::unique_ptr<NavMesh> navMesh_;
 
     // 魚眼レンズ強度（ImGui用）
     float fisheyeStrength_ = 2.58f;

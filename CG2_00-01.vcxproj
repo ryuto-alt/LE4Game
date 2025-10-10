@@ -157,6 +157,7 @@
     <ClCompile Include="src\Game\GameObject\Enemy.cpp" />
     <ClCompile Include="src\Game\GameObject\FPSCamera.cpp" />
     <ClCompile Include="src\Game\GameObject\Ground.cpp" />
+    <ClCompile Include="src\Game\NavMesh.cpp" />
     <ClCompile Include="src\Game\Manager\LightManager.cpp" />
     <ClCompile Include="src\Engine\Animation\AnimatedModel.cpp" />
     <ClCompile Include="src\Engine\Animation\AnimationBlender.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="src\Game\GameObject\Enemy.h" />
     <ClInclude Include="src\Game\GameObject\FPSCamera.h" />
     <ClInclude Include="src\Game\GameObject\Ground.h" />
+    <ClInclude Include="src\Game\NavMesh.h" />
     <ClInclude Include="src\Game\Manager\LightManager.h" />
     <ClInclude Include="src\Engine\Animation\Animation.h" />
     <ClInclude Include="src\Engine\Animation\AnimatedModel.h" />

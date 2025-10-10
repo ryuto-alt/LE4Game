@@ -30,16 +30,28 @@ void GamePlayScene::Initialize() {
 
     player_ = std::make_unique<Player>();
     player_->Initialize(camera_, true, false); // コリジョン有効、環境マップ無効
+    // NavMesh座標系に合わせてプレイヤーを配置（NavMeshはx=-58～58, z=-88～88付近）
+    player_->SetPosition({-30.0f, 0.0f, -30.0f});
     player_->SetupCamera(engine);
+
+    // NavMeshの読み込み
+    navMesh_ = std::make_unique<NavMesh>();
+    if (!navMesh_->LoadFromFile("Resources/naviMap/navmesh.json")) {
+        OutputDebugStringA("GamePlayScene: Failed to load NavMesh!\n");
+    } else {
+        OutputDebugStringA("GamePlayScene: NavMesh loaded successfully!\n");
+    }
 
     // Enemyの初期化
     enemy_ = std::make_unique<Enemy>();
     enemy_->Initialize(camera_);
-    // プレイヤーから離れた位置にスポーン
+    // プレイヤーから離れた位置にスポーン（NavMesh範囲内）
     Vector3 playerPos = player_->GetPosition();
     enemy_->SetPosition({playerPos.x + 15.0f, playerPos.y, playerPos.z});
     // プレイヤーへの参照を設定
     enemy_->SetPlayer(player_.get());
+    // NavMeshを設定
+    enemy_->SetNavMesh(navMesh_.get());
 
     groundModel_ = engine->CreateAnimatedModel();
     groundModel_->LoadFromFile("Resources/Models/ground", "ground.gltf");
@@ -70,7 +82,7 @@ void GamePlayScene::Initialize() {
     wallObject_->EnableEnv(false);
     wallObject_->SetModel(static_cast<Model*>(wallModel_.get()));
     wallObject_->SetCamera(camera_);
-    wallObject_->SetPosition({0.0f, 0.0f, 5.0f});
+    wallObject_->SetPosition({0.0f, 0.0f, 0.0f});
     wallObject_->SetScale({1.0f, 1.0f, 1.0f});
     wallObject_->SetEnableLighting(true);
     wallObject_->SetEnableAnimation(false);
@@ -253,6 +265,7 @@ void GamePlayScene::Finalize() {
         enemy_->Finalize();
         enemy_.reset();
     }
+    navMesh_.reset();
     ground_.reset();
     groundModel_.reset();
     wallObject_.reset();

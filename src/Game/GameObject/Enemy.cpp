@@ -1,12 +1,13 @@
 #include "Enemy.h"
 #include "Player.h"
+#include "NavMesh.h"
 #include "imgui.h"
 #include <numbers>
 #include <cmath>
 #include "Collision/AABBCollision.h"
 
 Enemy::Enemy()
-	: position_({0.0f, 0.0f, 0.0f})
+	: position_({0.0f, 0.0f, 5.0f})
 	, currentRotationY_(0.0f)
 	, animationPaused_(false)
 	, isBlending_(false)
@@ -17,6 +18,11 @@ Enemy::Enemy()
 	, detectionRange_(20.0f)
 	, moveSpeed_(0.1f)
 	, isChasing_(false)
+	, navMesh_(nullptr)
+	, currentWaypointIndex_(0)
+	, pathUpdateTimer_(0.0f)
+	, lastPlayerPosition_({0.0f, 0.0f, 0.0f})
+	, playerMovementThreshold_(5.0f)
 	, avoidanceRadius_(5.0f)
 	, alternativeTimer_(0.0f) {
 }
@@ -108,13 +114,13 @@ void Enemy::Initialize(Camera* camera) {
 }
 
 void Enemy::Update() {
-	// 代替経路タイマーの更新
-	if (alternativeTimer_ > 0.0f) {
-		alternativeTimer_ -= 1.0f / 60.0f;
-	}
+	float deltaTime = 1.0f / 60.0f; // 60 FPS
+
+	// パス更新タイマーを減らす
+	pathUpdateTimer_ -= deltaTime;
 
 	// プレイヤー検知と追跡
-	if (player_) {
+	if (player_ && navMesh_) {
 		Vector3 playerPos = player_->GetPosition();
 		Vector3 toPlayer = {
 			playerPos.x - position_.x,
@@ -124,6 +130,20 @@ void Enemy::Update() {
 
 		float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.z * toPlayer.z);
 
+		// デバッグ出力（1秒に1回）
+		static float debugTimer = 0.0f;
+		debugTimer += deltaTime;
+		if (debugTimer >= 1.0f) {
+			char debugMsg[256];
+			sprintf_s(debugMsg, "Enemy Debug:\n  Position: (%.2f, %.2f, %.2f)\n  Player: (%.2f, %.2f, %.2f)\n  Distance: %.2f\n  Chasing: %s\n",
+				position_.x, position_.y, position_.z,
+				playerPos.x, playerPos.y, playerPos.z,
+				distanceToPlayer,
+				isChasing_ ? "YES" : "NO");
+			OutputDebugStringA(debugMsg);
+			debugTimer = 0.0f;
+		}
+
 		// プレイヤーが検知範囲内にいるかチェック
 		if (distanceToPlayer < detectionRange_) {
 			if (!isChasing_) {
@@ -132,67 +152,123 @@ void Enemy::Update() {
 				isChasing_ = true;
 			}
 
-			// プレイヤーに向かって移動
-			if (distanceToPlayer > 1.0f) {
-				// 正規化
-				float invLength = 1.0f / distanceToPlayer;
-				toPlayer.x *= invLength;
-				toPlayer.z *= invLength;
+			// プレイヤーが大きく移動したかチェック
+			Vector3 playerMovement = {
+				playerPos.x - lastPlayerPosition_.x,
+				playerPos.y - lastPlayerPosition_.y,
+				playerPos.z - lastPlayerPosition_.z
+			};
+			float playerMoved = std::sqrt(
+				playerMovement.x * playerMovement.x +
+				playerMovement.z * playerMovement.z
+			);
 
-				// 前方をチェック（プレイヤー方向に壁があるか）
-				Vector3 checkPos = {
-					position_.x + toPlayer.x * 3.0f,
-					position_.y,
-					position_.z + toPlayer.z * 3.0f
+			// パスの再計算が必要かチェック（0.5秒ごと、または プレイヤーが大きく移動）
+			bool needsPathUpdate = (pathUpdateTimer_ <= 0.0f) ||
+			                       (playerMoved > playerMovementThreshold_) ||
+			                       (currentPath_.empty());
+
+			if (needsPathUpdate) {
+				// 新しいパスを計算
+				currentPath_ = navMesh_->FindPath(position_, playerPos);
+				currentWaypointIndex_ = 0;
+				lastPlayerPosition_ = playerPos;
+				pathUpdateTimer_ = 0.5f; // 0.5秒後に再計算
+
+				if (!currentPath_.empty()) {
+					char debugMsg[128];
+					sprintf_s(debugMsg, "Enemy: New path calculated with %zu waypoints\n",
+					         currentPath_.size());
+					OutputDebugStringA(debugMsg);
+				} else {
+					OutputDebugStringA("Enemy: WARNING - Path calculation failed (empty path)!\n");
+				}
+			}
+
+			// パスに沿って移動
+			if (!currentPath_.empty() && currentWaypointIndex_ < currentPath_.size()) {
+				Vector3 targetWaypoint = currentPath_[currentWaypointIndex_];
+				Vector3 toWaypoint = {
+					targetWaypoint.x - position_.x,
+					0.0f,
+					targetWaypoint.z - position_.z
 				};
 
-				bool forwardBlocked = CheckWallAt(checkPos);
+				float distToWaypoint = std::sqrt(
+					toWaypoint.x * toWaypoint.x +
+					toWaypoint.z * toWaypoint.z
+				);
 
-				Vector3 moveDir = toPlayer;
+				// ウェイポイントに到達したら次へ
+				if (distToWaypoint < 1.5f) {
+					currentWaypointIndex_++;
+					char debugMsg[128];
+					sprintf_s(debugMsg, "Enemy: Reached waypoint %d/%zu\n",
+						currentWaypointIndex_, currentPath_.size());
+					OutputDebugStringA(debugMsg);
+				} else {
+					// ウェイポイントに向かって移動
+					toWaypoint.x /= distToWaypoint;
+					toWaypoint.z /= distToWaypoint;
 
-				if (forwardBlocked) {
-					// 前方がブロックされている場合、左右をチェック
-					Vector3 rightDir = {toPlayer.z, 0.0f, -toPlayer.x};
-					Vector3 leftDir = {-toPlayer.z, 0.0f, toPlayer.x};
+					Vector3 oldPos = position_;
+					position_.x += toWaypoint.x * moveSpeed_;
+					position_.z += toWaypoint.z * moveSpeed_;
 
-					Vector3 checkRight = {
-						position_.x + rightDir.x * 2.5f,
-						position_.y,
-						position_.z + rightDir.z * 2.5f
-					};
-					Vector3 checkLeft = {
-						position_.x + leftDir.x * 2.5f,
-						position_.y,
-						position_.z + leftDir.z * 2.5f
-					};
+					// 移動方向を向く
+					currentRotationY_ = std::atan2(toWaypoint.x, toWaypoint.z);
 
-					bool rightBlocked = CheckWallAt(checkRight);
-					bool leftBlocked = CheckWallAt(checkLeft);
-
-					// 通れる方向を選択
-					if (!rightBlocked && leftBlocked) {
-						moveDir = rightDir;
-					} else if (rightBlocked && !leftBlocked) {
-						moveDir = leftDir;
-					} else if (!rightBlocked && !leftBlocked) {
-						// 両方通れる場合、プレイヤーに近い方
-						float rightDot = rightDir.x * toPlayer.x + rightDir.z * toPlayer.z;
-						float leftDot = leftDir.x * toPlayer.x + leftDir.z * toPlayer.z;
-						moveDir = (rightDot > leftDot) ? rightDir : leftDir;
+					// 移動を確認（最初の数フレームのみ）
+					static int moveCounter = 0;
+					if (moveCounter < 10) {
+						char debugMsg[256];
+						sprintf_s(debugMsg, "Enemy: Moving - Old:(%.2f,%.2f,%.2f) New:(%.2f,%.2f,%.2f) Speed:%.2f\n",
+							oldPos.x, oldPos.y, oldPos.z,
+							position_.x, position_.y, position_.z,
+							moveSpeed_);
+						OutputDebugStringA(debugMsg);
+						moveCounter++;
 					}
-					// 両方ブロックされている場合はプレイヤー方向に押す
 				}
-
-				// 移動
-				position_.x += moveDir.x * moveSpeed_;
-				position_.z += moveDir.z * moveSpeed_;
-
-				// 移動方向を向く
-				currentRotationY_ = std::atan2(moveDir.x, moveDir.z);
 			}
 		} else {
 			if (isChasing_) {
 				// 追跡終了：Walkアニメーションに戻す
+				ChangeAnimation("Walk");
+				isChasing_ = false;
+				currentPath_.clear();
+				currentWaypointIndex_ = 0;
+			}
+		}
+	} else if (player_) {
+		// NavMeshがない場合は従来の直進ロジック
+		Vector3 playerPos = player_->GetPosition();
+		Vector3 toPlayer = {
+			playerPos.x - position_.x,
+			0.0f,
+			playerPos.z - position_.z
+		};
+
+		float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.z * toPlayer.z);
+
+		if (distanceToPlayer < detectionRange_) {
+			if (!isChasing_) {
+				ChangeAnimation("Run");
+				isChasing_ = true;
+			}
+
+			if (distanceToPlayer > 1.0f) {
+				float invLength = 1.0f / distanceToPlayer;
+				toPlayer.x *= invLength;
+				toPlayer.z *= invLength;
+
+				position_.x += toPlayer.x * moveSpeed_;
+				position_.z += toPlayer.z * moveSpeed_;
+
+				currentRotationY_ = std::atan2(toPlayer.x, toPlayer.z);
+			}
+		} else {
+			if (isChasing_) {
 				ChangeAnimation("Walk");
 				isChasing_ = false;
 			}
@@ -277,10 +353,22 @@ void Enemy::DrawUI() {
 	ImGui::Text("AI Settings");
 	ImGui::DragFloat("Detection Range", &detectionRange_, 1.0f, 0.0f, 100.0f);
 	ImGui::DragFloat("Move Speed", &moveSpeed_, 0.01f, 0.0f, 5.0f);
-	ImGui::DragFloat("Avoidance Radius", &avoidanceRadius_, 0.1f, 0.0f, 10.0f);
+	ImGui::DragFloat("Player Move Threshold", &playerMovementThreshold_, 0.1f, 0.0f, 20.0f);
+
+	// NavMesh情報
+	ImGui::Separator();
+	ImGui::Text("NavMesh");
+	ImGui::Text("NavMesh: %s", navMesh_ ? "Set" : "Not Set");
+	if (navMesh_) {
+		ImGui::Text("Current Path: %zu waypoints", currentPath_.size());
+		ImGui::Text("Current Waypoint: %d", currentWaypointIndex_);
+		ImGui::Text("Path Update Timer: %.2f", pathUpdateTimer_);
+	}
 
 	// プレイヤー検知デバッグ情報
 	if (player_) {
+		ImGui::Separator();
+		ImGui::Text("Player Tracking");
 		Vector3 playerPos = player_->GetPosition();
 		Vector3 toPlayer = {
 			playerPos.x - position_.x,
