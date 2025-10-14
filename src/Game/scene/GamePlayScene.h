@@ -8,6 +8,7 @@
 #include "InstancedRenderer.h"
 #include "PostProcess.h"
 #include "Scene/SceneConfigurator.h"
+#include "NavMesh/NavMeshSystem.h"
 #include <memory>
 #include <vector>
 
@@ -31,6 +32,7 @@ private:
     std::unique_ptr<LightManager> lightManager_;
     std::unique_ptr<FPSCamera> fpsCamera_;
     std::unique_ptr<PostProcess> postProcess_;
+    std::unique_ptr<NavMeshSystem> navMeshSystem_;
 
     SceneData sceneData_;
     bool skyboxEnabled_ = false;

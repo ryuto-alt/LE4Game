@@ -1,6 +1,8 @@
 #pragma once
 #include "UnoEngine.h"
 #include <memory>
+#include "NavMesh/NavMeshSystem.h"
+#include "NavMesh/EnemyAI.h"
 
 // Forward declaration
 class Player;
@@ -43,9 +45,14 @@ public:
 	// Player tracking
 	void SetPlayer(Player* player) { player_ = player; }
 
+	// NavMesh system
+	void SetNavMeshSystem(NavMeshSystem* navMeshSystem);
+	bool IsUsingNavMesh() const { return useNavMesh_ && navMeshSystem_ != nullptr; }
+
 	// Getters
 	Object3d* GetObject() { return object3d_.get(); }
 	AnimatedModel* GetModel() { return animatedModel_.get(); }
+	EnemyAI* GetAI() { return enemyAI_.get(); }
 
 	// Collision response
 	void HandleCollisionResponse();
@@ -83,4 +90,9 @@ private:
 	// Wall avoidance (for UI/future use)
 	float avoidanceRadius_;
 	float alternativeTimer_;
+
+	// NavMesh system
+	NavMeshSystem* navMeshSystem_;
+	std::unique_ptr<EnemyAI> enemyAI_;
+	bool useNavMesh_;
 };

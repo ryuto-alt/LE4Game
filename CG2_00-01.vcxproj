@@ -62,7 +62,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\Engine\Graphics;$(ProjectDir)src\Engine\Math;$(ProjectDir)src\Engine\Input;$(ProjectDir)src\Engine\Utility;$(ProjectDir)imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\DirectXTex\Common;$(ProjectDir)src\Engine\Camera;$(ProjectDir)src\Engine\Particle;$(ProjectDir)src\Engine\Audio;$(ProjectDir)src\Engine\core;$(ProjectDir)src\Game\scene;$(ProjectDir)src\Game;$(ProjectDir)src\Engine;$(ProjectDir)src\Engine\Collision;$(ProjectDir)src\Engine\Animation;$(ProjectDir)externals\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\Engine\Graphics;$(ProjectDir)src\Engine\Math;$(ProjectDir)src\Engine\Input;$(ProjectDir)src\Engine\Utility;$(ProjectDir)imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\DirectXTex\Common;$(ProjectDir)src\Engine\Camera;$(ProjectDir)src\Engine\Particle;$(ProjectDir)src\Engine\Audio;$(ProjectDir)src\Engine\core;$(ProjectDir)src\Game\scene;$(ProjectDir)src\Game;$(ProjectDir)src\Engine;$(ProjectDir)src\Engine\Collision;$(ProjectDir)src\Engine\Animation;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\recastnavigation\Recast\Include;$(ProjectDir)externals\recastnavigation\Detour\Include;$(ProjectDir)externals\recastnavigation\DetourCrowd\Include;$(ProjectDir)externals\recastnavigation\DebugUtils\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,7 +89,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\Engine\Graphics;$(ProjectDir)src\Engine\Math;$(ProjectDir)src\Engine\Input;$(ProjectDir)src\Engine\Utility;$(ProjectDir)imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\DirectXTex\Common;$(ProjectDir)src\Engine\Camera;$(ProjectDir)src\Engine\Particle;$(ProjectDir)src\Engine\Audio;$(ProjectDir)src\Engine\core;$(ProjectDir)src\Game\scene;$(ProjectDir)src\Game;$(ProjectDir)src\Engine;$(ProjectDir)src\Engine\Collision;$(ProjectDir)src\Engine\Animation;$(ProjectDir)externals\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\Engine\Graphics;$(ProjectDir)src\Engine\Math;$(ProjectDir)src\Engine\Input;$(ProjectDir)src\Engine\Utility;$(ProjectDir)imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\DirectXTex\Common;$(ProjectDir)src\Engine\Camera;$(ProjectDir)src\Engine\Particle;$(ProjectDir)src\Engine\Audio;$(ProjectDir)src\Engine\core;$(ProjectDir)src\Game\scene;$(ProjectDir)src\Game;$(ProjectDir)src\Engine;$(ProjectDir)src\Engine\Collision;$(ProjectDir)src\Engine\Animation;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\recastnavigation\Recast\Include;$(ProjectDir)externals\recastnavigation\Detour\Include;$(ProjectDir)externals\recastnavigation\DetourCrowd\Include;$(ProjectDir)externals\recastnavigation\DebugUtils\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -164,6 +164,27 @@
     <ClCompile Include="src\Engine\Resource\ResourcePreloader.cpp" />
     <ClCompile Include="src\Engine\Scene\SceneLoader.cpp" />
     <ClCompile Include="src\Engine\Scene\SceneConfigurator.cpp" />
+    <ClCompile Include="src\Engine\NavMesh\NavMeshSystem.cpp" />
+    <ClCompile Include="src\Engine\NavMesh\EnemyAI.cpp" />
+    <ClCompile Include="src\Engine\NavMesh\NavMeshDebugDraw.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\Recast.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAlloc.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAssert.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastArea.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastContour.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastFilter.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastLayers.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastMesh.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastMeshDetail.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastRasterization.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastRegion.cpp" />
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourAlloc.cpp" />
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourAssert.cpp" />
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourCommon.cpp" />
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMesh.cpp" />
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMeshBuilder.cpp" />
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMeshQuery.cpp" />
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -229,6 +250,9 @@
     <ClInclude Include="src\Engine\Resource\ResourcePreloader.h" />
     <ClInclude Include="src\Engine\Scene\SceneLoader.h" />
     <ClInclude Include="src\Engine\Scene\SceneConfigurator.h" />
+    <ClInclude Include="src\Engine\NavMesh\NavMeshSystem.h" />
+    <ClInclude Include="src\Engine\NavMesh\EnemyAI.h" />
+    <ClInclude Include="src\Engine\NavMesh\NavMeshDebugDraw.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

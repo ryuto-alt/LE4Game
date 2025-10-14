@@ -19,6 +19,30 @@ void GamePlayScene::Initialize() {
         fpsCamera_, postProcess_, skyboxEnabled_,
         fisheyeStrength_, fisheyeRadius_
     );
+
+    // NavMeshシステムの初期化
+    navMeshSystem_ = std::make_unique<NavMeshSystem>();
+
+    // ナビメッシュファイルをロード（存在する場合）
+    bool navMeshLoaded = navMeshSystem_->LoadNavMeshFromFile("Resources/naviMap/navmesh.bin");
+
+    if (navMeshLoaded) {
+        OutputDebugStringA("GamePlayScene: NavMesh loaded successfully!\n");
+
+        // エネミーにNavMeshシステムを設定
+        if (enemy_) {
+            enemy_->SetNavMeshSystem(navMeshSystem_.get());
+            enemy_->SetPlayer(player_.get());
+            OutputDebugStringA("GamePlayScene: Enemy NavMesh system configured\n");
+        }
+    } else {
+        OutputDebugStringA("GamePlayScene: NavMesh file not found or failed to load. Using fallback AI.\n");
+
+        // ナビメッシュがなくてもプレイヤーは設定
+        if (enemy_) {
+            enemy_->SetPlayer(player_.get());
+        }
+    }
 }
 
 
