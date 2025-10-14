@@ -14,6 +14,14 @@ void TitleScene::Initialize() {
     horrorEffect_ = std::make_unique<PostProcess>();
     horrorEffect_->Initialize(dxCommon_, srvManager_);
 
+    // 白黒砂嵐エフェクトの初期化
+    whiteNoiseEffect_ = std::make_unique<PostProcess>();
+    whiteNoiseEffect_->Initialize(dxCommon_, srvManager_);
+
+    // 赤い砂嵐エフェクトの初期化
+    redStaticEffect_ = std::make_unique<PostProcess>();
+    redStaticEffect_->Initialize(dxCommon_, srvManager_);
+
     // タイトルスプライトの初期化（通常の色で）
     titleBgSprite_ = std::make_unique<Sprite>();
     titleBgSprite_->Initialize(spriteCommon_, "Resources/textures/Title/Title_bg.png");
@@ -38,13 +46,6 @@ void TitleScene::Initialize() {
     owaruSprite_->SetPosition({ 640.0f, 590.0f });
     owaruSprite_->SetAnchorPoint({ 0.5f, 0.5f }); // 中心を基準に
 
-    // 砂嵐スプライトの初期化（画面全体を覆う）
-    noiseSprite_ = std::make_unique<Sprite>();
-    noiseSprite_->Initialize(spriteCommon_, "Resources/textures/Title/noize.png");
-    noiseSprite_->SetPosition({ 0.0f, 0.0f });
-    noiseSprite_->SetSize({ 1280.0f, 720.0f });
-    noiseSprite_->setColor({ 1.0f, 1.0f, 1.0f, 0.0f }); // 初期は透明
-
     ResourcePreloader::GetInstance()->PreloadAnimatedModelLightweight("human_walk", "Resources/Models/human", "walk.gltf", dxCommon_);
     ResourcePreloader::GetInstance()->PreloadAnimatedModelLightweight("human_sneak", "Resources/Models/human", "sneakWalk.gltf", dxCommon_);
 
@@ -65,14 +66,19 @@ void TitleScene::Update() {
 
     // 初回砂嵐エフェクト
     if (showInitialNoise_) {
-        initialNoiseTimer_ += deltaTime;
+        // 初回砂嵐の音を再生（1回だけ）
+        if (!hasPlayedInitialNoise_) {
+            AudioManager::GetInstance()->LoadMP3("initialNoise", "Resources/Audio/noize.mp3");
+            AudioManager::GetInstance()->SetVolume("initialNoise", 0.3f);
+            AudioManager::GetInstance()->Play("initialNoise", false); // ループしない
+            hasPlayedInitialNoise_ = true;
+        }
 
-        // 画像をそのまま表示
-        noiseSprite_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+        initialNoiseTimer_ += deltaTime;
 
         if (initialNoiseTimer_ >= kInitialNoiseDuration) {
             showInitialNoise_ = false;
-            noiseSprite_->setColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+            AudioManager::GetInstance()->Stop("initialNoise");
         }
     }
     // ランダム砂嵐エフェクト
@@ -83,16 +89,22 @@ void TitleScene::Update() {
         if (!showRandomNoise_ && randomNoiseTimer_ >= nextNoiseTime_) {
             showRandomNoise_ = true;
             randomNoiseTimer_ = 0.0f;
+            hasPlayedRandomNoise_ = false; // フラグをリセット
         }
 
         // 砂嵐表示中
         if (showRandomNoise_) {
-            // 画像をそのまま表示
-            noiseSprite_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+            // ランダム砂嵐の音を再生（1回だけ）
+            if (!hasPlayedRandomNoise_) {
+                AudioManager::GetInstance()->LoadMP3("randomNoise", "Resources/Audio/noize.mp3");
+                AudioManager::GetInstance()->SetVolume("randomNoise", 0.3f);
+                AudioManager::GetInstance()->Play("randomNoise", false); // ループしない
+                hasPlayedRandomNoise_ = true;
+            }
 
             if (randomNoiseTimer_ >= kRandomNoiseDuration) {
                 showRandomNoise_ = false;
-                noiseSprite_->setColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+                AudioManager::GetInstance()->Stop("randomNoise");
                 randomNoiseTimer_ = 0.0f;
                 // 次の砂嵐タイミングをランダムに設定
                 nextNoiseTime_ = kMinNoiseInterval + static_cast<float>(rand()) / RAND_MAX * (kMaxNoiseInterval - kMinNoiseInterval);
@@ -171,7 +183,6 @@ void TitleScene::Update() {
     titleTextSprite_->Update();
     hazimeruSprite_->Update();
     owaruSprite_->Update();
-    noiseSprite_->Update();
 
     // ホラーエフェクトのパラメータ更新
     time_ += 1.0f / 60.0f;
@@ -188,7 +199,13 @@ void TitleScene::Update() {
     if (SUCCEEDED(input_->GetMouseState(&mouseState))) {
         if (mouseState.rgbButtons[0] & 0x80) { // 左クリック
             if (hazimeruHovered) {
-                sceneManager_->ChangeScene("GamePlay");
+                // トランジション開始
+                isTransitioning_ = true;
+                transitionTimer_ = 0.0f;
+                transitionTotalTime_ = 0.0f;
+                nextTransitionNoiseTime_ = 0.0f; // すぐに最初のノイズを表示
+                showTransitionNoise_ = false;
+                hasPlayedNoiseSound_ = false; // フラグをリセット
             }
             if (owaruHovered) {
                 sceneManager_->RequestExit();
@@ -196,10 +213,79 @@ void TitleScene::Update() {
         }
     }
 
+    // トランジション中の処理
+    if (isTransitioning_) {
+        transitionTimer_ += deltaTime;
+
+        // トランジションノイズの更新
+        if (showTransitionNoise_) {
+            transitionNoiseTimer_ += deltaTime;
+            // ノイズ表示中（シェーダーで描画）
+
+            if (transitionNoiseTimer_ >= currentNoiseDuration_) {
+                // ノイズ終了
+                showTransitionNoise_ = false;
+                transitionNoiseTimer_ = 0.0f;
+                transitionTotalTime_ += currentNoiseDuration_;
+
+                // ノイズ音停止
+                if (hasPlayedNoiseSound_) {
+                    AudioManager::GetInstance()->Stop("transitionNoise");
+                    hasPlayedNoiseSound_ = false;
+                }
+
+                // 次のノイズタイミングをランダムに設定
+                float minInterval = 0.05f;
+                float maxInterval = 0.2f;
+                nextTransitionNoiseTime_ = transitionTimer_ + minInterval +
+                    static_cast<float>(rand()) / RAND_MAX * (maxInterval - minInterval);
+            }
+        } else {
+            // ノイズ非表示
+
+            // 次のノイズ表示タイミングチェック
+            if (transitionTimer_ >= nextTransitionNoiseTime_ && transitionTotalTime_ < 1.0f) {
+                showTransitionNoise_ = true;
+                transitionNoiseTimer_ = 0.0f;
+
+                // ノイズ表示時間をランダムに設定（0.2秒～0.3秒）
+                float minDuration = 0.2f;
+                float maxDuration = 0.3f;
+                currentNoiseDuration_ = minDuration +
+                    static_cast<float>(rand()) / RAND_MAX * (maxDuration - minDuration);
+
+                // ノイズ音再生
+                if (!hasPlayedNoiseSound_) {
+                    AudioManager::GetInstance()->LoadMP3("transitionNoise", "Resources/Audio/noize.mp3");
+                    AudioManager::GetInstance()->SetVolume("transitionNoise", 0.5f);
+                    AudioManager::GetInstance()->Play("transitionNoise", false); // ループしない
+                    hasPlayedNoiseSound_ = true;
+                }
+            }
+        }
+
+        // 合計1秒経過したら暗転してシーン遷移
+        if (transitionTotalTime_ >= 1.0f) {
+            // 画面を黒に（showTransitionNoise_をfalseにして暗転）
+            showTransitionNoise_ = false;
+
+            // シーン遷移
+            sceneManager_->ChangeScene("GamePlay");
+        }
+
+        return; // トランジション中は他の更新を停止
+    }
+
     // SPACEまたはENTERで決定
     if (input_->TriggerKey(DIK_SPACE) || input_->TriggerKey(DIK_RETURN)) {
         if (currentSelection_ == MenuSelection::Start) {
-            sceneManager_->ChangeScene("GamePlay");
+            // トランジション開始
+            isTransitioning_ = true;
+            transitionTimer_ = 0.0f;
+            transitionTotalTime_ = 0.0f;
+            nextTransitionNoiseTime_ = 0.0f; // すぐに最初のノイズを表示
+            showTransitionNoise_ = false;
+            hasPlayedNoiseSound_ = false; // フラグをリセット
         } else {
             sceneManager_->RequestExit();
         }
@@ -221,21 +307,65 @@ void TitleScene::Draw() {
     titleBgSprite_->Draw();
     titleBg2Sprite_->Draw();
 
-    // 砂嵐エフェクトを最前面に描画
-    if (showInitialNoise_ || showRandomNoise_) {
-        noiseSprite_->Draw();
-    }
-
     // ホラーエフェクトを適用してバックバッファに描画
     horrorEffect_->PostDraw();
 
-    // エフェクト適用後、タイトル文字をバックバッファに直接描画
-    spriteCommon_->CommonDraw();
-    titleTextSprite_->Draw();
-    hazimeruSprite_->Draw();
-    owaruSprite_->Draw();
+    // 砂嵐エフェクトをシェーダーで描画（通常時）
+    if (showInitialNoise_ || showRandomNoise_) {
+        // 白黒砂嵐シェーダーに切り替え
+        whiteNoiseEffect_->UseWhiteNoiseShader();
+        whiteNoiseEffect_->SetWhiteNoiseParams(time_, 1.0f); // 強度MAX
 
-    
+        // 白黒砂嵐をフルスクリーンで描画
+        whiteNoiseEffect_->PreDraw();
+
+        // スプライト共通描画設定
+        spriteCommon_->CommonDraw();
+
+        // 何も描画しない（透明な砂嵐のみ）
+
+        // 白黒砂嵐シェーダーを適用
+        whiteNoiseEffect_->PostDraw();
+
+        // 通常シェーダーに戻す
+        whiteNoiseEffect_->UseHorrorShader();
+    }
+
+    // トランジション中の赤い砂嵐エフェクト
+    if (isTransitioning_ && showTransitionNoise_) {
+        // 赤い砂嵐シェーダーに切り替え
+        redStaticEffect_->UseRedStaticShader();
+        redStaticEffect_->SetRedStaticParams(time_, 1.0f); // 強度MAX
+
+        // 赤い砂嵐をフルスクリーンで描画
+        redStaticEffect_->PreDraw();
+
+        // スプライト共通描画設定
+        spriteCommon_->CommonDraw();
+
+        // 何も描画しない（黒背景に砂嵐のみ）
+
+        // 赤い砂嵐シェーダーを適用
+        redStaticEffect_->PostDraw();
+
+        // 通常シェーダーに戻す
+        redStaticEffect_->UseHorrorShader();
+    }
+    // 暗転状態
+    else if (isTransitioning_ && transitionTotalTime_ >= 1.0f) {
+        // 完全な黒画面
+        spriteCommon_->CommonDraw();
+        // 何も描画しない = 黒画面
+    }
+
+    // エフェクト適用後、タイトル文字をバックバッファに直接描画
+    // 砂嵐が表示されていない時、または暗転前に表示
+    if (!showTransitionNoise_ && transitionTotalTime_ < 1.0f) {
+        spriteCommon_->CommonDraw();
+        titleTextSprite_->Draw();
+        hazimeruSprite_->Draw();
+        owaruSprite_->Draw();
+    }
 }
 
 bool TitleScene::CheckMouseHover(const Vector2& mousePos, const Vector2& spritePos, const Vector2& spriteSize) {
@@ -267,8 +397,12 @@ void TitleScene::Finalize() {
     if (owaruSprite_) {
         owaruSprite_.reset();
     }
-    if (noiseSprite_) {
-        noiseSprite_.reset();
+
+    // 白黒砂嵐エフェクトの明示的な解放
+    if (whiteNoiseEffect_) {
+        OutputDebugStringA("  Finalizing whiteNoiseEffect_\n");
+        whiteNoiseEffect_->Finalize();
+        whiteNoiseEffect_.reset();
     }
 
     // ホラーエフェクトの明示的な解放
@@ -276,6 +410,13 @@ void TitleScene::Finalize() {
         OutputDebugStringA("  Finalizing horrorEffect_\n");
         horrorEffect_->Finalize();
         horrorEffect_.reset();
+    }
+
+    // 赤い砂嵐エフェクトの明示的な解放
+    if (redStaticEffect_) {
+        OutputDebugStringA("  Finalizing redStaticEffect_\n");
+        redStaticEffect_->Finalize();
+        redStaticEffect_.reset();
     }
 
     OutputDebugStringA("TitleScene::Finalize() completed\n");

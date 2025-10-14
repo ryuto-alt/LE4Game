@@ -132,6 +132,7 @@
     <ClCompile Include="src\Engine\Graphics\Sprite.cpp" />
     <ClCompile Include="src\Engine\Graphics\SpriteCommon.cpp" />
     <ClCompile Include="src\Engine\Graphics\PostProcess.cpp" />
+    <ClCompile Include="src\Engine\Graphics\TransitionEffect.cpp" />
     <ClCompile Include="src\Engine\Graphics\SRVManager.cpp" />
     <ClCompile Include="src\Engine\Graphics\TextureManager.cpp" />
     <ClCompile Include="src\Engine\Input\Input.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="src\Engine\Graphics\Sprite.h" />
     <ClInclude Include="src\Engine\Graphics\SpriteCommon.h" />
     <ClInclude Include="src\Engine\Graphics\PostProcess.h" />
+    <ClInclude Include="src\Engine\Graphics\TransitionEffect.h" />
     <ClInclude Include="src\Engine\Graphics\SRVManager.h" />
     <ClInclude Include="src\Engine\Graphics\TextureManager.h" />
     <ClInclude Include="src\Engine\Input\Input.h" />

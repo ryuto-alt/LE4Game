@@ -33,6 +33,15 @@ public:
     void SetFisheyeStrength(float strength);
     void SetFisheyeRadius(float radius);
 
+    // 赤い砂嵐エフェクト用
+    void SetRedStaticParams(float time, float intensity);
+    void UseRedStaticShader(); // 赤い砂嵐シェーダーに切り替え
+    void UseHorrorShader();    // ホラーシェーダーに戻す
+
+    // 白黒砂嵐エフェクト用
+    void SetWhiteNoiseParams(float time, float intensity);
+    void UseWhiteNoiseShader(); // 白黒砂嵐シェーダーに切り替え
+
     // ウィンドウサイズ変更時に呼び出す
     void ResizeRenderTarget();
 
@@ -59,6 +68,15 @@ private:
     // Pipeline
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
     Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState_;
+    Microsoft::WRL::ComPtr<ID3D12PipelineState> redStaticPipelineState_; // 赤い砂嵐用パイプライン
+    Microsoft::WRL::ComPtr<ID3D12PipelineState> whiteNoisePipelineState_; // 白黒砂嵐用パイプライン
+
+    enum class ShaderMode {
+        Horror,
+        RedStatic,
+        WhiteNoise
+    };
+    ShaderMode currentShaderMode_ = ShaderMode::Horror;
 
     // Constant Buffer
     Microsoft::WRL::ComPtr<ID3D12Resource> horrorParamsResource_;

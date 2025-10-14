@@ -1,24 +1,27 @@
-#include "PostProcess.h"
+#include "TransitionEffect.h"
 #include "DirectXCommon.h"
 #include "SrvManager.h"
+#include "../Audio/AudioManager.h"
 #include <cassert>
 
-PostProcess::~PostProcess() {
-    OutputDebugStringA("PostProcess::~PostProcess() called\n");
+TransitionEffect::~TransitionEffect() {
     Finalize();
-    OutputDebugStringA("PostProcess::~PostProcess() completed\n");
 }
 
-void PostProcess::Finalize() {
-    OutputDebugStringA("PostProcess::Finalize() called\n");
+void TransitionEffect::Finalize() {
+    // トランジション音を停止
+    if (isTransitioning_ && audioManager_) {
+        StopTransition();
+    }
+
     // Unmapリソース
-    if (horrorParamsResource_ && horrorParamsData_) {
-        horrorParamsResource_->Unmap(0, nullptr);
-        horrorParamsData_ = nullptr;
+    if (transitionParamsResource_ && transitionParamsData_) {
+        transitionParamsResource_->Unmap(0, nullptr);
+        transitionParamsData_ = nullptr;
     }
 
     // ComPtrは自動的に解放されるが、明示的にリセット
-    horrorParamsResource_.Reset();
+    transitionParamsResource_.Reset();
     renderTargetResource_.Reset();
     rtvDescriptorHeap_.Reset();
     rootSignature_.Reset();
@@ -27,10 +30,9 @@ void PostProcess::Finalize() {
     // SRV割り当てフラグをリセット
     srvAllocated_ = false;
     srvIndex_ = 0;
-    OutputDebugStringA("PostProcess::Finalize() completed\n");
 }
 
-void PostProcess::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
+void TransitionEffect::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
     dxCommon_ = dxCommon;
     srvManager_ = srvManager;
 
@@ -38,22 +40,25 @@ void PostProcess::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
     CreatePipeline();
 
     // Constant Buffer作成
-    horrorParamsResource_ = dxCommon_->CreateBufferResource(sizeof(HorrorParams));
-    horrorParamsResource_->Map(0, nullptr, reinterpret_cast<void**>(&horrorParamsData_));
+    transitionParamsResource_ = dxCommon_->CreateBufferResource(sizeof(TransitionParams));
+    transitionParamsResource_->Map(0, nullptr, reinterpret_cast<void**>(&transitionParamsData_));
 
     // デフォルトパラメータ
-    currentParams_.time = 0.0f;
-    currentParams_.noiseIntensity = 0.3f;
-    currentParams_.distortionAmount = 0.5f;
-    currentParams_.bloodAmount = 0.4f;
-    currentParams_.vignetteIntensity = 0.0f;
-    currentParams_.fisheyeStrength = 0.0f;  // デフォルトはオフ
-    currentParams_.fisheyeRadius = 1.5f;    // デフォルトの範囲
+    currentParams_.progress = 0.0f;
+    currentParams_.aspectRatio = static_cast<float>(dxCommon_->GetCurrentWindowWidth()) /
+                                  static_cast<float>(dxCommon_->GetCurrentWindowHeight());
 
-    *horrorParamsData_ = currentParams_;
+    *transitionParamsData_ = currentParams_;
+
+    // オーディオマネージャーの取得とノイズ音の読み込み
+    audioManager_ = AudioManager::GetInstance();
+    if (audioManager_) {
+        audioManager_->LoadMP3(noiseAudioName_, "Resources/Audio/noize.mp3");
+        audioManager_->SetVolume(noiseAudioName_, 0.5f); // デフォルト音量を設定
+    }
 }
 
-void PostProcess::CreateRenderTarget() {
+void TransitionEffect::CreateRenderTarget() {
     HRESULT hr;
 
     // RTV用のDescriptorHeap作成
@@ -88,7 +93,7 @@ void PostProcess::CreateRenderTarget() {
         &heapProps,
         D3D12_HEAP_FLAG_NONE,
         &resourceDesc,
-        D3D12_RESOURCE_STATE_RENDER_TARGET, // 初期状態をRENDER_TARGETに変更
+        D3D12_RESOURCE_STATE_RENDER_TARGET,
         &clearValue,
         IID_PPV_ARGS(&renderTargetResource_)
     );
@@ -107,7 +112,7 @@ void PostProcess::CreateRenderTarget() {
     srvGPUHandle_ = srvManager_->GetGPUDescriptorHandle(srvIndex_);
 }
 
-void PostProcess::CreatePipeline() {
+void TransitionEffect::CreatePipeline() {
     HRESULT hr;
 
     // RootSignature作成
@@ -160,7 +165,7 @@ void PostProcess::CreatePipeline() {
 
     // シェーダーコンパイル
     Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = dxCommon_->CompileShader(L"Resources/shaders/Fullscreen.VS.hlsl", L"vs_6_0");
-    Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = dxCommon_->CompileShader(L"Resources/shaders/Horror.PS.hlsl", L"ps_6_0");
+    Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = dxCommon_->CompileShader(L"Resources/shaders/Transition.PS.hlsl", L"ps_6_0");
 
     // Pipeline State作成
     D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineStateDesc{};
@@ -184,26 +189,10 @@ void PostProcess::CreatePipeline() {
 
     hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&pipelineStateDesc, IID_PPV_ARGS(&pipelineState_));
     assert(SUCCEEDED(hr));
-
-    // 赤い砂嵐用のパイプライン作成
-    Microsoft::WRL::ComPtr<IDxcBlob> redStaticPixelShaderBlob = dxCommon_->CompileShader(L"Resources/shaders/RedStatic.PS.hlsl", L"ps_6_0");
-    pipelineStateDesc.PS = { redStaticPixelShaderBlob->GetBufferPointer(), redStaticPixelShaderBlob->GetBufferSize() };
-    hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&pipelineStateDesc, IID_PPV_ARGS(&redStaticPipelineState_));
-    assert(SUCCEEDED(hr));
-
-    // 白黒砂嵐用のパイプライン作成
-    Microsoft::WRL::ComPtr<IDxcBlob> whiteNoisePixelShaderBlob = dxCommon_->CompileShader(L"Resources/shaders/WhiteNoise.PS.hlsl", L"ps_6_0");
-    pipelineStateDesc.PS = { whiteNoisePixelShaderBlob->GetBufferPointer(), whiteNoisePixelShaderBlob->GetBufferSize() };
-    hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&pipelineStateDesc, IID_PPV_ARGS(&whiteNoisePipelineState_));
-    assert(SUCCEEDED(hr));
 }
 
-void PostProcess::PreDraw() {
+void TransitionEffect::PreDraw() {
     auto commandList = dxCommon_->GetCommandList();
-
-    // リソースバリア：PIXEL_SHADER_RESOURCEからRENDER_TARGETへ（2フレーム目以降用）
-    // 初回はすでにRENDER_TARGETなので、状態を追跡する必要がある
-    // 簡単のため、常にバリアを張る（初回は何もしない状態から始まるので問題ない）
 
     // レンダーターゲットをクリア
     float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -237,7 +226,7 @@ void PostProcess::PreDraw() {
     commandList->RSSetScissorRects(1, &scissorRect);
 }
 
-void PostProcess::PostDraw() {
+void TransitionEffect::PostDraw() {
     auto commandList = dxCommon_->GetCommandList();
 
     // リソースバリア：RENDER_TARGETからPIXEL_SHADER_RESOURCEへ
@@ -256,24 +245,12 @@ void PostProcess::PostDraw() {
     D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dxCommon_->GetDSVCPUDescriptorHandle(0);
     commandList->OMSetRenderTargets(1, &backBufferRTV, false, &dsvHandle);
 
-    // 使用するパイプラインを選択
-    switch (currentShaderMode_) {
-    case ShaderMode::RedStatic:
-        commandList->SetPipelineState(redStaticPipelineState_.Get());
-        break;
-    case ShaderMode::WhiteNoise:
-        commandList->SetPipelineState(whiteNoisePipelineState_.Get());
-        break;
-    case ShaderMode::Horror:
-    default:
-        commandList->SetPipelineState(pipelineState_.Get());
-        break;
-    }
-
+    // バックバッファに対してトランジションエフェクトを適用
+    commandList->SetPipelineState(pipelineState_.Get());
     commandList->SetGraphicsRootSignature(rootSignature_.Get());
 
     // パラメータ設定
-    commandList->SetGraphicsRootConstantBufferView(0, horrorParamsResource_->GetGPUVirtualAddress());
+    commandList->SetGraphicsRootConstantBufferView(0, transitionParamsResource_->GetGPUVirtualAddress());
     commandList->SetGraphicsRootDescriptorTable(1, srvGPUHandle_);
 
     // フルスクリーン三角形を描画
@@ -291,71 +268,46 @@ void PostProcess::PostDraw() {
     commandList->ResourceBarrier(1, &barrier2);
 }
 
-void PostProcess::SetHorrorParams(float time, float noise, float distortion, float blood, float vignette) {
-    currentParams_.time = time;
-    currentParams_.noiseIntensity = noise;
-    currentParams_.distortionAmount = distortion;
-    currentParams_.bloodAmount = blood;
-    currentParams_.vignetteIntensity = vignette;
+void TransitionEffect::SetProgress(float progress) {
+    currentParams_.progress = progress;
 
-    if (horrorParamsData_) {
-        *horrorParamsData_ = currentParams_;
+    if (transitionParamsData_) {
+        *transitionParamsData_ = currentParams_;
     }
 }
 
-void PostProcess::SetFisheyeStrength(float strength) {
-    currentParams_.fisheyeStrength = strength;
-
-    if (horrorParamsData_) {
-        *horrorParamsData_ = currentParams_;
-    }
-}
-
-void PostProcess::SetFisheyeRadius(float radius) {
-    currentParams_.fisheyeRadius = radius;
-
-    if (horrorParamsData_) {
-        *horrorParamsData_ = currentParams_;
-    }
-}
-
-void PostProcess::ResizeRenderTarget() {
+void TransitionEffect::ResizeRenderTarget() {
     // 既存のレンダーターゲットをリセット
     renderTargetResource_.Reset();
     rtvDescriptorHeap_.Reset();
 
     // 新しいサイズでレンダーターゲットを再作成
     CreateRenderTarget();
-}
 
-void PostProcess::SetRedStaticParams(float time, float intensity) {
-    // 赤い砂嵐用のパラメータ設定（最初の2つのfloatを使用）
-    currentParams_.time = time;
-    currentParams_.noiseIntensity = intensity;
-
-    if (horrorParamsData_) {
-        *horrorParamsData_ = currentParams_;
+    // アスペクト比を更新
+    currentParams_.aspectRatio = static_cast<float>(dxCommon_->GetCurrentWindowWidth()) /
+                                  static_cast<float>(dxCommon_->GetCurrentWindowHeight());
+    if (transitionParamsData_) {
+        *transitionParamsData_ = currentParams_;
     }
 }
 
-void PostProcess::UseRedStaticShader() {
-    currentShaderMode_ = ShaderMode::RedStatic;
-}
-
-void PostProcess::UseHorrorShader() {
-    currentShaderMode_ = ShaderMode::Horror;
-}
-
-void PostProcess::SetWhiteNoiseParams(float time, float intensity) {
-    // 白黒砂嵐用のパラメータ設定（最初の2つのfloatを使用）
-    currentParams_.time = time;
-    currentParams_.noiseIntensity = intensity;
-
-    if (horrorParamsData_) {
-        *horrorParamsData_ = currentParams_;
+void TransitionEffect::StartTransition() {
+    if (audioManager_ && !isTransitioning_) {
+        audioManager_->Play(noiseAudioName_, true); // ループ再生
+        isTransitioning_ = true;
     }
 }
 
-void PostProcess::UseWhiteNoiseShader() {
-    currentShaderMode_ = ShaderMode::WhiteNoise;
+void TransitionEffect::StopTransition() {
+    if (audioManager_ && isTransitioning_) {
+        audioManager_->Stop(noiseAudioName_);
+        isTransitioning_ = false;
+    }
+}
+
+void TransitionEffect::SetNoiseVolume(float volume) {
+    if (audioManager_) {
+        audioManager_->SetVolume(noiseAudioName_, volume);
+    }
 }
