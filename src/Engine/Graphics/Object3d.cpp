@@ -281,6 +281,19 @@ void Object3d::SetModel(Model* model) {
 	}
 }
 
+void Object3d::LoadModel(const std::string& filePath) {
+	ownedModel_ = std::make_unique<AnimatedModel>();
+	ownedModel_->Initialize(dxCommon_);
+	
+	size_t lastSlash = filePath.find_last_of("/\\");
+	std::string dir = (lastSlash != std::string::npos) ? filePath.substr(0, lastSlash) : "";
+	std::string file = (lastSlash != std::string::npos) ? filePath.substr(lastSlash + 1) : filePath;
+	
+	ownedModel_->LoadFromFile(dir, file);
+	SetModel(ownedModel_.get());
+	SetAnimatedModel(static_cast<AnimatedModel*>(ownedModel_.get()));
+}
+
 // 従来のUpdateメソッド（ビュー行列とプロジェクション行列を直接指定）
 void Object3d::Update(const Matrix4x4& viewMatrix, const Matrix4x4& projectionMatrix) {
 	assert(transformationMatrixData_);

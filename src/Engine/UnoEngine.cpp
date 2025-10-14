@@ -372,6 +372,14 @@ std::unique_ptr<Object3d> UnoEngine::CreateObject3D() {
     return object;
 }
 
+std::unique_ptr<Object3d> UnoEngine::CreateObject3DWithModel(const std::string& modelPath) {
+    auto object = std::make_unique<Object3d>();
+    object->Initialize(dxCommon_.get(), spriteCommon_.get());
+    object->SetCamera(camera_.get());
+    object->LoadModel(modelPath);
+    return object;
+}
+
 std::unique_ptr<Model> UnoEngine::LoadModel(const std::string& modelPath) {
     auto model = std::make_unique<Model>();
 

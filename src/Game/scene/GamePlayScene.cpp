@@ -3,103 +3,75 @@
 #include "UnoEngine.h"
 #include "SceneManager.h"
 #include "InstancedRenderer.h"
+#include <cmath>
 
 void GamePlayScene::Initialize() {
-    UnoEngine* engine = UnoEngine::GetInstance();
-
-    // 必須ポインタのnullチェック
     if (!dxCommon_ || !srvManager_ || !camera_) {
         OutputDebugStringA("GamePlayScene::Initialize - Critical error: Required pointers are null!\n");
         return;
     }
+    LoadSceneFromJSON();
+    ApplySceneData();
+}
 
-    // ポストプロセス初期化
+void GamePlayScene::LoadSceneFromJSON() {
+    sceneData_ = SceneLoader::LoadSceneData("Resources/Scenes/gameplay_scene.json");
+}
+
+void GamePlayScene::ApplySceneData() {
+    UnoEngine* engine = UnoEngine::GetInstance();
+
+    // Core初期化
     postProcess_ = std::make_unique<PostProcess>();
     postProcess_->Initialize(dxCommon_, srvManager_);
-
-    // 背景色を黒に設定
-    //dxCommon_->SetClearColor(0.1f, 0.25f, 0.5f, 1.0f);
     dxCommon_->SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
     lightManager_ = std::make_unique<LightManager>();
     lightManager_->Initialize();
 
-    // FPSカメラの初期化（true: 一人称, false: 三人称）
+    // 環境設定
+    skyboxEnabled_ = sceneData_.environment.skyboxEnabled;
+    Object3d::SetEnvTex(sceneData_.environment.environmentMap);
+
+    // カメラ設定（度数をラジアンに変換）
+    float fovRadians = sceneData_.camera.fovDegrees * 3.14159265358979323846f / 180.0f;
+    camera_->SetFov(fovRadians);
+
     fpsCamera_ = std::make_unique<FPSCamera>();
-    fpsCamera_->Initialize(true); 
+    fpsCamera_->Initialize(true);
+    fpsCamera_->SetMouseLookEnabled(sceneData_.camera.mouseLookEnabled);
 
+    // ポストプロセス設定
+    fisheyeStrength_ = sceneData_.postProcess.fisheyeStrength;
+    fisheyeRadius_ = sceneData_.postProcess.fisheyeRadius;
+    postProcess_->SetFisheyeStrength(fisheyeStrength_);
+    postProcess_->SetFisheyeRadius(fisheyeRadius_);
+
+    const auto& hp = sceneData_.postProcess.horrorParams;
+    postProcess_->SetHorrorParams(hp.vignette, hp.aberration, hp.noise, hp.scanlines, hp.distortion);
+
+    // プレイヤー初期化
     player_ = std::make_unique<Player>();
-    player_->Initialize(camera_, true, false); // コリジョン有効、環境マップ無効
+    player_->Initialize(camera_, sceneData_.player.useFPSCamera, sceneData_.player.enableCollision);
     player_->SetupCamera(engine);
+    player_->SetPosition(sceneData_.player.position);
 
-    // Enemyの初期化
-    enemy_ = std::make_unique<Enemy>();
-    enemy_->Initialize(camera_);
-    // プレイヤーから離れた位置にスポーン
-    Vector3 playerPos = player_->GetPosition();
-    enemy_->SetPosition({playerPos.x + 15.0f, playerPos.y, playerPos.z});
-    // プレイヤーへの参照を設定
-    enemy_->SetPlayer(player_.get());
-
-    groundModel_ = engine->CreateAnimatedModel();
-    groundModel_->LoadFromFile("Resources/Models/ground", "ground.gltf");
-
-    ground_ = engine->CreateObject3D();
-
-    // 環境マップをHDRファイルで設定
-    Object3d::SetEnvTex("Resources/Models/skybox/warm_restaurant_night_2k.hdr");
-    ground_->EnableEnv(false);
-    ground_->SetModel(static_cast<Model*>(groundModel_.get()));
-    ground_->SetCamera(camera_);
-    ground_->SetEnableLighting(true);
-    ground_->SetPosition({0.0f, -0.1f, 0.0f});
-
-    // 地面の当たり判定を登録
-    auto* collisionManager = Collision::AABBCollisionManager::GetInstance();
-    if (collisionManager && groundModel_) {
-        Collision::AABB groundAABB = Collision::AABBExtractor::ExtractFromAnimatedModel(groundModel_.get());
-        collisionManager->RegisterObject(ground_.get(), groundAABB, true, "Ground");
+    // 敵初期化
+    if (!sceneData_.enemies.empty()) {
+        enemy_ = std::make_unique<Enemy>();
+        enemy_->Initialize(camera_);
+        enemy_->SetPosition(sceneData_.enemies[0].position);
+        enemy_->SetPlayer(player_.get());
     }
 
-    wallModel_ = engine->CreateAnimatedModel();
-    wallModel_->LoadFromFile("Resources/Models/stageWall", "stageWall.gltf");
+    // オブジェクト初期化
+    sceneObjects_ = SceneLoader::CreateObjects(sceneData_, engine);
 
-    wallObject_ = engine->CreateObject3D();
-
-    // 環境マップを有効化
-    wallObject_->EnableEnv(false);
-    wallObject_->SetModel(static_cast<Model*>(wallModel_.get()));
-    wallObject_->SetCamera(camera_);
-    wallObject_->SetPosition({0.0f, 0.0f, 5.0f});
-    wallObject_->SetScale({1.0f, 1.0f, 1.0f});
-    wallObject_->SetEnableLighting(true);
-    wallObject_->SetEnableAnimation(false);
-    wallObject_->EnableCollision(true, "Object");
-
-    // SkyboxをDDSファイルで初期化
-    // skybox_ = engine->CreateSkybox();
-    // engine->LoadSkybox(skybox_.get(), "Resources/Models/skybox/warm_restaurant_night_2k.hdr");
-    skyboxEnabled_ = false;
-
-    // FPSカメラのマウスルックを有効化
-    if (fpsCamera_) {
-        fpsCamera_->SetMouseLookEnabled(true);
+    // オーディオ初期化
+    const auto& bgm = sceneData_.audio.bgm;
+    if (!bgm.name.empty() && !bgm.path.empty()) {
+        engine->LoadAudio(bgm.name, bgm.path);
+        engine->PlayAudio(bgm.name, bgm.loop, bgm.volume);
     }
-
-    // 魚眼レンズエフェクトを設定
-    if (camera_) {
-        camera_->SetFov(1.8f);  // 約103度の広角
-    }
-
-    // ポストプロセスで魚眼レンズエフェクトを有効化
-    if (postProcess_) {
-        // 魚眼レンズの初期強度はメンバ変数で管理
-        postProcess_->SetHorrorParams(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);  // ホラーエフェクトはオフ
-    }
-
-    // BGMの読み込みと再生
-    engine->LoadAudio("stagebgm", "Resources/Audio/stagebgm.mp3");
-    engine->PlayAudio("stagebgm", true, 0.3f);  // ループ再生、ボリューム50%
 }
 
 
@@ -169,16 +141,11 @@ void GamePlayScene::Update() {
         enemy_->Update();
     }
 
-    if (ground_) {
-        ground_->SetDirectionalLight(dirLight);
-        ground_->SetSpotLight(spotLight);
-        ground_->Update();
-    }
-
-    if (wallObject_) {
-        wallObject_->SetDirectionalLight(dirLight);
-        wallObject_->SetSpotLight(spotLight);
-        wallObject_->Update();
+    // 全シーンオブジェクトを更新
+    for (auto& obj : sceneObjects_) {
+        obj->SetDirectionalLight(dirLight);
+        obj->SetSpotLight(spotLight);
+        obj->Update();
     }
 
     if (skyboxEnabled_ && skybox_) {
@@ -199,8 +166,9 @@ void GamePlayScene::Draw() {
 
     spriteCommon_->CommonDraw();
 
-    if (ground_) {
-        ground_->Draw(camera_);
+    // 全シーンオブジェクトを描画
+    for (auto& obj : sceneObjects_) {
+        obj->Draw(camera_);
     }
 
     if (!fpsCamera_ || !fpsCamera_->IsFPSMode()) {
@@ -209,10 +177,6 @@ void GamePlayScene::Draw() {
 
     if (enemy_) {
         enemy_->Draw();
-    }
-
-    if (wallObject_) {
-        wallObject_->Draw(camera_);
     }
 
     // ポストプロセスを適用して画面に描画
@@ -241,8 +205,8 @@ void GamePlayScene::Draw() {
 void GamePlayScene::Finalize() {
     // BGMを停止
     UnoEngine* engine = UnoEngine::GetInstance();
-    if (engine) {
-        engine->StopAudio("stagebgm");
+    if (engine && !sceneData_.audio.bgm.name.empty()) {
+        engine->StopAudio(sceneData_.audio.bgm.name);
     }
 
     if (player_) {
@@ -253,10 +217,7 @@ void GamePlayScene::Finalize() {
         enemy_->Finalize();
         enemy_.reset();
     }
-    ground_.reset();
-    groundModel_.reset();
-    wallObject_.reset();
-    wallModel_.reset();
+    sceneObjects_.clear();
     skybox_.reset();
     lightManager_.reset();
     fpsCamera_.reset();

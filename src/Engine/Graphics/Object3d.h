@@ -25,6 +25,8 @@ public:
     void Initialize(DirectXCommon* dxCommon, SpriteCommon* spriteCommon);
     // モデルのセット
     void SetModel(Model* model);
+    // モデルを読み込んで内部で所有
+    void LoadModel(const std::string& filePath);
     // 更新処理（従来のメソッド - 後方互換性のため残す）
     void Update(const Matrix4x4& viewMatrix, const Matrix4x4& projectionMatrix);
     // 描画処理
@@ -95,8 +97,10 @@ public:
     void SetAnimationTime(float time);
 
 private:
-    // モデル
+    // モデル（外部参照）
     Model* model_;
+    // モデル（内部所有）
+    std::unique_ptr<AnimatedModel> ownedModel_;
 
     // DirectXCommon
     DirectXCommon* dxCommon_;

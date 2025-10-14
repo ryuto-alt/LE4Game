@@ -7,7 +7,9 @@
 #include "Manager/LightManager.h"
 #include "InstancedRenderer.h"
 #include "PostProcess.h"
+#include "Scene/SceneLoader.h"
 #include <memory>
+#include <vector>
 
 class GamePlayScene : public IScene {
 public:
@@ -21,23 +23,19 @@ public:
 
 private:
     void HandleInput();
+    void LoadSceneFromJSON();
+    void ApplySceneData();
 
     std::unique_ptr<Player> player_;
     std::unique_ptr<Enemy> enemy_;
-    std::unique_ptr<Object3d> ground_;
-    std::unique_ptr<AnimatedModel> groundModel_;
+    std::vector<std::unique_ptr<Object3d>> sceneObjects_;
     std::unique_ptr<Skybox> skybox_;
     std::unique_ptr<LightManager> lightManager_;
-
-    std::unique_ptr<Object3d> wallObject_;
-    std::unique_ptr<AnimatedModel> wallModel_;
-
-    bool skyboxEnabled_ = false;
-
     std::unique_ptr<FPSCamera> fpsCamera_;
     std::unique_ptr<PostProcess> postProcess_;
 
-    // 魚眼レンズ強度（ImGui用）
+    SceneData sceneData_;
+    bool skyboxEnabled_ = false;
     float fisheyeStrength_ = 2.58f;
-    float fisheyeRadius_ = 1.5f;  // 魚眼レンズの範囲
+    float fisheyeRadius_ = 1.5f;
 };

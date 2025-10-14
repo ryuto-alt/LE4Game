@@ -218,9 +218,6 @@
     <ClCompile Include="src\Game\GameObject\Player.cpp">
       <Filter>src\Game\Player</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\GameObject\Ground.cpp">
-      <Filter>src\Game\Object</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\Core\MyGame.cpp">
       <Filter>src\Game</Filter>
     </ClCompile>
@@ -247,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="src\Game\GameObject\Enemy.cpp">
       <Filter>src\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\SceneLoader.cpp">
+      <Filter>src\engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -406,9 +406,6 @@
     <ClInclude Include="src\Game\GameObject\Player.h">
       <Filter>src\Game\Player</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\GameObject\Ground.h">
-      <Filter>src\Game\Object</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game\Core\MyGame.h">
       <Filter>src\Game</Filter>
     </ClInclude>
@@ -429,6 +426,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\GameObject\FPSCamera.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\SceneLoader.h">
+      <Filter>src\engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
