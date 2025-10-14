@@ -5,7 +5,7 @@
     "environmentMap": "Resources/Models/skybox/warm_restaurant_night_2k.hdr"
   },
   "camera": {
-    "fovDegrees": 103.13,
+    "fovDegrees": 103.00,
     "mode": "fps",
     "mouseLookEnabled": true
   },

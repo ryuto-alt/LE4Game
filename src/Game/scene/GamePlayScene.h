@@ -7,7 +7,7 @@
 #include "Manager/LightManager.h"
 #include "InstancedRenderer.h"
 #include "PostProcess.h"
-#include "Scene/SceneLoader.h"
+#include "Scene/SceneConfigurator.h"
 #include <memory>
 #include <vector>
 
@@ -23,8 +23,6 @@ public:
 
 private:
     void HandleInput();
-    void LoadSceneFromJSON();
-    void ApplySceneData();
 
     std::unique_ptr<Player> player_;
     std::unique_ptr<Enemy> enemy_;

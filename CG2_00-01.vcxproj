@@ -163,6 +163,7 @@
     <ClCompile Include="src\Engine\Animation\AnimationUtility.cpp" />
     <ClCompile Include="src\Engine\Resource\ResourcePreloader.cpp" />
     <ClCompile Include="src\Engine\Scene\SceneLoader.cpp" />
+    <ClCompile Include="src\Engine\Scene\SceneConfigurator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -227,6 +228,7 @@
     <ClInclude Include="src\Engine\Animation\AnimationUtility.h" />
     <ClInclude Include="src\Engine\Resource\ResourcePreloader.h" />
     <ClInclude Include="src\Engine\Scene\SceneLoader.h" />
+    <ClInclude Include="src\Engine\Scene\SceneConfigurator.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

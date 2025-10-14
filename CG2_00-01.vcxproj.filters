@@ -248,6 +248,9 @@
     <ClCompile Include="src\Engine\Scene\SceneLoader.cpp">
       <Filter>src\engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Scene\SceneConfigurator.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -428,6 +431,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\SceneLoader.h">
+      <Filter>src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\SceneConfigurator.h">
       <Filter>src\engine</Filter>
     </ClInclude>
   </ItemGroup>

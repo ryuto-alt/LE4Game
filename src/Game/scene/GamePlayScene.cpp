@@ -10,68 +10,15 @@ void GamePlayScene::Initialize() {
         OutputDebugStringA("GamePlayScene::Initialize - Critical error: Required pointers are null!\n");
         return;
     }
-    LoadSceneFromJSON();
-    ApplySceneData();
-}
 
-void GamePlayScene::LoadSceneFromJSON() {
-    sceneData_ = SceneLoader::LoadSceneData("Resources/Scenes/gameplay_scene.json");
-}
-
-void GamePlayScene::ApplySceneData() {
-    UnoEngine* engine = UnoEngine::GetInstance();
-
-    // Core初期化
-    postProcess_ = std::make_unique<PostProcess>();
-    postProcess_->Initialize(dxCommon_, srvManager_);
-    dxCommon_->SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    lightManager_ = std::make_unique<LightManager>();
-    lightManager_->Initialize();
-
-    // 環境設定
-    skyboxEnabled_ = sceneData_.environment.skyboxEnabled;
-    Object3d::SetEnvTex(sceneData_.environment.environmentMap);
-
-    // カメラ設定（度数をラジアンに変換）
-    float fovRadians = sceneData_.camera.fovDegrees * 3.14159265358979323846f / 180.0f;
-    camera_->SetFov(fovRadians);
-
-    fpsCamera_ = std::make_unique<FPSCamera>();
-    fpsCamera_->Initialize(true);
-    fpsCamera_->SetMouseLookEnabled(sceneData_.camera.mouseLookEnabled);
-
-    // ポストプロセス設定
-    fisheyeStrength_ = sceneData_.postProcess.fisheyeStrength;
-    fisheyeRadius_ = sceneData_.postProcess.fisheyeRadius;
-    postProcess_->SetFisheyeStrength(fisheyeStrength_);
-    postProcess_->SetFisheyeRadius(fisheyeRadius_);
-
-    const auto& hp = sceneData_.postProcess.horrorParams;
-    postProcess_->SetHorrorParams(hp.vignette, hp.aberration, hp.noise, hp.scanlines, hp.distortion);
-
-    // プレイヤー初期化
-    player_ = std::make_unique<Player>();
-    player_->Initialize(camera_, sceneData_.player.useFPSCamera, sceneData_.player.enableCollision);
-    player_->SetupCamera(engine);
-    player_->SetPosition(sceneData_.player.position);
-
-    // 敵初期化
-    if (!sceneData_.enemies.empty()) {
-        enemy_ = std::make_unique<Enemy>();
-        enemy_->Initialize(camera_);
-        enemy_->SetPosition(sceneData_.enemies[0].position);
-        enemy_->SetPlayer(player_.get());
-    }
-
-    // オブジェクト初期化
-    sceneObjects_ = SceneLoader::CreateObjects(sceneData_, engine);
-
-    // オーディオ初期化
-    const auto& bgm = sceneData_.audio.bgm;
-    if (!bgm.name.empty() && !bgm.path.empty()) {
-        engine->LoadAudio(bgm.name, bgm.path);
-        engine->PlayAudio(bgm.name, bgm.loop, bgm.volume);
-    }
+    SceneConfigurator configurator;
+    sceneData_ = configurator.LoadSceneFromJSON("Resources/Scenes/gameplay_scene.json");
+    configurator.ApplySceneData(
+        sceneData_, dxCommon_, srvManager_, camera_,
+        player_, enemy_, sceneObjects_, skybox_, lightManager_,
+        fpsCamera_, postProcess_, skyboxEnabled_,
+        fisheyeStrength_, fisheyeRadius_
+    );
 }
 
 
@@ -93,7 +40,10 @@ void GamePlayScene::Update() {
     }
 
     // ImGuiで魚眼レンズ強度と範囲を調整
-    ImGui::Begin("Fisheye Settings");
+    ImGui::Begin("Scene Settings");
+    ImGui::Text("Camera FOV (degrees): %.2f", sceneData_.camera.fovDegrees);
+    ImGui::Text("Camera FOV (radians): %.2f", camera_->GetFovY());
+    ImGui::Separator();
     ImGui::SliderFloat("Fisheye Strength", &fisheyeStrength_, 0.0f, 100.0f);
     ImGui::SliderFloat("Fisheye Radius", &fisheyeRadius_, 0.1f, 3.0f);
     ImGui::End();
@@ -107,13 +57,16 @@ void GamePlayScene::Update() {
     HandleInput();
     player_->HandleInput(engine);
 
+    // デルタタイムを取得
+    const float deltaTime = engine->GetDeltaTime();
+
     // FPSカメラモードかどうかでカメラ更新を切り替え
     if (fpsCamera_ && fpsCamera_->IsFPSMode()) {
         // FPSモード: FPSカメラ専用の更新
         fpsCamera_->UpdateCameraRotation(camera_, engine);
 
         // カメラシェイクを更新（プレイヤーの移動状態に基づく）
-        fpsCamera_->UpdateCameraShake(player_->IsMoving(), player_->IsRunning(), engine);
+        fpsCamera_->UpdateCameraShake(player_->IsMoving(), player_->IsRunning(), deltaTime, engine);
 
         player_->UpdateFPSCamera(fpsCamera_.get());
         camera_->Update();

@@ -612,7 +612,6 @@ void Player::StopMoving() {
 void Player::SetupCamera(UnoEngine* engine) {
     if (!camera_) return;
     
-    camera_->SetFov(1.37f);
     engine->SetCameraStickSensitivity(2.5f);
     engine->SetCameraOrbitDistance(3.0f);
     engine->SetCameraOrbitHeight(2.5f);

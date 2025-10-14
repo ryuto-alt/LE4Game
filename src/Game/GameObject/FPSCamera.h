@@ -32,7 +32,7 @@ public:
     void ToggleMouseLook();
 
     // カメラシェイク
-    void UpdateCameraShake(bool isMoving, bool isRunning, class UnoEngine* engine);
+    void UpdateCameraShake(bool isMoving, bool isRunning, float deltaTime, class UnoEngine* engine);
     Vector3 GetCameraShakeOffset() const { return cameraShakeOffset_; }
 
 private:

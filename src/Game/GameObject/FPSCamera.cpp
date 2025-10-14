@@ -104,7 +104,7 @@ void FPSCamera::ToggleMouseLook() {
     }
 }
 
-void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning, UnoEngine* engine) {
+void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning, float deltaTime, UnoEngine* engine) {
     if (!isFPSMode_) {
         cameraShakeOffset_ = {0.0f, 0.0f, 0.0f};
         return;
@@ -121,8 +121,8 @@ void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning, UnoEngine* engi
         float amplitude = isRunning ? runShakeAmplitude_ : walkShakeAmplitude_;
         float frequency = isRunning ? runShakeFrequency_ : walkShakeFrequency_;
 
-        // タイマーを進める（デルタタイムの代わりに固定値を使用）
-        shakeTimer_ += 0.016f; // 約60FPS想定
+        // タイマーをデルタタイムで進める
+        shakeTimer_ += deltaTime;
 
         // sin波を使って上下の揺れを作成
         float yOffset = std::sin(shakeTimer_ * frequency) * amplitude;
@@ -141,10 +141,11 @@ void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning, UnoEngine* engi
         previousYOffset_ = yOffset;
         cameraShakeOffset_ = {xOffset, yOffset, 0.0f};
     } else {
-        // 停止中の場合、揺れをスムーズに減衰
-        cameraShakeOffset_.x *= 0.9f;
-        cameraShakeOffset_.y *= 0.9f;
-        cameraShakeOffset_.z *= 0.9f;
+        // 停止中の場合、揺れをスムーズに減衰（デルタタイム考慮）
+        float decayFactor = std::pow(0.1f, deltaTime);  // 0.9fの60FPS相当
+        cameraShakeOffset_.x *= decayFactor;
+        cameraShakeOffset_.y *= decayFactor;
+        cameraShakeOffset_.z *= decayFactor;
 
         // 十分小さくなったらリセット
         if (std::abs(cameraShakeOffset_.x) < 0.001f &&
