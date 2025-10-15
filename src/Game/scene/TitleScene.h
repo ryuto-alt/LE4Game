@@ -55,10 +55,12 @@ private:
     // トランジション用
     bool isTransitioning_ = false;       // トランジション中フラグ
     float transitionTimer_ = 0.0f;       // トランジション経過時間
-    float transitionTotalTime_ = 0.0f;   // トランジション合計時間（2秒目標）
+    float transitionTotalTime_ = 0.0f;   // トランジション合計時間（1秒目標）
     float nextTransitionNoiseTime_ = 0.0f; // 次のノイズ表示時間
     bool showTransitionNoise_ = false;   // トランジションノイズ表示中フラグ
     float transitionNoiseTimer_ = 0.0f;  // トランジションノイズタイマー
     float currentNoiseDuration_ = 0.0f;  // 現在のノイズ表示時間
     bool hasPlayedNoiseSound_ = false;   // ノイズ音再生済みフラグ
+    bool isLastNoise_ = false;           // 最後の砂嵐フラグ
+    const float kFinalTransitionTime = 1.2f; // 最後の砂嵐を含めた最終トランジション時間
 };

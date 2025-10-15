@@ -206,6 +206,7 @@ void TitleScene::Update() {
                 nextTransitionNoiseTime_ = 0.0f; // すぐに最初のノイズを表示
                 showTransitionNoise_ = false;
                 hasPlayedNoiseSound_ = false; // フラグをリセット
+                isLastNoise_ = false; // 最後の砂嵐フラグをリセット
             }
             if (owaruHovered) {
                 sceneManager_->RequestExit();
@@ -234,17 +235,39 @@ void TitleScene::Update() {
                     hasPlayedNoiseSound_ = false;
                 }
 
-                // 次のノイズタイミングをランダムに設定
-                float minInterval = 0.05f;
-                float maxInterval = 0.2f;
-                nextTransitionNoiseTime_ = transitionTimer_ + minInterval +
-                    static_cast<float>(rand()) / RAND_MAX * (maxInterval - minInterval);
+                // 最後の砂嵐が終わった場合は即座に暗転モードに
+                // （次のノイズタイミング設定をスキップ）
+
+                // 最後の砂嵐でない場合のみ、次のノイズタイミングをランダムに設定
+                if (!isLastNoise_) {
+                    float minInterval = 0.05f;
+                    float maxInterval = 0.2f;
+                    nextTransitionNoiseTime_ = transitionTimer_ + minInterval +
+                        static_cast<float>(rand()) / RAND_MAX * (maxInterval - minInterval);
+                }
             }
         } else {
             // ノイズ非表示
 
-            // 次のノイズ表示タイミングチェック
-            if (transitionTimer_ >= nextTransitionNoiseTime_ && transitionTotalTime_ < 1.0f) {
+            // 0.7秒経過したら最後の砂嵐を開始
+            if (transitionTotalTime_ >= 0.7f && !isLastNoise_) {
+                showTransitionNoise_ = true;
+                transitionNoiseTimer_ = 0.0f;
+                isLastNoise_ = true;
+
+                // 最後の砂嵐は長めに（1.0秒）
+                currentNoiseDuration_ = 1.0f;
+
+                // ノイズ音再生
+                if (!hasPlayedNoiseSound_) {
+                    AudioManager::GetInstance()->LoadMP3("transitionNoise", "Resources/Audio/noize.mp3");
+                    AudioManager::GetInstance()->SetVolume("transitionNoise", 0.5f);
+                    AudioManager::GetInstance()->Play("transitionNoise", false); // ループしない
+                    hasPlayedNoiseSound_ = true;
+                }
+            }
+            // 次のノイズ表示タイミングチェック（最後の砂嵐前まで）
+            else if (transitionTimer_ >= nextTransitionNoiseTime_ && transitionTotalTime_ < 0.7f) {
                 showTransitionNoise_ = true;
                 transitionNoiseTimer_ = 0.0f;
 
@@ -264,12 +287,8 @@ void TitleScene::Update() {
             }
         }
 
-        // 合計1秒経過したら暗転してシーン遷移
-        if (transitionTotalTime_ >= 1.0f) {
-            // 画面を黒に（showTransitionNoise_をfalseにして暗転）
-            showTransitionNoise_ = false;
-
-            // シーン遷移
+        // 最後の砂嵐が終わって0.3秒経過したらシーン遷移（黒画面を確実に表示）
+        if (isLastNoise_ && !showTransitionNoise_ && transitionTimer_ >= transitionTotalTime_ + 0.3f) {
             sceneManager_->ChangeScene("GamePlay");
         }
 
@@ -286,6 +305,7 @@ void TitleScene::Update() {
             nextTransitionNoiseTime_ = 0.0f; // すぐに最初のノイズを表示
             showTransitionNoise_ = false;
             hasPlayedNoiseSound_ = false; // フラグをリセット
+            isLastNoise_ = false; // 最後の砂嵐フラグをリセット
         } else {
             sceneManager_->RequestExit();
         }
@@ -297,21 +317,24 @@ void TitleScene::Update() {
 }
 
 void TitleScene::Draw() {
-    // ホラーエフェクトのレンダーターゲットに描画開始
-    horrorEffect_->PreDraw();
+    // トランジション中でない場合のみ背景を描画
+    if (!isTransitioning_) {
+        // ホラーエフェクトのレンダーターゲットに描画開始
+        horrorEffect_->PreDraw();
 
-    // スプライト共通描画設定
-    spriteCommon_->CommonDraw();
+        // スプライト共通描画設定
+        spriteCommon_->CommonDraw();
 
-    // 背景だけエフェクトのレンダーターゲットに描画
-    titleBgSprite_->Draw();
-    titleBg2Sprite_->Draw();
+        // 背景だけエフェクトのレンダーターゲットに描画
+        titleBgSprite_->Draw();
+        titleBg2Sprite_->Draw();
 
-    // ホラーエフェクトを適用してバックバッファに描画
-    horrorEffect_->PostDraw();
+        // ホラーエフェクトを適用してバックバッファに描画
+        horrorEffect_->PostDraw();
+    }
 
-    // 砂嵐エフェクトをシェーダーで描画（通常時）
-    if (showInitialNoise_ || showRandomNoise_) {
+    // 砂嵐エフェクトをシェーダーで描画（通常時のみ）
+    if (!isTransitioning_ && (showInitialNoise_ || showRandomNoise_)) {
         // 白黒砂嵐シェーダーに切り替え
         whiteNoiseEffect_->UseWhiteNoiseShader();
         whiteNoiseEffect_->SetWhiteNoiseParams(time_, 1.0f); // 強度MAX
@@ -351,16 +374,22 @@ void TitleScene::Draw() {
         // 通常シェーダーに戻す
         redStaticEffect_->UseHorrorShader();
     }
-    // 暗転状態
-    else if (isTransitioning_ && transitionTotalTime_ >= 1.0f) {
-        // 完全な黒画面
-        spriteCommon_->CommonDraw();
-        // 何も描画しない = 黒画面
+    // トランジション中で砂嵐が表示されていない時
+    if (isTransitioning_ && !showTransitionNoise_) {
+        // 最後の砂嵐後は完全な黒画面
+        if (isLastNoise_) {
+            // 何も描画しない = 黒画面（クリアカラーが黒なので）
+        }
+        // 最後の砂嵐前はタイトル文字を表示
+        else {
+            spriteCommon_->CommonDraw();
+            titleTextSprite_->Draw();
+            hazimeruSprite_->Draw();
+            owaruSprite_->Draw();
+        }
     }
-
-    // エフェクト適用後、タイトル文字をバックバッファに直接描画
-    // 砂嵐が表示されていない時、または暗転前に表示
-    if (!showTransitionNoise_ && transitionTotalTime_ < 1.0f) {
+    // 通常時のタイトル文字表示
+    else if (!isTransitioning_) {
         spriteCommon_->CommonDraw();
         titleTextSprite_->Draw();
         hazimeruSprite_->Draw();
