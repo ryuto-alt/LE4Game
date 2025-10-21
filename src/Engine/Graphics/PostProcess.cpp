@@ -303,6 +303,14 @@ void PostProcess::SetVignetteIntensity(float intensity) {
     }
 }
 
+void PostProcess::SetBlurIntensity(float intensity) {
+    currentParams_.blurIntensity = intensity;
+
+    if (horrorParamsData_) {
+        *horrorParamsData_ = currentParams_;
+    }
+}
+
 void PostProcess::ResizeRenderTarget() {
     // 既存のレンダーターゲットをリセット
     renderTargetResource_.Reset();

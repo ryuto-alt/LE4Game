@@ -42,16 +42,17 @@ private:
     // 開始演出用
     bool isIntroPlaying_ = true;
     float introTimer_ = 0.0f;
-    float introDuration_ = 6.0f; // 瞬き演出を含めて延長
+    float introDuration_ = 8.0f; // 瞬き演出を含めて延長（より長く）
     float fadeAlpha_ = 1.0f;
     float vignetteIntensity_ = 1.5f;
+    float blurIntensity_ = 3.0f; // ぼやけ効果の強度
     bool introShakePlayed_ = false;
 
     // 瞬き演出用
     int blinkCount_ = 0;
     int maxBlinks_ = 3;
     float blinkTimer_ = 0.0f;
-    float blinkOpenDuration_ = 0.4f;   // 目を開けている時間
-    float blinkCloseDuration_ = 0.15f; // 目を閉じている時間
+    float blinkOpenDuration_ = 1.0f;   // 目を開けている時間
+    float blinkCloseDuration_ = 0.4f;  // 目を閉じている時間
     bool isBlinkClosed_ = true;        // 瞬き中に目が閉じているか
 };

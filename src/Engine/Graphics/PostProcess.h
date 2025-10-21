@@ -17,7 +17,7 @@ public:
         float vignetteIntensity;
         float fisheyeStrength;  // 魚眼レンズの強度
         float fisheyeRadius;    // 魚眼レンズの範囲
-        float padding;          // 16バイト境界に合わせる
+        float blurIntensity;    // ぼやけ効果の強度
     };
 
     PostProcess() = default;
@@ -33,6 +33,7 @@ public:
     void SetFisheyeStrength(float strength);
     void SetFisheyeRadius(float radius);
     void SetVignetteIntensity(float intensity);
+    void SetBlurIntensity(float intensity);
 
     // ウィンドウサイズ変更時に呼び出す
     void ResizeRenderTarget();

@@ -17,7 +17,7 @@ cbuffer HorrorParams : register(b0)
     float32_t vignetteIntensity; // ビネットの強度 (0.0 - 1.0)
     float32_t fisheyeStrength; // 魚眼レンズの強度 (0.0 - 1.0)
     float32_t fisheyeRadius;   // 魚眼レンズの範囲 (0.0 - 3.0)
-    float32_t padding;         // パディング
+    float32_t blurIntensity;   // ぼやけ効果の強度 (0.0 - 3.0)
 };
 
 // RenderTextureをサンプリングするためのテクスチャとサンプラー
@@ -101,6 +101,48 @@ float32_t3 bloodEffect(float32_t2 uv, float32_t3 color, float amount)
     return result;
 }
 
+// ガウシアンブラー効果（目のぼやけを表現）
+float32_t3 blurEffect(float32_t2 uv, float intensity)
+{
+    if (intensity <= 0.0)
+    {
+        return gTexture.Sample(gSampler, uv).rgb;
+    }
+
+    // ブラーのサンプリングオフセット（9サンプル）
+    float32_t3 result = float32_t3(0.0, 0.0, 0.0);
+    float totalWeight = 0.0;
+
+    // ブラー半径（強度に応じて変化）
+    float blurRadius = intensity * 0.003;
+
+    // 3x3ガウシアンカーネル
+    const int samples = 9;
+    const float32_t2 offsets[9] =
+    {
+        float32_t2(-1, -1), float32_t2(0, -1), float32_t2(1, -1),
+        float32_t2(-1,  0), float32_t2(0,  0), float32_t2(1,  0),
+        float32_t2(-1,  1), float32_t2(0,  1), float32_t2(1,  1)
+    };
+
+    const float weights[9] =
+    {
+        0.077, 0.123, 0.077,
+        0.123, 0.195, 0.123,
+        0.077, 0.123, 0.077
+    };
+
+    for (int i = 0; i < samples; i++)
+    {
+        float32_t2 sampleUV = uv + offsets[i] * blurRadius;
+        float32_t3 sampleColor = gTexture.Sample(gSampler, sampleUV).rgb;
+        result += sampleColor * weights[i];
+        totalWeight += weights[i];
+    }
+
+    return result / totalWeight;
+}
+
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
@@ -142,10 +184,19 @@ PixelShaderOutput main(VertexShaderOutput input)
         // else: 範囲外はそのまま（歪みなし）
     }
 
-    // 色収差効果を適用
-    float aberrationAmount = 1.0 + distortionAmount * 2.0;
-    float32_t3 color = chromaticAberration(uv, aberrationAmount);
-    
+    // ブラー効果を適用（最初に適用して、目のぼやけを表現）
+    float32_t3 color;
+    if (blurIntensity > 0.0)
+    {
+        color = blurEffect(uv, blurIntensity);
+    }
+    else
+    {
+        // 色収差効果を適用
+        float aberrationAmount = 1.0 + distortionAmount * 2.0;
+        color = chromaticAberration(uv, aberrationAmount);
+    }
+
     // 血のエフェクトを適用
     color = bloodEffect(input.texcoord, color, bloodAmount);
 

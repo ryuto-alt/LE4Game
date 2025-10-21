@@ -71,6 +71,7 @@ void GamePlayScene::Update() {
             isIntroPlaying_ = false;
             fadeAlpha_ = 0.0f;
             vignetteIntensity_ = 0.35f;
+            blurIntensity_ = 0.0f;
             blinkCount_ = maxBlinks_; // 瞬きも終了
 
             // 環境音を停止
@@ -107,8 +108,9 @@ void GamePlayScene::Update() {
                     }
                 }
 
-                // 瞬き中はビネット強め
+                // 瞬き中はビネット強め、ぼやけも強め
                 vignetteIntensity_ = 1.5f;
+                blurIntensity_ = 3.0f;
             } else {
                 // 瞬き終了後、通常のフェードイン
                 float timeSinceBlink = introTimer_ - (maxBlinks_ * (blinkOpenDuration_ + blinkCloseDuration_));
@@ -118,6 +120,9 @@ void GamePlayScene::Update() {
                 // ビネット効果を演出全体の進行度で徐々に弱める（演出終了まで）
                 float totalProgress = introTimer_ / introDuration_;
                 vignetteIntensity_ = 1.5f - (totalProgress * 1.15f); // 1.5 -> 0.35
+
+                // ぼやけ効果も徐々に弱める（3.0 -> 0.0）
+                blurIntensity_ = 3.0f - (totalProgress * 3.0f);
 
                 // 目覚めのカメラシェイク（瞬き終了直後）
                 if (!introShakePlayed_ && blinkCount_ >= maxBlinks_) {
@@ -131,6 +136,7 @@ void GamePlayScene::Update() {
                 isIntroPlaying_ = false;
                 fadeAlpha_ = 0.0f;
                 vignetteIntensity_ = 0.35f;
+                blurIntensity_ = 0.0f;
 
                 // 環境音を停止
                 if (engine) {
@@ -140,9 +146,10 @@ void GamePlayScene::Update() {
             }
         }
 
-        // ビネット強度をPostProcessに適用
+        // ビネット強度とぼやけ効果をPostProcessに適用
         if (postProcess_) {
             postProcess_->SetVignetteIntensity(vignetteIntensity_);
+            postProcess_->SetBlurIntensity(blurIntensity_);
         }
 
         // 演出の進行に応じて環境音のボリュームを調整
@@ -167,6 +174,7 @@ void GamePlayScene::Update() {
         introTimer_ = 0.0f;
         fadeAlpha_ = 1.0f;
         vignetteIntensity_ = 1.5f;
+        blurIntensity_ = 3.0f;
         introShakePlayed_ = false;
 
         // 瞬き演出もリセット
