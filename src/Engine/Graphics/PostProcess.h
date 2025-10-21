@@ -32,6 +32,7 @@ public:
     void SetHorrorParams(float time, float noise, float distortion, float blood, float vignette = 0.0f);
     void SetFisheyeStrength(float strength);
     void SetFisheyeRadius(float radius);
+    void SetVignetteIntensity(float intensity);
 
     // ウィンドウサイズ変更時に呼び出す
     void ResizeRenderTarget();

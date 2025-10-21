@@ -116,6 +116,28 @@ void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning, float deltaTime
         footSoundLoaded_ = true;
     }
 
+    // 目覚めシェイクの処理（優先）
+    if (wakeUpShakeActive_) {
+        wakeUpShakeTimer_ += deltaTime;
+
+        // 揺れの減衰計算（時間経過で減衰）
+        float progress = wakeUpShakeTimer_ / wakeUpShakeDuration_;
+        float intensity = 1.0f - progress;
+
+        if (progress >= 1.0f) {
+            wakeUpShakeActive_ = false;
+            wakeUpShakeTimer_ = 0.0f;
+            cameraShakeOffset_ = {0.0f, 0.0f, 0.0f};
+        } else {
+            // ランダムな揺れを生成（強い揺れから徐々に弱く）
+            float xShake = (std::sin(wakeUpShakeTimer_ * 25.0f) * 0.5f + std::cos(wakeUpShakeTimer_ * 18.0f) * 0.3f) * intensity * 0.08f;
+            float yShake = (std::cos(wakeUpShakeTimer_ * 22.0f) * 0.5f + std::sin(wakeUpShakeTimer_ * 15.0f) * 0.3f) * intensity * 0.06f;
+            float zShake = std::sin(wakeUpShakeTimer_ * 20.0f) * intensity * 0.02f;
+            cameraShakeOffset_ = {xShake, yShake, zShake};
+        }
+        return;
+    }
+
     if (isMoving) {
         // 移動中の場合、カメラシェイクを適用
         float amplitude = isRunning ? runShakeAmplitude_ : walkShakeAmplitude_;
@@ -156,4 +178,9 @@ void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning, float deltaTime
             previousYOffset_ = 0.0f;
         }
     }
+}
+
+void FPSCamera::TriggerWakeUpShake() {
+    wakeUpShakeActive_ = true;
+    wakeUpShakeTimer_ = 0.0f;
 }

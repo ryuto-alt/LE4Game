@@ -295,6 +295,14 @@ void PostProcess::SetFisheyeRadius(float radius) {
     }
 }
 
+void PostProcess::SetVignetteIntensity(float intensity) {
+    currentParams_.vignetteIntensity = intensity;
+
+    if (horrorParamsData_) {
+        *horrorParamsData_ = currentParams_;
+    }
+}
+
 void PostProcess::ResizeRenderTarget() {
     // 既存のレンダーターゲットをリセット
     renderTargetResource_.Reset();

@@ -34,6 +34,7 @@ public:
     // カメラシェイク
     void UpdateCameraShake(bool isMoving, bool isRunning, float deltaTime, class UnoEngine* engine);
     Vector3 GetCameraShakeOffset() const { return cameraShakeOffset_; }
+    void TriggerWakeUpShake();
 
 private:
     bool isFPSMode_ = false;           // true: 一人称, false: 三人称
@@ -60,4 +61,9 @@ private:
     // 足音用
     float previousYOffset_ = 0.0f;  // 前フレームのY方向オフセット
     bool footSoundLoaded_ = false;  // 足音が読み込まれたかどうか
+
+    // 目覚めシェイク用
+    bool wakeUpShakeActive_ = false;
+    float wakeUpShakeTimer_ = 0.0f;
+    float wakeUpShakeDuration_ = 0.8f;
 };
