@@ -162,7 +162,8 @@ void GamePlayScene::Update() {
         }
     }
 
-    // ImGuiで魚眼レンズ強度と範囲を調整
+#ifdef _DEBUG
+    // ImGuiで魚眼レンズ強度と範囲を調整（デバッグビルドのみ）
     ImGui::Begin("Scene Settings");
     ImGui::Text("Camera FOV (degrees): %.2f", sceneData_.camera.fovDegrees);
     ImGui::Text("Camera FOV (radians): %.2f", camera_->GetFovY());
@@ -191,6 +192,7 @@ void GamePlayScene::Update() {
         }
     }
     ImGui::End();
+#endif
 
     // 魚眼強度と範囲を適用
     if (postProcess_) {
@@ -297,9 +299,9 @@ void GamePlayScene::Draw() {
         fadeSprite_->Draw();
     }
 
+#ifdef _DEBUG
     player_->DrawUI();
 
-#ifdef _DEBUG
     if (lightManager_) {
         lightManager_->DrawImGui();
     }
