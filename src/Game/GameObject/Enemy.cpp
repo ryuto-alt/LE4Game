@@ -15,7 +15,7 @@ Enemy::Enemy()
 	, animationEnabled_(true)
 	, currentAnimationIndex_(0)
 	, player_(nullptr)
-	, detectionRange_(2.0f)
+	, detectionRange_(20.0f)
 	, moveSpeed_(0.1f)
 	, isChasing_(false)
 	, avoidanceRadius_(5.0f)
@@ -113,26 +113,16 @@ void Enemy::Initialize(Camera* camera) {
 
 	// 3D空間オーディオの初期化
 	footstepSource1_ = std::make_unique<SpatialAudioSource>();
-	bool init1 = footstepSource1_->Initialize("Resources/Audio/EnemyWalk_1.mp3", position_);
-	footstepSource1_->SetVolume(1.8f);
-	footstepSource1_->SetMaxDistance(60.0f);
+	footstepSource1_->Initialize("Resources/Audio/EnemyWalk_1.mp3", position_);
+	footstepSource1_->SetVolume(0.8f);
+	footstepSource1_->SetMaxDistance(30.0f);
 	footstepSource1_->SetMinDistance(1.0f);
 
 	footstepSource2_ = std::make_unique<SpatialAudioSource>();
-	bool init2 = footstepSource2_->Initialize("Resources/Audio/EnemyWalk_2.mp3", position_);
-	footstepSource2_->SetVolume(1.8f);
-	footstepSource2_->SetMaxDistance(60.0f);
+	footstepSource2_->Initialize("Resources/Audio/EnemyWalk_2.mp3", position_);
+	footstepSource2_->SetVolume(0.8f);
+	footstepSource2_->SetMaxDistance(30.0f);
 	footstepSource2_->SetMinDistance(1.0f);
-
-	char debugMsg[256];
-	sprintf_s(debugMsg, "Enemy: Footstep audio initialized - Source1: %s, Source2: %s\n",
-		init1 ? "SUCCESS" : "FAILED", init2 ? "SUCCESS" : "FAILED");
-	OutputDebugStringA(debugMsg);
-
-	// 初回の足音再生を遅延させるため、現在のアニメーション時刻で初期化
-	if (animatedModel_) {
-		lastAnimationTime_ = animatedModel_->GetAnimationPlayer().GetTime();
-	}
 
 	OutputDebugStringA("Enemy: Initialization complete with Walk, Run, and Scream animations\n");
 }
@@ -288,38 +278,19 @@ void Enemy::UpdateFootstepAudio() {
 			Vector3 listenerPos = audioListener_->GetPosition();
 			Vector3 listenerForward = audioListener_->GetForward();
 
-			// 距離を計算してデバッグ出力
-			Vector3 toListener = {
-				listenerPos.x - position_.x,
-				listenerPos.y - position_.y,
-				listenerPos.z - position_.z
-			};
-			float distance = std::sqrt(toListener.x * toListener.x + toListener.y * toListener.y + toListener.z * toListener.z);
-
-			char msg[512];
-			sprintf_s(msg, "Enemy: Playing footstep (source %d) - Distance: %.2f, EnemyPos(%.1f,%.1f,%.1f), ListenerPos(%.1f,%.1f,%.1f)\n",
-				useFootstep1_ ? 1 : 2, distance,
-				position_.x, position_.y, position_.z,
-				listenerPos.x, listenerPos.y, listenerPos.z);
-			OutputDebugStringA(msg);
-
 			// 交互に足音を再生
 			if (useFootstep1_) {
 				footstepSource1_->SetPosition(position_);
 				footstepSource1_->Update(listenerPos, listenerForward);
 				footstepSource1_->Play(false);  // ループなし
-				OutputDebugStringA("Enemy: Played footstep 1\n");
 			} else {
 				footstepSource2_->SetPosition(position_);
 				footstepSource2_->Update(listenerPos, listenerForward);
 				footstepSource2_->Play(false);  // ループなし
-				OutputDebugStringA("Enemy: Played footstep 2\n");
 			}
 
 			// 次回は別の足音を使用
 			useFootstep1_ = !useFootstep1_;
-		} else {
-			OutputDebugStringA("Enemy: Footstep sources are null!\n");
 		}
 
 		lastAnimationTime_ = currentTime;
@@ -342,6 +313,7 @@ void Enemy::DrawUI() {
 
 	// NavMesh状態表示
 	ImGui::Text("NavMesh Valid: %s", (navMesh_ && navMesh_->IsValid()) ? "Yes" : "No");
+	ImGui::Text("Is Chasing: %s", isChasing_ ? "Yes" : "No");
 
 	// パス情報表示
 	if (navMesh_ && navMesh_->IsValid()) {
@@ -349,6 +321,25 @@ void Enemy::DrawUI() {
 		ImGui::Text("Path Info");
 		ImGui::Text("Path Waypoints: %d", static_cast<int>(currentPath_.size()));
 		ImGui::Text("Current Waypoint: %d", currentWaypointIndex_);
+
+		// 次のウェイポイントの情報を表示
+		if (!currentPath_.empty() && currentWaypointIndex_ < static_cast<int>(currentPath_.size())) {
+			const Vector3& nextWaypoint = currentPath_[currentWaypointIndex_];
+			ImGui::Text("Next Waypoint: (%.1f, %.1f, %.1f)",
+				nextWaypoint.x, nextWaypoint.y, nextWaypoint.z);
+
+			// 現在の向きと次のウェイポイント方向を表示
+			Vector3 toWaypoint = {
+				nextWaypoint.x - position_.x,
+				0.0f,
+				nextWaypoint.z - position_.z
+			};
+			float targetRotation = std::atan2(toWaypoint.x, toWaypoint.z);
+			ImGui::Text("Current Rotation: %.2f deg", currentRotationY_ * 180.0f / 3.14159f);
+			ImGui::Text("Target Rotation: %.2f deg", targetRotation * 180.0f / 3.14159f);
+		}
+	} else {
+		ImGui::Text("NavMesh Mode: Direct Chase (No NavMesh)");
 	}
 
 	// アニメーションの有効/無効トグル
@@ -570,7 +561,7 @@ void Enemy::HandleCollisionResponse() {
 	auto enemyColObj = collisionManager->FindCollisionObject(object3d_.get());
 	if (!enemyColObj || !enemyColObj->IsEnabled()) return;
 
-	const int maxIterations = 3;
+	const int maxIterations = 5;  // 反復回数を増やして確実に押し出す
 
 	for (int iteration = 0; iteration < maxIterations; ++iteration) {
 		bool hadCollision = false;
@@ -608,17 +599,18 @@ void Enemy::HandleCollisionResponse() {
 
 				// 最小の押し出し方向を選択（Y軸は無視）
 				Vector3 pushOut = {0.0f, 0.0f, 0.0f};
+				const float PUSHOUT_MARGIN = 0.1f;  // 余裕を大きく
 				if (overlap.x < overlap.z) {
 					if (enemyAABB.GetCenter().x < otherAABB.GetCenter().x) {
-						pushOut.x = -(overlap.x + 0.01f); // 少し余裕を持たせる
+						pushOut.x = -(overlap.x + PUSHOUT_MARGIN);
 					} else {
-						pushOut.x = overlap.x + 0.01f;
+						pushOut.x = overlap.x + PUSHOUT_MARGIN;
 					}
 				} else {
 					if (enemyAABB.GetCenter().z < otherAABB.GetCenter().z) {
-						pushOut.z = -(overlap.z + 0.01f); // 少し余裕を持たせる
+						pushOut.z = -(overlap.z + PUSHOUT_MARGIN);
 					} else {
-						pushOut.z = overlap.z + 0.01f;
+						pushOut.z = overlap.z + PUSHOUT_MARGIN;
 					}
 				}
 
@@ -685,8 +677,9 @@ void Enemy::FollowPath() {
 
 	float distanceToWaypoint = std::sqrt(toWaypoint.x * toWaypoint.x + toWaypoint.z * toWaypoint.z);
 
-	// ウェイポイントに到達したら次へ
-	if (distanceToWaypoint < 0.5f) {
+	// ウェイポイントに到達したら次へ（判定を緩くして曲がり角でスムーズに）
+	const float WAYPOINT_REACH_THRESHOLD = 2.0f;  // 到達判定を緩く
+	if (distanceToWaypoint < WAYPOINT_REACH_THRESHOLD) {
 		currentWaypointIndex_++;
 		if (currentWaypointIndex_ >= static_cast<int>(currentPath_.size())) {
 			// パスの終端に到達
