@@ -43,29 +43,26 @@ void SpatialAudioSource::Update(const Vector3& listenerPosition, const Vector3& 
     // 3D音響計算
     Calculate3DAudio(listenerPosition, listenerForward);
 
-    // AudioManagerに音量を適用
-    if (isPlaying_) {
-        // パンニング計算
-        Vector3 directionToSource = {
-            position_.x - listenerPosition.x,
-            position_.y - listenerPosition.y,
-            position_.z - listenerPosition.z
-        };
-        
-        float leftVolume, rightVolume;
-        CalculatePanning(directionToSource, lastListenerForward_, leftVolume, rightVolume);
-        
-        // 距離減衰を左右の音量に適用
-        leftVolume *= currentVolume_;
-        rightVolume *= currentVolume_;
-        
-        // AudioManagerに左右の音量を個別適用
-        AudioManager::GetInstance()->SetLeftRightVolume(audioName_, leftVolume, rightVolume);
-        
-        // 全体音量も設定（互換性のため）
-        float finalVolume = (leftVolume + rightVolume) * 0.5f;
-        AudioManager::GetInstance()->SetVolume(audioName_, finalVolume);
-    }
+    // パンニング計算
+    Vector3 directionToSource = {
+        position_.x - listenerPosition.x,
+        position_.y - listenerPosition.y,
+        position_.z - listenerPosition.z
+    };
+
+    float leftVolume, rightVolume;
+    CalculatePanning(directionToSource, lastListenerForward_, leftVolume, rightVolume);
+
+    // 距離減衰を左右の音量に適用
+    leftVolume *= currentVolume_;
+    rightVolume *= currentVolume_;
+
+    // AudioManagerに左右の音量を個別適用（再生中でなくても設定）
+    AudioManager::GetInstance()->SetLeftRightVolume(audioName_, leftVolume, rightVolume);
+
+    // 全体音量も設定（互換性のため）
+    float finalVolume = (leftVolume + rightVolume) * 0.5f;
+    AudioManager::GetInstance()->SetVolume(audioName_, finalVolume);
 }
 
 void SpatialAudioSource::Play(bool loop) {
