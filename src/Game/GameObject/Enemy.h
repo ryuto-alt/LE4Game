@@ -108,5 +108,5 @@ private:
 	std::unique_ptr<SpatialAudioSource> footstepSource2_;
 	bool useFootstep1_;  // true: footstep1を使用, false: footstep2を使用
 	float lastAnimationTime_;  // アニメーション時間の記録
-	const float FOOTSTEP_INTERVAL = 0.5f;  // 足音の間隔（秒）
+	const float FOOTSTEP_INTERVAL = 0.1f;  // 足音の間隔
 };
