@@ -40,13 +40,15 @@ void GamePlayScene::Initialize() {
         }
     }
 
-    // NavMesh設定のデフォルト値
-    navMeshSettings_.cellSize = 0.2f;
+    // NavMesh設定のデフォルト値 - 曲がり角を滑らかにするために調整
+    navMeshSettings_.cellSize = 0.15f;          // 解像度を上げる（細かく）
     navMeshSettings_.cellHeight = 0.1f;
     navMeshSettings_.agentHeight = 2.0f;
-    navMeshSettings_.agentRadius = 0.6f;
+    navMeshSettings_.agentRadius = 1.0f;        // 半径を大きくして角から離れる
     navMeshSettings_.agentMaxClimb = 0.3f;
     navMeshSettings_.agentMaxSlope = 45.0f;
+    navMeshSettings_.edgeMaxError = 0.8f;       // エッジエラーを小さく（滑らか）
+    navMeshSettings_.detailSampleDist = 3.0f;   // 詳細サンプル距離を小さく
 
     const std::string navMeshPath = "Resources/NavMesh/stage.navmesh";
     const std::string navMeshDir = "Resources/NavMesh";
@@ -218,6 +220,12 @@ void GamePlayScene::Draw() {
         ImGui::SliderFloat("Agent Radius", &navMeshSettings_.agentRadius, 0.1f, 2.0f);
         ImGui::SliderFloat("Agent Max Climb", &navMeshSettings_.agentMaxClimb, 0.1f, 1.0f);
         ImGui::SliderFloat("Agent Max Slope", &navMeshSettings_.agentMaxSlope, 0.0f, 90.0f);
+
+        // 曲がり角の滑らかさに影響するパラメータ
+        ImGui::Separator();
+        ImGui::Text("Corner Smoothness Settings");
+        ImGui::SliderFloat("Edge Max Error", &navMeshSettings_.edgeMaxError, 0.1f, 3.0f);
+        ImGui::SliderFloat("Detail Sample Dist", &navMeshSettings_.detailSampleDist, 1.0f, 10.0f);
     }
 
     if (ImGui::Button("Generate NavMesh")) {

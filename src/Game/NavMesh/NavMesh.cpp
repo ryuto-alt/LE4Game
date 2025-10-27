@@ -144,15 +144,16 @@ bool NavMesh::FindPath(const float* startPos, const float* endPos, NavMeshPath& 
         return false;
     }
 
-    // パスをスムージング (Straight path)
+    // パスをスムージング (Straight path with area crossings for smoother corners)
     float straightPath[MAX_SMOOTH * 3];
     unsigned char straightPathFlags[MAX_SMOOTH];
     dtPolyRef straightPathPolys[MAX_SMOOTH];
     int nstraightPath = 0;
 
+    // DT_STRAIGHTPATH_AREA_CROSSINGS: エリアの境界を通過する際により詳細なポイントを生成
     navQuery_->findStraightPath(nearestStartPos, nearestEndPos, polys, npolys,
         straightPath, straightPathFlags, straightPathPolys,
-        &nstraightPath, MAX_SMOOTH);
+        &nstraightPath, MAX_SMOOTH, DT_STRAIGHTPATH_AREA_CROSSINGS);
 
     if (nstraightPath == 0) {
         OutputDebugStringA("NavMesh: Failed to create straight path\n");
