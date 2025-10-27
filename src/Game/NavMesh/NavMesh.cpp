@@ -177,3 +177,45 @@ bool NavMesh::FindPath(const float* startPos, const float* endPos, NavMeshPath& 
 
     return true;
 }
+
+NavMesh::DebugMeshData NavMesh::GetDebugMeshData() const {
+    DebugMeshData data;
+
+    if (!builder_ || !builder_->GetNavMesh()) {
+        return data;
+    }
+
+    const dtNavMesh* mesh = builder_->GetNavMesh();
+
+    // 全てのタイルをループ
+    for (int i = 0; i < mesh->getMaxTiles(); ++i) {
+        const dtMeshTile* tile = mesh->getTile(i);
+        if (!tile || !tile->header) continue;
+
+        // タイル内の全てのポリゴンをループ
+        for (int j = 0; j < tile->header->polyCount; ++j) {
+            const dtPoly* poly = &tile->polys[j];
+
+            // 三角形に分割
+            for (int k = 2; k < poly->vertCount; ++k) {
+                int baseIdx = static_cast<int>(data.vertices.size() / 3);
+
+                // 頂点を追加
+                for (int v = 0; v < 3; ++v) {
+                    int vertIdx = (v == 0) ? 0 : (v == 1) ? (k - 1) : k;
+                    const float* vert = &tile->verts[poly->verts[vertIdx] * 3];
+                    data.vertices.push_back(vert[0]);
+                    data.vertices.push_back(vert[1]);
+                    data.vertices.push_back(vert[2]);
+                }
+
+                // インデックスを追加
+                data.indices.push_back(baseIdx);
+                data.indices.push_back(baseIdx + 1);
+                data.indices.push_back(baseIdx + 2);
+            }
+        }
+    }
+
+    return data;
+}

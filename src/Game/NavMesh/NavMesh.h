@@ -52,6 +52,13 @@ public:
     using LogCallback = std::function<void(const std::string&)>;
     void SetLogCallback(LogCallback callback);
 
+    // デバッグ描画用のデータ取得
+    struct DebugMeshData {
+        std::vector<float> vertices;  // 頂点データ (x,y,z,x,y,z,...)
+        std::vector<int> indices;     // インデックスデータ (三角形)
+    };
+    DebugMeshData GetDebugMeshData() const;
+
 private:
     std::unique_ptr<NavMeshBuilder> builder_;
     dtNavMeshQuery* navQuery_;

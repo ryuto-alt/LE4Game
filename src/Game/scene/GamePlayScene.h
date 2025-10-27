@@ -44,6 +44,9 @@ private:
     // NavMesh設定
     NavMeshBuildSettings navMeshSettings_;
     bool showNavMeshDebug_ = false;
+    bool showNavMeshVisualization_ = false;  // NavMeshメッシュ表示
+    std::unique_ptr<Object3d> navMeshDebugObject_;
+    std::unique_ptr<Model> navMeshDebugModel_;
 
     // NavMeshログ
     std::vector<std::string> navMeshLogs_;

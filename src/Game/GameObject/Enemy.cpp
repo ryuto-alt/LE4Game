@@ -1,10 +1,12 @@
 #include "Enemy.h"
 #include "Player.h"
 #include "NavMesh/NavMesh.h"
+#include "NavMesh/NavMeshBuilder.h"
 #include "imgui.h"
 #include <numbers>
 #include <cmath>
 #include "Collision/AABBCollision.h"
+#include "DetourNavMeshQuery.h"
 
 Enemy::Enemy()
 	: position_({0.0f, 0.0f, 0.0f})
@@ -17,7 +19,7 @@ Enemy::Enemy()
 	, animationEnabled_(true)
 	, currentAnimationIndex_(0)
 	, player_(nullptr)
-	, detectionRange_(20.0f)
+	, detectionRange_(100.0f)
 	, moveSpeed_(0.125f)  
 	, isChasing_(false)
 	, avoidanceRadius_(5.0f)
@@ -770,6 +772,41 @@ void Enemy::FollowPath() {
 	currentSpeed_ += (targetSpeed - currentSpeed_) * SPEED_LERP_FACTOR;
 
 	// 移動
-	position_.x += targetDirection.x * currentSpeed_;
-	position_.z += targetDirection.z * currentSpeed_;
+	Vector3 newPosition = position_;
+	newPosition.x += targetDirection.x * currentSpeed_;
+	newPosition.z += targetDirection.z * currentSpeed_;
+
+	// NavMesh上の有効な位置に補正
+	if (navMesh_ && navMesh_->IsValid()) {
+		float startPos[3] = {newPosition.x, newPosition.y, newPosition.z};
+		float extents[3] = {2.0f, 4.0f, 2.0f};  // 探索範囲
+
+		dtNavMeshQuery* query = navMesh_->GetBuilder()->GetNavMesh() ?
+			dtAllocNavMeshQuery() : nullptr;
+
+		if (query && navMesh_->GetBuilder()->GetNavMesh()) {
+			query->init(navMesh_->GetBuilder()->GetNavMesh(), 2048);
+
+			dtQueryFilter filter;
+			filter.setIncludeFlags(0xffff);
+			filter.setExcludeFlags(0);
+
+			dtPolyRef nearestPoly = 0;
+			float nearestPoint[3];
+
+			// 最も近いNavMesh上の点を探す
+			dtStatus status = query->findNearestPoly(startPos, extents, &filter, &nearestPoly, nearestPoint);
+
+			if (dtStatusSucceed(status) && nearestPoly != 0) {
+				// NavMesh上の有効な位置に補正
+				newPosition.x = nearestPoint[0];
+				newPosition.y = nearestPoint[1];
+				newPosition.z = nearestPoint[2];
+			}
+
+			dtFreeNavMeshQuery(query);
+		}
+	}
+
+	position_ = newPosition;
 }

@@ -202,6 +202,120 @@ void GamePlayScene::Update() {
         skybox_->Update();
     }
     player_->Update(engine);
+
+    // NavMesh視覚化の更新
+    if (showNavMeshVisualization_ && navMesh_ && navMesh_->IsValid()) {
+        if (!navMeshDebugObject_) {
+            // 初回作成
+            UnoEngine* unoEngine = UnoEngine::GetInstance();
+            navMeshDebugObject_ = unoEngine->CreateObject3D();
+            navMeshDebugModel_ = std::make_unique<Model>();
+
+            auto meshData = navMesh_->GetDebugMeshData();
+            if (!meshData.vertices.empty()) {
+                // ModelDataを構築
+                ModelData modelData;
+                modelData.vertices.resize(meshData.vertices.size() / 3);
+                for (size_t i = 0; i < modelData.vertices.size(); ++i) {
+                    modelData.vertices[i].position.x = meshData.vertices[i * 3 + 0];
+                    modelData.vertices[i].position.y = meshData.vertices[i * 3 + 1];
+                    modelData.vertices[i].position.z = meshData.vertices[i * 3 + 2];
+                    modelData.vertices[i].position.w = 1.0f;
+
+                    modelData.vertices[i].normal.x = 0.0f;
+                    modelData.vertices[i].normal.y = 0.0f;
+                    modelData.vertices[i].normal.z = 0.0f;
+
+                    modelData.vertices[i].texcoord.x = 0.0f;
+                    modelData.vertices[i].texcoord.y = 0.0f;
+                }
+                modelData.indices.assign(meshData.indices.begin(), meshData.indices.end());
+
+                // 各三角形の法線を計算
+                for (size_t i = 0; i < modelData.indices.size(); i += 3) {
+                    uint32_t i0 = modelData.indices[i + 0];
+                    uint32_t i1 = modelData.indices[i + 1];
+                    uint32_t i2 = modelData.indices[i + 2];
+
+                    Vector3 v0 = {modelData.vertices[i0].position.x, modelData.vertices[i0].position.y, modelData.vertices[i0].position.z};
+                    Vector3 v1 = {modelData.vertices[i1].position.x, modelData.vertices[i1].position.y, modelData.vertices[i1].position.z};
+                    Vector3 v2 = {modelData.vertices[i2].position.x, modelData.vertices[i2].position.y, modelData.vertices[i2].position.z};
+
+                    Vector3 edge1 = {v1.x - v0.x, v1.y - v0.y, v1.z - v0.z};
+                    Vector3 edge2 = {v2.x - v0.x, v2.y - v0.y, v2.z - v0.z};
+
+                    // 外積で法線を計算
+                    Vector3 normal = {
+                        edge1.y * edge2.z - edge1.z * edge2.y,
+                        edge1.z * edge2.x - edge1.x * edge2.z,
+                        edge1.x * edge2.y - edge1.y * edge2.x
+                    };
+
+                    // 正規化
+                    float length = std::sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+                    if (length > 0.0001f) {
+                        normal.x /= length;
+                        normal.y /= length;
+                        normal.z /= length;
+                    }
+
+                    // 三角形の各頂点に法線を設定（加算して後で平均化）
+                    modelData.vertices[i0].normal.x += normal.x;
+                    modelData.vertices[i0].normal.y += normal.y;
+                    modelData.vertices[i0].normal.z += normal.z;
+
+                    modelData.vertices[i1].normal.x += normal.x;
+                    modelData.vertices[i1].normal.y += normal.y;
+                    modelData.vertices[i1].normal.z += normal.z;
+
+                    modelData.vertices[i2].normal.x += normal.x;
+                    modelData.vertices[i2].normal.y += normal.y;
+                    modelData.vertices[i2].normal.z += normal.z;
+                }
+
+                // 法線を正規化
+                for (size_t i = 0; i < modelData.vertices.size(); ++i) {
+                    float length = std::sqrt(
+                        modelData.vertices[i].normal.x * modelData.vertices[i].normal.x +
+                        modelData.vertices[i].normal.y * modelData.vertices[i].normal.y +
+                        modelData.vertices[i].normal.z * modelData.vertices[i].normal.z
+                    );
+                    if (length > 0.0001f) {
+                        modelData.vertices[i].normal.x /= length;
+                        modelData.vertices[i].normal.y /= length;
+                        modelData.vertices[i].normal.z /= length;
+                    } else {
+                        // フォールバック: 上向き
+                        modelData.vertices[i].normal.x = 0.0f;
+                        modelData.vertices[i].normal.y = 1.0f;
+                        modelData.vertices[i].normal.z = 0.0f;
+                    }
+                }
+
+                // 半透明の緑色マテリアル
+                modelData.material.isPBR = true;
+                modelData.material.baseColorFactor = {0.0f, 1.0f, 0.0f, 0.3f};  // 緑色半透明
+                modelData.material.metallicFactor = 0.0f;
+                modelData.material.roughnessFactor = 1.0f;
+                modelData.material.doubleSided = true;  // 両面描画
+
+                // Modelを初期化
+                navMeshDebugModel_->Initialize(dxCommon_);
+                navMeshDebugModel_->GetModelDataInternal() = modelData;
+                navMeshDebugModel_->CreateVertexBuffer();
+
+                navMeshDebugObject_->SetModel(navMeshDebugModel_.get());
+                navMeshDebugObject_->SetPosition({0.0f, 0.5f, 0.0f});  // 地面より十分高く表示
+                navMeshDebugObject_->SetCamera(camera_);  // カメラは設定する
+                navMeshDebugObject_->SetEnableLighting(false);
+            }
+        }
+
+        // 毎フレームカメラ更新（ただし位置/回転は固定）
+        if (navMeshDebugObject_) {
+            navMeshDebugObject_->Update();
+        }
+    }
 }
 
 void GamePlayScene::Draw() {
@@ -229,6 +343,11 @@ void GamePlayScene::Draw() {
         enemy_->Draw();
     }
 
+    // NavMeshの視覚化（フラスタムカリングなしで描画）
+    if (showNavMeshVisualization_ && navMeshDebugObject_) {
+        navMeshDebugObject_->Draw();  
+    }
+
     // ポストプロセスを適用して画面に描画
     if (postProcess_) {
         postProcess_->PostDraw();
@@ -253,6 +372,7 @@ void GamePlayScene::Draw() {
     // NavMeshデバッグウィンドウ
     ImGui::Begin("NavMesh Debug");
     ImGui::Checkbox("Show NavMesh Debug", &showNavMeshDebug_);
+    ImGui::Checkbox("Show NavMesh Visualization", &showNavMeshVisualization_);
 
     if (ImGui::CollapsingHeader("NavMesh Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::SliderFloat("Cell Size", &navMeshSettings_.cellSize, 0.05f, 1.0f);
