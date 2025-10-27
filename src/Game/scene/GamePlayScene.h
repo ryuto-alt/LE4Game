@@ -34,6 +34,7 @@ private:
     std::unique_ptr<FPSCamera> fpsCamera_;
     std::unique_ptr<PostProcess> postProcess_;
     std::unique_ptr<NavMesh> navMesh_;
+    std::unique_ptr<SpatialAudioListener> audioListener_;
 
     SceneData sceneData_;
     bool skyboxEnabled_ = false;

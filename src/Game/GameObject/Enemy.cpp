@@ -22,7 +22,10 @@ Enemy::Enemy()
 	, alternativeTimer_(0.0f)
 	, navMesh_(nullptr)
 	, currentWaypointIndex_(0)
-	, pathUpdateTimer_(0.0f) {
+	, pathUpdateTimer_(0.0f)
+	, audioListener_(nullptr)
+	, useFootstep1_(true)
+	, lastAnimationTime_(0.0f) {
 }
 
 Enemy::~Enemy() {
@@ -107,6 +110,19 @@ void Enemy::Initialize(Camera* camera) {
 			object3d_->SetModel(static_cast<Model*>(animatedModel_.get()));
 		}
 	}
+
+	// 3D空間オーディオの初期化
+	footstepSource1_ = std::make_unique<SpatialAudioSource>();
+	footstepSource1_->Initialize("Resources/Audio/EnemyWalk_1.mp3", position_);
+	footstepSource1_->SetVolume(0.8f);
+	footstepSource1_->SetMaxDistance(30.0f);
+	footstepSource1_->SetMinDistance(1.0f);
+
+	footstepSource2_ = std::make_unique<SpatialAudioSource>();
+	footstepSource2_->Initialize("Resources/Audio/EnemyWalk_2.mp3", position_);
+	footstepSource2_->SetVolume(0.8f);
+	footstepSource2_->SetMaxDistance(30.0f);
+	footstepSource2_->SetMinDistance(1.0f);
 
 	OutputDebugStringA("Enemy: Initialization complete with Walk, Run, and Scream animations\n");
 }
@@ -198,6 +214,9 @@ void Enemy::Update() {
 	// アニメーションの更新
 	UpdateAnimation();
 
+	// 足音の更新
+	UpdateFootstepAudio();
+
 	// オブジェクトの位置と回転を更新
 	if (object3d_) {
 		object3d_->SetPosition(position_);
@@ -228,6 +247,58 @@ void Enemy::UpdateAnimation() {
 			isBlending_ = false;
 			blendTimer_ = 0.0f;
 		}
+	}
+}
+
+void Enemy::UpdateFootstepAudio() {
+	// WalkまたはRunアニメーション中のみ足音を再生
+	std::string currentAnim = GetCurrentAnimationName();
+	if (currentAnim != "Walk" && currentAnim != "Run") {
+		return;
+	}
+
+	// アニメーションが停止している場合はスキップ
+	if (animationPaused_ || !animatedModel_) {
+		return;
+	}
+
+	// リスナーが設定されていない場合はスキップ
+	if (!audioListener_) {
+		return;
+	}
+
+	// アニメーションの現在時刻を取得
+	float currentTime = animatedModel_->GetAnimationPlayer().GetTime();
+
+	// 前回の時刻から一定時間経過したかチェック
+	if (currentTime - lastAnimationTime_ >= FOOTSTEP_INTERVAL) {
+		// 3D位置を更新して再生
+		if (footstepSource1_ && footstepSource2_) {
+			// リスナーの位置と向きを取得
+			Vector3 listenerPos = audioListener_->GetPosition();
+			Vector3 listenerForward = audioListener_->GetForward();
+
+			// 交互に足音を再生
+			if (useFootstep1_) {
+				footstepSource1_->SetPosition(position_);
+				footstepSource1_->Update(listenerPos, listenerForward);
+				footstepSource1_->Play(false);  // ループなし
+			} else {
+				footstepSource2_->SetPosition(position_);
+				footstepSource2_->Update(listenerPos, listenerForward);
+				footstepSource2_->Play(false);  // ループなし
+			}
+
+			// 次回は別の足音を使用
+			useFootstep1_ = !useFootstep1_;
+		}
+
+		lastAnimationTime_ = currentTime;
+	}
+
+	// アニメーションがループした場合のリセット
+	if (currentTime < lastAnimationTime_) {
+		lastAnimationTime_ = 0.0f;
 	}
 }
 

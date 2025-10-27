@@ -24,6 +24,12 @@ void GamePlayScene::Initialize() {
     // ナビメッシュの初期化
     navMesh_ = std::make_unique<NavMesh>();
 
+    // 3D空間オーディオリスナーの初期化
+    audioListener_ = std::make_unique<SpatialAudioListener>();
+    if (player_) {
+        audioListener_->SetPosition(player_->GetPosition());
+    }
+
     // シーンオブジェクトのロード確認
     char msg[256];
     sprintf_s(msg, "=== Initialize: Scene Objects ===");
@@ -70,10 +76,19 @@ void GamePlayScene::Initialize() {
         GenerateAndSaveNavMesh(navMeshPath);
     }
 
-    // EnemyにNavMeshを設定
-    if (enemy_ && navMesh_) {
-        enemy_->SetNavMesh(navMesh_.get());
-        AddNavMeshLog("NavMesh set to Enemy");
+    // EnemyにNavMeshとAudioListenerを設定
+    if (enemy_) {
+        if (navMesh_) {
+            enemy_->SetNavMesh(navMesh_.get());
+            AddNavMeshLog("NavMesh set to Enemy");
+        }
+        if (player_) {
+            enemy_->SetPlayer(player_.get());
+        }
+        if (audioListener_) {
+            enemy_->SetAudioListener(audioListener_.get());
+            AddNavMeshLog("Player and AudioListener set to Enemy");
+        }
     }
 }
 
@@ -143,6 +158,19 @@ void GamePlayScene::Update() {
 
     player_->SetDirectionalLight(dirLight);
     player_->SetSpotLight(spotLight);
+
+    // AudioListenerの位置と向きを更新（プレイヤーの位置とカメラの向き）
+    if (audioListener_ && player_ && camera_) {
+        audioListener_->SetPosition(player_->GetPosition());
+        // カメラの回転からforward vectorを計算
+        Vector3 cameraRot = camera_->GetRotate();
+        Vector3 forward = {
+            std::sin(cameraRot.y),
+            0.0f,
+            std::cos(cameraRot.y)
+        };
+        audioListener_->SetOrientation(forward, Vector3{0.0f, 1.0f, 0.0f});
+    }
 
     if (enemy_) {
         enemy_->SetDirectionalLight(const_cast<DirectionalLight*>(&dirLight));

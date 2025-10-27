@@ -42,6 +42,9 @@ public:
 	// Camera
 	void SetCamera(Camera* camera);
 
+	// Audio
+	void SetAudioListener(SpatialAudioListener* listener) { audioListener_ = listener; }
+
 	// Player tracking
 	void SetPlayer(Player* player) { player_ = player; }
 
@@ -57,6 +60,7 @@ public:
 
 private:
 	void UpdateAnimation();
+	void UpdateFootstepAudio();
 	bool CheckWallAt(const Vector3& position);
 	void UpdateNavMeshPath();
 	void FollowPath();
@@ -97,4 +101,12 @@ private:
 	int currentWaypointIndex_;
 	float pathUpdateTimer_;
 	const float PATH_UPDATE_INTERVAL = 0.5f; // 0.5秒ごとにパス更新
+
+	// Audio
+	SpatialAudioListener* audioListener_;
+	std::unique_ptr<SpatialAudioSource> footstepSource1_;
+	std::unique_ptr<SpatialAudioSource> footstepSource2_;
+	bool useFootstep1_;  // true: footstep1を使用, false: footstep2を使用
+	float lastAnimationTime_;  // アニメーション時間の記録
+	const float FOOTSTEP_INTERVAL = 0.5f;  // 足音の間隔（秒）
 };
