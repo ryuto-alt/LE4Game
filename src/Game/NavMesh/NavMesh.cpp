@@ -1,0 +1,172 @@
+#include "NavMesh.h"
+#include "DetourCommon.h"
+#include <algorithm>
+#define NOMINMAX
+#include <Windows.h>
+
+NavMesh::NavMesh()
+    : navQuery_(nullptr) {
+    builder_ = std::make_unique<NavMeshBuilder>();
+}
+
+NavMesh::~NavMesh() {
+    if (navQuery_) {
+        dtFreeNavMeshQuery(navQuery_);
+        navQuery_ = nullptr;
+    }
+}
+
+void NavMesh::AddModelGeometry(const float* vertices, int vertexCount, const int* indices, int indexCount) {
+    if (builder_) {
+        builder_->AddGeometry(vertices, vertexCount, indices, indexCount);
+    }
+}
+
+void NavMesh::ClearGeometry() {
+    if (builder_) {
+        builder_->ClearGeometry();
+    }
+}
+
+bool NavMesh::InitializeFromGeometry(const NavMeshBuildSettings& settings) {
+    if (!builder_) {
+        OutputDebugStringA("NavMesh: Builder is null\n");
+        return false;
+    }
+
+    // ナビメッシュを生成
+    if (!builder_->Build(settings)) {
+        OutputDebugStringA("NavMesh: Failed to build navmesh\n");
+        return false;
+    }
+
+    // クエリオブジェクトを作成
+    if (navQuery_) {
+        dtFreeNavMeshQuery(navQuery_);
+    }
+
+    navQuery_ = dtAllocNavMeshQuery();
+    if (!navQuery_) {
+        OutputDebugStringA("NavMesh: Failed to allocate navmesh query\n");
+        return false;
+    }
+
+    dtStatus status = navQuery_->init(builder_->GetNavMesh(), 2048);
+    if (dtStatusFailed(status)) {
+        OutputDebugStringA("NavMesh: Failed to init navmesh query\n");
+        dtFreeNavMeshQuery(navQuery_);
+        navQuery_ = nullptr;
+        return false;
+    }
+
+    // フィルター設定
+    filter_.setIncludeFlags(0xffff);
+    filter_.setExcludeFlags(0);
+
+    OutputDebugStringA("NavMesh: Initialized successfully\n");
+    return true;
+}
+
+bool NavMesh::SaveToFile(const std::string& filepath) {
+    if (!builder_) {
+        return false;
+    }
+    return builder_->SaveToFile(filepath);
+}
+
+bool NavMesh::LoadFromFile(const std::string& filepath) {
+    if (!builder_) {
+        return false;
+    }
+
+    if (!builder_->LoadFromFile(filepath)) {
+        return false;
+    }
+
+    // クエリオブジェクトを再作成
+    if (navQuery_) {
+        dtFreeNavMeshQuery(navQuery_);
+    }
+
+    navQuery_ = dtAllocNavMeshQuery();
+    if (!navQuery_) {
+        OutputDebugStringA("NavMesh: Failed to allocate navmesh query after loading\n");
+        return false;
+    }
+
+    dtStatus status = navQuery_->init(builder_->GetNavMesh(), 2048);
+    if (dtStatusFailed(status)) {
+        OutputDebugStringA("NavMesh: Failed to init navmesh query after loading\n");
+        dtFreeNavMeshQuery(navQuery_);
+        navQuery_ = nullptr;
+        return false;
+    }
+
+    // フィルター設定
+    filter_.setIncludeFlags(0xffff);
+    filter_.setExcludeFlags(0);
+
+    return true;
+}
+
+bool NavMesh::FindPath(const float* startPos, const float* endPos, NavMeshPath& outPath) {
+    outPath.waypoints.clear();
+    outPath.isValid = false;
+
+    if (!navQuery_ || !builder_ || !builder_->GetNavMesh()) {
+        OutputDebugStringA("NavMesh: Not initialized for pathfinding\n");
+        return false;
+    }
+
+    // 開始点と終了点の最近接ポリゴンを検索
+    const float extents[3] = { 2.0f, 4.0f, 2.0f }; // 検索範囲
+    dtPolyRef startRef = 0;
+    dtPolyRef endRef = 0;
+    float nearestStartPos[3];
+    float nearestEndPos[3];
+
+    navQuery_->findNearestPoly(startPos, extents, &filter_, &startRef, nearestStartPos);
+    navQuery_->findNearestPoly(endPos, extents, &filter_, &endRef, nearestEndPos);
+
+    if (!startRef || !endRef) {
+        OutputDebugStringA("NavMesh: Could not find start or end poly\n");
+        return false;
+    }
+
+    // A*パスファインディング
+    dtPolyRef polys[MAX_POLYS];
+    int npolys = 0;
+
+    navQuery_->findPath(startRef, endRef, nearestStartPos, nearestEndPos, &filter_, polys, &npolys, MAX_POLYS);
+
+    if (npolys == 0) {
+        OutputDebugStringA("NavMesh: No path found\n");
+        return false;
+    }
+
+    // パスをスムージング (Straight path)
+    float straightPath[MAX_SMOOTH * 3];
+    unsigned char straightPathFlags[MAX_SMOOTH];
+    dtPolyRef straightPathPolys[MAX_SMOOTH];
+    int nstraightPath = 0;
+
+    navQuery_->findStraightPath(nearestStartPos, nearestEndPos, polys, npolys,
+        straightPath, straightPathFlags, straightPathPolys,
+        &nstraightPath, MAX_SMOOTH);
+
+    if (nstraightPath == 0) {
+        OutputDebugStringA("NavMesh: Failed to create straight path\n");
+        return false;
+    }
+
+    // 結果を格納
+    outPath.waypoints.resize(nstraightPath * 3);
+    std::memcpy(outPath.waypoints.data(), straightPath, nstraightPath * 3 * sizeof(float));
+    outPath.isValid = true;
+
+    char msg[256];
+    sprintf_s(msg, "NavMesh: Path found with %d waypoints\n", nstraightPath);
+    OutputDebugStringA(msg);
+
+    return true;
+}

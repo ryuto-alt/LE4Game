@@ -8,6 +8,7 @@
 #include "InstancedRenderer.h"
 #include "PostProcess.h"
 #include "Scene/SceneConfigurator.h"
+#include "NavMesh/NavMesh.h"
 #include <memory>
 #include <vector>
 
@@ -23,6 +24,7 @@ public:
 
 private:
     void HandleInput();
+    void GenerateAndSaveNavMesh(const std::string& filepath);
 
     std::unique_ptr<Player> player_;
     std::unique_ptr<Enemy> enemy_;
@@ -31,9 +33,19 @@ private:
     std::unique_ptr<LightManager> lightManager_;
     std::unique_ptr<FPSCamera> fpsCamera_;
     std::unique_ptr<PostProcess> postProcess_;
+    std::unique_ptr<NavMesh> navMesh_;
 
     SceneData sceneData_;
     bool skyboxEnabled_ = false;
     float fisheyeStrength_ = 2.58f;
     float fisheyeRadius_ = 1.5f;
+
+    // NavMesh設定
+    NavMeshBuildSettings navMeshSettings_;
+    bool showNavMeshDebug_ = false;
+
+    // NavMeshログ
+    std::vector<std::string> navMeshLogs_;
+    void AddNavMeshLog(const std::string& message);
+    void ClearNavMeshLogs();
 };

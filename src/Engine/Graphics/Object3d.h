@@ -96,6 +96,12 @@ public:
     float GetAnimationTime() const;
     void SetAnimationTime(float time);
 
+    // NavMesh用のアクセサ
+    Model* GetModel() const { return model_; }
+    Matrix4x4 GetWorldMatrix() const {
+        return MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+    }
+
 private:
     // モデル（外部参照）
     Model* model_;
