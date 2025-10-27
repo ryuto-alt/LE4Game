@@ -28,6 +28,12 @@ void NavMesh::ClearGeometry() {
     }
 }
 
+void NavMesh::SetLogCallback(LogCallback callback) {
+    if (builder_) {
+        builder_->SetLogCallback(callback);
+    }
+}
+
 bool NavMesh::InitializeFromGeometry(const NavMeshBuildSettings& settings) {
     if (!builder_) {
         OutputDebugStringA("NavMesh: Builder is null\n");

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <functional>
 #include "Recast.h"
 #include "DetourNavMesh.h"
 #include "DetourNavMeshBuilder.h"
@@ -71,7 +72,13 @@ public:
     // デバッグ情報取得
     const InputGeometry& GetInputGeometry() const { return inputGeom_; }
 
+    // ログコールバック設定
+    using LogCallback = std::function<void(const std::string&)>;
+    void SetLogCallback(LogCallback callback) { logCallback_ = callback; }
+
 private:
+    void Log(const std::string& message);
+    LogCallback logCallback_;
     InputGeometry inputGeom_;
     dtNavMesh* navMesh_;
 

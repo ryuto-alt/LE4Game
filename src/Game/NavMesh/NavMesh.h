@@ -48,6 +48,10 @@ public:
     // デバッグ: ビルダーの取得
     NavMeshBuilder* GetBuilder() const { return builder_.get(); }
 
+    // ログコールバック設定
+    using LogCallback = std::function<void(const std::string&)>;
+    void SetLogCallback(LogCallback callback);
+
 private:
     std::unique_ptr<NavMeshBuilder> builder_;
     dtNavMeshQuery* navQuery_;

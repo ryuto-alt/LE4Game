@@ -24,6 +24,11 @@ void GamePlayScene::Initialize() {
     // ナビメッシュの初期化
     navMesh_ = std::make_unique<NavMesh>();
 
+    // NavMeshのログをImGuiに表示するように設定
+    navMesh_->SetLogCallback([this](const std::string& message) {
+        AddNavMeshLog(message);
+    });
+
     // 3D空間オーディオリスナーの初期化
     audioListener_ = std::make_unique<SpatialAudioListener>();
     if (player_) {
@@ -46,33 +51,41 @@ void GamePlayScene::Initialize() {
         }
     }
 
-    // NavMesh設定のデフォルト値 - 壁衝突を絶対に回避
-    navMeshSettings_.cellSize = 0.15f;          // 解像度を上げる（細かく）
-    navMeshSettings_.cellHeight = 0.1f;
-    navMeshSettings_.agentHeight = 2.0f;
-    navMeshSettings_.agentRadius = 2.0f;        // 最大！壁から完全に離れる
-    navMeshSettings_.agentMaxClimb = 0.3f;
-    navMeshSettings_.agentMaxSlope = 45.0f;
-    navMeshSettings_.edgeMaxError = 0.5f;       // 最も滑らかに
-    navMeshSettings_.detailSampleDist = 1.5f;   // 最も詳細に
+    // NavMesh設定のデフォルト値
+    navMeshSettings_.cellSize = 0.202f;
+    navMeshSettings_.cellHeight = 0.100f;
+    navMeshSettings_.agentHeight = 2.000f;
+    navMeshSettings_.agentRadius = 2.031f;
+    navMeshSettings_.agentMaxClimb = 0.315f;
+    navMeshSettings_.agentMaxSlope = 45.000f;
+    navMeshSettings_.edgeMaxError = 1.300f;
+    navMeshSettings_.detailSampleDist = 6.080f;
 
-    const std::string navMeshPath = "Resources/NavMesh/stage.navmesh";
-    const std::string navMeshDir = "Resources/NavMesh";
+    const std::string navMeshPath = "externals/navimap/stage.navmesh";
+    const std::string navMeshDir = "externals/navimap";
 
     // NavMeshディレクトリを作成（存在しない場合）
-    std::filesystem::create_directories(navMeshDir);
+    std::error_code ec;
+    std::filesystem::create_directories(navMeshDir, ec);
+    if (ec) {
+        sprintf_s(msg, "ERROR: Failed to create NavMesh directory: %s", ec.message().c_str());
+        AddNavMeshLog(msg);
+    } else {
+        sprintf_s(msg, "NavMesh directory ready: %s", navMeshDir.c_str());
+        AddNavMeshLog(msg);
+    }
 
-    // 保存済みナビメッシュがあれば読み込み、なければ生成
+    // 保存済みナビメッシュがあれば読み込み、なければ自動生成
     if (std::filesystem::exists(navMeshPath)) {
         AddNavMeshLog("Loading existing NavMesh...");
         if (navMesh_->LoadFromFile(navMeshPath)) {
             AddNavMeshLog("SUCCESS: NavMesh loaded from file");
         } else {
-            AddNavMeshLog("Failed to load NavMesh, regenerating...");
+            AddNavMeshLog("Failed to load NavMesh, auto-generating new one...");
             GenerateAndSaveNavMesh(navMeshPath);
         }
     } else {
-        AddNavMeshLog("No existing NavMesh found, generating new one...");
+        AddNavMeshLog("No existing NavMesh found, auto-generating...");
         GenerateAndSaveNavMesh(navMeshPath);
     }
 
@@ -245,7 +258,7 @@ void GamePlayScene::Draw() {
         ImGui::SliderFloat("Cell Size", &navMeshSettings_.cellSize, 0.05f, 1.0f);
         ImGui::SliderFloat("Cell Height", &navMeshSettings_.cellHeight, 0.05f, 0.5f);
         ImGui::SliderFloat("Agent Height", &navMeshSettings_.agentHeight, 0.5f, 5.0f);
-        ImGui::SliderFloat("Agent Radius", &navMeshSettings_.agentRadius, 0.1f, 2.0f);
+        ImGui::SliderFloat("Agent Radius", &navMeshSettings_.agentRadius, 0.1f, 5.0f);
         ImGui::SliderFloat("Agent Max Climb", &navMeshSettings_.agentMaxClimb, 0.1f, 1.0f);
         ImGui::SliderFloat("Agent Max Slope", &navMeshSettings_.agentMaxSlope, 0.0f, 90.0f);
 

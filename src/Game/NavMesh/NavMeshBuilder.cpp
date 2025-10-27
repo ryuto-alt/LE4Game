@@ -11,7 +11,15 @@ NavMeshBuilder::NavMeshBuilder()
     , chf_(nullptr)
     , cset_(nullptr)
     , pmesh_(nullptr)
-    , dmesh_(nullptr) {
+    , dmesh_(nullptr)
+    , logCallback_(nullptr) {
+}
+
+void NavMeshBuilder::Log(const std::string& message) {
+    if (logCallback_) {
+        logCallback_(message);
+    }
+    OutputDebugStringA((message + "\n").c_str());
 }
 
 NavMeshBuilder::~NavMeshBuilder() {
@@ -255,18 +263,25 @@ bool NavMeshBuilder::Build(const NavMeshBuildSettings& settings) {
 
 bool NavMeshBuilder::SaveToFile(const std::string& filepath) const {
     if (!navMesh_) {
-        OutputDebugStringA("NavMeshBuilder: No navmesh to save\n");
+        const_cast<NavMeshBuilder*>(this)->Log("NavMeshBuilder: No navmesh to save");
         return false;
     }
 
+    // ファイルパスのディレクトリ部分を確認
+    char msg[512];
+    sprintf_s(msg, "NavMeshBuilder: Attempting to save to: %s", filepath.c_str());
+    const_cast<NavMeshBuilder*>(this)->Log(msg);
+
     std::ofstream file(filepath, std::ios::binary);
-    if (!file) {
-        OutputDebugStringA("NavMeshBuilder: Failed to open file for writing\n");
+    if (!file.is_open()) {
+        sprintf_s(msg, "NavMeshBuilder: Failed to open file for writing: %s", filepath.c_str());
+        const_cast<NavMeshBuilder*>(this)->Log(msg);
         return false;
     }
 
     // Get tile data
     const dtNavMesh* mesh = navMesh_;
+    int tileCount = 0;
     for (int i = 0; i < mesh->getMaxTiles(); ++i) {
         const dtMeshTile* tile = mesh->getTile(i);
         if (!tile || !tile->header || !tile->dataSize) continue;
@@ -275,11 +290,27 @@ bool NavMeshBuilder::SaveToFile(const std::string& filepath) const {
         file.write(reinterpret_cast<const char*>(&tile->dataSize), sizeof(tile->dataSize));
         // Write tile data
         file.write(reinterpret_cast<const char*>(tile->data), tile->dataSize);
+        tileCount++;
     }
 
     file.close();
-    OutputDebugStringA("NavMesh saved to file\n");
-    return true;
+
+    sprintf_s(msg, "NavMeshBuilder: Saved %d tiles to file: %s", tileCount, filepath.c_str());
+    const_cast<NavMeshBuilder*>(this)->Log(msg);
+
+    // ファイルが実際に作成されたか確認
+    std::ifstream checkFile(filepath, std::ios::binary);
+    if (checkFile.is_open()) {
+        checkFile.seekg(0, std::ios::end);
+        size_t fileSize = checkFile.tellg();
+        checkFile.close();
+        sprintf_s(msg, "NavMeshBuilder: File created successfully, size: %zu bytes", fileSize);
+        const_cast<NavMeshBuilder*>(this)->Log(msg);
+        return true;
+    } else {
+        const_cast<NavMeshBuilder*>(this)->Log("NavMeshBuilder: File was not created!");
+        return false;
+    }
 }
 
 bool NavMeshBuilder::LoadFromFile(const std::string& filepath) {
