@@ -115,13 +115,13 @@ void Enemy::Initialize(Camera* camera) {
 	footstepSource1_ = std::make_unique<SpatialAudioSource>();
 	bool init1 = footstepSource1_->Initialize("Resources/Audio/EnemyWalk_1.mp3", position_);
 	footstepSource1_->SetVolume(1.8f);
-	footstepSource1_->SetMaxDistance(30.0f);
+	footstepSource1_->SetMaxDistance(60.0f);
 	footstepSource1_->SetMinDistance(1.0f);
 
 	footstepSource2_ = std::make_unique<SpatialAudioSource>();
 	bool init2 = footstepSource2_->Initialize("Resources/Audio/EnemyWalk_2.mp3", position_);
 	footstepSource2_->SetVolume(1.8f);
-	footstepSource2_->SetMaxDistance(30.0f);
+	footstepSource2_->SetMaxDistance(60.0f);
 	footstepSource2_->SetMinDistance(1.0f);
 
 	char debugMsg[256];
