@@ -393,7 +393,9 @@ namespace Collision {
                 ImGui::PushID(static_cast<int>(i));
 
                 bool enabled = colObj->IsEnabled();
-                ImGui::Checkbox("Enabled", &enabled);
+                if (ImGui::Checkbox("Enabled", &enabled)) {
+                    colObj->SetEnabled(enabled);
+                }
                 ImGui::SameLine();
 
                 // 名前がある場合は名前を表示、ない場合はインデックス

@@ -9,6 +9,8 @@
 Enemy::Enemy()
 	: position_({0.0f, 0.0f, 0.0f})
 	, currentRotationY_(0.0f)
+	, targetRotationY_(0.0f)
+	, currentSpeed_(0.0f)
 	, animationPaused_(false)
 	, isBlending_(false)
 	, blendTimer_(0.0f)
@@ -16,7 +18,7 @@ Enemy::Enemy()
 	, currentAnimationIndex_(0)
 	, player_(nullptr)
 	, detectionRange_(20.0f)
-	, moveSpeed_(0.1f)
+	, moveSpeed_(0.125f)  
 	, isChasing_(false)
 	, avoidanceRadius_(5.0f)
 	, alternativeTimer_(0.0f)
@@ -73,11 +75,11 @@ void Enemy::Initialize(Camera* camera) {
 	// 環境マップを無効化（Playerと同じ）
 	object3d_->EnableEnv(false);
 
-	// コリジョン設定（Playerと同じ）
+	// コリジョン設定（登録するが無効化）
 	auto* collisionManager = Collision::AABBCollisionManager::GetInstance();
 	if (collisionManager && object3d_ && animatedModel_) {
 		Collision::AABB enemyAABB = Collision::AABBExtractor::ExtractFromAnimatedModel(animatedModel_.get());
-		collisionManager->RegisterObject(object3d_.get(), enemyAABB, true, "Enemy");
+		collisionManager->RegisterObject(object3d_.get(), enemyAABB, false, "Enemy");  // falseで無効化
 	}
 
 	// マテリアルの確認と設定 - Playerと同じロジック
@@ -579,8 +581,9 @@ void Enemy::HandleCollisionResponse() {
 			if (colObj.get() == enemyColObj.get()) continue;
 			if (!colObj->IsEnabled()) continue;
 
-			// プレイヤーとの衝突は無視
+			// プレイヤーと壁との衝突は無視
 			if (colObj->GetName() == "Player") continue;
+			if (colObj->GetName() == "wall") continue;
 
 			const Collision::AABB& otherAABB = colObj->GetWorldAABB();
 
@@ -747,11 +750,26 @@ void Enemy::FollowPath() {
 		targetDirection.z /= targetLength;
 	}
 
-	// 移動（角では減速）
-	float actualSpeed = moveSpeed_ * cornerSlowdownFactor_;
-	position_.x += targetDirection.x * actualSpeed;
-	position_.z += targetDirection.z * actualSpeed;
+	// 目標回転角を計算
+	targetRotationY_ = std::atan2(targetDirection.x, targetDirection.z);
 
-	// 移動方向を向く
-	currentRotationY_ = std::atan2(targetDirection.x, targetDirection.z);
+	// 回転の補間（滑らかに回転）
+	const float ROTATION_LERP_FACTOR = 0.15f;  // 回転の滑らかさ（0.0～1.0）
+
+	// 角度差を-π～πの範囲に正規化
+	float angleDiff = targetRotationY_ - currentRotationY_;
+	while (angleDiff > 3.14159f) angleDiff -= 2.0f * 3.14159f;
+	while (angleDiff < -3.14159f) angleDiff += 2.0f * 3.14159f;
+
+	// 補間
+	currentRotationY_ += angleDiff * ROTATION_LERP_FACTOR;
+
+	// 速度の補間（滑らかに加減速）
+	const float SPEED_LERP_FACTOR = 0.1f;  // 加減速の滑らかさ（0.0～1.0）
+	float targetSpeed = moveSpeed_ * cornerSlowdownFactor_;
+	currentSpeed_ += (targetSpeed - currentSpeed_) * SPEED_LERP_FACTOR;
+
+	// 移動
+	position_.x += targetDirection.x * currentSpeed_;
+	position_.z += targetDirection.z * currentSpeed_;
 }

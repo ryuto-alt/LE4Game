@@ -72,6 +72,8 @@ private:
 	// Transform
 	Vector3 position_;
 	float currentRotationY_;
+	float targetRotationY_;  // 目標回転角（補間用）
+	float currentSpeed_;  // 現在の速度（補間用）
 
 	// Animation
 	bool animationPaused_;
