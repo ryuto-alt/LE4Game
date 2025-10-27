@@ -114,13 +114,13 @@ void Enemy::Initialize(Camera* camera) {
 	// 3D空間オーディオの初期化
 	footstepSource1_ = std::make_unique<SpatialAudioSource>();
 	bool init1 = footstepSource1_->Initialize("Resources/Audio/EnemyWalk_1.mp3", position_);
-	footstepSource1_->SetVolume(0.8f);
+	footstepSource1_->SetVolume(1.8f);
 	footstepSource1_->SetMaxDistance(30.0f);
 	footstepSource1_->SetMinDistance(1.0f);
 
 	footstepSource2_ = std::make_unique<SpatialAudioSource>();
 	bool init2 = footstepSource2_->Initialize("Resources/Audio/EnemyWalk_2.mp3", position_);
-	footstepSource2_->SetVolume(0.8f);
+	footstepSource2_->SetVolume(1.8f);
 	footstepSource2_->SetMaxDistance(30.0f);
 	footstepSource2_->SetMinDistance(1.0f);
 
@@ -128,6 +128,11 @@ void Enemy::Initialize(Camera* camera) {
 	sprintf_s(debugMsg, "Enemy: Footstep audio initialized - Source1: %s, Source2: %s\n",
 		init1 ? "SUCCESS" : "FAILED", init2 ? "SUCCESS" : "FAILED");
 	OutputDebugStringA(debugMsg);
+
+	// 初回の足音再生を遅延させるため、現在のアニメーション時刻で初期化
+	if (animatedModel_) {
+		lastAnimationTime_ = animatedModel_->GetAnimationPlayer().GetTime();
+	}
 
 	OutputDebugStringA("Enemy: Initialization complete with Walk, Run, and Scream animations\n");
 }
