@@ -20,9 +20,17 @@ Enemy::Enemy()
 	, isChasing_(false)
 	, avoidanceRadius_(5.0f)
 	, alternativeTimer_(0.0f)
+<<<<<<< HEAD
 	, navMesh_(nullptr)
 	, currentWaypointIndex_(0)
 	, pathUpdateTimer_(0.0f) {
+=======
+	, navMeshSystem_(nullptr)
+	, useNavMesh_(false) {
+
+	// EnemyAIの初期化
+	enemyAI_ = std::make_unique<EnemyAI>();
+>>>>>>> e18487971e11122a0fa043931de4cb1e1ee455a5
 }
 
 Enemy::~Enemy() {
@@ -112,6 +120,7 @@ void Enemy::Initialize(Camera* camera) {
 }
 
 void Enemy::Update() {
+<<<<<<< HEAD
 	const float deltaTime = 1.0f / 60.0f; // 60 FPS想定
 
 	// 代替経路タイマーの更新
@@ -121,6 +130,48 @@ void Enemy::Update() {
 
 	// プレイヤー検知と追跡 (NavMeshベース)
 	if (player_ && navMesh_ && navMesh_->IsValid()) {
+=======
+	float deltaTime = 1.0f / 60.0f;
+
+	// NavMeshシステムを使用する場合
+	if (useNavMesh_ && navMeshSystem_ && navMeshSystem_->IsValid() && enemyAI_) {
+		// EnemyAIの位置を同期
+		enemyAI_->SetPosition(position_);
+
+		// プレイヤー位置を取得
+		Vector3 playerPos = player_ ? player_->GetPosition() : Vector3{0.0f, 0.0f, 0.0f};
+
+		// AI更新
+		enemyAI_->Update(deltaTime, playerPos);
+
+		// AI状態に応じてアニメーション変更
+		EnemyState state = enemyAI_->GetState();
+		if (state == EnemyState::Chase || state == EnemyState::Search) {
+			if (!isChasing_) {
+				ChangeAnimation("Run");
+				isChasing_ = true;
+			}
+		} else {
+			if (isChasing_) {
+				ChangeAnimation("Walk");
+				isChasing_ = false;
+			}
+		}
+
+		// AIからの位置と回転を取得
+		position_ = enemyAI_->GetPosition();
+		currentRotationY_ = enemyAI_->GetRotationY();
+	}
+	// 従来のシンプルな追跡システム
+	else {
+		// 代替経路タイマーの更新
+		if (alternativeTimer_ > 0.0f) {
+			alternativeTimer_ -= deltaTime;
+		}
+
+		// プレイヤー検知と追跡
+		if (player_) {
+>>>>>>> e18487971e11122a0fa043931de4cb1e1ee455a5
 		Vector3 playerPos = player_->GetPosition();
 		Vector3 toPlayer = {
 			playerPos.x - position_.x,
@@ -147,9 +198,82 @@ void Enemy::Update() {
 				pathUpdateTimer_ = PATH_UPDATE_INTERVAL;
 			}
 
+<<<<<<< HEAD
 			// パスに沿って移動
 			if (!currentPath_.empty()) {
 				FollowPath();
+=======
+				bool forwardBlocked = CheckWallAt(checkPos);
+
+				Vector3 moveDir = toPlayer;
+
+				if (forwardBlocked) {
+					// 前方がブロックされている場合、複数方向をチェック
+					// 右、左、右斜め前、左斜め前、右後ろ、左後ろの順に試す
+					Vector3 rightDir = {toPlayer.z, 0.0f, -toPlayer.x};
+					Vector3 leftDir = {-toPlayer.z, 0.0f, toPlayer.x};
+
+					// 正規化
+					float rightLen = std::sqrt(rightDir.x * rightDir.x + rightDir.z * rightDir.z);
+					float leftLen = std::sqrt(leftDir.x * leftDir.x + leftDir.z * leftDir.z);
+					if (rightLen > 0.001f) { rightDir.x /= rightLen; rightDir.z /= rightLen; }
+					if (leftLen > 0.001f) { leftDir.x /= leftLen; leftDir.z /= leftLen; }
+
+					// 斜め方向も試す
+					Vector3 rightForward = {
+						toPlayer.x * 0.5f + rightDir.x * 0.5f,
+						0.0f,
+						toPlayer.z * 0.5f + rightDir.z * 0.5f
+					};
+					Vector3 leftForward = {
+						toPlayer.x * 0.5f + leftDir.x * 0.5f,
+						0.0f,
+						toPlayer.z * 0.5f + leftDir.z * 0.5f
+					};
+
+					// 正規化
+					float rfLen = std::sqrt(rightForward.x * rightForward.x + rightForward.z * rightForward.z);
+					float lfLen = std::sqrt(leftForward.x * leftForward.x + leftForward.z * leftForward.z);
+					if (rfLen > 0.001f) { rightForward.x /= rfLen; rightForward.z /= rfLen; }
+					if (lfLen > 0.001f) { leftForward.x /= lfLen; leftForward.z /= lfLen; }
+
+					// 各方向をチェック
+					struct DirectionTest {
+						Vector3 direction;
+						float priority;
+						bool blocked;
+					};
+
+					DirectionTest directions[] = {
+						{rightForward, 0.9f, CheckWallAt({position_.x + rightForward.x * 2.5f, position_.y, position_.z + rightForward.z * 2.5f})},
+						{leftForward, 0.9f, CheckWallAt({position_.x + leftForward.x * 2.5f, position_.y, position_.z + leftForward.z * 2.5f})},
+						{rightDir, 0.7f, CheckWallAt({position_.x + rightDir.x * 2.5f, position_.y, position_.z + rightDir.z * 2.5f})},
+						{leftDir, 0.7f, CheckWallAt({position_.x + leftDir.x * 2.5f, position_.y, position_.z + leftDir.z * 2.5f})}
+					};
+
+					// ブロックされていない方向で最も優先度の高いものを選択
+					bool foundDirection = false;
+					float bestPriority = -1.0f;
+
+					for (const auto& dir : directions) {
+						if (!dir.blocked && dir.priority > bestPriority) {
+							moveDir = dir.direction;
+							bestPriority = dir.priority;
+							foundDirection = true;
+						}
+					}
+
+					// どの方向もブロックされている場合は、プレイヤー方向に押し続ける
+					// （衝突応答で壁から離れる）
+				}
+
+				// 移動
+				position_.x += moveDir.x * moveSpeed_;
+				position_.z += moveDir.z * moveSpeed_;
+
+				// 移動方向を向く
+				currentRotationY_ = std::atan2(moveDir.x, moveDir.z);
+>>>>>>> e18487971e11122a0fa043931de4cb1e1ee455a5
 			}
 		} else {
 			if (isChasing_) {
@@ -192,6 +316,7 @@ void Enemy::Update() {
 				ChangeAnimation("Walk");
 				isChasing_ = false;
 			}
+		}
 		}
 	}
 
@@ -237,8 +362,55 @@ void Enemy::Draw() {
 	}
 }
 
+void Enemy::SetNavMeshSystem(NavMeshSystem* navMeshSystem) {
+	navMeshSystem_ = navMeshSystem;
+
+	if (navMeshSystem_ && navMeshSystem_->IsValid()) {
+		useNavMesh_ = true;
+
+		// EnemyAIを初期化
+		if (enemyAI_) {
+			enemyAI_->Initialize(navMeshSystem_);
+			enemyAI_->SetPosition(position_);
+			enemyAI_->SetDetectionRange(detectionRange_);
+			enemyAI_->SetMoveSpeed(moveSpeed_ * 10.0f); // スケール調整
+
+			char debugMsg[256];
+			sprintf_s(debugMsg, "Enemy: NavMesh system initialized\n");
+			OutputDebugStringA(debugMsg);
+		}
+	} else {
+		useNavMesh_ = false;
+	}
+}
+
 void Enemy::DrawUI() {
 	ImGui::Begin("Enemy Settings");
+
+	// NavMesh使用切り替え
+	if (ImGui::Checkbox("Use NavMesh", &useNavMesh_)) {
+		if (useNavMesh_ && enemyAI_ && navMeshSystem_) {
+			enemyAI_->Initialize(navMeshSystem_);
+			enemyAI_->SetPosition(position_);
+		}
+	}
+
+	ImGui::SameLine();
+	ImGui::Text("NavMesh Valid: %s", (navMeshSystem_ && navMeshSystem_->IsValid()) ? "Yes" : "No");
+
+	// AI状態表示
+	if (useNavMesh_ && enemyAI_) {
+		ImGui::Separator();
+		ImGui::Text("AI State");
+
+		const char* stateNames[] = {"Idle", "Patrol", "Chase", "Attack", "Search"};
+		int stateIndex = static_cast<int>(enemyAI_->GetState());
+		ImGui::Text("Current State: %s", stateNames[stateIndex]);
+
+		const auto& path = enemyAI_->GetCurrentPath();
+		ImGui::Text("Path Waypoints: %d", static_cast<int>(path.size()));
+		ImGui::Text("Current Waypoint: %d", enemyAI_->GetCurrentWaypointIndex());
+	}
 
 	// アニメーションの有効/無効トグル
 	if (ImGui::Checkbox("Animation Enabled", &animationEnabled_)) {

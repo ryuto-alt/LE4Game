@@ -166,10 +166,20 @@
     <ClCompile Include="src\Engine\Resource\ResourcePreloader.cpp" />
     <ClCompile Include="src\Engine\Scene\SceneLoader.cpp" />
     <ClCompile Include="src\Engine\Scene\SceneConfigurator.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="externals\recastnavigation\Recast\Source\Recast.cpp" />
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAlloc.cpp" />
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastArea.cpp" />
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAssert.cpp" />
+=======
+    <ClCompile Include="src\Engine\NavMesh\NavMeshSystem.cpp" />
+    <ClCompile Include="src\Engine\NavMesh\EnemyAI.cpp" />
+    <ClCompile Include="src\Engine\NavMesh\NavMeshDebugDraw.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\Recast.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAlloc.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAssert.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastArea.cpp" />
+>>>>>>> e18487971e11122a0fa043931de4cb1e1ee455a5
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastContour.cpp" />
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastFilter.cpp" />
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastLayers.cpp" />
@@ -251,6 +261,9 @@
     <ClInclude Include="src\Engine\Resource\ResourcePreloader.h" />
     <ClInclude Include="src\Engine\Scene\SceneLoader.h" />
     <ClInclude Include="src\Engine\Scene\SceneConfigurator.h" />
+    <ClInclude Include="src\Engine\NavMesh\NavMeshSystem.h" />
+    <ClInclude Include="src\Engine\NavMesh\EnemyAI.h" />
+    <ClInclude Include="src\Engine\NavMesh\NavMeshDebugDraw.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

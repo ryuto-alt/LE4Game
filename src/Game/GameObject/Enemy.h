@@ -1,7 +1,12 @@
 #pragma once
 #include "UnoEngine.h"
 #include <memory>
+<<<<<<< HEAD
 #include <vector>
+=======
+#include "NavMesh/NavMeshSystem.h"
+#include "NavMesh/EnemyAI.h"
+>>>>>>> e18487971e11122a0fa043931de4cb1e1ee455a5
 
 // Forward declaration
 class Player;
@@ -45,12 +50,19 @@ public:
 	// Player tracking
 	void SetPlayer(Player* player) { player_ = player; }
 
+<<<<<<< HEAD
 	// NavMesh
 	void SetNavMesh(NavMesh* navMesh) { navMesh_ = navMesh; }
+=======
+	// NavMesh system
+	void SetNavMeshSystem(NavMeshSystem* navMeshSystem);
+	bool IsUsingNavMesh() const { return useNavMesh_ && navMeshSystem_ != nullptr; }
+>>>>>>> e18487971e11122a0fa043931de4cb1e1ee455a5
 
 	// Getters
 	Object3d* GetObject() { return object3d_.get(); }
 	AnimatedModel* GetModel() { return animatedModel_.get(); }
+	EnemyAI* GetAI() { return enemyAI_.get(); }
 
 	// Collision response
 	void HandleCollisionResponse();
@@ -91,10 +103,17 @@ private:
 	float avoidanceRadius_;
 	float alternativeTimer_;
 
+<<<<<<< HEAD
 	// NavMesh pathfinding
 	NavMesh* navMesh_;
 	std::vector<Vector3> currentPath_;
 	int currentWaypointIndex_;
 	float pathUpdateTimer_;
 	const float PATH_UPDATE_INTERVAL = 0.5f; // 0.5秒ごとにパス更新
+=======
+	// NavMesh system
+	NavMeshSystem* navMeshSystem_;
+	std::unique_ptr<EnemyAI> enemyAI_;
+	bool useNavMesh_;
+>>>>>>> e18487971e11122a0fa043931de4cb1e1ee455a5
 };
