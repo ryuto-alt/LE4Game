@@ -15,7 +15,7 @@ Enemy::Enemy()
 	, animationEnabled_(true)
 	, currentAnimationIndex_(0)
 	, player_(nullptr)
-	, detectionRange_(20.0f)
+	, detectionRange_(2.0f)
 	, moveSpeed_(0.1f)
 	, isChasing_(false)
 	, avoidanceRadius_(5.0f)
@@ -113,16 +113,21 @@ void Enemy::Initialize(Camera* camera) {
 
 	// 3D空間オーディオの初期化
 	footstepSource1_ = std::make_unique<SpatialAudioSource>();
-	footstepSource1_->Initialize("Resources/Audio/EnemyWalk_1.mp3", position_);
+	bool init1 = footstepSource1_->Initialize("Resources/Audio/EnemyWalk_1.mp3", position_);
 	footstepSource1_->SetVolume(0.8f);
 	footstepSource1_->SetMaxDistance(30.0f);
 	footstepSource1_->SetMinDistance(1.0f);
 
 	footstepSource2_ = std::make_unique<SpatialAudioSource>();
-	footstepSource2_->Initialize("Resources/Audio/EnemyWalk_2.mp3", position_);
+	bool init2 = footstepSource2_->Initialize("Resources/Audio/EnemyWalk_2.mp3", position_);
 	footstepSource2_->SetVolume(0.8f);
 	footstepSource2_->SetMaxDistance(30.0f);
 	footstepSource2_->SetMinDistance(1.0f);
+
+	char debugMsg[256];
+	sprintf_s(debugMsg, "Enemy: Footstep audio initialized - Source1: %s, Source2: %s\n",
+		init1 ? "SUCCESS" : "FAILED", init2 ? "SUCCESS" : "FAILED");
+	OutputDebugStringA(debugMsg);
 
 	OutputDebugStringA("Enemy: Initialization complete with Walk, Run, and Scream animations\n");
 }
@@ -278,19 +283,38 @@ void Enemy::UpdateFootstepAudio() {
 			Vector3 listenerPos = audioListener_->GetPosition();
 			Vector3 listenerForward = audioListener_->GetForward();
 
+			// 距離を計算してデバッグ出力
+			Vector3 toListener = {
+				listenerPos.x - position_.x,
+				listenerPos.y - position_.y,
+				listenerPos.z - position_.z
+			};
+			float distance = std::sqrt(toListener.x * toListener.x + toListener.y * toListener.y + toListener.z * toListener.z);
+
+			char msg[512];
+			sprintf_s(msg, "Enemy: Playing footstep (source %d) - Distance: %.2f, EnemyPos(%.1f,%.1f,%.1f), ListenerPos(%.1f,%.1f,%.1f)\n",
+				useFootstep1_ ? 1 : 2, distance,
+				position_.x, position_.y, position_.z,
+				listenerPos.x, listenerPos.y, listenerPos.z);
+			OutputDebugStringA(msg);
+
 			// 交互に足音を再生
 			if (useFootstep1_) {
 				footstepSource1_->SetPosition(position_);
 				footstepSource1_->Update(listenerPos, listenerForward);
 				footstepSource1_->Play(false);  // ループなし
+				OutputDebugStringA("Enemy: Played footstep 1\n");
 			} else {
 				footstepSource2_->SetPosition(position_);
 				footstepSource2_->Update(listenerPos, listenerForward);
 				footstepSource2_->Play(false);  // ループなし
+				OutputDebugStringA("Enemy: Played footstep 2\n");
 			}
 
 			// 次回は別の足音を使用
 			useFootstep1_ = !useFootstep1_;
+		} else {
+			OutputDebugStringA("Enemy: Footstep sources are null!\n");
 		}
 
 		lastAnimationTime_ = currentTime;

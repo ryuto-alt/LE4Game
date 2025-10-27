@@ -28,8 +28,12 @@ SpatialAudioSource::~SpatialAudioSource() {
 bool SpatialAudioSource::Initialize(const std::string& audioName, const Vector3& position) {
     audioName_ = audioName;
     position_ = position;
+
+    // AudioManagerにオーディオファイルをロード（MP3形式）
+    AudioManager::GetInstance()->LoadMP3(audioName_, audioName_);
+
     isInitialized_ = true;
-    
+
     return true;
 }
 
