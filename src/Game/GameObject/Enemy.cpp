@@ -23,6 +23,8 @@ Enemy::Enemy()
 	, navMesh_(nullptr)
 	, currentWaypointIndex_(0)
 	, pathUpdateTimer_(0.0f)
+	, isAtCorner_(false)
+	, cornerSlowdownFactor_(1.0f)
 	, audioListener_(nullptr)
 	, useFootstep1_(true)
 	, lastAnimationTime_(0.0f) {
@@ -337,6 +339,12 @@ void Enemy::DrawUI() {
 			float targetRotation = std::atan2(toWaypoint.x, toWaypoint.z);
 			ImGui::Text("Current Rotation: %.2f deg", currentRotationY_ * 180.0f / 3.14159f);
 			ImGui::Text("Target Rotation: %.2f deg", targetRotation * 180.0f / 3.14159f);
+
+			// 角検知情報
+			ImGui::Text("At Corner: %s", isAtCorner_ ? "YES" : "No");
+			if (isAtCorner_) {
+				ImGui::Text("Corner Slowdown: %.1f%%", cornerSlowdownFactor_ * 100.0f);
+			}
 		}
 	} else {
 		ImGui::Text("NavMesh Mode: Direct Chase (No NavMesh)");
@@ -660,7 +668,7 @@ void Enemy::UpdateNavMeshPath() {
 	}
 }
 
-// パスに沿って移動
+// パスに沿って移動（先読みで滑らかに）
 void Enemy::FollowPath() {
 	if (currentPath_.empty() || currentWaypointIndex_ >= static_cast<int>(currentPath_.size())) {
 		return;
@@ -678,7 +686,7 @@ void Enemy::FollowPath() {
 	float distanceToWaypoint = std::sqrt(toWaypoint.x * toWaypoint.x + toWaypoint.z * toWaypoint.z);
 
 	// ウェイポイントに到達したら次へ（判定を緩くして曲がり角でスムーズに）
-	const float WAYPOINT_REACH_THRESHOLD = 2.0f;  // 到達判定を緩く
+	const float WAYPOINT_REACH_THRESHOLD = 3.0f;  // さらに緩く
 	if (distanceToWaypoint < WAYPOINT_REACH_THRESHOLD) {
 		currentWaypointIndex_++;
 		if (currentWaypointIndex_ >= static_cast<int>(currentPath_.size())) {
@@ -689,15 +697,61 @@ void Enemy::FollowPath() {
 		return;
 	}
 
-	// 正規化
-	float invLength = 1.0f / distanceToWaypoint;
-	toWaypoint.x *= invLength;
-	toWaypoint.z *= invLength;
+	// 先読み：次のウェイポイントがある場合、そちらにも少し引き寄せられる
+	Vector3 targetDirection = toWaypoint;
+	isAtCorner_ = false;
+	cornerSlowdownFactor_ = 1.0f;
 
-	// 移動
-	position_.x += toWaypoint.x * moveSpeed_;
-	position_.z += toWaypoint.z * moveSpeed_;
+	if (currentWaypointIndex_ + 1 < static_cast<int>(currentPath_.size())) {
+		const Vector3& nextWaypoint = currentPath_[currentWaypointIndex_ + 1];
+		Vector3 toNextWaypoint = {
+			nextWaypoint.x - position_.x,
+			0.0f,
+			nextWaypoint.z - position_.z
+		};
+
+		float distToNext = std::sqrt(toNextWaypoint.x * toNextWaypoint.x + toNextWaypoint.z * toNextWaypoint.z);
+		if (distToNext > 0.001f) {
+			toNextWaypoint.x /= distToNext;
+			toNextWaypoint.z /= distToNext;
+
+			// 正規化された方向ベクトル
+			float normalizedToWaypointX = toWaypoint.x / distanceToWaypoint;
+			float normalizedToWaypointZ = toWaypoint.z / distanceToWaypoint;
+
+			// 角度を計算（内積）
+			float dotProduct = normalizedToWaypointX * toNextWaypoint.x + normalizedToWaypointZ * toNextWaypoint.z;
+			float angle = std::acos(std::clamp(dotProduct, -1.0f, 1.0f));
+
+			// 角度が大きい（急カーブ）場合は減速
+			const float SHARP_TURN_THRESHOLD = 1.0f; // 約57度
+			if (angle > SHARP_TURN_THRESHOLD) {
+				isAtCorner_ = true;
+				// 角度が急なほど減速（0.3倍～1.0倍）
+				cornerSlowdownFactor_ = 0.3f + (1.0f - angle / 3.14159f) * 0.7f;
+			}
+
+			// 現在のウェイポイントに近いほど次のウェイポイントの影響を強くする
+			float blendFactor = 1.0f - (distanceToWaypoint / WAYPOINT_REACH_THRESHOLD);
+			blendFactor = std::clamp(blendFactor, 0.0f, 0.6f);  // 最大60%の影響
+
+			targetDirection.x = normalizedToWaypointX * (1.0f - blendFactor) + toNextWaypoint.x * blendFactor;
+			targetDirection.z = normalizedToWaypointZ * (1.0f - blendFactor) + toNextWaypoint.z * blendFactor;
+		}
+	}
+
+	// 正規化
+	float targetLength = std::sqrt(targetDirection.x * targetDirection.x + targetDirection.z * targetDirection.z);
+	if (targetLength > 0.001f) {
+		targetDirection.x /= targetLength;
+		targetDirection.z /= targetLength;
+	}
+
+	// 移動（角では減速）
+	float actualSpeed = moveSpeed_ * cornerSlowdownFactor_;
+	position_.x += targetDirection.x * actualSpeed;
+	position_.z += targetDirection.z * actualSpeed;
 
 	// 移動方向を向く
-	currentRotationY_ = std::atan2(toWaypoint.x, toWaypoint.z);
+	currentRotationY_ = std::atan2(targetDirection.x, targetDirection.z);
 }

@@ -46,15 +46,15 @@ void GamePlayScene::Initialize() {
         }
     }
 
-    // NavMesh設定のデフォルト値 - 壁衝突を完全回避
+    // NavMesh設定のデフォルト値 - 壁衝突を絶対に回避
     navMeshSettings_.cellSize = 0.15f;          // 解像度を上げる（細かく）
     navMeshSettings_.cellHeight = 0.1f;
     navMeshSettings_.agentHeight = 2.0f;
-    navMeshSettings_.agentRadius = 1.5f;        // さらに大きく！壁から完全に離れる
+    navMeshSettings_.agentRadius = 2.0f;        // 最大！壁から完全に離れる
     navMeshSettings_.agentMaxClimb = 0.3f;
     navMeshSettings_.agentMaxSlope = 45.0f;
-    navMeshSettings_.edgeMaxError = 0.6f;       // さらに滑らかに
-    navMeshSettings_.detailSampleDist = 2.0f;   // より詳細に
+    navMeshSettings_.edgeMaxError = 0.5f;       // 最も滑らかに
+    navMeshSettings_.detailSampleDist = 1.5f;   // 最も詳細に
 
     const std::string navMeshPath = "Resources/NavMesh/stage.navmesh";
     const std::string navMeshDir = "Resources/NavMesh";

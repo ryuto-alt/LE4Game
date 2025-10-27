@@ -101,6 +101,8 @@ private:
 	int currentWaypointIndex_;
 	float pathUpdateTimer_;
 	const float PATH_UPDATE_INTERVAL = 0.5f; // 0.5秒ごとにパス更新
+	bool isAtCorner_;  // 角を曲がっているかどうか
+	float cornerSlowdownFactor_;  // 角での減速率
 
 	// Audio
 	SpatialAudioListener* audioListener_;
