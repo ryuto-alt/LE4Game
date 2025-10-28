@@ -30,12 +30,18 @@
   },
   "player": {
     "position": [0.0, 0.0, 0.0],
+    "rotation": [0.0, 90.0, 0.0],
     "useFPSCamera": true,
     "enableCollision": false
   },
   "enemies": [
     {
-      "position": [15.0, 0.0, 0.0]
+      "position": [15.0, 0.0, 0.0],
+      "aiConfig": {
+        "aggressiveness": 10.0,
+        "intelligence": 8.0,
+        "mobility": 1.0
+      }
     }
   ],
   "objects": [

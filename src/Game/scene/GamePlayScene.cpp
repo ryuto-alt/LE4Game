@@ -80,6 +80,28 @@ void GamePlayScene::Initialize() {
             AddNavMeshLog("Player and AudioListener set to Enemy");
         }
     }
+
+    // プレイヤーのカメラを敵の方向に向ける
+    if (player_ && enemy_ && camera_) {
+        Vector3 playerPos = player_->GetPosition();
+        Vector3 enemyPos = enemy_->GetPosition();
+
+        // 敵への方向ベクトルを計算
+        Vector3 direction = {
+            enemyPos.x - playerPos.x,
+            enemyPos.y - playerPos.y,
+            enemyPos.z - playerPos.z
+        };
+
+        // Y軸回転角度を計算（atan2でラジアンを取得し、ラジアンのまま使用）
+        float angleY = atan2f(direction.x, direction.z);
+
+        // カメラの回転を設定
+        Vector3 currentRotation = camera_->GetRotate();
+        camera_->SetRotate({currentRotation.x, angleY, currentRotation.z});
+
+        OutputDebugStringA("Player camera set to face enemy\n");
+    }
 }
 
 
@@ -167,7 +189,15 @@ void GamePlayScene::Update() {
     if (enemy_) {
         enemy_->SetDirectionalLight(const_cast<DirectionalLight*>(&dirLight));
         enemy_->SetSpotLight(const_cast<SpotLight*>(&spotLight));
+
+        // 敵の位置を保存
+        Vector3 frozenPosition = enemy_->GetPosition();
+
+        // Updateを呼んでアニメーションと描画を更新
         enemy_->Update();
+
+        // 位置を元に戻して固定
+        enemy_->SetPosition(frozenPosition);
     }
 
     // 全シーンオブジェクトを更新

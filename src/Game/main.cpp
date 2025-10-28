@@ -207,6 +207,41 @@ cleanup:
     DestroyWindow(hwnd);
     delete gifImage;
     Gdiplus::GdiplusShutdown(gdiplusToken);
+
+    // コンティニュー確認ダイアログ
+    int result = MessageBoxW(
+        nullptr,
+        L"コンティニューしますか？",
+        L"ゲームオーバー",
+        MB_YESNO | MB_ICONQUESTION | MB_TOPMOST
+    );
+
+    if (result == IDYES) {
+        // 「はい」が押された場合、ゲームを再起動
+        char exePath[MAX_PATH];
+        GetModuleFileNameA(nullptr, exePath, MAX_PATH);
+
+        STARTUPINFOA si = {};
+        si.cb = sizeof(si);
+        PROCESS_INFORMATION pi = {};
+
+        // 通常モードで起動（引数なし）
+        if (CreateProcessA(
+            exePath,
+            nullptr,
+            nullptr,
+            nullptr,
+            FALSE,
+            0,
+            nullptr,
+            nullptr,
+            &si,
+            &pi
+        )) {
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
+        }
+    }
 }
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int) {
