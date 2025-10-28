@@ -15,7 +15,6 @@ public:
     void Finalize() override;
 
 private:
-    std::unique_ptr<Sprite> gameOverBgSprite_;
     std::unique_ptr<Sprite> gameOverTextSprite_;
     std::unique_ptr<Sprite> retrySprite_;
     std::unique_ptr<Sprite> titleSprite_;

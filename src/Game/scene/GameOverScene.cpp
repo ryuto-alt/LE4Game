@@ -17,14 +17,21 @@ void GameOverScene::Initialize() {
     horrorEffect_ = std::make_unique<PostProcess>();
     horrorEffect_->Initialize(dxCommon_, srvManager_);
 
-    // ゲームオーバースプライトの初期化（一時的に既存のテクスチャを使用）
-    gameOverBgSprite_ = std::make_unique<Sprite>();
-    gameOverBgSprite_->Initialize(spriteCommon_, "Resources/textures/Title/Title_bg.png");
-    gameOverBgSprite_->SetSize({1280.0f, 720.0f});
+    // TVノイズのみ - 常に最大強度で表示
+    if (horrorEffect_) {
+        horrorEffect_->SetHorrorParams(
+            0.0f,   // time
+            1.0f,   // noiseIntensity（最大）
+            0.3f,   // distortionIntensity（軽め）
+            0.0f,   // bloodAmount
+            0.5f    // vignetteIntensity
+        );
+    }
 
+    // ゲームオーバーテキストスプライトのみ初期化
     gameOverTextSprite_ = std::make_unique<Sprite>();
     gameOverTextSprite_->Initialize(spriteCommon_, "Resources/textures/Title/Title_moji.png");
-    gameOverTextSprite_->SetPosition({640.0f, 200.0f});
+    gameOverTextSprite_->SetPosition({640.0f, 360.0f});
     gameOverTextSprite_->SetAnchorPoint({0.5f, 0.5f});
 
     retrySprite_ = std::make_unique<Sprite>();
@@ -48,6 +55,18 @@ void GameOverScene::Update() {
     camera_->Update();
 
     float deltaTime = 1.0f / 60.0f;
+    time_ += deltaTime;
+
+    // TVノイズのパラメータを更新（時間だけ）
+    if (horrorEffect_) {
+        horrorEffect_->SetHorrorParams(
+            time_,
+            1.0f,   // noiseIntensity（常に最大）
+            0.3f,   // distortionIntensity
+            0.0f,   // bloodAmount
+            0.5f    // vignetteIntensity
+        );
+    }
 
     // キーボード入力フラグ
     bool keyPressed = false;
@@ -103,22 +122,10 @@ void GameOverScene::Update() {
     }
 
     // スプライトの更新
-    gameOverBgSprite_->Update();
     gameOverTextSprite_->Update();
     retrySprite_->Update();
     titleSprite_->Update();
 
-    // ホラーエフェクトのパラメータ更新
-    time_ += deltaTime;
-    if (horrorEffect_) {
-        horrorEffect_->SetHorrorParams(
-            time_,
-            0.5f,  // ノイズ強度
-            0.8f,  // 歪み強度
-            0.5f,  // 血エフェクト強度
-            0.95f  // ビネット強度（暗く）
-        );
-    }
 
     // マウスクリックで決定
     DIMOUSESTATE mouseState;
@@ -144,7 +151,7 @@ void GameOverScene::Update() {
 }
 
 void GameOverScene::Draw() {
-    // ポストプロセス用のレンダーターゲットに描画
+    // TVノイズポストプロセス用のレンダーターゲットに描画開始
     if (horrorEffect_) {
         horrorEffect_->PreDraw();
     }
@@ -153,13 +160,12 @@ void GameOverScene::Draw() {
         spriteCommon_->CommonDraw();
     }
 
-    // 背景とテキスト描画
-    if (gameOverBgSprite_) gameOverBgSprite_->Draw();
+    // テキストとメニューのみ描画
     if (gameOverTextSprite_) gameOverTextSprite_->Draw();
     if (retrySprite_) retrySprite_->Draw();
     if (titleSprite_) titleSprite_->Draw();
 
-    // ポストプロセスを適用して画面に描画
+    // TVノイズを適用して画面に描画
     if (horrorEffect_) {
         horrorEffect_->PostDraw();
     }
@@ -171,7 +177,6 @@ void GameOverScene::Finalize() {
         horrorEffect_.reset();
     }
 
-    gameOverBgSprite_.reset();
     gameOverTextSprite_.reset();
     retrySprite_.reset();
     titleSprite_.reset();
