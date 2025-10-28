@@ -15,7 +15,6 @@ public:
 	void Initialize(Camera* camera = nullptr);
 	void Update();
 	void Draw();
-	void DrawUI();
 	void Finalize();
 
 	// Position
@@ -70,47 +69,47 @@ private:
 	std::unique_ptr<AnimatedModel> animatedModel_;
 
 	// Transform
-	Vector3 position_;
-	float currentRotationY_;
-	float targetRotationY_;  // 目標回転角（補間用）
-	float currentSpeed_;  // 現在の速度（補間用）
+	Vector3 position_{0.0f, 0.0f, 0.0f};
+	float currentRotationY_{0.0f};
+	float targetRotationY_{0.0f};
+	float currentSpeed_{0.0f};
 
 	// Animation
-	bool animationPaused_;
-	bool isBlending_;
-	float blendTimer_;
+	bool animationPaused_{false};
+	bool isBlending_{false};
+	float blendTimer_{0.0f};
 	const float BLEND_DURATION = 0.3f;
 
 	// Animation toggle for ImGui
-	bool animationEnabled_;
+	bool animationEnabled_{true};
 
 	// Current animation index for ImGui combo
-	int currentAnimationIndex_;
+	int currentAnimationIndex_{0};
 
 	// Player tracking
-	Player* player_;
-	float detectionRange_;
-	float moveSpeed_;
-	bool isChasing_;
+	Player* player_{nullptr};
+	float detectionRange_{100.0f};
+	float moveSpeed_{0.125f};
+	bool isChasing_{false};
 
 	// Wall avoidance (for UI/future use)
-	float avoidanceRadius_;
-	float alternativeTimer_;
+	float avoidanceRadius_{5.0f};
+	float alternativeTimer_{0.0f};
 
 	// NavMesh pathfinding
-	NavMesh* navMesh_;
+	NavMesh* navMesh_{nullptr};
 	std::vector<Vector3> currentPath_;
-	int currentWaypointIndex_;
-	float pathUpdateTimer_;
-	const float PATH_UPDATE_INTERVAL = 0.5f; // 0.5秒ごとにパス更新
-	bool isAtCorner_;  // 角を曲がっているかどうか
-	float cornerSlowdownFactor_;  // 角での減速率
+	int currentWaypointIndex_{0};
+	float pathUpdateTimer_{0.0f};
+	const float PATH_UPDATE_INTERVAL = 0.5f;
+	bool isAtCorner_{false};
+	float cornerSlowdownFactor_{1.0f};
 
 	// Audio
-	SpatialAudioListener* audioListener_;
+	SpatialAudioListener* audioListener_{nullptr};
 	std::unique_ptr<SpatialAudioSource> footstepSource1_;
 	std::unique_ptr<SpatialAudioSource> footstepSource2_;
-	bool useFootstep1_;  // true: footstep1を使用, false: footstep2を使用
-	float lastAnimationTime_;  // アニメーション時間の記録
-	const float FOOTSTEP_INTERVAL = 0.3f;  // 足音の間隔
+	bool useFootstep1_{true};
+	float lastAnimationTime_{0.0f};
+	const float FOOTSTEP_INTERVAL = 0.3f;
 };

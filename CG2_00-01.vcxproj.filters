@@ -69,9 +69,6 @@
     <Filter Include="src\Game\Player">
       <UniqueIdentifier>{c7d1c0b8-5331-4b77-8564-6968ba414bf0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Game\Object">
-      <UniqueIdentifier>{fc5e1a67-a2ed-49c6-963e-98ec93a2f004}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Game\Light">
       <UniqueIdentifier>{aebc30fc-f6a2-41f9-b277-3cc61bdf7280}</UniqueIdentifier>
     </Filter>

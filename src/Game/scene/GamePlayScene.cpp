@@ -208,10 +208,6 @@ void GamePlayScene::Draw() {
         lightManager_->DrawImGui();
     }
 
-    if (enemy_) {
-        enemy_->DrawUI();
-    }
-
     auto* collisionManager = Collision::AABBCollisionManager::GetInstance();
     if (collisionManager) {
         collisionManager->DrawImGui();

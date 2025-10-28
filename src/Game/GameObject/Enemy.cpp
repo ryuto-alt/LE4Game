@@ -2,37 +2,11 @@
 #include "Player.h"
 #include "NavMesh/NavMesh.h"
 #include "NavMesh/NavMeshBuilder.h"
-#include "imgui.h"
-#include <numbers>
 #include <cmath>
 #include "Collision/AABBCollision.h"
 #include "DetourNavMeshQuery.h"
 
-Enemy::Enemy()
-	: position_({0.0f, 0.0f, 0.0f})
-	, currentRotationY_(0.0f)
-	, targetRotationY_(0.0f)
-	, currentSpeed_(0.0f)
-	, animationPaused_(false)
-	, isBlending_(false)
-	, blendTimer_(0.0f)
-	, animationEnabled_(true)
-	, currentAnimationIndex_(0)
-	, player_(nullptr)
-	, detectionRange_(100.0f)
-	, moveSpeed_(0.125f)  
-	, isChasing_(false)
-	, avoidanceRadius_(5.0f)
-	, alternativeTimer_(0.0f)
-	, navMesh_(nullptr)
-	, currentWaypointIndex_(0)
-	, pathUpdateTimer_(0.0f)
-	, isAtCorner_(false)
-	, cornerSlowdownFactor_(1.0f)
-	, audioListener_(nullptr)
-	, useFootstep1_(true)
-	, lastAnimationTime_(0.0f) {
-}
+Enemy::Enemy() = default;
 
 Enemy::~Enemy() {
 }
@@ -84,25 +58,10 @@ void Enemy::Initialize(Camera* camera) {
 		collisionManager->RegisterObject(object3d_.get(), enemyAABB, false, "Enemy");  // falseで無効化
 	}
 
-	// マテリアルの確認と設定 - Playerと同じロジック
+	// PBRマテリアルでない場合、強制的にPBRを有効化
 	if (animatedModel_) {
 		const MaterialData& material = animatedModel_->GetMaterial();
-		char debugMsg[512];
-		sprintf_s(debugMsg, "Enemy Model Material:\n"
-			"  isPBR: %s\n"
-			"  BaseColor: R=%.3f, G=%.3f, B=%.3f, A=%.3f\n"
-			"  Metallic=%.3f, Roughness=%.3f\n"
-			"  Texture: %s\n",
-			material.isPBR ? "true" : "false",
-			material.baseColorFactor.x, material.baseColorFactor.y,
-			material.baseColorFactor.z, material.baseColorFactor.w,
-			material.metallicFactor, material.roughnessFactor,
-			material.textureFilePath.empty() ? "None" : material.textureFilePath.c_str());
-		OutputDebugStringA(debugMsg);
-
-		// PBRマテリアルでない場合、強制的にPBRを有効化
 		if (!material.isPBR) {
-			OutputDebugStringA("Enemy: Model is not PBR, forcing PBR settings...\n");
 			MaterialData& mutableMaterial = const_cast<MaterialData&>(animatedModel_->GetMaterial());
 			mutableMaterial.isPBR = true;
 			mutableMaterial.baseColorFactor = { 0.8f, 0.8f, 0.8f, 1.0f };
@@ -111,8 +70,6 @@ void Enemy::Initialize(Camera* camera) {
 			mutableMaterial.emissiveFactor = { 0.0f, 0.0f, 0.0f };
 			mutableMaterial.alphaMode = "OPAQUE";
 			mutableMaterial.doubleSided = false;
-
-			OutputDebugStringA("Enemy: Applied PBR material settings\n");
 			object3d_->SetModel(static_cast<Model*>(animatedModel_.get()));
 		}
 	}
@@ -129,8 +86,6 @@ void Enemy::Initialize(Camera* camera) {
 	footstepSource2_->SetVolume(0.8f);
 	footstepSource2_->SetMaxDistance(30.0f);
 	footstepSource2_->SetMinDistance(1.0f);
-
-	OutputDebugStringA("Enemy: Initialization complete with Walk, Run, and Scream animations\n");
 }
 
 void Enemy::Update() {
@@ -314,125 +269,6 @@ void Enemy::Draw() {
 	}
 }
 
-void Enemy::DrawUI() {
-	ImGui::Begin("Enemy Settings");
-
-	// NavMesh状態表示
-	ImGui::Text("NavMesh Valid: %s", (navMesh_ && navMesh_->IsValid()) ? "Yes" : "No");
-	ImGui::Text("Is Chasing: %s", isChasing_ ? "Yes" : "No");
-
-	// パス情報表示
-	if (navMesh_ && navMesh_->IsValid()) {
-		ImGui::Separator();
-		ImGui::Text("Path Info");
-		ImGui::Text("Path Waypoints: %d", static_cast<int>(currentPath_.size()));
-		ImGui::Text("Current Waypoint: %d", currentWaypointIndex_);
-
-		// 次のウェイポイントの情報を表示
-		if (!currentPath_.empty() && currentWaypointIndex_ < static_cast<int>(currentPath_.size())) {
-			const Vector3& nextWaypoint = currentPath_[currentWaypointIndex_];
-			ImGui::Text("Next Waypoint: (%.1f, %.1f, %.1f)",
-				nextWaypoint.x, nextWaypoint.y, nextWaypoint.z);
-
-			// 現在の向きと次のウェイポイント方向を表示
-			Vector3 toWaypoint = {
-				nextWaypoint.x - position_.x,
-				0.0f,
-				nextWaypoint.z - position_.z
-			};
-			float targetRotation = std::atan2(toWaypoint.x, toWaypoint.z);
-			ImGui::Text("Current Rotation: %.2f deg", currentRotationY_ * 180.0f / 3.14159f);
-			ImGui::Text("Target Rotation: %.2f deg", targetRotation * 180.0f / 3.14159f);
-
-			// 角検知情報
-			ImGui::Text("At Corner: %s", isAtCorner_ ? "YES" : "No");
-			if (isAtCorner_) {
-				ImGui::Text("Corner Slowdown: %.1f%%", cornerSlowdownFactor_ * 100.0f);
-			}
-		}
-	} else {
-		ImGui::Text("NavMesh Mode: Direct Chase (No NavMesh)");
-	}
-
-	// アニメーションの有効/無効トグル
-	if (ImGui::Checkbox("Animation Enabled", &animationEnabled_)) {
-		if (animationEnabled_) {
-			PlayAnimation();
-		} else {
-			PauseAnimation();
-		}
-	}
-
-	// アニメーション選択
-	ImGui::Separator();
-	ImGui::Text("Animation Selection");
-
-	if (ImGui::Button("Walk", ImVec2(100, 0))) {
-		ChangeAnimation("Walk");
-		currentAnimationIndex_ = 0;
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Run", ImVec2(100, 0))) {
-		ChangeAnimation("Run");
-		currentAnimationIndex_ = 1;
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Scream", ImVec2(100, 0))) {
-		ChangeAnimation("Scream");
-		currentAnimationIndex_ = 2;
-	}
-
-	// AI設定
-	ImGui::Separator();
-	ImGui::Text("AI Settings");
-	ImGui::DragFloat("Detection Range", &detectionRange_, 1.0f, 0.0f, 100.0f);
-	ImGui::DragFloat("Move Speed", &moveSpeed_, 0.01f, 0.0f, 5.0f);
-	ImGui::DragFloat("Avoidance Radius", &avoidanceRadius_, 0.1f, 0.0f, 10.0f);
-
-	// プレイヤー検知デバッグ情報
-	if (player_) {
-		Vector3 playerPos = player_->GetPosition();
-		Vector3 toPlayer = {
-			playerPos.x - position_.x,
-			0.0f,
-			playerPos.z - position_.z
-		};
-		float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.z * toPlayer.z);
-
-		ImGui::Text("Player Detected: %s", player_ ? "Yes" : "No");
-		ImGui::Text("Distance to Player: %.2f", distanceToPlayer);
-		ImGui::Text("Is Chasing: %s", isChasing_ ? "Yes" : "No");
-		ImGui::Text("Player Pos: (%.2f, %.2f, %.2f)", playerPos.x, playerPos.y, playerPos.z);
-	} else {
-		ImGui::Text("Player: Not Set");
-	}
-
-	// 位置コントロール
-	ImGui::Separator();
-	ImGui::Text("Transform");
-	float pos[3] = {position_.x, position_.y, position_.z};
-	if (ImGui::DragFloat3("Position", pos, 0.1f)) {
-		SetPosition({pos[0], pos[1], pos[2]});
-	}
-
-	// 回転コントロール
-	float rotationDeg = currentRotationY_ * 180.0f / std::numbers::pi_v<float>;
-	if (ImGui::DragFloat("Rotation Y (deg)", &rotationDeg, 1.0f)) {
-		currentRotationY_ = rotationDeg * std::numbers::pi_v<float> / 180.0f;
-	}
-
-	// アニメーション情報表示
-	if (animatedModel_) {
-		ImGui::Separator();
-		ImGui::Text("Animation Info");
-		std::string currentAnim = GetCurrentAnimationName();
-		ImGui::Text("Current: %s", currentAnim.c_str());
-		ImGui::Text("Paused: %s", animationPaused_ ? "Yes" : "No");
-		ImGui::Text("Enabled: %s", animationEnabled_ ? "Yes" : "No");
-	}
-
-	ImGui::End();
-}
 
 void Enemy::Finalize() {
 	if (animatedModel_) {
@@ -519,15 +355,9 @@ void Enemy::SetCamera(Camera* camera) {
 
 void Enemy::ChangeAnimation(const std::string& animationName) {
 	if (animatedModel_) {
-		// TransitionToAnimationを使用してスムーズな補間を適用
 		animatedModel_->TransitionToAnimation(animationName, BLEND_DURATION);
 		isBlending_ = true;
 		blendTimer_ = 0.0f;
-
-		char debugMsg[256];
-		sprintf_s(debugMsg, "Enemy: Transitioning to animation %s with blend duration %.2fs\n",
-			animationName.c_str(), BLEND_DURATION);
-		OutputDebugStringA(debugMsg);
 	}
 }
 
@@ -663,10 +493,6 @@ void Enemy::UpdateNavMeshPath() {
 			currentPath_.push_back({ x, y, z });
 		}
 		currentWaypointIndex_ = 0;
-
-		char msg[256];
-		sprintf_s(msg, "Enemy: Path updated with %d waypoints\n", path.GetWaypointCount());
-		OutputDebugStringA(msg);
 	} else {
 		currentPath_.clear();
 		currentWaypointIndex_ = 0;
