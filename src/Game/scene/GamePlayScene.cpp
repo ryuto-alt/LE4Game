@@ -3,6 +3,8 @@
 #include "UnoEngine.h"
 #include "SceneManager.h"
 #include "InstancedRenderer.h"
+#include "NavMesh/NavMeshSystem.h"
+#include "NavMesh/EnemyAI.h"
 #include <cmath>
 #include <filesystem>
 
@@ -53,6 +55,22 @@ void GamePlayScene::Initialize() {
         if (navMeshManager && navMeshManager->GetNavMesh()) {
             enemy_->SetNavMesh(navMeshManager->GetNavMesh());
             AddNavMeshLog("NavMesh set to Enemy");
+
+            // 新しいAIシステム用にNavMeshSystemを作成して設定
+            // 注意: 今は旧NavMeshシステムを使用（useNewAI_ = false）
+            // NavMeshSystemのロードに失敗するため、一時的に無効化
+            /*
+            navMeshSystem_ = std::make_unique<NavMeshSystem>();
+            if (navMeshSystem_->LoadNavMeshFromFile("externals/navimap/stage.navmesh")) {
+                enemy_->SetNavMeshSystem(navMeshSystem_.get());
+                AddNavMeshLog("New AI System initialized with NavMeshSystem");
+            } else {
+                AddNavMeshLog("Warning: Failed to load NavMeshSystem for new AI");
+            }
+            */
+            // 旧システムを使用
+            enemy_->useNewAI_ = false;
+            AddNavMeshLog("Using old AI system (NavMeshSystem load failed)");
         }
         if (player_) {
             enemy_->SetPlayer(player_.get());
@@ -223,11 +241,15 @@ void GamePlayScene::Draw() {
         // NavMeshManagerのImGui描画
         bool showViz = engine->IsNavVis();
         if (ImGui::Checkbox("Show NavMesh Visualization", &showViz)) {
-            engine->SetNavVis(showViz);
-            if (showViz && !engine->IsNavVis()) {
-                // 視覚化を有効にする場合、まだ作成されていなければ作成
+            if (showViz) {
+                // 視覚化を有効にする場合、視覚化オブジェクトを作成
                 engine->CreateNavVis();
                 engine->SetNavVis(true);
+                AddNavMeshLog("NavMesh visualization enabled");
+            } else {
+                // 視覚化を無効にする
+                engine->SetNavVis(false);
+                AddNavMeshLog("NavMesh visualization disabled");
             }
         }
 
@@ -239,8 +261,37 @@ void GamePlayScene::Draw() {
             }
         }
 
+        if (ImGui::CollapsingHeader("About Recast Navigation")) {
+            ImGui::TextWrapped("This project uses Recast Navigation, the industry-standard NavMesh library.");
+            ImGui::TextWrapped("Used in: Unreal Engine, Unity, many AAA games");
+            ImGui::Separator();
+            ImGui::Text("Precision depends on settings:");
+            ImGui::BulletText("Lower Cell Size = Higher precision (0.1-0.2 recommended)");
+            ImGui::BulletText("Smaller Agent Radius = Closer to walls (0.3-0.6)");
+            ImGui::BulletText("Lower Edge Max Error = Smoother paths (0.5-1.0)");
+            ImGui::Separator();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "This is professional-grade pathfinding!");
+            ImGui::TextWrapped("If precision seems low, try the High Precision Preset below.");
+        }
+
         NavMeshBuildSettings& settings = engine->GetNavSet();
         if (ImGui::CollapsingHeader("NavMesh Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
+            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Quick Fix: Apply High Precision Preset");
+            ImGui::Separator();
+
+            if (ImGui::Button("Apply High Precision Preset")) {
+                settings.cellSize = 0.15f;
+                settings.cellHeight = 0.2f;
+                settings.agentHeight = 2.0f;
+                settings.agentRadius = 0.4f;
+                settings.agentMaxClimb = 0.5f;
+                settings.agentMaxSlope = 45.0f;
+                settings.edgeMaxError = 0.8f;
+                settings.detailSampleDist = 6.0f;
+                AddNavMeshLog("Applied high precision preset");
+            }
+
+            ImGui::Separator();
             ImGui::SliderFloat("Cell Size", &settings.cellSize, 0.05f, 1.0f);
             ImGui::SliderFloat("Cell Height", &settings.cellHeight, 0.05f, 0.5f);
             ImGui::SliderFloat("Agent Height", &settings.agentHeight, 0.5f, 5.0f);
@@ -262,6 +313,13 @@ void GamePlayScene::Draw() {
             if (enemy_ && navMesh) {
                 enemy_->SetNavMesh(navMesh);
                 AddNavMeshLog("NavMesh re-set to Enemy");
+
+                // 新しいAIシステムも更新
+                navMeshSystem_ = std::make_unique<NavMeshSystem>();
+                if (navMeshSystem_->LoadNavMeshFromFile("externals/navimap/stage.navmesh")) {
+                    enemy_->SetNavMeshSystem(navMeshSystem_.get());
+                    AddNavMeshLog("New AI System re-initialized");
+                }
             }
         }
 
@@ -273,6 +331,13 @@ void GamePlayScene::Draw() {
                 NavMesh* navMesh = navMeshManager->GetNavMesh();
                 if (enemy_ && navMesh) {
                     enemy_->SetNavMesh(navMesh);
+
+                    // 新しいAIシステムも更新
+                    navMeshSystem_ = std::make_unique<NavMeshSystem>();
+                    if (navMeshSystem_->LoadNavMeshFromFile(navMeshPath)) {
+                        enemy_->SetNavMeshSystem(navMeshSystem_.get());
+                        AddNavMeshLog("New AI System loaded");
+                    }
                 }
             }
         }
@@ -307,6 +372,50 @@ void GamePlayScene::Draw() {
             }
         } else {
             ImGui::Text("NavMesh: Not Initialized");
+        }
+    }
+
+    // Enemy AI Debug情報
+    if (ImGui::CollapsingHeader("Enemy AI Debug", ImGuiTreeNodeFlags_DefaultOpen)) {
+        if (enemy_) {
+            ImGui::Text("Enemy Position: (%.2f, %.2f, %.2f)",
+                enemy_->GetPosition().x,
+                enemy_->GetPosition().y,
+                enemy_->GetPosition().z);
+
+            ImGui::Text("Using New AI: %s", enemy_->useNewAI_ ? "YES" : "NO");
+
+            if (enemy_->enemyAI_) {
+                const char* stateNames[] = { "Idle", "Patrol", "Chase", "Attack", "Search" };
+                int stateIndex = static_cast<int>(enemy_->enemyAI_->GetState());
+                ImGui::Text("EnemyAI State: %s (%d)",
+                    (stateIndex >= 0 && stateIndex < 5) ? stateNames[stateIndex] : "Unknown",
+                    stateIndex);
+                ImGui::Text("EnemyAI Position: (%.2f, %.2f, %.2f)",
+                    enemy_->enemyAI_->GetPosition().x,
+                    enemy_->enemyAI_->GetPosition().y,
+                    enemy_->enemyAI_->GetPosition().z);
+                ImGui::Text("Patrol Mode: %s", enemy_->enemyAI_->IsPatrolModeEnabled() ? "Enabled" : "Disabled");
+                ImGui::Text("Target Position: (%.2f, %.2f, %.2f)",
+                    enemy_->enemyAI_->GetTargetPosition().x,
+                    enemy_->enemyAI_->GetTargetPosition().y,
+                    enemy_->enemyAI_->GetTargetPosition().z);
+                ImGui::Text("Current Path Size: %d", static_cast<int>(enemy_->enemyAI_->GetCurrentPath().size()));
+                ImGui::Text("Current Waypoint: %d", enemy_->enemyAI_->GetCurrentWaypointIndex());
+
+                Vector3 moveDir = enemy_->enemyAI_->GetMoveDirection();
+                ImGui::Text("Move Direction: (%.2f, %.2f, %.2f)", moveDir.x, moveDir.y, moveDir.z);
+            } else {
+                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "EnemyAI is NULL!");
+            }
+
+            if (navMeshSystem_) {
+                ImGui::Text("NavMeshSystem: Valid (%s)", navMeshSystem_->IsValid() ? "OK" : "Invalid");
+            } else {
+                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "NavMeshSystem is NULL!");
+            }
+        } else {
+            ImGui::Text("Enemy: Not Initialized");
         }
     }
 

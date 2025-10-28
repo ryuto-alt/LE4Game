@@ -7,6 +7,8 @@
 // Forward declaration
 class Player;
 class NavMesh;
+class EnemyAI;
+class NavMeshSystem;  // forward declarationのまま（cppでインクルード）
 
 class Enemy {
 public:
@@ -52,6 +54,9 @@ public:
 	// NavMesh
 	void SetNavMesh(NavMesh* navMesh) { navMesh_ = navMesh; }
 
+	// NavMeshSystem (for new AI)
+	void SetNavMeshSystem(NavMeshSystem* navMeshSystem);
+
 	// AI parameters
 	void SetIntelligence(float value);
 	void SetAggressiveness(float value);
@@ -69,6 +74,10 @@ public:
 	// Debug
 	bool debugDrawVision_{false};  // 視界デバッグ描画フラグ
 
+	// Debug accessors for ImGui (public for debugging)
+	std::unique_ptr<EnemyAI> enemyAI_;
+	bool useNewAI_{true};
+
 private:
 	void UpdateAnimation();
 	void UpdateFootstepAudio();
@@ -80,6 +89,7 @@ private:
 	void CheckAndHandleStuck();
 	void RecoverFromStuck();
 	bool IsPlayerInVision();
+	Vector3 GetRandomPatrolPoint();  // 徘徊用ランダムポイント取得
 
 	// 3D object and model
 	std::unique_ptr<Object3d> object3d_;
@@ -121,7 +131,7 @@ private:
 	float avoidanceRadius_{5.0f};
 	float alternativeTimer_{0.0f};
 
-	// NavMesh pathfinding
+	// NavMesh pathfinding (old system)
 	NavMesh* navMesh_{nullptr};
 	std::vector<Vector3> currentPath_;
 	int currentWaypointIndex_{0};

@@ -53,6 +53,14 @@ public:
     // プレイヤーが視界内か（LOS: Line of Sight チェック）
     bool IsPlayerVisible(const Vector3& playerPosition) const;
 
+    // 徘徊モード有効化
+    void EnablePatrolMode(bool enable) { patrolModeEnabled_ = enable; }
+    bool IsPatrolModeEnabled() const { return patrolModeEnabled_; }
+
+    // 徘徊範囲設定
+    void SetPatrolRadius(float radius) { patrolRadius_ = radius; }
+    void SetPatrolCenter(const Vector3& center) { patrolCenter_ = center; }
+
 private:
     // ステート更新
     void UpdateState(const Vector3& playerPosition);
@@ -68,6 +76,12 @@ private:
 
     // プレイヤーとの距離計算
     float DistanceToPlayer(const Vector3& playerPosition) const;
+
+    // 徘徊用: ランダムなNavMesh上の点を取得
+    Vector3 GetRandomPatrolPoint();
+
+    // 徘徊用: 次の徘徊ポイントを選択
+    void SelectNextPatrolPoint();
 
     // ナビメッシュシステム
     NavMeshSystem* navMeshSystem_;
@@ -97,6 +111,22 @@ private:
     // ステアリング（mdファイル: ローカルステアリング技術）
     float arrivalRadius_;       // 到着判定半径
     float waypointRadius_;      // ウェイポイント到達判定半径
+
+    // 徘徊パラメータ
+    bool patrolModeEnabled_;    // 徘徊モード有効フラグ
+    Vector3 patrolCenter_;      // 徘徊の中心位置
+    float patrolRadius_;        // 徘徊範囲の半径
+    Vector3 currentPatrolTarget_; // 現在の徘徊目標地点
+    float patrolWaitTimer_;     // 徘徊ポイント到着後の待機タイマー
+    float patrolWaitDuration_;  // 徘徊ポイントでの待機時間（ランダム化）
+    std::vector<Vector3> recentPatrolPoints_; // 最近訪れたパトロールポイント履歴
+    const int MAX_PATROL_HISTORY = 5; // 履歴保持数
+
+    // スタック検出
+    Vector3 lastStuckCheckPosition_; // スタック検出用の前回位置
+    float stuckCheckTimer_;     // スタック検出タイマー
+    float stuckCheckInterval_;  // スタック検出間隔
+    int stuckCounter_;          // スタック回数カウンター
 
     // デバッグ
     bool debugMode_;

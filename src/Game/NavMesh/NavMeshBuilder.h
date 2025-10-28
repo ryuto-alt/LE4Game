@@ -9,17 +9,17 @@
 // ナビメッシュ生成のためのパラメータ
 struct NavMeshBuildSettings {
     // Cell size (ボクセルの横幅)
-    // 推奨: agent_radius / 2 (屋外) または agent_radius / 3 (屋内)
-    float cellSize = 0.2f;
+    // 高精度設定: 0.15 (より細かいメッシュ)
+    float cellSize = 0.15f;
 
     // Cell height (ボクセルの高さ)
-    // 推奨: cellSize / 2
-    float cellHeight = 0.1f;
+    // 高精度設定: 0.2
+    float cellHeight = 0.2f;
 
-    // Agent parameters (Enemy scale 3.0を考慮)
+    // Agent parameters (高精度徘徊用)
     float agentHeight = 2.0f;      // エージェントの高さ
-    float agentRadius = 0.5f;      // エージェントの半径 (スケール3.0を考慮して少し大きめ)
-    float agentMaxClimb = 0.3f;    // 登れる段差の高さ
+    float agentRadius = 1.054f;    // エージェントの半径 (画像の値)
+    float agentMaxClimb = 0.5f;    // 登れる段差の高さ (画像の値)
     float agentMaxSlope = 45.0f;   // 登れる坂の最大角度(度)
 
     // Region settings
@@ -28,7 +28,7 @@ struct NavMeshBuildSettings {
 
     // Edge settings
     float edgeMaxLen = 12.0f;      // 最大エッジ長
-    float edgeMaxError = 1.3f;     // エッジ単純化エラー
+    float edgeMaxError = 0.8f;     // エッジ単純化エラー (低い値でより滑らか)
 
     // Detail mesh settings
     float detailSampleDist = 6.0f;  // 詳細メッシュサンプル距離
