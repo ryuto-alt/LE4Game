@@ -251,6 +251,69 @@
     <ClCompile Include="src\Engine\Scene\SceneConfigurator.cpp">
       <Filter>src\engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\Manager\NavMeshManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\NavMesh\NavMesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\NavMesh\NavMeshBuilder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\Recast.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAlloc.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastArea.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAssert.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastContour.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastFilter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastLayers.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastMesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastMeshDetail.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastRasterization.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastRegion.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourAlloc.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourAssert.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourCommon.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMeshBuilder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMeshQuery.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNode.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -436,6 +499,9 @@
     <ClInclude Include="src\Engine\Scene\SceneConfigurator.h">
       <Filter>src\engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\Manager\NavMeshManager.h" />
+    <ClInclude Include="src\Game\NavMesh\NavMesh.h" />
+    <ClInclude Include="src\Game\NavMesh\NavMeshBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">

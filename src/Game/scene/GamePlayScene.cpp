@@ -22,12 +22,19 @@ void GamePlayScene::Initialize() {
     );
 
     // ナビメッシュの初期化
-    navMesh_ = std::make_unique<NavMesh>();
-
-    // NavMeshのログをImGuiに表示するように設定
-    navMesh_->SetLogCallback([this](const std::string& message) {
+    navMeshManager_ = std::make_unique<NavMeshManager>();
+    navMeshManager_->SetLogCallback([this](const std::string& message) {
         AddNavMeshLog(message);
     });
+
+    const std::string navMeshPath = "externals/navimap/stage.navmesh";
+    navMeshManager_->Initialize(navMeshPath);
+
+    // NavMeshが読み込まれなかった場合は生成
+    if (!navMeshManager_->GetNavMesh() || !navMeshManager_->GetNavMesh()->IsValid()) {
+        AddNavMeshLog("No existing NavMesh found, auto-generating...");
+        navMeshManager_->GenerateAndSaveNavMesh(sceneObjects_, navMeshPath);
+    }
 
     // 3D空間オーディオリスナーの初期化
     audioListener_ = std::make_unique<SpatialAudioListener>();
@@ -35,64 +42,10 @@ void GamePlayScene::Initialize() {
         audioListener_->SetPosition(player_->GetPosition());
     }
 
-    // シーンオブジェクトのロード確認
-    char msg[256];
-    sprintf_s(msg, "=== Initialize: Scene Objects ===");
-    AddNavMeshLog(msg);
-    sprintf_s(msg, "Loaded %d scene objects", static_cast<int>(sceneObjects_.size()));
-    AddNavMeshLog(msg);
-    for (size_t i = 0; i < sceneObjects_.size(); ++i) {
-        if (sceneObjects_[i] && sceneObjects_[i]->GetModel()) {
-            sprintf_s(msg, "  Object %d: Has model", static_cast<int>(i));
-            AddNavMeshLog(msg);
-        } else {
-            sprintf_s(msg, "  Object %d: No model!", static_cast<int>(i));
-            AddNavMeshLog(msg);
-        }
-    }
-
-    // NavMesh設定のデフォルト値
-    navMeshSettings_.cellSize = 0.202f;
-    navMeshSettings_.cellHeight = 0.100f;
-    navMeshSettings_.agentHeight = 2.000f;
-    navMeshSettings_.agentRadius = 2.031f;
-    navMeshSettings_.agentMaxClimb = 0.315f;
-    navMeshSettings_.agentMaxSlope = 45.000f;
-    navMeshSettings_.edgeMaxError = 1.300f;
-    navMeshSettings_.detailSampleDist = 6.080f;
-
-    const std::string navMeshPath = "externals/navimap/stage.navmesh";
-    const std::string navMeshDir = "externals/navimap";
-
-    // NavMeshディレクトリを作成（存在しない場合）
-    std::error_code ec;
-    std::filesystem::create_directories(navMeshDir, ec);
-    if (ec) {
-        sprintf_s(msg, "ERROR: Failed to create NavMesh directory: %s", ec.message().c_str());
-        AddNavMeshLog(msg);
-    } else {
-        sprintf_s(msg, "NavMesh directory ready: %s", navMeshDir.c_str());
-        AddNavMeshLog(msg);
-    }
-
-    // 保存済みナビメッシュがあれば読み込み、なければ自動生成
-    if (std::filesystem::exists(navMeshPath)) {
-        AddNavMeshLog("Loading existing NavMesh...");
-        if (navMesh_->LoadFromFile(navMeshPath)) {
-            AddNavMeshLog("SUCCESS: NavMesh loaded from file");
-        } else {
-            AddNavMeshLog("Failed to load NavMesh, auto-generating new one...");
-            GenerateAndSaveNavMesh(navMeshPath);
-        }
-    } else {
-        AddNavMeshLog("No existing NavMesh found, auto-generating...");
-        GenerateAndSaveNavMesh(navMeshPath);
-    }
-
     // EnemyにNavMeshとAudioListenerを設定
     if (enemy_) {
-        if (navMesh_) {
-            enemy_->SetNavMesh(navMesh_.get());
+        if (navMeshManager_->GetNavMesh()) {
+            enemy_->SetNavMesh(navMeshManager_->GetNavMesh());
             AddNavMeshLog("NavMesh set to Enemy");
         }
         if (player_) {
@@ -123,6 +76,7 @@ void GamePlayScene::Update() {
         previousHeight = currentHeight;
     }
 
+#ifdef _DEBUG
     // ImGuiで魚眼レンズ強度と範囲を調整
     ImGui::Begin("Scene Settings");
     ImGui::Text("Camera FOV (degrees): %.2f", sceneData_.camera.fovDegrees);
@@ -131,6 +85,7 @@ void GamePlayScene::Update() {
     ImGui::SliderFloat("Fisheye Strength", &fisheyeStrength_, 0.0f, 100.0f);
     ImGui::SliderFloat("Fisheye Radius", &fisheyeRadius_, 0.1f, 3.0f);
     ImGui::End();
+#endif
 
     // 魚眼強度と範囲を適用
     if (postProcess_) {
@@ -203,118 +158,9 @@ void GamePlayScene::Update() {
     }
     player_->Update(engine);
 
-    // NavMesh視覚化の更新
-    if (showNavMeshVisualization_ && navMesh_ && navMesh_->IsValid()) {
-        if (!navMeshDebugObject_) {
-            // 初回作成
-            UnoEngine* unoEngine = UnoEngine::GetInstance();
-            navMeshDebugObject_ = unoEngine->CreateObject3D();
-            navMeshDebugModel_ = std::make_unique<Model>();
-
-            auto meshData = navMesh_->GetDebugMeshData();
-            if (!meshData.vertices.empty()) {
-                // ModelDataを構築
-                ModelData modelData;
-                modelData.vertices.resize(meshData.vertices.size() / 3);
-                for (size_t i = 0; i < modelData.vertices.size(); ++i) {
-                    modelData.vertices[i].position.x = meshData.vertices[i * 3 + 0];
-                    modelData.vertices[i].position.y = meshData.vertices[i * 3 + 1];
-                    modelData.vertices[i].position.z = meshData.vertices[i * 3 + 2];
-                    modelData.vertices[i].position.w = 1.0f;
-
-                    modelData.vertices[i].normal.x = 0.0f;
-                    modelData.vertices[i].normal.y = 0.0f;
-                    modelData.vertices[i].normal.z = 0.0f;
-
-                    modelData.vertices[i].texcoord.x = 0.0f;
-                    modelData.vertices[i].texcoord.y = 0.0f;
-                }
-                modelData.indices.assign(meshData.indices.begin(), meshData.indices.end());
-
-                // 各三角形の法線を計算
-                for (size_t i = 0; i < modelData.indices.size(); i += 3) {
-                    uint32_t i0 = modelData.indices[i + 0];
-                    uint32_t i1 = modelData.indices[i + 1];
-                    uint32_t i2 = modelData.indices[i + 2];
-
-                    Vector3 v0 = {modelData.vertices[i0].position.x, modelData.vertices[i0].position.y, modelData.vertices[i0].position.z};
-                    Vector3 v1 = {modelData.vertices[i1].position.x, modelData.vertices[i1].position.y, modelData.vertices[i1].position.z};
-                    Vector3 v2 = {modelData.vertices[i2].position.x, modelData.vertices[i2].position.y, modelData.vertices[i2].position.z};
-
-                    Vector3 edge1 = {v1.x - v0.x, v1.y - v0.y, v1.z - v0.z};
-                    Vector3 edge2 = {v2.x - v0.x, v2.y - v0.y, v2.z - v0.z};
-
-                    // 外積で法線を計算
-                    Vector3 normal = {
-                        edge1.y * edge2.z - edge1.z * edge2.y,
-                        edge1.z * edge2.x - edge1.x * edge2.z,
-                        edge1.x * edge2.y - edge1.y * edge2.x
-                    };
-
-                    // 正規化
-                    float length = std::sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
-                    if (length > 0.0001f) {
-                        normal.x /= length;
-                        normal.y /= length;
-                        normal.z /= length;
-                    }
-
-                    // 三角形の各頂点に法線を設定（加算して後で平均化）
-                    modelData.vertices[i0].normal.x += normal.x;
-                    modelData.vertices[i0].normal.y += normal.y;
-                    modelData.vertices[i0].normal.z += normal.z;
-
-                    modelData.vertices[i1].normal.x += normal.x;
-                    modelData.vertices[i1].normal.y += normal.y;
-                    modelData.vertices[i1].normal.z += normal.z;
-
-                    modelData.vertices[i2].normal.x += normal.x;
-                    modelData.vertices[i2].normal.y += normal.y;
-                    modelData.vertices[i2].normal.z += normal.z;
-                }
-
-                // 法線を正規化
-                for (size_t i = 0; i < modelData.vertices.size(); ++i) {
-                    float length = std::sqrt(
-                        modelData.vertices[i].normal.x * modelData.vertices[i].normal.x +
-                        modelData.vertices[i].normal.y * modelData.vertices[i].normal.y +
-                        modelData.vertices[i].normal.z * modelData.vertices[i].normal.z
-                    );
-                    if (length > 0.0001f) {
-                        modelData.vertices[i].normal.x /= length;
-                        modelData.vertices[i].normal.y /= length;
-                        modelData.vertices[i].normal.z /= length;
-                    } else {
-                        // フォールバック: 上向き
-                        modelData.vertices[i].normal.x = 0.0f;
-                        modelData.vertices[i].normal.y = 1.0f;
-                        modelData.vertices[i].normal.z = 0.0f;
-                    }
-                }
-
-                // 半透明の緑色マテリアル
-                modelData.material.isPBR = true;
-                modelData.material.baseColorFactor = {0.0f, 1.0f, 0.0f, 0.3f};  // 緑色半透明
-                modelData.material.metallicFactor = 0.0f;
-                modelData.material.roughnessFactor = 1.0f;
-                modelData.material.doubleSided = true;  // 両面描画
-
-                // Modelを初期化
-                navMeshDebugModel_->Initialize(dxCommon_);
-                navMeshDebugModel_->GetModelDataInternal() = modelData;
-                navMeshDebugModel_->CreateVertexBuffer();
-
-                navMeshDebugObject_->SetModel(navMeshDebugModel_.get());
-                navMeshDebugObject_->SetPosition({0.0f, 0.5f, 0.0f});  // 地面より十分高く表示
-                navMeshDebugObject_->SetCamera(camera_);  // カメラは設定する
-                navMeshDebugObject_->SetEnableLighting(false);
-            }
-        }
-
-        // 毎フレームカメラ更新（ただし位置/回転は固定）
-        if (navMeshDebugObject_) {
-            navMeshDebugObject_->Update();
-        }
+    // NavMesh更新
+    if (navMeshManager_) {
+        navMeshManager_->Update();
     }
 }
 
@@ -343,9 +189,9 @@ void GamePlayScene::Draw() {
         enemy_->Draw();
     }
 
-    // NavMeshの視覚化（フラスタムカリングなしで描画）
-    if (showNavMeshVisualization_ && navMeshDebugObject_) {
-        navMeshDebugObject_->Draw();  
+    // NavMeshの視覚化
+    if (navMeshManager_) {
+        navMeshManager_->DrawVisualization();
     }
 
     // ポストプロセスを適用して画面に描画
@@ -353,9 +199,9 @@ void GamePlayScene::Draw() {
         postProcess_->PostDraw();
     }
 
+#ifdef _DEBUG
     player_->DrawUI();
 
-#ifdef _DEBUG
     if (lightManager_) {
         lightManager_->DrawImGui();
     }
@@ -371,82 +217,86 @@ void GamePlayScene::Draw() {
 
     // NavMeshデバッグウィンドウ
     ImGui::Begin("NavMesh Debug");
-    ImGui::Checkbox("Show NavMesh Debug", &showNavMeshDebug_);
-    ImGui::Checkbox("Show NavMesh Visualization", &showNavMeshVisualization_);
 
-    if (ImGui::CollapsingHeader("NavMesh Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
-        ImGui::SliderFloat("Cell Size", &navMeshSettings_.cellSize, 0.05f, 1.0f);
-        ImGui::SliderFloat("Cell Height", &navMeshSettings_.cellHeight, 0.05f, 0.5f);
-        ImGui::SliderFloat("Agent Height", &navMeshSettings_.agentHeight, 0.5f, 5.0f);
-        ImGui::SliderFloat("Agent Radius", &navMeshSettings_.agentRadius, 0.1f, 5.0f);
-        ImGui::SliderFloat("Agent Max Climb", &navMeshSettings_.agentMaxClimb, 0.1f, 1.0f);
-        ImGui::SliderFloat("Agent Max Slope", &navMeshSettings_.agentMaxSlope, 0.0f, 90.0f);
-
-        // 曲がり角の滑らかさに影響するパラメータ
-        ImGui::Separator();
-        ImGui::Text("Corner Smoothness Settings");
-        ImGui::SliderFloat("Edge Max Error", &navMeshSettings_.edgeMaxError, 0.1f, 3.0f);
-        ImGui::SliderFloat("Detail Sample Dist", &navMeshSettings_.detailSampleDist, 1.0f, 10.0f);
-    }
-
-    if (ImGui::Button("Generate NavMesh")) {
-        ClearNavMeshLogs();
-        AddNavMeshLog("=== Manual NavMesh generation triggered ===");
-        GenerateAndSaveNavMesh("Resources/NavMesh/stage.navmesh");
-        if (enemy_ && navMesh_) {
-            enemy_->SetNavMesh(navMesh_.get());
-            AddNavMeshLog("NavMesh re-set to Enemy");
+    if (navMeshManager_) {
+        // NavMeshManagerのImGui描画
+        bool showViz = navMeshManager_->IsVisualizationEnabled();
+        if (ImGui::Checkbox("Show NavMesh Visualization", &showViz)) {
+            navMeshManager_->SetVisualizationEnabled(showViz);
+            if (showViz && !navMeshManager_->IsVisualizationEnabled()) {
+                // 視覚化を有効にする場合、まだ作成されていなければ作成
+                navMeshManager_->CreateVisualization(dxCommon_, camera_);
+                navMeshManager_->SetVisualizationEnabled(true);
+            }
         }
-    }
 
-    ImGui::SameLine();
-    if (ImGui::Button("Load NavMesh")) {
-        ClearNavMeshLogs();
-        const std::string navMeshPath = "Resources/NavMesh/stage.navmesh";
-        AddNavMeshLog("=== Loading NavMesh from file ===");
-        if (std::filesystem::exists(navMeshPath)) {
-            if (navMesh_->LoadFromFile(navMeshPath)) {
-                AddNavMeshLog("SUCCESS: NavMesh loaded from file");
-                if (enemy_ && navMesh_) {
-                    enemy_->SetNavMesh(navMesh_.get());
+        NavMeshBuildSettings& settings = navMeshManager_->GetSettings();
+        if (ImGui::CollapsingHeader("NavMesh Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
+            ImGui::SliderFloat("Cell Size", &settings.cellSize, 0.05f, 1.0f);
+            ImGui::SliderFloat("Cell Height", &settings.cellHeight, 0.05f, 0.5f);
+            ImGui::SliderFloat("Agent Height", &settings.agentHeight, 0.5f, 5.0f);
+            ImGui::SliderFloat("Agent Radius", &settings.agentRadius, 0.1f, 5.0f);
+            ImGui::SliderFloat("Agent Max Climb", &settings.agentMaxClimb, 0.1f, 1.0f);
+            ImGui::SliderFloat("Agent Max Slope", &settings.agentMaxSlope, 0.0f, 90.0f);
+
+            ImGui::Separator();
+            ImGui::Text("Corner Smoothness Settings");
+            ImGui::SliderFloat("Edge Max Error", &settings.edgeMaxError, 0.1f, 3.0f);
+            ImGui::SliderFloat("Detail Sample Dist", &settings.detailSampleDist, 1.0f, 10.0f);
+        }
+
+        if (ImGui::Button("Generate NavMesh")) {
+            ClearNavMeshLogs();
+            AddNavMeshLog("=== Manual NavMesh generation triggered ===");
+            navMeshManager_->GenerateAndSaveNavMesh(sceneObjects_, "externals/navimap/stage.navmesh");
+            if (enemy_ && navMeshManager_->GetNavMesh()) {
+                enemy_->SetNavMesh(navMeshManager_->GetNavMesh());
+                AddNavMeshLog("NavMesh re-set to Enemy");
+            }
+        }
+
+        ImGui::SameLine();
+        if (ImGui::Button("Load NavMesh")) {
+            ClearNavMeshLogs();
+            const std::string navMeshPath = "externals/navimap/stage.navmesh";
+            if (navMeshManager_->LoadNavMesh(navMeshPath)) {
+                if (enemy_ && navMeshManager_->GetNavMesh()) {
+                    enemy_->SetNavMesh(navMeshManager_->GetNavMesh());
                 }
-            } else {
-                AddNavMeshLog("ERROR: Failed to load NavMesh");
+            }
+        }
+
+        ImGui::SameLine();
+        if (ImGui::Button("Clear Logs")) {
+            ClearNavMeshLogs();
+        }
+
+        ImGui::Separator();
+
+        // NavMesh情報表示
+        NavMesh* navMesh = navMeshManager_->GetNavMesh();
+        if (navMesh) {
+            ImGui::Text("NavMesh Status: %s", navMesh->IsValid() ? "Valid" : "Invalid");
+
+            // シーンオブジェクト数を表示
+            ImGui::Text("Scene Objects: %d", static_cast<int>(sceneObjects_.size()));
+
+            if (ImGui::CollapsingHeader("Scene Objects Details")) {
+                int idx = 0;
+                for (const auto& obj : sceneObjects_) {
+                    Model* model = obj->GetModel();
+                    if (model) {
+                        const ModelData& modelData = model->GetModelData();
+                        ImGui::Text("Object %d: %d vertices, %d triangles",
+                            idx++,
+                            static_cast<int>(modelData.vertices.size()),
+                            static_cast<int>(modelData.indices.size()) / 3);
+                    }
+                }
             }
         } else {
-            AddNavMeshLog("ERROR: NavMesh file not found: " + navMeshPath);
+            ImGui::Text("NavMesh: Not Initialized");
         }
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Clear Logs")) {
-        ClearNavMeshLogs();
-    }
-
-    ImGui::Separator();
-
-    // NavMesh情報表示
-    if (navMesh_) {
-        ImGui::Text("NavMesh Status: %s", navMesh_->IsValid() ? "Valid" : "Invalid");
-
-        // シーンオブジェクト数を表示
-        ImGui::Text("Scene Objects: %d", static_cast<int>(sceneObjects_.size()));
-
-        if (ImGui::CollapsingHeader("Scene Objects Details")) {
-            int idx = 0;
-            for (const auto& obj : sceneObjects_) {
-                Model* model = obj->GetModel();
-                if (model) {
-                    const ModelData& modelData = model->GetModelData();
-                    ImGui::Text("Object %d: %d vertices, %d triangles",
-                        idx++,
-                        static_cast<int>(modelData.vertices.size()),
-                        static_cast<int>(modelData.indices.size()) / 3);
-                }
-            }
-        }
-    } else {
-        ImGui::Text("NavMesh: Not Initialized");
     }
 
     ImGui::Separator();
@@ -535,220 +385,9 @@ void GamePlayScene::HandleInput() {
     if (engine->IsKeyTriggered(DIK_R)) {
         ClearNavMeshLogs();
         AddNavMeshLog("=== Regenerating NavMesh (R key) ===");
-        GenerateAndSaveNavMesh("Resources/NavMesh/stage.navmesh");
+        if (navMeshManager_) {
+            navMeshManager_->GenerateAndSaveNavMesh(sceneObjects_, "externals/navimap/stage.navmesh");
+        }
     }
 }
 
-void GamePlayScene::GenerateAndSaveNavMesh(const std::string& filepath) {
-    if (!navMesh_) {
-        AddNavMeshLog("ERROR: NavMesh object is null!");
-        return;
-    }
-
-    char msg[512];
-    sprintf_s(msg, "=== Starting NavMesh Generation ===");
-    AddNavMeshLog(msg);
-    sprintf_s(msg, "Target file: %s", filepath.c_str());
-    AddNavMeshLog(msg);
-
-    // 既存のジオメトリをクリア
-    navMesh_->ClearGeometry();
-    AddNavMeshLog("Cleared existing geometry");
-
-    // シーンの全オブジェクトからジオメトリを抽出
-    sprintf_s(msg, "Scene objects count: %d", static_cast<int>(sceneObjects_.size()));
-    AddNavMeshLog(msg);
-
-    int totalVertices = 0;
-    int totalTriangles = 0;
-
-    for (const auto& obj : sceneObjects_) {
-        if (!obj) {
-            AddNavMeshLog("  Skipping null object");
-            continue;
-        }
-
-        // Object3dからModelを取得
-        Model* model = obj->GetModel();
-        if (!model) {
-            AddNavMeshLog("  Skipping object with no model");
-            continue;
-        }
-
-        const ModelData& modelData = model->GetModelData();
-
-        // Object3dのワールド変換行列を取得
-        Matrix4x4 worldMatrix = obj->GetWorldMatrix();
-
-        int objectVertices = 0;
-        int objectTriangles = 0;
-
-        // マルチマテリアルデータから取得（GLTFモデル用）
-        if (!modelData.matVertexData.empty()) {
-            sprintf_s(msg, "  Object has %d material meshes", static_cast<int>(modelData.matVertexData.size()));
-            AddNavMeshLog(msg);
-
-            int meshIndex = 0;
-            for (const auto& matPair : modelData.matVertexData) {
-                const MaterialVertexData& matData = matPair.second;
-                const std::vector<VertexData>& vertices = matData.vertices;
-                const std::vector<uint32_t>& indices = matData.indices;
-
-                sprintf_s(msg, "    Mesh %d: %d verts, %d indices",
-                    meshIndex++,
-                    static_cast<int>(vertices.size()),
-                    static_cast<int>(indices.size()));
-                AddNavMeshLog(msg);
-
-                if (vertices.empty()) {
-                    AddNavMeshLog("      -> Empty vertices, skipping");
-                    continue;
-                }
-
-                // インデックスが空の場合は自動生成（Assimpローダーの場合）
-                std::vector<int> intIndices;
-                if (indices.empty()) {
-                    AddNavMeshLog("      -> No indices, generating from vertices");
-                    intIndices.reserve(vertices.size());
-                    for (size_t i = 0; i < vertices.size(); ++i) {
-                        intIndices.push_back(static_cast<int>(i));
-                    }
-                } else {
-                    intIndices.reserve(indices.size());
-                    for (uint32_t idx : indices) {
-                        intIndices.push_back(static_cast<int>(idx));
-                    }
-                }
-
-                // 頂点データをfloat配列に変換（ワールド座標に変換）
-                std::vector<float> vertexPositions;
-                vertexPositions.reserve(vertices.size() * 3);
-
-                for (const auto& vertex : vertices) {
-                    Vector3 localPos(vertex.position.x, vertex.position.y, vertex.position.z);
-
-                    // ワールド座標に変換 (w=1)
-                    float x = localPos.x * worldMatrix.m[0][0] + localPos.y * worldMatrix.m[1][0] + localPos.z * worldMatrix.m[2][0] + worldMatrix.m[3][0];
-                    float y = localPos.x * worldMatrix.m[0][1] + localPos.y * worldMatrix.m[1][1] + localPos.z * worldMatrix.m[2][1] + worldMatrix.m[3][1];
-                    float z = localPos.x * worldMatrix.m[0][2] + localPos.y * worldMatrix.m[1][2] + localPos.z * worldMatrix.m[2][2] + worldMatrix.m[3][2];
-
-                    vertexPositions.push_back(x);
-                    vertexPositions.push_back(y);
-                    vertexPositions.push_back(z);
-                }
-
-                // NavMeshにジオメトリを追加
-                navMesh_->AddModelGeometry(
-                    vertexPositions.data(),
-                    static_cast<int>(vertices.size()),
-                    intIndices.data(),
-                    static_cast<int>(intIndices.size())
-                );
-
-                objectVertices += static_cast<int>(vertices.size());
-                objectTriangles += static_cast<int>(intIndices.size()) / 3;
-            }
-        }
-        // 単一メッシュデータから取得（OBJモデル用）
-        else {
-            const std::vector<VertexData>& vertices = modelData.vertices;
-            const std::vector<uint32_t>& indices = modelData.indices;
-
-            sprintf_s(msg, "  Object has %d vertices, %d indices",
-                static_cast<int>(vertices.size()),
-                static_cast<int>(indices.size()));
-            AddNavMeshLog(msg);
-
-            if (vertices.empty() || indices.empty()) {
-                AddNavMeshLog("    -> Skipping: empty geometry");
-                continue;
-            }
-
-            // 頂点データをfloat配列に変換（ワールド座標に変換）
-            std::vector<float> vertexPositions;
-            vertexPositions.reserve(vertices.size() * 3);
-
-            for (const auto& vertex : vertices) {
-                Vector3 localPos(vertex.position.x, vertex.position.y, vertex.position.z);
-
-                // ワールド座標に変換 (w=1)
-                float x = localPos.x * worldMatrix.m[0][0] + localPos.y * worldMatrix.m[1][0] + localPos.z * worldMatrix.m[2][0] + worldMatrix.m[3][0];
-                float y = localPos.x * worldMatrix.m[0][1] + localPos.y * worldMatrix.m[1][1] + localPos.z * worldMatrix.m[2][1] + worldMatrix.m[3][1];
-                float z = localPos.x * worldMatrix.m[0][2] + localPos.y * worldMatrix.m[1][2] + localPos.z * worldMatrix.m[2][2] + worldMatrix.m[3][2];
-
-                vertexPositions.push_back(x);
-                vertexPositions.push_back(y);
-                vertexPositions.push_back(z);
-            }
-
-            // インデックスデータをint配列に変換
-            std::vector<int> intIndices;
-            intIndices.reserve(indices.size());
-            for (uint32_t idx : indices) {
-                intIndices.push_back(static_cast<int>(idx));
-            }
-
-            // NavMeshにジオメトリを追加
-            navMesh_->AddModelGeometry(
-                vertexPositions.data(),
-                static_cast<int>(vertices.size()),
-                intIndices.data(),
-                static_cast<int>(indices.size())
-            );
-
-            objectVertices += static_cast<int>(vertices.size());
-            objectTriangles += static_cast<int>(indices.size()) / 3;
-        }
-
-        totalVertices += objectVertices;
-        totalTriangles += objectTriangles;
-
-        sprintf_s(msg, "  Added object: %d vertices, %d triangles",
-            objectVertices, objectTriangles);
-        AddNavMeshLog(msg);
-    }
-
-    sprintf_s(msg, "=== Geometry Summary ===");
-    AddNavMeshLog(msg);
-    sprintf_s(msg, "Total geometry: %d vertices, %d triangles", totalVertices, totalTriangles);
-    AddNavMeshLog(msg);
-
-    if (totalVertices == 0 || totalTriangles == 0) {
-        AddNavMeshLog("ERROR: No geometry found! Cannot generate NavMesh without geometry.");
-        AddNavMeshLog("Please check that sceneObjects_ contains valid models.");
-        return;
-    }
-
-    // ナビメッシュ設定（ImGuiで設定した値を使用）
-    sprintf_s(msg, "=== NavMesh Build Settings ===");
-    AddNavMeshLog(msg);
-    sprintf_s(msg, "  Cell Size: %.2f, Cell Height: %.2f",
-        navMeshSettings_.cellSize, navMeshSettings_.cellHeight);
-    AddNavMeshLog(msg);
-    sprintf_s(msg, "  Agent: radius=%.2f, height=%.2f, climb=%.2f, slope=%.2f",
-        navMeshSettings_.agentRadius, navMeshSettings_.agentHeight,
-        navMeshSettings_.agentMaxClimb, navMeshSettings_.agentMaxSlope);
-    AddNavMeshLog(msg);
-
-    AddNavMeshLog("=== Building NavMesh ===");
-    if (navMesh_->InitializeFromGeometry(navMeshSettings_)) {
-        AddNavMeshLog("SUCCESS: NavMesh generated successfully!");
-
-        sprintf_s(msg, "Attempting to save to: %s", filepath.c_str());
-        AddNavMeshLog(msg);
-
-        if (navMesh_->SaveToFile(filepath)) {
-            AddNavMeshLog("SUCCESS: NavMesh saved to file!");
-            sprintf_s(msg, "=== NavMesh Generation Complete ===");
-            AddNavMeshLog(msg);
-            sprintf_s(msg, "File: %s", filepath.c_str());
-            AddNavMeshLog(msg);
-        } else {
-            AddNavMeshLog("ERROR: Failed to save NavMesh to file!");
-            AddNavMeshLog("Check file path and write permissions.");
-        }
-    } else {
-        AddNavMeshLog("ERROR: Failed to generate NavMesh!");
-        AddNavMeshLog("Check geometry data and build settings.");
-    }
-}

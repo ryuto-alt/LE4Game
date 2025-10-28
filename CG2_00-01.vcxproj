@@ -157,6 +157,7 @@
     <ClCompile Include="src\Game\GameObject\Enemy.cpp" />
     <ClCompile Include="src\Game\GameObject\FPSCamera.cpp" />
     <ClCompile Include="src\Game\Manager\LightManager.cpp" />
+    <ClCompile Include="src\Game\Manager\NavMeshManager.cpp" />
     <ClCompile Include="src\Game\NavMesh\NavMesh.cpp" />
     <ClCompile Include="src\Game\NavMesh\NavMeshBuilder.cpp" />
     <ClCompile Include="src\Engine\Animation\AnimatedModel.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="src\Game\GameObject\Enemy.h" />
     <ClInclude Include="src\Game\GameObject\FPSCamera.h" />
     <ClInclude Include="src\Game\Manager\LightManager.h" />
+    <ClInclude Include="src\Game\Manager\NavMeshManager.h" />
     <ClInclude Include="src\Game\NavMesh\NavMesh.h" />
     <ClInclude Include="src\Game\NavMesh\NavMeshBuilder.h" />
     <ClInclude Include="src\Engine\Animation\Animation.h" />
@@ -256,6 +258,9 @@
     <Text Include="externals\imgui\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
+      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
+    </ProjectReference>
     <ProjectReference Include="imgui\imgui.vcxproj">
       <Project>{7b2b20e8-bac7-47f3-aaaa-745d6fb0cbd7}</Project>
     </ProjectReference>
