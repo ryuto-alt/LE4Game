@@ -77,8 +77,6 @@ private:
 	void UpdateNavMeshPath();
 	void FollowPath();
 	void ApplyAIConfig();
-	void GenerateRandomExplorationPoint();
-	void UpdateExploration();
 	void CheckAndHandleStuck();
 	void RecoverFromStuck();
 	bool IsPlayerInVision();
@@ -110,7 +108,6 @@ private:
 
 	// Player tracking
 	Player* player_{nullptr};
-	float detectionRange_{100.0f};
 	float moveSpeed_{0.125f};
 	bool isChasing_{false};
 
@@ -133,22 +130,14 @@ private:
 	bool isAtCorner_{false};
 	float cornerSlowdownFactor_{1.0f};
 
-	// Exploration phase
-	bool isExploring_{true};  // 探索モード中かどうか
-	Vector3 explorationTarget_{0.0f, 0.0f, 0.0f};  // 探索目標地点
-	float explorationIdleTimer_{0.0f};  // 目標到達後の待機タイマー
-	const float EXPLORATION_IDLE_TIME = 2.0f;  // 到達後の待機時間
-	const float EXPLORATION_ARRIVAL_THRESHOLD = 2.0f;  // 到達判定距離
-	const float EXPLORATION_MIN_DISTANCE = 20.0f;  // プレイヤーからの最小距離
-	const float EXPLORATION_MAX_DISTANCE = 60.0f;  // プレイヤーからの最大距離
-	const float EXPLORATION_RANGE = 30.0f;  // 探索ポイント生成の範囲
 
 	// Stack detection and recovery
 	Vector3 previousPosition_{0.0f, 0.0f, 0.0f};  // 前フレームの位置
 	float stuckTimer_{0.0f};  // スタック時間カウンター
-	const float STUCK_DETECTION_TIME = 2.0f;  // スタック判定時間（2秒）
-	const float STUCK_DISTANCE_THRESHOLD = 0.5f;  // スタック判定距離（0.5m以内）
+	const float STUCK_DETECTION_TIME = 1.5f;  // スタック判定時間（1.5秒に短縮）
+	const float STUCK_DISTANCE_THRESHOLD = 0.3f;  // スタック判定距離（より敏感に）
 	bool isRecoveringFromStuck_{false};  // スタック回避中フラグ
+	int stuckRecoveryAttempts_{0};  // スタック回避試行回数
 
 	// Audio
 	SpatialAudioListener* audioListener_{nullptr};
