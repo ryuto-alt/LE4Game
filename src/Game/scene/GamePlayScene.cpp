@@ -534,7 +534,40 @@ void GamePlayScene::CheckPlayerEnemyCollision() {
         char debugMsg[256];
         sprintf_s(debugMsg, "=== GAME OVER! Distance: %.2f < %.2f ===\n", distance, GAME_OVER_DISTANCE);
         OutputDebugStringA(debugMsg);
-        sceneManager_->ChangeScene("GameOver");
+
+        // 自分自身を--jumpscareオプション付きで起動（BEN風演出）
+        char exePath[MAX_PATH];
+        GetModuleFileNameA(nullptr, exePath, MAX_PATH);
+
+        STARTUPINFOA si = {};
+        si.cb = sizeof(si);
+        PROCESS_INFORMATION pi = {};
+
+        // --jumpscareオプションを付けて起動
+        char cmdLine[MAX_PATH + 20];
+        sprintf_s(cmdLine, "\"%s\" --jumpscare", exePath);
+
+        if (CreateProcessA(
+            nullptr,
+            cmdLine,
+            nullptr,
+            nullptr,
+            FALSE,
+            0,
+            nullptr,
+            nullptr,
+            &si,
+            &pi
+        )) {
+            // プロセスハンドルをクローズ（デタッチ）
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
+
+            OutputDebugStringA("Jumpscare process launched. Exiting main game...\n");
+        }
+
+        // ゲームを終了（gameoversceneには行かない）
+        PostQuitMessage(0);
     }
 }
 

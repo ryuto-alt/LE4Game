@@ -344,6 +344,15 @@
     <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNode.cpp">
       <Filter>externals\recastnavigation\Detour</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\scene\GameOverScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\NavMesh\EnemyAI.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\NavMesh\NavMeshSystem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -553,6 +562,9 @@
     <ClInclude Include="src\Game\NavMesh\NavMeshHelper.h">
       <Filter>src\Game\NavMesh</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\scene\GameOverScene.h" />
+    <ClInclude Include="src\Engine\NavMesh\EnemyAI.h" />
+    <ClInclude Include="src\Engine\NavMesh\NavMeshSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">

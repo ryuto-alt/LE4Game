@@ -1,6 +1,11 @@
 // main.cpp - UnoEngineを使用したサンプル
 #include "UnoEngine.h"
 #include "D3DResourceCheck.h"
+#include <thread>
+#include <chrono>
+#include <gdiplus.h>
+#pragma comment(lib, "gdiplus.lib")
+#pragma comment(lib, "winmm.lib")
 
 // NVIDIAのOptimusとAMDのPowerXpressに高性能GPUを使うように指示
 extern "C" {
@@ -8,7 +13,173 @@ extern "C" {
     __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
 
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+// Jumpscare表示用のウィンドウプロシージャ
+LRESULT CALLBACK JumpscareWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
+    case WM_ERASEBKGND:
+        // 背景消去を防ぐ（ちらつき防止）
+        return 1;
+    }
+    return DefWindowProc(hwnd, msg, wParam, lParam);
+}
+
+// Jumpscare表示関数
+void ShowJumpscare() {
+    // 2秒待機（デスクトップで油断している時間）
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+
+    // GDI+初期化
+    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+    ULONG_PTR gdiplusToken;
+    Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
+
+    // GIF画像を読み込み
+    Gdiplus::Image* gifImage = new Gdiplus::Image(L"Resources/textures/jumpscare.gif");
+
+    if (gifImage->GetLastStatus() != Gdiplus::Ok) {
+        delete gifImage;
+        Gdiplus::GdiplusShutdown(gdiplusToken);
+        return;
+    }
+
+    // ウィンドウクラス登録
+    WNDCLASSEXW wc = {};
+    wc.cbSize = sizeof(WNDCLASSEXW);
+    wc.lpfnWndProc = JumpscareWndProc;
+    wc.hInstance = GetModuleHandle(nullptr);
+    wc.lpszClassName = L"JumpscareWindow";
+    wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+
+    RegisterClassExW(&wc);
+
+    // フルスクリーンウィンドウ作成
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+    HWND hwnd = CreateWindowExW(
+        WS_EX_TOPMOST | WS_EX_TOOLWINDOW,
+        L"JumpscareWindow",
+        L"",
+        WS_POPUP,
+        0, 0, screenWidth, screenHeight,
+        nullptr, nullptr, GetModuleHandle(nullptr), nullptr
+    );
+
+    if (!hwnd) {
+        delete gifImage;
+        Gdiplus::GdiplusShutdown(gdiplusToken);
+        return;
+    }
+
+    // ウィンドウ表示
+    ShowWindow(hwnd, SW_SHOW);
+    UpdateWindow(hwnd);
+
+    // ダブルバッファリング用のバックバッファ作成
+    HDC hdcScreen = GetDC(hwnd);
+    HDC hdcMem = CreateCompatibleDC(hdcScreen);
+    HBITMAP hbmMem = CreateCompatibleBitmap(hdcScreen, screenWidth, screenHeight);
+    HBITMAP hbmOld = (HBITMAP)SelectObject(hdcMem, hbmMem);
+
+    // GDI+ Graphicsオブジェクト（バックバッファ用）
+    Gdiplus::Graphics* backBuffer = new Gdiplus::Graphics(hdcMem);
+
+    // GIFアニメーション用のフレーム情報取得
+    UINT frameCount = gifImage->GetFrameCount(&Gdiplus::FrameDimensionTime);
+
+    // フレーム遅延時間を取得
+    UINT propertySize = gifImage->GetPropertyItemSize(PropertyTagFrameDelay);
+    Gdiplus::PropertyItem* propertyItem = nullptr;
+    if (propertySize > 0) {
+        propertyItem = (Gdiplus::PropertyItem*)malloc(propertySize);
+        gifImage->GetPropertyItem(PropertyTagFrameDelay, propertySize, propertyItem);
+    }
+
+    // デルタタイムで4秒間表示
+    auto startTime = std::chrono::high_resolution_clock::now();
+    const float DISPLAY_DURATION = 4.0f; // 4秒間表示
+    float elapsedTime = 0.0f;
+    UINT currentFrame = 0;
+    auto lastFrameTime = startTime;
+    float frameTimer = 0.0f;
+
+    while (elapsedTime < DISPLAY_DURATION) {
+        // デルタタイム計算
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        float deltaTime = std::chrono::duration<float>(currentTime - lastFrameTime).count();
+        elapsedTime = std::chrono::duration<float>(currentTime - startTime).count();
+        lastFrameTime = currentTime;
+        frameTimer += deltaTime;
+
+        // メッセージ処理（ノンブロッキング）
+        MSG msg;
+        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+            if (msg.message == WM_QUIT) {
+                goto cleanup;
+            }
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+
+        // フレーム遅延チェック
+        float currentFrameDelay = 0.1f; // デフォルト100ms
+        if (frameCount > 1 && propertyItem) {
+            LONG* delays = (LONG*)propertyItem->value;
+            currentFrameDelay = delays[currentFrame] * 0.01f; // 10ms単位
+            if (currentFrameDelay < 0.01f) currentFrameDelay = 0.1f; // 最低10ms
+        }
+
+        // 次のフレームへ進む
+        if (frameTimer >= currentFrameDelay) {
+            frameTimer = 0.0f;
+            currentFrame = (currentFrame + 1) % frameCount;
+
+            // GIFのフレームを選択
+            GUID pageGuid = Gdiplus::FrameDimensionTime;
+            gifImage->SelectActiveFrame(&pageGuid, currentFrame);
+        }
+
+        // バックバッファに描画
+        backBuffer->Clear(Gdiplus::Color(0, 0, 0)); // 黒でクリア
+        backBuffer->DrawImage(gifImage, 0, 0, screenWidth, screenHeight);
+
+        // バックバッファを画面にBlit（一度に転送）
+        BitBlt(hdcScreen, 0, 0, screenWidth, screenHeight, hdcMem, 0, 0, SRCCOPY);
+
+        // 少し待機（CPU使用率を抑える、60FPS相当）
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+    }
+
+cleanup:
+    // クリーンアップ
+    delete backBuffer;
+    SelectObject(hdcMem, hbmOld);
+    DeleteObject(hbmMem);
+    DeleteDC(hdcMem);
+    ReleaseDC(hwnd, hdcScreen);
+
+    if (propertyItem) {
+        free(propertyItem);
+    }
+
+    DestroyWindow(hwnd);
+    delete gifImage;
+    Gdiplus::GdiplusShutdown(gdiplusToken);
+}
+
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int) {
+    // コマンドライン引数をチェック
+    if (lpCmdLine && strstr(lpCmdLine, "--jumpscare")) {
+        // Jumpscareモード: ゲームを起動せずにjumpscareを表示
+        ShowJumpscare();
+        return 0;
+    }
+
+    // 通常のゲームモード
     // リソースリーク検出用
     D3DResourceLeakChecker leakCheck;
 
@@ -24,7 +195,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         // シーンマネージャーの初期化（内部でLogoシーンに設定される）
         engine->GetScnMgr()->Initialize();
-                
+
         // ゲームループの実行
         engine->Run();
 
@@ -40,10 +211,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         // エラー時も終了処理を実行
         UnoEngine::DestroyInst();
-        
+
         // COM終了処理
         CoUninitialize();
-        
+
         return -1;
     }
 
