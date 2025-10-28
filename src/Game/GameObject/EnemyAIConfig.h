@@ -22,7 +22,7 @@ struct EnemyAIConfig {
     /// 100.0: 検知範囲 100m
     /// 値をそのまま検知距離（メートル）として使用
     /// </summary>
-    float aggressiveness = 30.0f;
+    float aggressiveness = 10.0f;
 
     /// <summary>
     /// 機動力（移動速度）

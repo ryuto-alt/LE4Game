@@ -4,6 +4,7 @@
 #include "NavMesh/NavMeshBuilder.h"
 #include "NavMesh/NavMeshHelper.h"
 #include <cmath>
+#include <random>
 #include "Collision/AABBCollision.h"
 #include "Collision/CollisionHelper.h"
 #include "DetourNavMeshQuery.h"
@@ -107,6 +108,13 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	footstepSource2_->SetVolume(0.8f);
 	footstepSource2_->SetMaxDistance(30.0f);
 	footstepSource2_->SetMinDistance(1.0f);
+
+	// 検知サウンドの初期化
+	detectionSound_ = std::make_unique<SpatialAudioSource>();
+	detectionSound_->Initialize("Resources/Audio/enemysound.mp3", position_);
+	detectionSound_->SetVolume(2.2f);  // 大き目の音量
+	detectionSound_->SetMaxDistance(40.0f);
+	detectionSound_->SetMinDistance(1.0f);
 }
 
 void Enemy::Update() {
@@ -130,6 +138,12 @@ void Enemy::Update() {
 
 		// プレイヤーが検知範囲内にいるかチェック
 		if (distanceToPlayer < detectionRange_) {
+			// 探索モードから追跡モードに切り替え
+			if (isExploring_) {
+				isExploring_ = false;
+				explorationIdleTimer_ = 0.0f;
+			}
+
 			if (!isChasing_) {
 				// 追跡開始：Runアニメーションに変更
 				ChangeAnimation("Run");
@@ -150,12 +164,19 @@ void Enemy::Update() {
 				FollowPath();
 			}
 		} else {
+			// プレイヤーが検知範囲外
 			if (isChasing_) {
-				// 追跡終了：Walkアニメーションに戻す
+				// 追跡終了：探索モードに切り替え
 				ChangeAnimation("Walk");
 				isChasing_ = false;
+				isExploring_ = true;
 				currentPath_.clear();
 				currentWaypointIndex_ = 0;
+				// すぐに新しい探索ポイントを生成
+				GenerateRandomExplorationPoint();
+			} else if (isExploring_) {
+				// 探索モード中
+				UpdateExploration();
 			}
 		}
 	} else if (player_) {
@@ -173,6 +194,7 @@ void Enemy::Update() {
 			if (!isChasing_) {
 				ChangeAnimation("Run");
 				isChasing_ = true;
+				isExploring_ = false;
 			}
 
 			if (distanceToPlayer > 1.0f) {
@@ -189,7 +211,13 @@ void Enemy::Update() {
 			if (isChasing_) {
 				ChangeAnimation("Walk");
 				isChasing_ = false;
+				isExploring_ = true;
 			}
+		}
+	} else if (navMesh_ && navMesh_->IsValid()) {
+		// プレイヤーが設定されていない場合でも探索モード
+		if (isExploring_) {
+			UpdateExploration();
 		}
 	}
 
@@ -198,6 +226,12 @@ void Enemy::Update() {
 
 	// 足音の更新
 	UpdateFootstepAudio();
+
+	// 検知サウンドの更新
+	UpdateDetectionSound();
+
+	// スタック検出と回避処理
+	CheckAndHandleStuck();
 
 	// オブジェクトの位置と回転を更新
 	if (object3d_) {
@@ -284,6 +318,59 @@ void Enemy::UpdateFootstepAudio() {
 	// アニメーションがループした場合のリセット
 	if (currentTime < lastAnimationTime_) {
 		lastAnimationTime_ = 0.0f;
+	}
+}
+
+void Enemy::UpdateDetectionSound() {
+	// プレイヤーとリスナーが設定されていない場合はスキップ
+	if (!player_ || !audioListener_ || !detectionSound_) {
+		return;
+	}
+
+	// リスナーの位置と向きを取得（毎フレーム更新）
+	Vector3 listenerPos = audioListener_->GetPosition();
+	Vector3 listenerForward = audioListener_->GetForward();
+
+	// 3D位置を常に更新
+	detectionSound_->SetPosition(position_);
+	detectionSound_->Update(listenerPos, listenerForward);
+
+	// 現在の時刻を取得（秒単位）
+	static float totalTime = 0.0f;
+	totalTime += 1.0f / 60.0f;
+
+	// 再生状態を確認
+	bool currentlyPlaying = detectionSound_->IsPlaying();
+
+	// 前フレームで再生中だったが今は停止している場合、終了時刻を記録
+	if (isDetectionSoundPlaying_ && !currentlyPlaying) {
+		lastDetectionSoundEndTime_ = totalTime;
+		isDetectionSoundPlaying_ = false;
+	}
+
+	// 現在再生中の場合、フラグを更新
+	if (currentlyPlaying) {
+		isDetectionSoundPlaying_ = true;
+	}
+
+	// プレイヤーとの距離を計算
+	Vector3 playerPos = player_->GetPosition();
+	Vector3 toPlayer = {
+		playerPos.x - position_.x,
+		0.0f,
+		playerPos.z - position_.z
+	};
+	float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.z * toPlayer.z);
+
+	// 20m以内にプレイヤーがいるかチェック
+	if (distanceToPlayer <= DETECTION_SOUND_RANGE) {
+		// 再生中でなく、かつクールタイムが経過している場合のみ再生
+		if (!isDetectionSoundPlaying_ &&
+		    totalTime - lastDetectionSoundEndTime_ >= DETECTION_SOUND_COOLDOWN) {
+			// 再生
+			detectionSound_->Play(false);  // ループなし
+			isDetectionSoundPlaying_ = true;
+		}
 	}
 }
 
@@ -488,4 +575,232 @@ void Enemy::FollowPath() {
 		&isAtCorner_,
 		&cornerSlowdownFactor_
 	);
+}
+
+// ランダムな探索ポイントを生成
+void Enemy::GenerateRandomExplorationPoint() {
+	if (!navMesh_ || !navMesh_->IsValid()) {
+		return;
+	}
+
+	// プレイヤーが設定されていない場合は従来の動作
+	if (!player_) {
+		// ランダムジェネレーターの初期化
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
+		std::uniform_real_distribution<float> distX(-20.0f, 20.0f);
+		std::uniform_real_distribution<float> distZ(-20.0f, 20.0f);
+
+		Vector3 randomOffset = {
+			distX(gen),
+			0.0f,
+			distZ(gen)
+		};
+
+		Vector3 targetPos = {
+			position_.x + randomOffset.x,
+			position_.y,
+			position_.z + randomOffset.z
+		};
+
+		float startPos[3] = { position_.x, position_.y, position_.z };
+		float endPos[3] = { targetPos.x, targetPos.y, targetPos.z };
+
+		NavMeshPath path;
+		if (navMesh_->FindPath(startPos, endPos, path) && path.isValid) {
+			if (path.GetWaypointCount() > 0) {
+				float x, y, z;
+				path.GetWaypoint(path.GetWaypointCount() - 1, x, y, z);
+				explorationTarget_ = { x, y, z };
+
+				currentPath_.clear();
+				for (int i = 0; i < path.GetWaypointCount(); ++i) {
+					path.GetWaypoint(i, x, y, z);
+					currentPath_.push_back({ x, y, z });
+				}
+				currentWaypointIndex_ = 0;
+			}
+		}
+		return;
+	}
+
+	// プレイヤーの位置を基準に探索範囲を設定
+	Vector3 playerPos = player_->GetPosition();
+
+	// ランダムジェネレーターの初期化
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+
+	// 最大試行回数
+	const int maxAttempts = 10;
+
+	for (int attempt = 0; attempt < maxAttempts; ++attempt) {
+		// プレイヤーからランダムな方向と距離でポイントを生成
+		std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * 3.14159f);
+		std::uniform_real_distribution<float> distanceDist(EXPLORATION_MIN_DISTANCE, EXPLORATION_MAX_DISTANCE);
+
+		float angle = angleDist(gen);
+		float distance = distanceDist(gen);
+
+		// プレイヤーから一定距離離れた位置を計算
+		Vector3 targetPos = {
+			playerPos.x + std::cos(angle) * distance,
+			playerPos.y,
+			playerPos.z + std::sin(angle) * distance
+		};
+
+		// NavMesh上の最も近い有効な位置を取得
+		float startPos[3] = { position_.x, position_.y, position_.z };
+		float endPos[3] = { targetPos.x, targetPos.y, targetPos.z };
+
+		NavMeshPath path;
+		if (navMesh_->FindPath(startPos, endPos, path) && path.isValid) {
+			// パスが見つかった場合、最終地点を探索目標にする
+			if (path.GetWaypointCount() > 0) {
+				float x, y, z;
+				path.GetWaypoint(path.GetWaypointCount() - 1, x, y, z);
+				explorationTarget_ = { x, y, z };
+
+				// 生成されたポイントがプレイヤーから適切な距離かチェック
+				Vector3 toPlayer = {
+					playerPos.x - explorationTarget_.x,
+					0.0f,
+					playerPos.z - explorationTarget_.z
+				};
+				float distToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.z * toPlayer.z);
+
+				// 適切な距離範囲内なら採用
+				if (distToPlayer >= EXPLORATION_MIN_DISTANCE && distToPlayer <= EXPLORATION_MAX_DISTANCE) {
+					// パスを設定
+					currentPath_.clear();
+					for (int i = 0; i < path.GetWaypointCount(); ++i) {
+						path.GetWaypoint(i, x, y, z);
+						currentPath_.push_back({ x, y, z });
+					}
+					currentWaypointIndex_ = 0;
+					return;
+				}
+			}
+		}
+	}
+
+	// 適切なポイントが見つからなかった場合、現在位置近くにランダムポイントを生成
+	std::uniform_real_distribution<float> nearbyDist(-EXPLORATION_RANGE, EXPLORATION_RANGE);
+	Vector3 targetPos = {
+		position_.x + nearbyDist(gen),
+		position_.y,
+		position_.z + nearbyDist(gen)
+	};
+
+	float startPos[3] = { position_.x, position_.y, position_.z };
+	float endPos[3] = { targetPos.x, targetPos.y, targetPos.z };
+
+	NavMeshPath path;
+	if (navMesh_->FindPath(startPos, endPos, path) && path.isValid) {
+		if (path.GetWaypointCount() > 0) {
+			float x, y, z;
+			path.GetWaypoint(path.GetWaypointCount() - 1, x, y, z);
+			explorationTarget_ = { x, y, z };
+
+			currentPath_.clear();
+			for (int i = 0; i < path.GetWaypointCount(); ++i) {
+				path.GetWaypoint(i, x, y, z);
+				currentPath_.push_back({ x, y, z });
+			}
+			currentWaypointIndex_ = 0;
+		}
+	}
+}
+
+// 探索フェーズの更新
+void Enemy::UpdateExploration() {
+	const float deltaTime = 1.0f / 60.0f;
+
+	// 待機中の場合
+	if (explorationIdleTimer_ > 0.0f) {
+		explorationIdleTimer_ -= deltaTime;
+		if (explorationIdleTimer_ <= 0.0f) {
+			// 待機終了、新しい目標を生成
+			GenerateRandomExplorationPoint();
+		}
+		return;
+	}
+
+	// 目標地点に到達したかチェック
+	Vector3 toTarget = {
+		explorationTarget_.x - position_.x,
+		0.0f,
+		explorationTarget_.z - position_.z
+	};
+	float distanceToTarget = std::sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
+
+	if (distanceToTarget < EXPLORATION_ARRIVAL_THRESHOLD) {
+		// 到達したので待機状態に入る
+		explorationIdleTimer_ = EXPLORATION_IDLE_TIME;
+		currentPath_.clear();
+		currentWaypointIndex_ = 0;
+		return;
+	}
+
+	// パスに沿って移動
+	if (!currentPath_.empty()) {
+		FollowPath();
+	} else {
+		// パスがない場合、新しい目標を生成
+		GenerateRandomExplorationPoint();
+	}
+}
+
+// スタック検出と処理
+void Enemy::CheckAndHandleStuck() {
+	const float deltaTime = 1.0f / 60.0f;
+
+	// スタック回避中は特別な処理
+	if (isRecoveringFromStuck_) {
+		RecoverFromStuck();
+		return;
+	}
+
+	// 現在位置と前フレームの位置の差を計算
+	Vector3 movement = {
+		position_.x - previousPosition_.x,
+		0.0f,
+		position_.z - previousPosition_.z
+	};
+	float movementDistance = std::sqrt(movement.x * movement.x + movement.z * movement.z);
+
+	// 移動量が閾値以下の場合、スタックタイマーを増加
+	if (movementDistance < STUCK_DISTANCE_THRESHOLD) {
+		stuckTimer_ += deltaTime;
+
+		// 一定時間スタックしている場合、回避処理を開始
+		if (stuckTimer_ >= STUCK_DETECTION_TIME) {
+			isRecoveringFromStuck_ = true;
+			stuckTimer_ = 0.0f;
+
+			// 現在のパスをクリア
+			currentPath_.clear();
+			currentWaypointIndex_ = 0;
+		}
+	} else {
+		// 正常に移動している場合、タイマーをリセット
+		stuckTimer_ = 0.0f;
+	}
+
+	// 前フレームの位置を更新
+	previousPosition_ = position_;
+}
+
+// スタックから回復
+void Enemy::RecoverFromStuck() {
+	// 新しい探索ポイントを強制的に生成
+	if (isExploring_) {
+		GenerateRandomExplorationPoint();
+	} else if (isChasing_ && player_) {
+		// 追跡中の場合はパスを再計算
+		UpdateNavMeshPath();
+	}
+
+	// 回避フラグをリセット
+	isRecoveringFromStuck_ = false;
 }

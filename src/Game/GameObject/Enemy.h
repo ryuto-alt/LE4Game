@@ -68,10 +68,15 @@ public:
 private:
 	void UpdateAnimation();
 	void UpdateFootstepAudio();
+	void UpdateDetectionSound();
 	bool CheckWallAt(const Vector3& position);
 	void UpdateNavMeshPath();
 	void FollowPath();
 	void ApplyAIConfig();
+	void GenerateRandomExplorationPoint();
+	void UpdateExploration();
+	void CheckAndHandleStuck();
+	void RecoverFromStuck();
 
 	// 3D object and model
 	std::unique_ptr<Object3d> object3d_;
@@ -117,6 +122,23 @@ private:
 	bool isAtCorner_{false};
 	float cornerSlowdownFactor_{1.0f};
 
+	// Exploration phase
+	bool isExploring_{true};  // 探索モード中かどうか
+	Vector3 explorationTarget_{0.0f, 0.0f, 0.0f};  // 探索目標地点
+	float explorationIdleTimer_{0.0f};  // 目標到達後の待機タイマー
+	const float EXPLORATION_IDLE_TIME = 2.0f;  // 到達後の待機時間
+	const float EXPLORATION_ARRIVAL_THRESHOLD = 2.0f;  // 到達判定距離
+	const float EXPLORATION_MIN_DISTANCE = 20.0f;  // プレイヤーからの最小距離
+	const float EXPLORATION_MAX_DISTANCE = 60.0f;  // プレイヤーからの最大距離
+	const float EXPLORATION_RANGE = 30.0f;  // 探索ポイント生成の範囲
+
+	// Stack detection and recovery
+	Vector3 previousPosition_{0.0f, 0.0f, 0.0f};  // 前フレームの位置
+	float stuckTimer_{0.0f};  // スタック時間カウンター
+	const float STUCK_DETECTION_TIME = 2.0f;  // スタック判定時間（2秒）
+	const float STUCK_DISTANCE_THRESHOLD = 0.5f;  // スタック判定距離（0.5m以内）
+	bool isRecoveringFromStuck_{false};  // スタック回避中フラグ
+
 	// Audio
 	SpatialAudioListener* audioListener_{nullptr};
 	std::unique_ptr<SpatialAudioSource> footstepSource1_;
@@ -124,4 +146,11 @@ private:
 	bool useFootstep1_{true};
 	float lastAnimationTime_{0.0f};
 	const float FOOTSTEP_INTERVAL = 0.3f;
+
+	// Detection Sound
+	std::unique_ptr<SpatialAudioSource> detectionSound_;
+	float lastDetectionSoundEndTime_{-10.0f};  // 最後にサウンドが終了した時刻
+	bool isDetectionSoundPlaying_{false};  // サウンドが再生中かどうか
+	const float DETECTION_SOUND_COOLDOWN = 3.0f;  // 再生終了後3秒のクールタイム
+	const float DETECTION_SOUND_RANGE = 20.0f;
 };
