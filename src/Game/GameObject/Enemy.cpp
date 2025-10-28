@@ -18,9 +18,9 @@ void Enemy::ApplyAIConfig() {
 	// 5.0で0.5秒（デフォルト）
 	pathUpdateInterval_ = 2.0f - (aiConfig_.intelligence * 0.19f);
 
-	// Aggressiveness: 0.0~10.0 → 検知範囲 20.0~200.0
-	// 5.0で100.0（デフォルト）
-	detectionRange_ = 20.0f + (aiConfig_.aggressiveness * 18.0f);
+	// Aggressiveness: 0.0~10.0 → 検知範囲 0.0~10.0m
+	// aggressivenessの値をそのまま検知距離（メートル）として使用
+	detectionRange_ = aiConfig_.aggressiveness;
 
 	// Mobility: 0.0~10.0 → 移動速度 0.025~0.25
 	// 5.0で0.125（デフォルト）
@@ -72,11 +72,11 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	// 環境マップを無効化（Playerと同じ）
 	object3d_->EnableEnv(false);
 
-	// コリジョン設定（登録するが無効化）
+	// コリジョン設定（有効化）
 	auto* collisionManager = Collision::AABBCollisionManager::GetInstance();
 	if (collisionManager && object3d_ && animatedModel_) {
 		Collision::AABB enemyAABB = Collision::AABBExtractor::ExtractFromAnimatedModel(animatedModel_.get());
-		collisionManager->RegisterObject(object3d_.get(), enemyAABB, false, "Enemy");  // falseで無効化
+		collisionManager->RegisterObject(object3d_.get(), enemyAABB, true, "Enemy");  // trueで有効化
 	}
 
 	// PBRマテリアルでない場合、強制的にPBRを有効化
@@ -233,6 +233,9 @@ void Enemy::UpdateAnimation() {
 }
 
 void Enemy::UpdateFootstepAudio() {
+	// 足音を無効化
+	return;
+
 	// WalkまたはRunアニメーション中のみ足音を再生
 	std::string currentAnim = GetCurrentAnimationName();
 	if (currentAnim != "Walk" && currentAnim != "Run") {
@@ -388,7 +391,7 @@ void Enemy::SetIntelligence(float value) {
 }
 
 void Enemy::SetAggressiveness(float value) {
-	aiConfig_.aggressiveness = std::clamp(value, 0.0f, 10.0f);
+	aiConfig_.aggressiveness = std::clamp(value, 0.0f, 100.0f);
 	ApplyAIConfig();
 }
 
@@ -442,7 +445,7 @@ void Enemy::HandleCollisionResponse() {
 	Collision::CollisionHelper::HandleAABBPushout(
 		position_,
 		object3d_.get(),
-		{"Player", "wall"}
+		{"Player"}  // wallとの当たり判定は無効化
 	);
 }
 

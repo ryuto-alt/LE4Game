@@ -3,8 +3,8 @@
 
 /// <summary>
 /// EnemyのAIパラメータ設定
-/// 各パラメータは 0.0 ~ 10.0 の範囲で設定可能
-/// デフォルト値は 5.0 で、現在のEnemyの標準的な強度
+/// intelligence, mobility: 0.0 ~ 10.0 の範囲で設定可能
+/// aggressiveness: 0.0 ~ 100.0 の範囲で設定可能（検知距離メートル）
 /// </summary>
 struct EnemyAIConfig {
     /// <summary>
@@ -17,11 +17,12 @@ struct EnemyAIConfig {
 
     /// <summary>
     /// 攻撃性（検知範囲）
-    /// 0.0: 検知範囲 20.0f
-    /// 5.0: 検知範囲 100.0f（デフォルト）
-    /// 10.0: 検知範囲 200.0f
+    /// 0.0: 検知範囲 0m（検知しない）
+    /// 30.0: 検知範囲 30m
+    /// 100.0: 検知範囲 100m
+    /// 値をそのまま検知距離（メートル）として使用
     /// </summary>
-    float aggressiveness = 5.0f;
+    float aggressiveness = 30.0f;
 
     /// <summary>
     /// 機動力（移動速度）
@@ -32,11 +33,11 @@ struct EnemyAIConfig {
     float mobility = 5.0f;
 
     /// <summary>
-    /// パラメータを0.0~10.0の範囲にクランプ
+    /// パラメータを有効範囲にクランプ
     /// </summary>
     void Clamp() {
         intelligence = std::clamp(intelligence, 0.0f, 10.0f);
-        aggressiveness = std::clamp(aggressiveness, 0.0f, 10.0f);
+        aggressiveness = std::clamp(aggressiveness, 0.0f, 100.0f);
         mobility = std::clamp(mobility, 0.0f, 10.0f);
     }
 };
