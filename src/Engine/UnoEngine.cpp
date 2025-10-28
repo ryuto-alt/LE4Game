@@ -676,11 +676,74 @@ void UnoEngine::UpdateCameraMouse() {
 void UnoEngine::UpdateCameraRightStick() {
     float stickX = input_->GetXboxRightStickX();
     float stickY = input_->GetXboxRightStickY();
-    
+
     // デッドゾーンを適用（スティックが少し動いただけでは反応しない）
     const float deadZone = 0.1f;
     if (abs(stickX) < deadZone) stickX = 0.0f;
     if (abs(stickY) < deadZone) stickY = 0.0f;
-    
+
     camera_->ProcessRightStickInput(stickX, stickY);
+}
+
+// === NavMesh関連の実装 ===
+
+void UnoEngine::InitializeNavMesh(const std::string& navMeshPath) {
+    if (!navMeshManager_) {
+        navMeshManager_ = std::make_unique<NavMeshManager>();
+    }
+    navMeshManager_->Initialize(navMeshPath);
+}
+
+void UnoEngine::GenerateNavMesh(const std::vector<std::unique_ptr<Object3d>>& sceneObjects, const std::string& filepath) {
+    if (!navMeshManager_) {
+        navMeshManager_ = std::make_unique<NavMeshManager>();
+    }
+    navMeshManager_->GenerateAndSaveNavMesh(sceneObjects, filepath);
+}
+
+bool UnoEngine::LoadNavMesh(const std::string& filepath) {
+    if (!navMeshManager_) {
+        navMeshManager_ = std::make_unique<NavMeshManager>();
+    }
+    return navMeshManager_->LoadNavMesh(filepath);
+}
+
+NavMeshBuildSettings& UnoEngine::GetNavMeshSettings() {
+    if (!navMeshManager_) {
+        navMeshManager_ = std::make_unique<NavMeshManager>();
+    }
+    return navMeshManager_->GetSettings();
+}
+
+void UnoEngine::SetNavMeshVisualizationEnabled(bool enabled) {
+    if (!navMeshManager_) {
+        navMeshManager_ = std::make_unique<NavMeshManager>();
+    }
+    navMeshManager_->SetVisualizationEnabled(enabled);
+}
+
+bool UnoEngine::IsNavMeshVisualizationEnabled() const {
+    if (!navMeshManager_) {
+        return false;
+    }
+    return navMeshManager_->IsVisualizationEnabled();
+}
+
+void UnoEngine::CreateNavMeshVisualization() {
+    if (!navMeshManager_) {
+        navMeshManager_ = std::make_unique<NavMeshManager>();
+    }
+    navMeshManager_->CreateVisualization(dxCommon_.get(), camera_.get());
+}
+
+void UnoEngine::DrawNavMeshVisualization() {
+    if (navMeshManager_) {
+        navMeshManager_->DrawVisualization();
+    }
+}
+
+void UnoEngine::UpdateNavMesh() {
+    if (navMeshManager_) {
+        navMeshManager_->Update();
+    }
 }

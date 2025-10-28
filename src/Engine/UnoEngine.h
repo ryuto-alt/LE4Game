@@ -37,6 +37,9 @@
 #include "SpatialAudioSource.h"
 #include "SpatialAudioListener.h"
 
+// NavMesh関連
+#include "Manager/NavMeshManager.h"
+
 // シーン管理
 #include "SceneManager.h"
 #include "IScene.h"
@@ -233,6 +236,35 @@ public:
     AudioManager* GetAudioManager() const { return AudioManager::GetInstance(); }
     Collision::AABBCollisionManager* GetAABBCollisionManager() const { return Collision::AABBCollisionManager::GetInstance(); }
 
+    // === NavMesh関連 ===
+    // NavMeshManagerを取得
+    NavMeshManager* GetNavMeshManager() const { return navMeshManager_.get(); }
+
+    // NavMeshを初期化
+    void InitializeNavMesh(const std::string& navMeshPath);
+
+    // NavMeshを生成して保存
+    void GenerateNavMesh(const std::vector<std::unique_ptr<Object3d>>& sceneObjects, const std::string& filepath);
+
+    // NavMeshを読み込み
+    bool LoadNavMesh(const std::string& filepath);
+
+    // NavMesh設定を取得
+    NavMeshBuildSettings& GetNavMeshSettings();
+
+    // NavMesh視覚化を有効/無効
+    void SetNavMeshVisualizationEnabled(bool enabled);
+    bool IsNavMeshVisualizationEnabled() const;
+
+    // NavMesh視覚化を作成
+    void CreateNavMeshVisualization();
+
+    // NavMesh視覚化を描画
+    void DrawNavMeshVisualization();
+
+    // NavMesh更新
+    void UpdateNavMesh();
+
 private:
     // シングルトンインスタンス
     static UnoEngine* instance_;
@@ -258,6 +290,9 @@ private:
     // 3D空間オーディオ関連
     std::unique_ptr<SpatialAudioListener> audioListener_;
     std::vector<std::unique_ptr<SpatialAudioSource>> spatialAudioSources_;
+
+    // NavMesh関連
+    std::unique_ptr<NavMeshManager> navMeshManager_;
 
     // ImGuiの初期化
     void InitializeImGui();

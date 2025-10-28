@@ -21,19 +21,24 @@ void GamePlayScene::Initialize() {
         fisheyeStrength_, fisheyeRadius_
     );
 
-    // ナビメッシュの初期化
-    navMeshManager_ = std::make_unique<NavMeshManager>();
-    navMeshManager_->SetLogCallback([this](const std::string& message) {
-        AddNavMeshLog(message);
-    });
+    // ナビメッシュの初期化（UnoEngine経由）
+    UnoEngine* engine = UnoEngine::GetInstance();
+    NavMeshManager* navMeshManager = engine->GetNavMeshManager();
+
+    if (navMeshManager) {
+        navMeshManager->SetLogCallback([this](const std::string& message) {
+            AddNavMeshLog(message);
+        });
+    }
 
     const std::string navMeshPath = "externals/navimap/stage.navmesh";
-    navMeshManager_->Initialize(navMeshPath);
+    engine->InitializeNavMesh(navMeshPath);
 
     // NavMeshが読み込まれなかった場合は生成
-    if (!navMeshManager_->GetNavMesh() || !navMeshManager_->GetNavMesh()->IsValid()) {
+    navMeshManager = engine->GetNavMeshManager();
+    if (!navMeshManager->GetNavMesh() || !navMeshManager->GetNavMesh()->IsValid()) {
         AddNavMeshLog("No existing NavMesh found, auto-generating...");
-        navMeshManager_->GenerateAndSaveNavMesh(sceneObjects_, navMeshPath);
+        engine->GenerateNavMesh(sceneObjects_, navMeshPath);
     }
 
     // 3D空間オーディオリスナーの初期化
@@ -44,8 +49,9 @@ void GamePlayScene::Initialize() {
 
     // EnemyにNavMeshとAudioListenerを設定
     if (enemy_) {
-        if (navMeshManager_->GetNavMesh()) {
-            enemy_->SetNavMesh(navMeshManager_->GetNavMesh());
+        navMeshManager = engine->GetNavMeshManager();
+        if (navMeshManager && navMeshManager->GetNavMesh()) {
+            enemy_->SetNavMesh(navMeshManager->GetNavMesh());
             AddNavMeshLog("NavMesh set to Enemy");
         }
         if (player_) {
@@ -158,10 +164,8 @@ void GamePlayScene::Update() {
     }
     player_->Update(engine);
 
-    // NavMesh更新
-    if (navMeshManager_) {
-        navMeshManager_->Update();
-    }
+    // NavMesh更新（UnoEngine経由）
+    engine->UpdateNavMesh();
 }
 
 void GamePlayScene::Draw() {
@@ -189,10 +193,8 @@ void GamePlayScene::Draw() {
         enemy_->Draw();
     }
 
-    // NavMeshの視覚化
-    if (navMeshManager_) {
-        navMeshManager_->DrawVisualization();
-    }
+    // NavMeshの視覚化（UnoEngine経由）
+    UnoEngine::GetInstance()->DrawNavMeshVisualization();
 
     // ポストプロセスを適用して画面に描画
     if (postProcess_) {
@@ -218,19 +220,22 @@ void GamePlayScene::Draw() {
     // NavMeshデバッグウィンドウ
     ImGui::Begin("NavMesh Debug");
 
-    if (navMeshManager_) {
+    UnoEngine* engine = UnoEngine::GetInstance();
+    NavMeshManager* navMeshManager = engine->GetNavMeshManager();
+
+    if (navMeshManager) {
         // NavMeshManagerのImGui描画
-        bool showViz = navMeshManager_->IsVisualizationEnabled();
+        bool showViz = engine->IsNavMeshVisualizationEnabled();
         if (ImGui::Checkbox("Show NavMesh Visualization", &showViz)) {
-            navMeshManager_->SetVisualizationEnabled(showViz);
-            if (showViz && !navMeshManager_->IsVisualizationEnabled()) {
+            engine->SetNavMeshVisualizationEnabled(showViz);
+            if (showViz && !engine->IsNavMeshVisualizationEnabled()) {
                 // 視覚化を有効にする場合、まだ作成されていなければ作成
-                navMeshManager_->CreateVisualization(dxCommon_, camera_);
-                navMeshManager_->SetVisualizationEnabled(true);
+                engine->CreateNavMeshVisualization();
+                engine->SetNavMeshVisualizationEnabled(true);
             }
         }
 
-        NavMeshBuildSettings& settings = navMeshManager_->GetSettings();
+        NavMeshBuildSettings& settings = engine->GetNavMeshSettings();
         if (ImGui::CollapsingHeader("NavMesh Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
             ImGui::SliderFloat("Cell Size", &settings.cellSize, 0.05f, 1.0f);
             ImGui::SliderFloat("Cell Height", &settings.cellHeight, 0.05f, 0.5f);
@@ -248,9 +253,10 @@ void GamePlayScene::Draw() {
         if (ImGui::Button("Generate NavMesh")) {
             ClearNavMeshLogs();
             AddNavMeshLog("=== Manual NavMesh generation triggered ===");
-            navMeshManager_->GenerateAndSaveNavMesh(sceneObjects_, "externals/navimap/stage.navmesh");
-            if (enemy_ && navMeshManager_->GetNavMesh()) {
-                enemy_->SetNavMesh(navMeshManager_->GetNavMesh());
+            engine->GenerateNavMesh(sceneObjects_, "externals/navimap/stage.navmesh");
+            NavMesh* navMesh = navMeshManager->GetNavMesh();
+            if (enemy_ && navMesh) {
+                enemy_->SetNavMesh(navMesh);
                 AddNavMeshLog("NavMesh re-set to Enemy");
             }
         }
@@ -259,9 +265,10 @@ void GamePlayScene::Draw() {
         if (ImGui::Button("Load NavMesh")) {
             ClearNavMeshLogs();
             const std::string navMeshPath = "externals/navimap/stage.navmesh";
-            if (navMeshManager_->LoadNavMesh(navMeshPath)) {
-                if (enemy_ && navMeshManager_->GetNavMesh()) {
-                    enemy_->SetNavMesh(navMeshManager_->GetNavMesh());
+            if (engine->LoadNavMesh(navMeshPath)) {
+                NavMesh* navMesh = navMeshManager->GetNavMesh();
+                if (enemy_ && navMesh) {
+                    enemy_->SetNavMesh(navMesh);
                 }
             }
         }
@@ -274,7 +281,7 @@ void GamePlayScene::Draw() {
         ImGui::Separator();
 
         // NavMesh情報表示
-        NavMesh* navMesh = navMeshManager_->GetNavMesh();
+        NavMesh* navMesh = navMeshManager->GetNavMesh();
         if (navMesh) {
             ImGui::Text("NavMesh Status: %s", navMesh->IsValid() ? "Valid" : "Invalid");
 
@@ -385,9 +392,7 @@ void GamePlayScene::HandleInput() {
     if (engine->IsKeyTriggered(DIK_R)) {
         ClearNavMeshLogs();
         AddNavMeshLog("=== Regenerating NavMesh (R key) ===");
-        if (navMeshManager_) {
-            navMeshManager_->GenerateAndSaveNavMesh(sceneObjects_, "externals/navimap/stage.navmesh");
-        }
+        engine->GenerateNavMesh(sceneObjects_, "externals/navimap/stage.navmesh");
     }
 }
 

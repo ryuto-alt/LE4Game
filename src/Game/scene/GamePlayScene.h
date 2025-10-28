@@ -5,7 +5,6 @@
 #include "GameObject/FPSCamera.h"
 #include "Skybox.h"
 #include "Manager/LightManager.h"
-#include "Manager/NavMeshManager.h"
 #include "InstancedRenderer.h"
 #include "PostProcess.h"
 #include "Scene/SceneConfigurator.h"
@@ -32,7 +31,6 @@ private:
     std::unique_ptr<LightManager> lightManager_;
     std::unique_ptr<FPSCamera> fpsCamera_;
     std::unique_ptr<PostProcess> postProcess_;
-    std::unique_ptr<NavMeshManager> navMeshManager_;
     std::unique_ptr<SpatialAudioListener> audioListener_;
 
     SceneData sceneData_;
