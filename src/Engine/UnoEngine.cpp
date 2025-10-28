@@ -11,9 +11,16 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+// ========================================
 // 静的メンバ変数の実体化
+// ========================================
 UnoEngine* UnoEngine::instance_ = nullptr;
 
+// ========================================
+// 🧩 基本機能
+// ========================================
+
+// シングルトンインスタンスを取得
 UnoEngine* UnoEngine::GetInstance() {
     if (!instance_) {
         instance_ = new UnoEngine();
@@ -21,6 +28,7 @@ UnoEngine* UnoEngine::GetInstance() {
     return instance_;
 }
 
+// シングルトンインスタンスを破棄
 void UnoEngine::DestroyInst() {
     if (instance_) {
         instance_->Finalize();
@@ -29,6 +37,7 @@ void UnoEngine::DestroyInst() {
     }
 }
 
+// 初期化
 void UnoEngine::Initialize() {
     try {
         // WinAppの初期化
@@ -111,6 +120,7 @@ void UnoEngine::Initialize() {
     }
 }
 
+// 更新
 void UnoEngine::Update() {
     try {
         // デルタタイムを更新
@@ -185,6 +195,7 @@ void UnoEngine::Update() {
     }
 }
 
+// 描画
 void UnoEngine::Draw() {
     try {
         // DirectXの描画準備
@@ -216,6 +227,7 @@ void UnoEngine::Draw() {
     }
 }
 
+// 終了処理
 void UnoEngine::Finalize() {
     // 既に終了処理済みの場合は何もしない
     if (finalized_) {
@@ -280,6 +292,7 @@ void UnoEngine::Finalize() {
     }
 }
 
+// ゲームループ実行
 void UnoEngine::Run() {
     // ゲームループ
     while (!IsEnding()) {
@@ -296,11 +309,11 @@ void UnoEngine::Run() {
     }
 }
 
+// ========================================
+// 🔊 オーディオシステム
+// ========================================
 
-
-// === 統合API実装 ===
-
-// === オーディオシステム ===
+// オーディオファイルを読み込む（WAV/MP3対応）
 bool UnoEngine::LoadAudio(const std::string& name, const std::string& filePath) {
     auto* audioManager = AudioManager::GetInstance();
     
@@ -318,6 +331,7 @@ bool UnoEngine::LoadAudio(const std::string& name, const std::string& filePath) 
     return false;
 }
 
+// オーディオを再生
 void UnoEngine::PlayAudio(const std::string& name, bool loop, float volume) {
     AudioManager::GetInstance()->Play(name, loop);
     if (volume != 1.0f) {
@@ -325,28 +339,37 @@ void UnoEngine::PlayAudio(const std::string& name, bool loop, float volume) {
     }
 }
 
+// オーディオを停止
 void UnoEngine::StopAudio(const std::string& name) {
     AudioManager::GetInstance()->Stop(name);
 }
 
+// オーディオの音量を設定
 void UnoEngine::SetAudVol(const std::string& name, float volume) {
     AudioManager::GetInstance()->SetVolume(name, volume);
 }
 
+// オーディオが再生中かチェック
 bool UnoEngine::IsAudPlay(const std::string& name) {
     return AudioManager::GetInstance()->IsPlaying(name);
 }
 
-// === パーティクルシステム ===
+// ========================================
+// 💨 パーティクル・オブジェクト生成
+// ========================================
+
+// パーティクルグループを作成
 bool UnoEngine::CreatePart(const std::string& name, const std::string& texturePath) {
     ParticleManager::GetInstance()->CreateParticleGroup(name, texturePath);
     return true; // TODO: エラーハンドリングの改善
 }
 
+// パーティクルを発生（基本版）
 void UnoEngine::PlayPart(const std::string& name, const Vector3& position, int count) {
     ParticleManager::GetInstance()->Emit(name, position, count);
 }
 
+// パーティクルを発生（詳細版）
 void UnoEngine::PlayPart(const std::string& name, const Vector3& position, int count,
                             const Vector3& velocity, float lifeTime) {
     // より詳細なパラメータでパーティクルを発生
@@ -364,7 +387,7 @@ void UnoEngine::PlayPart(const std::string& name, const Vector3& position, int c
     );
 }
 
-// === 3Dオブジェクト作成システム ===
+// 3Dオブジェクトを作成（空のオブジェクト）
 std::unique_ptr<Object3d> UnoEngine::CreateObj3() {
     auto object = std::make_unique<Object3d>();
     object->Initialize(dxCommon_.get(), spriteCommon_.get());
@@ -372,6 +395,7 @@ std::unique_ptr<Object3d> UnoEngine::CreateObj3() {
     return object;
 }
 
+// 3Dオブジェクトを作成（モデル読み込み済み）
 std::unique_ptr<Object3d> UnoEngine::CreateObjM(const std::string& modelPath) {
     auto object = std::make_unique<Object3d>();
     object->Initialize(dxCommon_.get(), spriteCommon_.get());
@@ -380,6 +404,7 @@ std::unique_ptr<Object3d> UnoEngine::CreateObjM(const std::string& modelPath) {
     return object;
 }
 
+// モデルを読み込む
 std::unique_ptr<Model> UnoEngine::LoadModel(const std::string& modelPath) {
     auto model = std::make_unique<Model>();
 
@@ -397,24 +422,26 @@ std::unique_ptr<Model> UnoEngine::LoadModel(const std::string& modelPath) {
     return model;
 }
 
+// インスタンスレンダラーを作成
 std::unique_ptr<InstancedRenderer> UnoEngine::CreateInst(size_t maxInstances) {
     auto renderer = std::make_unique<InstancedRenderer>();
     renderer->Initialize(dxCommon_.get(), spriteCommon_.get(), maxInstances);
     return renderer;
 }
 
-// === アニメーションシステム ===
+// アニメーション付きモデルを作成
 std::unique_ptr<AnimatedModel> UnoEngine::CreateAnim() {
     auto animatedModel = std::make_unique<AnimatedModel>();
     animatedModel->Initialize(dxCommon_.get());
     return animatedModel;
 }
 
+// アニメーションファイルを読み込む
 Animation UnoEngine::LoadAnim(const std::string& directoryPath, const std::string& filename) {
     return LoadAnimationFile(directoryPath, filename);
 }
 
-// === 2Dスプライト作成システム ===
+// 2Dスプライトを作成
 std::unique_ptr<Sprite> UnoEngine::CreateSpr(const std::string& texturePath) {
     // テクスチャを読み込み
     LoadTex(texturePath);
@@ -424,8 +451,11 @@ std::unique_ptr<Sprite> UnoEngine::CreateSpr(const std::string& texturePath) {
     return sprite;
 }
 
+// ========================================
+// ⚙️ ユーティリティ
+// ========================================
 
-// === 衝突判定システム ===
+// 球同士の衝突判定
 bool UnoEngine::ChkCollide(const Vector3& pos1, float radius1, const Vector3& pos2, float radius2) {
     // 簡易的な球同士の衝突判定(距離ベース)
     float dx = pos2.x - pos1.x;
@@ -436,12 +466,12 @@ bool UnoEngine::ChkCollide(const Vector3& pos1, float radius1, const Vector3& po
     return distanceSq <= (radiusSum * radiusSum);
 }
 
-// === シーン管理 ===
+// シーンを変更
 void UnoEngine::ChgScene(const std::string& sceneName) {
     SceneManager::GetInstance()->ChangeScene(sceneName);
 }
 
-// === デバッグ情報 ===
+// デバッグ情報を表示
 void UnoEngine::ShowDebug() {
 #ifdef _DEBUG
     ImGui::Begin("UnoEngine デバッグ情報");
@@ -477,7 +507,11 @@ void UnoEngine::ShowDebug() {
 #endif
 }
 
-// === 3D空間オーディオシステム実装 ===
+// ========================================
+// 🔊 3D空間オーディオシステム
+// ========================================
+
+// 3D空間オーディオソースを作成
 std::unique_ptr<SpatialAudioSource> UnoEngine::CreateSAud(const std::string& audioName, const Vector3& position) {
     auto spatialSource = std::make_unique<SpatialAudioSource>();
     
@@ -488,18 +522,21 @@ std::unique_ptr<SpatialAudioSource> UnoEngine::CreateSAud(const std::string& aud
     return nullptr;
 }
 
+// リスナーの位置を設定
 void UnoEngine::SetListPos(const Vector3& position) {
     if (audioListener_) {
         audioListener_->SetPosition(position);
     }
 }
 
+// リスナーの向きを設定
 void UnoEngine::SetListOri(const Vector3& forward, const Vector3& up) {
     if (audioListener_) {
         audioListener_->SetOrientation(forward, up);
     }
 }
 
+// 3D空間オーディオを更新
 void UnoEngine::UpdateSAud() {
     if (!audioListener_) return;
     
@@ -511,6 +548,11 @@ void UnoEngine::UpdateSAud() {
     }
 }
 
+// ========================================
+// ImGui初期化
+// ========================================
+
+// ImGuiの初期化処理
 void UnoEngine::InitializeImGui() {
     try {
         // ImGui初期化
@@ -587,30 +629,37 @@ void UnoEngine::InitializeImGui() {
     }
 }
 
-// === スムージングシステム実装 ===
+// ========================================
+// 🔄 スムージングシステム
+// ========================================
 
+// 角度を正規化（-π ~ π に収める）
 float UnoEngine::NormAngle(float angle) {
     while (angle > (float)M_PI) angle -= 2.0f * (float)M_PI;
     while (angle < -(float)M_PI) angle += 2.0f * (float)M_PI;
     return angle;
 }
 
+// 2つの角度の差を計算
 float UnoEngine::AngleDiff(float from, float to) {
     float diff = to - from;
     return NormAngle(diff);
 }
 
+// 角度を線形補間
 float UnoEngine::LerpAngle(float from, float to, float t) {
     t = std::clamp(t, 0.0f, 1.0f);
     float diff = AngleDiff(from, to);
     return NormAngle(from + diff * t);
 }
 
+// 値を線形補間
 float UnoEngine::Lerp(float from, float to, float t) {
     t = std::clamp(t, 0.0f, 1.0f);
     return from + (to - from) * t;
 }
 
+// Vector3を線形補間
 Vector3 UnoEngine::LerpVector3(const Vector3& from, const Vector3& to, float t) {
     t = std::clamp(t, 0.0f, 1.0f);
     return Vector3{
@@ -620,11 +669,17 @@ Vector3 UnoEngine::LerpVector3(const Vector3& from, const Vector3& to, float t) 
     };
 }
 
+// 回転を滑らかに補間
 float UnoEngine::SmoothRot(float current, float target, float speed, float deltaTime) {
     float lerpFactor = std::min(1.0f, speed * deltaTime);
     return LerpAngle(current, target, lerpFactor);
 }
 
+// ========================================
+// ⏱️ 時間管理
+// ========================================
+
+// デルタタイムを更新
 void UnoEngine::UpdateDt() {
     // 初回呼び出し時の処理
     static bool firstCall = true;
@@ -652,27 +707,39 @@ void UnoEngine::UpdateDt() {
     lastFrameTime_ = currentTime;
 }
 
-// === 簡易化API実装 ===
+// ========================================
+// 🖼️ テクスチャ・スカイボックス
+// ========================================
+
+// テクスチャを読み込む
 void UnoEngine::LoadTex(const std::string& path) {
     TextureManager::GetInstance()->LoadTexture(path);
 }
 
+// スカイボックスを作成
 std::unique_ptr<Skybox> UnoEngine::CreateSky() {
     auto skybox = std::make_unique<Skybox>();
     skybox->Initialize(dxCommon_.get(), srvManager_.get(), TextureManager::GetInstance());
     return skybox;
 }
 
+// スカイボックスにキューブマップを読み込む
 void UnoEngine::LoadSkybox(Skybox* skybox, const std::string& path) {
     skybox->LoadCubemap(path);
 }
 
+// ========================================
+// 📷 カメラ更新ヘルパー
+// ========================================
+
+// マウス入力でカメラを更新
 void UnoEngine::UpdCamMouse() {
     float deltaX, deltaY;
     input_->GetMouseMovement(deltaX, deltaY);
     camera_->ProcessMouseInput(deltaX, deltaY);
 }
 
+// 右スティック入力でカメラを更新
 void UnoEngine::UpdCamStick() {
     float stickX = input_->GetXboxRightStickX();
     float stickY = input_->GetXboxRightStickY();
@@ -685,8 +752,11 @@ void UnoEngine::UpdCamStick() {
     camera_->ProcessRightStickInput(stickX, stickY);
 }
 
-// === NavMesh関連の実装 ===
+// ========================================
+// 🧭 NavMesh システム
+// ========================================
 
+// NavMeshを初期化
 void UnoEngine::InitNav(const std::string& navMeshPath) {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
@@ -694,6 +764,7 @@ void UnoEngine::InitNav(const std::string& navMeshPath) {
     navMeshManager_->Initialize(navMeshPath);
 }
 
+// NavMeshを生成して保存
 void UnoEngine::GenNav(const std::vector<std::unique_ptr<Object3d>>& sceneObjects, const std::string& filepath) {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
@@ -701,6 +772,7 @@ void UnoEngine::GenNav(const std::vector<std::unique_ptr<Object3d>>& sceneObject
     navMeshManager_->GenerateAndSaveNavMesh(sceneObjects, filepath);
 }
 
+// NavMeshをファイルから読み込む
 bool UnoEngine::LoadNavMesh(const std::string& filepath) {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
@@ -708,6 +780,7 @@ bool UnoEngine::LoadNavMesh(const std::string& filepath) {
     return navMeshManager_->LoadNavMesh(filepath);
 }
 
+// NavMeshの設定を取得
 NavMeshBuildSettings& UnoEngine::GetNavSet() {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
@@ -715,6 +788,7 @@ NavMeshBuildSettings& UnoEngine::GetNavSet() {
     return navMeshManager_->GetSettings();
 }
 
+// NavMeshの視覚化を有効/無効にする
 void UnoEngine::SetNavVis(bool enabled) {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
@@ -722,6 +796,7 @@ void UnoEngine::SetNavVis(bool enabled) {
     navMeshManager_->SetVisualizationEnabled(enabled);
 }
 
+// NavMeshの視覚化が有効かチェック
 bool UnoEngine::IsNavVis() const {
     if (!navMeshManager_) {
         return false;
@@ -729,6 +804,7 @@ bool UnoEngine::IsNavVis() const {
     return navMeshManager_->IsVisualizationEnabled();
 }
 
+// NavMeshの視覚化用オブジェクトを作成
 void UnoEngine::CreateNavVis() {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
@@ -736,12 +812,14 @@ void UnoEngine::CreateNavVis() {
     navMeshManager_->CreateVisualization(dxCommon_.get(), camera_.get());
 }
 
+// NavMeshの視覚化を描画
 void UnoEngine::DrawNavVis() {
     if (navMeshManager_) {
         navMeshManager_->DrawVisualization();
     }
 }
 
+// NavMeshを更新
 void UnoEngine::UpdateNavMesh() {
     if (navMeshManager_) {
         navMeshManager_->Update();
