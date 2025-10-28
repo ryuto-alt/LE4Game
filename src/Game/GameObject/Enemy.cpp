@@ -8,6 +8,7 @@
 #include "Collision/AABBCollision.h"
 #include "Collision/CollisionHelper.h"
 #include "DetourNavMeshQuery.h"
+#include "imgui.h"
 
 Enemy::Enemy() = default;
 
@@ -136,8 +137,17 @@ void Enemy::Update() {
 
 		float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.z * toPlayer.z);
 
-		// プレイヤーが検知範囲内にいるかチェック
-		if (distanceToPlayer < detectionRange_) {
+		// 検知条件：視界内にいるか、または追跡中の場合は追跡解除距離以内
+		bool shouldChase = false;
+		if (isChasing_) {
+			// 追跡中は25m以上離れないと解除しない
+			shouldChase = (distanceToPlayer < CHASE_RELEASE_DISTANCE);
+		} else {
+			// 探索中は視界内（前方30m以内）にいるか確認
+			shouldChase = IsPlayerInVision();
+		}
+
+		if (shouldChase) {
 			// 探索モードから追跡モードに切り替え
 			if (isExploring_) {
 				isExploring_ = false;
@@ -378,6 +388,107 @@ void Enemy::Draw() {
 	if (object3d_) {
 		object3d_->Draw();
 	}
+
+	// デバッグ用視界描画
+	if (debugDrawVision_) {
+		DrawDebugVision();
+	}
+}
+
+void Enemy::DrawDebugVision() {
+	if (!player_) {
+		return;
+	}
+
+	// ImGuiウィンドウで視界情報を表示
+	ImGui::Begin("Enemy Vision Debug");
+
+	// プレイヤーとの距離を計算
+	Vector3 playerPos = player_->GetPosition();
+	Vector3 toPlayer = {
+		playerPos.x - position_.x,
+		0.0f,
+		playerPos.z - position_.z
+	};
+	float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.z * toPlayer.z);
+
+	// Enemyの状態
+	ImGui::Text("Enemy Status:");
+	ImGui::Text("  Position: (%.2f, %.2f, %.2f)", position_.x, position_.y, position_.z);
+	ImGui::Text("  Rotation Y: %.2f degrees", currentRotationY_ * (180.0f / 3.14159f));
+	ImGui::Text("  Is Chasing: %s", isChasing_ ? "YES" : "NO");
+	ImGui::Text("  Is Exploring: %s", isExploring_ ? "YES" : "NO");
+
+	ImGui::Separator();
+
+	// プレイヤーとの関係
+	ImGui::Text("Player Relation:");
+	ImGui::Text("  Distance: %.2f m", distanceToPlayer);
+	ImGui::Text("  Vision Detection Distance: %.2f m", VISION_DETECTION_DISTANCE);
+	ImGui::Text("  Chase Release Distance: %.2f m", CHASE_RELEASE_DISTANCE);
+
+	// 視界チェック結果
+	bool inVision = IsPlayerInVision();
+	ImGui::Separator();
+	ImGui::Text("Vision Check:");
+
+	if (distanceToPlayer <= VISION_DETECTION_DISTANCE) {
+		ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "  Distance: WITHIN detection range (15m)");
+
+		// 角度計算
+		if (distanceToPlayer > 0.01f) {
+			float invLength = 1.0f / distanceToPlayer;
+			Vector3 toPlayerNorm = {
+				toPlayer.x * invLength,
+				0.0f,
+				toPlayer.z * invLength
+			};
+
+			Vector3 forward = {
+				std::sin(currentRotationY_),
+				0.0f,
+				std::cos(currentRotationY_)
+			};
+
+			float dotProduct = toPlayerNorm.x * forward.x + toPlayerNorm.z * forward.z;
+			if (dotProduct > 1.0f) dotProduct = 1.0f;
+			if (dotProduct < -1.0f) dotProduct = -1.0f;
+
+			float angleInRadians = std::acos(dotProduct);
+			float angleInDegrees = angleInRadians * (180.0f / 3.14159f);
+
+			ImGui::Text("  Angle to Player: %.2f degrees", angleInDegrees);
+			ImGui::Text("  Vision Angle: %.2f degrees", VISION_ANGLE);
+
+			if (angleInDegrees <= VISION_ANGLE) {
+				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "  Angle: WITHIN vision cone");
+			} else {
+				ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "  Angle: OUTSIDE vision cone");
+			}
+		}
+	} else {
+		ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "  Distance: OUTSIDE detection range (>15m)");
+	}
+
+	ImGui::Separator();
+	if (inVision) {
+		ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "PLAYER DETECTED!");
+	} else {
+		ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Player not in vision");
+	}
+
+	// 追跡中の場合、追跡解除までの距離
+	if (isChasing_) {
+		ImGui::Separator();
+		float distanceToRelease = CHASE_RELEASE_DISTANCE - distanceToPlayer;
+		if (distanceToRelease > 0) {
+			ImGui::Text("Distance until chase release: %.2f m", distanceToRelease);
+		} else {
+			ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Will release chase now!");
+		}
+	}
+
+	ImGui::End();
 }
 
 
@@ -803,4 +914,59 @@ void Enemy::RecoverFromStuck() {
 
 	// 回避フラグをリセット
 	isRecoveringFromStuck_ = false;
+}
+
+// プレイヤーが視界内にいるかチェック
+bool Enemy::IsPlayerInVision() {
+	if (!player_) {
+		return false;
+	}
+
+	// プレイヤーとの距離を計算
+	Vector3 playerPos = player_->GetPosition();
+	Vector3 toPlayer = {
+		playerPos.x - position_.x,
+		0.0f,
+		playerPos.z - position_.z
+	};
+	float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.z * toPlayer.z);
+
+	// 視界検知距離外なら検知しない（15m以内のみ検知）
+	if (distanceToPlayer > VISION_DETECTION_DISTANCE) {
+		return false;
+	}
+
+	// プレイヤーへの方向ベクトルを正規化
+	if (distanceToPlayer < 0.01f) {
+		// 距離が極端に小さい場合は常に視界内とする
+		return true;
+	}
+
+	float invLength = 1.0f / distanceToPlayer;
+	Vector3 toPlayerNorm = {
+		toPlayer.x * invLength,
+		0.0f,
+		toPlayer.z * invLength
+	};
+
+	// Enemyの向きベクトルを計算（Y軸回転）
+	Vector3 forward = {
+		std::sin(currentRotationY_),
+		0.0f,
+		std::cos(currentRotationY_)
+	};
+
+	// 内積で角度を計算（-1.0 ~ 1.0）
+	float dotProduct = toPlayerNorm.x * forward.x + toPlayerNorm.z * forward.z;
+
+	// 内積の範囲をクランプ（数値誤差対策）
+	if (dotProduct > 1.0f) dotProduct = 1.0f;
+	if (dotProduct < -1.0f) dotProduct = -1.0f;
+
+	// 角度を計算（ラジアンから度に変換）
+	float angleInRadians = std::acos(dotProduct);
+	float angleInDegrees = angleInRadians * (180.0f / 3.14159f);
+
+	// 視野角以内ならtrue（Enemyの前方±60度、合計120度の視野）
+	return angleInDegrees <= VISION_ANGLE;
 }

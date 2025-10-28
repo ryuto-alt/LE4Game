@@ -231,6 +231,14 @@ void GamePlayScene::Draw() {
             }
         }
 
+        // Enemy視界の可視化
+        if (enemy_) {
+            bool showEnemyVision = enemy_->debugDrawVision_;
+            if (ImGui::Checkbox("Show Enemy Vision", &showEnemyVision)) {
+                enemy_->debugDrawVision_ = showEnemyVision;
+            }
+        }
+
         NavMeshBuildSettings& settings = engine->GetNavSet();
         if (ImGui::CollapsingHeader("NavMesh Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
             ImGui::SliderFloat("Cell Size", &settings.cellSize, 0.05f, 1.0f);

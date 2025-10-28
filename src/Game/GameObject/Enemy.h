@@ -16,6 +16,7 @@ public:
 	void Initialize(Camera* camera = nullptr, const EnemyAIConfig& aiConfig = EnemyAIConfig{});
 	void Update();
 	void Draw();
+	void DrawDebugVision();  // 視界デバッグ描画
 	void Finalize();
 
 	// Position
@@ -65,6 +66,9 @@ public:
 	// Collision response
 	void HandleCollisionResponse();
 
+	// Debug
+	bool debugDrawVision_{false};  // 視界デバッグ描画フラグ
+
 private:
 	void UpdateAnimation();
 	void UpdateFootstepAudio();
@@ -77,6 +81,7 @@ private:
 	void UpdateExploration();
 	void CheckAndHandleStuck();
 	void RecoverFromStuck();
+	bool IsPlayerInVision();
 
 	// 3D object and model
 	std::unique_ptr<Object3d> object3d_;
@@ -108,6 +113,12 @@ private:
 	float detectionRange_{100.0f};
 	float moveSpeed_{0.125f};
 	bool isChasing_{false};
+
+	// Vision-based detection
+	const float VISION_RANGE = 30.0f;  // 視界範囲30m
+	const float VISION_ANGLE = 60.0f;  // 視野角±60度（合計120度）
+	const float VISION_DETECTION_DISTANCE = 20.0f;  // 視界検知距離15m
+	const float CHASE_RELEASE_DISTANCE = 22.0f;  // 追跡解除距離25m
 
 	// Wall avoidance (for UI/future use)
 	float avoidanceRadius_{5.0f};
