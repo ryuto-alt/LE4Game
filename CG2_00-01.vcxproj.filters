@@ -5,11 +5,20 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="math">
+    <Filter Include="externals">
       <UniqueIdentifier>{b05f0138-5552-487b-8ffd-321ec6d704b0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="math\imgui">
+    <Filter Include="externals\imgui">
       <UniqueIdentifier>{e8e8e278-b259-4d45-a15a-584ab892f8a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="externals\recastnavigation">
+      <UniqueIdentifier>{f1a2b3c4-d5e6-7890-1234-567890abcdef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="externals\recastnavigation\Recast">
+      <UniqueIdentifier>{a1b2c3d4-e5f6-7890-1234-567890abcdef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="externals\recastnavigation\Detour">
+      <UniqueIdentifier>{b2c3d4e5-f6a7-8901-2345-67890abcdef1}</UniqueIdentifier>
     </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
@@ -72,28 +81,46 @@
     <Filter Include="src\Game\Enemy">
       <UniqueIdentifier>{84b91cef-82ef-4bbb-a455-717118ec2970}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\engine\Resource">
+      <UniqueIdentifier>{d1e2f3a4-b5c6-7890-1234-567890abcdef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine\Scene">
+      <UniqueIdentifier>{e2f3a4b5-c6d7-8901-2345-67890abcdef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Game\NavMesh">
+      <UniqueIdentifier>{f3a4b5c6-d7e8-9012-3456-7890abcdef12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Game\Manager">
+      <UniqueIdentifier>{a4b5c6d7-e8f9-0123-4567-890abcdef123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Game\GameObject">
+      <UniqueIdentifier>{b5c6d7e8-f9a0-1234-5678-90abcdef1234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine\Graphics\PostProcess">
+      <UniqueIdentifier>{c6d7e8f9-a0b1-2345-6789-0abcdef12345}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_demo.cpp">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_draw.cpp">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_tables.cpp">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\D3DResourceCheck.cpp">
       <Filter>src\engine\Graphics</Filter>
@@ -204,7 +231,7 @@
       <Filter>src\engine\Animation</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Resource\ResourcePreloader.cpp">
-      <Filter>src\engine\Animation</Filter>
+      <Filter>src\engine\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Audio\SpatialAudioListener.cpp">
       <Filter>src\engine\Audio</Filter>
@@ -225,120 +252,120 @@
       <Filter>src\Game\Light</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\Skybox.cpp">
-      <Filter>src\Game\SkyBox</Filter>
+      <Filter>src\engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\PostProcess.cpp">
-      <Filter>src</Filter>
+      <Filter>src\engine\Graphics\PostProcess</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\GameObject\FPSCamera.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Game\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\scene\LogoScene.cpp">
       <Filter>src\Game\scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Camera\Frustum.cpp">
-      <Filter>src</Filter>
+      <Filter>src\engine\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\InstancedRenderer.cpp">
-      <Filter>src</Filter>
+      <Filter>src\engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\GameObject\Enemy.cpp">
       <Filter>src\Game\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\SceneLoader.cpp">
-      <Filter>src\engine</Filter>
+      <Filter>src\engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\SceneConfigurator.cpp">
-      <Filter>src\engine</Filter>
+      <Filter>src\engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\Manager\NavMeshManager.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Game\Manager</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\NavMesh\NavMesh.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Game\NavMesh</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\NavMesh\NavMeshBuilder.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Game\NavMesh</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\Recast.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAlloc.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastArea.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAssert.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastContour.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastFilter.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastLayers.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastMesh.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastMeshDetail.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastRasterization.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\RecastRegion.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Recast</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Detour\Source\DetourAlloc.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Detour</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Detour\Source\DetourAssert.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Detour</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Detour\Source\DetourCommon.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Detour</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMesh.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Detour</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMeshBuilder.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Detour</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMeshQuery.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Detour</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNode.cpp">
-      <Filter>src</Filter>
+      <Filter>externals\recastnavigation\Detour</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui.h">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui_impl_win32.h">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imgui_internal.h">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_rectpack.h">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_textedit.h">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_truetype.h">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\D3DResourceCheck.h">
       <Filter>src\engine\Graphics</Filter>
@@ -458,7 +485,7 @@
       <Filter>src\engine\Animation</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Resource\ResourcePreloader.h">
-      <Filter>src\engine\Animation</Filter>
+      <Filter>src\engine\Resource</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Audio\SpatialAudioListener.h">
       <Filter>src\engine\Audio</Filter>
@@ -479,33 +506,45 @@
       <Filter>src\Game\Light</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\Skybox.h">
-      <Filter>src\Game\SkyBox</Filter>
+      <Filter>src\engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Graphics\PostProcess.h" />
+    <ClInclude Include="src\Engine\Graphics\PostProcess.h">
+      <Filter>src\engine\Graphics\PostProcess</Filter>
+    </ClInclude>
     <ClInclude Include="src\Game\scene\LogoScene.h">
       <Filter>src\Game\scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Camera\Frustum.h" />
-    <ClInclude Include="src\Engine\Graphics\InstancedRenderer.h" />
+    <ClInclude Include="src\Engine\Camera\Frustum.h">
+      <Filter>src\engine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\InstancedRenderer.h">
+      <Filter>src\engine\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Game\GameObject\Enemy.h">
       <Filter>src\Game\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\GameObject\FPSCamera.h">
-      <Filter>src</Filter>
+      <Filter>src\Game\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\SceneLoader.h">
-      <Filter>src\engine</Filter>
+      <Filter>src\engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\SceneConfigurator.h">
-      <Filter>src\engine</Filter>
+      <Filter>src\engine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\Manager\NavMeshManager.h" />
-    <ClInclude Include="src\Game\NavMesh\NavMesh.h" />
-    <ClInclude Include="src\Game\NavMesh\NavMeshBuilder.h" />
+    <ClInclude Include="src\Game\Manager\NavMeshManager.h">
+      <Filter>src\Game\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\NavMesh\NavMesh.h">
+      <Filter>src\Game\NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\NavMesh\NavMeshBuilder.h">
+      <Filter>src\Game\NavMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
-      <Filter>math\imgui</Filter>
+      <Filter>externals\imgui</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
