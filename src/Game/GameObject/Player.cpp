@@ -42,19 +42,19 @@ void Player::Initialize(Camera* camera, bool enableCollision, bool enableEnviron
             OutputDebugStringA("Player: Using preloaded sneak animation\n");
         } else {
             // フォールバック: 通常読み込み
-            Animation sneakWalkAnim = engine->LoadAnimation("Resources/Models/human", "sneakWalk.gltf");
+            Animation sneakWalkAnim = engine->LoadAnim("Resources/Models/human", "sneakWalk.gltf");
             animatedModel_->AddAnimation("sneakWalk", sneakWalkAnim);
         }
     } else {
         OutputDebugStringA("Player: Preloaded model not found, loading normally\n");
         // フォールバック: 通常読み込み
-        animatedModel_ = engine->CreateAnimatedModel();
+        animatedModel_ = engine->CreateAnim();
         animatedModel_->LoadFromFile("Resources/Models/human", "walk.gltf");
         
         Animation walkAnim = animatedModel_->GetAnimationPlayer().GetAnimation();
         animatedModel_->AddAnimation("walk", walkAnim);
-        
-        Animation sneakWalkAnim = engine->LoadAnimation("Resources/Models/human", "sneakWalk.gltf");
+
+        Animation sneakWalkAnim = engine->LoadAnim("Resources/Models/human", "sneakWalk.gltf");
         animatedModel_->AddAnimation("sneakWalk", sneakWalkAnim);
     }
     
@@ -62,7 +62,7 @@ void Player::Initialize(Camera* camera, bool enableCollision, bool enableEnviron
     animatedModel_->PlayAnimation();
     
     // Object3Dの作成と設定
-    object3d_ = engine->CreateObject3D();
+    object3d_ = engine->CreateObj3();
     object3d_->SetModel(static_cast<Model*>(animatedModel_.get()));
     object3d_->SetAnimatedModel(animatedModel_.get());
     object3d_->SetPosition(position_);
@@ -129,7 +129,7 @@ void Player::Initialize(Camera* camera, bool enableCollision, bool enableEnviron
 
 void Player::Update(UnoEngine* engine) {
 
-    const float deltaTime = engine->GetDeltaTime();
+    const float deltaTime = engine->GetDelta();
 
     // 移動前の位置を保存
     previousPosition_ = position_;
@@ -160,7 +160,7 @@ void Player::Update(UnoEngine* engine) {
 
 // ゲームパッド固有機能処理（スニーク切り替えなど）
 void Player::HandleGamepadFeatures(UnoEngine* engine, float deltaTime) {
-    bool bButtonPressed = engine->IsXboxButtonPressed(0x2000);
+    bool bButtonPressed = engine->IsXboxDown(0x2000);
     bool bButtonTriggered = bButtonPressed && !previousBButtonPressed_;
     
     // スニーク状態の切り替え（移動中のみ）
@@ -321,25 +321,25 @@ float Player::GetBlendProgress() const {
 }
 
 void Player::HandleMovement(UnoEngine* engine, float deltaTime) {
-    float stickX = engine->GetXboxLeftStickX();
-    float stickY = engine->GetXboxLeftStickY();
-    bool bButtonPressed = engine->IsXboxButtonPressed(0x2000);
+    float stickX = engine->GetLStickX();
+    float stickY = engine->GetLStickY();
+    bool bButtonPressed = engine->IsXboxDown(0x2000);
     bool bButtonTriggered = bButtonPressed && !previousBButtonPressed_;
     
     // 矢印キー入力の処理
     float keyboardInputX = 0.0f;
     float keyboardInputY = 0.0f;
     
-    if (engine->IsKeyPressed(DIK_LEFTARROW)) {
+    if (engine->IsKeyDown(DIK_LEFTARROW)) {
         keyboardInputX = -1.0f;
     }
-    if (engine->IsKeyPressed(DIK_RIGHTARROW)) {
+    if (engine->IsKeyDown(DIK_RIGHTARROW)) {
         keyboardInputX = 1.0f;
     }
-    if (engine->IsKeyPressed(DIK_UPARROW)) {
+    if (engine->IsKeyDown(DIK_UPARROW)) {
         keyboardInputY = 1.0f;
     }
-    if (engine->IsKeyPressed(DIK_DOWNARROW)) {
+    if (engine->IsKeyDown(DIK_DOWNARROW)) {
         keyboardInputY = -1.0f;
     }
     
@@ -431,7 +431,7 @@ void Player::UpdateAnimation(float deltaTime) {
 }
 
 void Player::UpdateRotation(UnoEngine* engine, float deltaTime) {
-    currentRotationY_ = engine->SmoothRotation(currentRotationY_, targetRotationY_, rotationSmoothingSpeed_, deltaTime);
+    currentRotationY_ = engine->SmoothRot(currentRotationY_, targetRotationY_, rotationSmoothingSpeed_, deltaTime);
 }
 
 // カメラ方向ベースの移動機能
@@ -612,45 +612,45 @@ void Player::StopMoving() {
 void Player::SetupCamera(UnoEngine* engine) {
     if (!camera_) return;
     
-    engine->SetCameraStickSensitivity(2.5f);
-    engine->SetCameraOrbitDistance(3.0f);
-    engine->SetCameraOrbitHeight(2.5f);
-    engine->SetCameraOrbitTarget(Vector3{0.0f, 0.0f, 0.0f});
+    engine->SetStickSens(2.5f);
+    engine->SetOrbitDst(3.0f);
+    engine->SetOrbitHgt(2.5f);
+    engine->SetOrbitTgt(Vector3{0.0f, 0.0f, 0.0f});
 }
 
 void Player::HandleInput(UnoEngine* engine) {
-    float deltaTime = engine->GetDeltaTime();
+    float deltaTime = engine->GetDelta();
 
-    if (engine->IsKeyTriggered(DIK_ESCAPE)) {
+    if (engine->IsKeyTrig(DIK_ESCAPE)) {
         engine->RequestEnd();
         return;
     }
 
 #ifdef _DEBUG
-    if (engine->IsKeyTriggered(DIK_TAB)) {
+    if (engine->IsKeyTrig(DIK_TAB)) {
         camera_->ToggleMouseLook();
     }
-    if (engine->IsKeyTriggered(DIK_F1)) {
+    if (engine->IsKeyTrig(DIK_F1)) {
         camera_->ToggleFreeCameraMode();
     }
 #endif
 
-    if (engine->IsKeyTriggered(DIK_P)) {
+    if (engine->IsKeyTrig(DIK_P)) {
         if (IsAnimationPaused()) {
             PlayAnimation();
         } else {
             PauseAnimation();
         }
     }
-    if (engine->IsKeyTriggered(DIK_R)) {
+    if (engine->IsKeyTrig(DIK_R)) {
         ResetAnimation();
     }
-    if (engine->IsKeyTriggered(DIK_1) || engine->IsKeyTriggered(DIK_RSHIFT)) {
+    if (engine->IsKeyTrig(DIK_1) || engine->IsKeyTrig(DIK_RSHIFT)) {
         ToggleSneakWalk();
     }
 
     // ジャンプ処理
-    if (engine->IsKeyTriggered(DIK_SPACE)) {
+    if (engine->IsKeyTrig(DIK_SPACE)) {
         char debugMsg[128];
         sprintf_s(debugMsg, "SPACE pressed! isGrounded: %s\n", isGrounded_ ? "true" : "false");
         OutputDebugStringA(debugMsg);
@@ -663,27 +663,27 @@ void Player::HandleInput(UnoEngine* engine) {
 #ifdef _DEBUG
     if (camera_->IsFreeCameraMode()) {
         float cameraSpeed = 5.0f * deltaTime;
-        if (engine->IsKeyPressed(DIK_W)) camera_->MoveForward(cameraSpeed);
-        if (engine->IsKeyPressed(DIK_S)) camera_->MoveForward(-cameraSpeed);
-        if (engine->IsKeyPressed(DIK_A)) camera_->MoveRight(-cameraSpeed);
-        if (engine->IsKeyPressed(DIK_D)) camera_->MoveRight(cameraSpeed);
-        if (engine->IsKeyPressed(DIK_SPACE)) camera_->MoveUp(cameraSpeed);
-        if (engine->IsKeyPressed(DIK_LSHIFT)) camera_->MoveUp(-cameraSpeed);
+        if (engine->IsKeyDown(DIK_W)) camera_->MoveForward(cameraSpeed);
+        if (engine->IsKeyDown(DIK_S)) camera_->MoveForward(-cameraSpeed);
+        if (engine->IsKeyDown(DIK_A)) camera_->MoveRight(-cameraSpeed);
+        if (engine->IsKeyDown(DIK_D)) camera_->MoveRight(cameraSpeed);
+        if (engine->IsKeyDown(DIK_SPACE)) camera_->MoveUp(cameraSpeed);
+        if (engine->IsKeyDown(DIK_LSHIFT)) camera_->MoveUp(-cameraSpeed);
     } else
 #endif
     {
-        isRunning_ = engine->IsKeyPressed(DIK_LSHIFT);
+        isRunning_ = engine->IsKeyDown(DIK_LSHIFT);
 
         float forward = 0.0f;
         float right = 0.0f;
 
-        if (engine->IsKeyPressed(DIK_W)) forward += 1.0f;
-        if (engine->IsKeyPressed(DIK_S)) forward -= 1.0f;
-        if (engine->IsKeyPressed(DIK_A)) right -= 1.0f;
-        if (engine->IsKeyPressed(DIK_D)) right += 1.0f;
+        if (engine->IsKeyDown(DIK_W)) forward += 1.0f;
+        if (engine->IsKeyDown(DIK_S)) forward -= 1.0f;
+        if (engine->IsKeyDown(DIK_A)) right -= 1.0f;
+        if (engine->IsKeyDown(DIK_D)) right += 1.0f;
 
-        float stickX = engine->GetXboxLeftStickX();
-        float stickY = engine->GetXboxLeftStickY();
+        float stickX = engine->GetLStickX();
+        float stickY = engine->GetLStickY();
 
         const float deadZone = 0.1f;
         if (abs(stickX) < deadZone) stickX = 0.0f;
@@ -709,8 +709,8 @@ void Player::HandleInput(UnoEngine* engine) {
 }
 
 void Player::UpdateCameraSystem(UnoEngine* engine) {
-    engine->UpdateCameraMouse();
-    engine->UpdateCameraRightStick();
+    engine->UpdCamMouse();
+    engine->UpdCamStick();
 
 #ifdef _DEBUG
     if (!camera_->IsFreeCameraMode())

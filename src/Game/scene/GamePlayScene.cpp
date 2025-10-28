@@ -23,7 +23,7 @@ void GamePlayScene::Initialize() {
 
     // ナビメッシュの初期化（UnoEngine経由）
     UnoEngine* engine = UnoEngine::GetInstance();
-    NavMeshManager* navMeshManager = engine->GetNavMeshManager();
+    NavMeshManager* navMeshManager = engine->GetNavMgr();
 
     if (navMeshManager) {
         navMeshManager->SetLogCallback([this](const std::string& message) {
@@ -32,13 +32,13 @@ void GamePlayScene::Initialize() {
     }
 
     const std::string navMeshPath = "externals/navimap/stage.navmesh";
-    engine->InitializeNavMesh(navMeshPath);
+    engine->InitNav(navMeshPath);
 
     // NavMeshが読み込まれなかった場合は生成
-    navMeshManager = engine->GetNavMeshManager();
+    navMeshManager = engine->GetNavMgr();
     if (!navMeshManager->GetNavMesh() || !navMeshManager->GetNavMesh()->IsValid()) {
         AddNavMeshLog("No existing NavMesh found, auto-generating...");
-        engine->GenerateNavMesh(sceneObjects_, navMeshPath);
+        engine->GenNav(sceneObjects_, navMeshPath);
     }
 
     // 3D空間オーディオリスナーの初期化
@@ -49,7 +49,7 @@ void GamePlayScene::Initialize() {
 
     // EnemyにNavMeshとAudioListenerを設定
     if (enemy_) {
-        navMeshManager = engine->GetNavMeshManager();
+        navMeshManager = engine->GetNavMgr();
         if (navMeshManager && navMeshManager->GetNavMesh()) {
             enemy_->SetNavMesh(navMeshManager->GetNavMesh());
             AddNavMeshLog("NavMesh set to Enemy");
@@ -103,7 +103,7 @@ void GamePlayScene::Update() {
     player_->HandleInput(engine);
 
     // デルタタイムを取得
-    const float deltaTime = engine->GetDeltaTime();
+    const float deltaTime = engine->GetDelta();
 
     // FPSカメラモードかどうかでカメラ更新を切り替え
     if (fpsCamera_ && fpsCamera_->IsFPSMode()) {
@@ -194,7 +194,7 @@ void GamePlayScene::Draw() {
     }
 
     // NavMeshの視覚化（UnoEngine経由）
-    UnoEngine::GetInstance()->DrawNavMeshVisualization();
+    UnoEngine::GetInstance()->DrawNavVis();
 
     // ポストプロセスを適用して画面に描画
     if (postProcess_) {
@@ -221,21 +221,21 @@ void GamePlayScene::Draw() {
     ImGui::Begin("NavMesh Debug");
 
     UnoEngine* engine = UnoEngine::GetInstance();
-    NavMeshManager* navMeshManager = engine->GetNavMeshManager();
+    NavMeshManager* navMeshManager = engine->GetNavMgr();
 
     if (navMeshManager) {
         // NavMeshManagerのImGui描画
-        bool showViz = engine->IsNavMeshVisualizationEnabled();
+        bool showViz = engine->IsNavVis();
         if (ImGui::Checkbox("Show NavMesh Visualization", &showViz)) {
-            engine->SetNavMeshVisualizationEnabled(showViz);
-            if (showViz && !engine->IsNavMeshVisualizationEnabled()) {
+            engine->SetNavVis(showViz);
+            if (showViz && !engine->IsNavVis()) {
                 // 視覚化を有効にする場合、まだ作成されていなければ作成
-                engine->CreateNavMeshVisualization();
-                engine->SetNavMeshVisualizationEnabled(true);
+                engine->CreateNavVis();
+                engine->SetNavVis(true);
             }
         }
 
-        NavMeshBuildSettings& settings = engine->GetNavMeshSettings();
+        NavMeshBuildSettings& settings = engine->GetNavSet();
         if (ImGui::CollapsingHeader("NavMesh Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
             ImGui::SliderFloat("Cell Size", &settings.cellSize, 0.05f, 1.0f);
             ImGui::SliderFloat("Cell Height", &settings.cellHeight, 0.05f, 0.5f);
@@ -253,7 +253,7 @@ void GamePlayScene::Draw() {
         if (ImGui::Button("Generate NavMesh")) {
             ClearNavMeshLogs();
             AddNavMeshLog("=== Manual NavMesh generation triggered ===");
-            engine->GenerateNavMesh(sceneObjects_, "externals/navimap/stage.navmesh");
+            engine->GenNav(sceneObjects_, "externals/navimap/stage.navmesh");
             NavMesh* navMesh = navMeshManager->GetNavMesh();
             if (enemy_ && navMesh) {
                 enemy_->SetNavMesh(navMesh);
@@ -371,28 +371,28 @@ void GamePlayScene::ClearNavMeshLogs() {
 void GamePlayScene::HandleInput() {
     UnoEngine* engine = UnoEngine::GetInstance();
 
-    if (engine->IsKeyTriggered(DIK_F)) {
+    if (engine->IsKeyTrig(DIK_F)) {
         lightManager_->ToggleDebugDisplay();
     }
 
-    if (engine->IsKeyTriggered(DIK_V)) {
+    if (engine->IsKeyTrig(DIK_V)) {
         if (fpsCamera_) {
             bool currentMode = fpsCamera_->IsFPSMode();
             fpsCamera_->SetFPSMode(!currentMode);
         }
     }
 
-    if (engine->IsKeyTriggered(DIK_TAB)) {
+    if (engine->IsKeyTrig(DIK_TAB)) {
         if (fpsCamera_ && fpsCamera_->IsFPSMode()) {
             fpsCamera_->ToggleMouseLook();
         }
     }
 
     // R キーでナビメッシュ再生成
-    if (engine->IsKeyTriggered(DIK_R)) {
+    if (engine->IsKeyTrig(DIK_R)) {
         ClearNavMeshLogs();
         AddNavMeshLog("=== Regenerating NavMesh (R key) ===");
-        engine->GenerateNavMesh(sceneObjects_, "externals/navimap/stage.navmesh");
+        engine->GenNav(sceneObjects_, "externals/navimap/stage.navmesh");
     }
 }
 

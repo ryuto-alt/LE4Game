@@ -69,12 +69,12 @@ void FPSCamera::UpdateCameraRotation(Camera* camera, UnoEngine* engine) {
 
     // マウス視点が有効な場合はマウスを画面中央に固定
     if (mouseLookEnabled_) {
-        engine->ResetMouseCenter();
+        engine->ResetMouse();
 
         // マウスの移動量を取得
         float deltaX = 0.0f;
         float deltaY = 0.0f;
-        engine->GetMouseMovement(deltaX, deltaY);
+        engine->GetMouseMove(deltaX, deltaY);
 
         // マウス移動量に基づいてカメラを回転
         cameraRotation_.y += deltaX * mouseSensitivity_; // ヨー（左右）
@@ -97,9 +97,9 @@ void FPSCamera::ToggleMouseLook() {
     UnoEngine* engine = UnoEngine::GetInstance();
     if (engine) {
         if (mouseLookEnabled_) {
-            engine->SetMouseCursor(false);
+            engine->SetCursor(false);
         } else {
-            engine->SetMouseCursor(true);
+            engine->SetCursor(true);
         }
     }
 }
@@ -133,7 +133,7 @@ void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning, float deltaTime
         // 足音を再生（揺れが下から上に切り替わるタイミング）
         if (engine && previousYOffset_ < 0.0f && yOffset >= 0.0f) {
             // 音が再生中でなければ再生
-            if (!engine->IsAudioPlaying("footstep")) {
+            if (!engine->IsAudPlay("footstep")) {
                 engine->PlayAudio("footstep", false, 0.3f);  // ボリューム30%
             }
         }

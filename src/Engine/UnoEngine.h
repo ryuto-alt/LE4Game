@@ -61,11 +61,15 @@
 // UnoEngineクラス - DirectX12ゲームエンジン統合クラス
 class UnoEngine {
 public:
+    // ========================================
+    // 🧩 基本機能
+    // ========================================
+
     // シングルトンインスタンスを取得
     static UnoEngine* GetInstance();
-    
+
     // シングルトンインスタンスを破棄
-    static void DestroyInstance();
+    static void DestroyInst();
 
     // コピー禁止
     UnoEngine(const UnoEngine&) = delete;
@@ -87,180 +91,203 @@ public:
     void Run();
 
     // 終了リクエスト
-    bool IsEndRequested() const { return endRequest_; }
+    bool IsEnding() const { return endRequest_; }
     void RequestEnd() { endRequest_ = true; }
 
-    // === 統一された直感的API ===
+    // ========================================
+    // ⌨️ 入力システム
+    // ========================================
+
+    bool IsKeyDown(int key) const { return input_->PushKey(key); }
+    bool IsKeyTrig(int key) const { return input_->TriggerKey(key); }
+    void GetMouseMove(float& deltaX, float& deltaY) { input_->GetMouseMovement(deltaX, deltaY); }
+    void SetCursor(bool visible) { input_->SetMouseCursor(visible); }
+    void ResetMouse() { input_->ResetMouseCenter(); }
     
-    // === 入力システム ===
-    bool IsKeyPressed(int key) const { return input_->PushKey(key); }
-    bool IsKeyTriggered(int key) const { return input_->TriggerKey(key); }
-    void GetMouseMovement(float& deltaX, float& deltaY) { input_->GetMouseMovement(deltaX, deltaY); }
-    void SetMouseCursor(bool visible) { input_->SetMouseCursor(visible); }
-    void ResetMouseCenter() { input_->ResetMouseCenter(); }
+    // ========================================
+    // 🎮 Xboxコントローラー入力システム
+    // ========================================
+
+    bool IsXboxConn(int playerIndex = 0) const { return input_->IsXboxControllerConnected(playerIndex); }
+    bool IsXboxDown(int button, int playerIndex = 0) const { return input_->IsXboxButtonPressed(button, playerIndex); }
+    bool IsXboxTrig(int button, int playerIndex = 0) const { return input_->IsXboxButtonTriggered(button, playerIndex); }
+    float GetLStickX(int playerIndex = 0) const { return input_->GetXboxLeftStickX(playerIndex); }
+    float GetLStickY(int playerIndex = 0) const { return input_->GetXboxLeftStickY(playerIndex); }
+    float GetRStickX(int playerIndex = 0) const { return input_->GetXboxRightStickX(playerIndex); }
+    float GetRStickY(int playerIndex = 0) const { return input_->GetXboxRightStickY(playerIndex); }
+    float GetLTrigger(int playerIndex = 0) const { return input_->GetXboxLeftTrigger(playerIndex); }
+    float GetRTrigger(int playerIndex = 0) const { return input_->GetXboxRightTrigger(playerIndex); }
     
-    // === Xboxコントローラー入力システム ===
-    bool IsXboxControllerConnected(int playerIndex = 0) const { return input_->IsXboxControllerConnected(playerIndex); }
-    bool IsXboxButtonPressed(int button, int playerIndex = 0) const { return input_->IsXboxButtonPressed(button, playerIndex); }
-    bool IsXboxButtonTriggered(int button, int playerIndex = 0) const { return input_->IsXboxButtonTriggered(button, playerIndex); }
-    float GetXboxLeftStickX(int playerIndex = 0) const { return input_->GetXboxLeftStickX(playerIndex); }
-    float GetXboxLeftStickY(int playerIndex = 0) const { return input_->GetXboxLeftStickY(playerIndex); }
-    float GetXboxRightStickX(int playerIndex = 0) const { return input_->GetXboxRightStickX(playerIndex); }
-    float GetXboxRightStickY(int playerIndex = 0) const { return input_->GetXboxRightStickY(playerIndex); }
-    float GetXboxLeftTrigger(int playerIndex = 0) const { return input_->GetXboxLeftTrigger(playerIndex); }
-    float GetXboxRightTrigger(int playerIndex = 0) const { return input_->GetXboxRightTrigger(playerIndex); }
-    
-    // === カメラシステム ===
-    void SetCameraPosition(const Vector3& position) { camera_->SetTranslate(position); }
-    void SetCameraRotation(const Vector3& rotation) { camera_->SetRotate(rotation); }
-    Vector3 GetCameraPosition() const { return camera_->GetTranslate(); }
-    Vector3 GetCameraRotation() const { return camera_->GetRotate(); }
-    void ProcessCameraMouseInput(float deltaX, float deltaY) { camera_->ProcessMouseInput(deltaX, deltaY); }
-    void SetCameraMouseSensitivity(float sensitivity) { camera_->SetMouseSensitivity(sensitivity); }
-    void SetCameraMode(int mode) { camera_->SetCameraMode(mode); }
-    int GetCameraMode() const { return camera_->GetCameraMode(); }
-    void ToggleCameraMode() { camera_->ToggleCameraMode(); }
-    
+    // ========================================
+    // 🎥 カメラシステム
+    // ========================================
+
+    // カメラ位置・回転
+    void SetCamPos(const Vector3& position) { camera_->SetTranslate(position); }
+    void SetCamRot(const Vector3& rotation) { camera_->SetRotate(rotation); }
+    Vector3 GetCamPos() const { return camera_->GetTranslate(); }
+    Vector3 GetCamRot() const { return camera_->GetRotate(); }
+
+    // カメラ入力処理
+    void ProcCamMouse(float deltaX, float deltaY) { camera_->ProcessMouseInput(deltaX, deltaY); }
+    void SetCamSens(float sensitivity) { camera_->SetMouseSensitivity(sensitivity); }
+
+    // カメラモード
+    void SetCamMode(int mode) { camera_->SetCameraMode(mode); }
+    int GetCamMode() const { return camera_->GetCameraMode(); }
+    void ToggleCam() { camera_->ToggleCameraMode(); }
+
     // カメラ移動（フリーカメラモード用）
-    void MoveCameraForward(float distance) { camera_->MoveForward(distance); }
-    void MoveCameraRight(float distance) { camera_->MoveRight(distance); }
-    void MoveCameraUp(float distance) { camera_->MoveUp(distance); }
-    
+    void MoveCamFwd(float distance) { camera_->MoveForward(distance); }
+    void MoveCamRgt(float distance) { camera_->MoveRight(distance); }
+    void MoveCamUp(float distance) { camera_->MoveUp(distance); }
+
     // カメラの方向ベクトル取得
-    Vector3 GetCameraForwardVector() const { return camera_->GetForwardVector(); }
-    Vector3 GetCameraRightVector() const { return camera_->GetRightVector(); }
-    Vector3 GetCameraUpVector() const { return camera_->GetUpVector(); }
-    
+    Vector3 GetCamFwd() const { return camera_->GetForwardVector(); }
+    Vector3 GetCamRgt() const { return camera_->GetRightVector(); }
+    Vector3 GetCamUp() const { return camera_->GetUpVector(); }
+
     // カメラの視野角設定
-    void SetCameraFov(float fov) { camera_->SetFovY(fov); }
-    
-    // カメラ感度設定
-    void SetCameraStickSensitivity(float sensitivity) { camera_->SetStickSensitivity(sensitivity); }
-    float GetCameraStickSensitivity() const { return camera_->GetStickSensitivity(); }
-    
+    void SetCamFov(float fov) { camera_->SetFovY(fov); }
+
+    // カメラスティック感度設定
+    void SetStickSens(float sensitivity) { camera_->SetStickSensitivity(sensitivity); }
+    float GetStickSens() const { return camera_->GetStickSensitivity(); }
+
     // オービットカメラ設定
-    void SetCameraOrbitTarget(const Vector3& target) { camera_->SetOrbitTarget(target); }
-    void SetCameraOrbitDistance(float distance) { camera_->SetOrbitDistance(distance); }
-    void SetCameraOrbitHeight(float height) { camera_->SetOrbitHeight(height); }
+    void SetOrbitTgt(const Vector3& target) { camera_->SetOrbitTarget(target); }
+    void SetOrbitDst(float distance) { camera_->SetOrbitDistance(distance); }
+    void SetOrbitHgt(float height) { camera_->SetOrbitHeight(height); }
     
-    // === オーディオシステム ===
+    // ========================================
+    // 🔊 オーディオシステム
+    // ========================================
+
+    // 基本オーディオ
     bool LoadAudio(const std::string& name, const std::string& filePath);
     void PlayAudio(const std::string& name, bool loop = false, float volume = 1.0f);
     void StopAudio(const std::string& name);
-    void SetAudioVolume(const std::string& name, float volume);
-    bool IsAudioPlaying(const std::string& name);
+    void SetAudVol(const std::string& name, float volume);
+    bool IsAudPlay(const std::string& name);
+
+    // 3D空間オーディオ
+    std::unique_ptr<SpatialAudioSource> CreateSAud(const std::string& audioName, const Vector3& position);
+    void SetListPos(const Vector3& position);
+    void SetListOri(const Vector3& forward, const Vector3& up = Vector3{0.0f, 1.0f, 0.0f});
+    void UpdateSAud();  // 毎フレーム呼び出して3Dオーディオを更新
     
-    // === 3D空間オーディオシステム ===
-    std::unique_ptr<SpatialAudioSource> CreateSpatialAudioSource(const std::string& audioName, const Vector3& position);
-    void SetAudioListenerPosition(const Vector3& position);
-    void SetAudioListenerOrientation(const Vector3& forward, const Vector3& up = Vector3{0.0f, 1.0f, 0.0f});
-    void UpdateSpatialAudio();  // 毎フレーム呼び出して3Dオーディオを更新
-    
-    // === パーティクルシステム ===
-    bool CreateParticleEffect(const std::string& name, const std::string& texturePath);
-    void PlayParticle(const std::string& name, const Vector3& position, int count = 10);
-    void PlayParticle(const std::string& name, const Vector3& position, int count,
-                     const Vector3& velocity, float lifeTime = 3.0f);
-    
-    // === 3Dオブジェクト作成システム ===
-    std::unique_ptr<Object3d> CreateObject3D();
+    // ========================================
+    // 💨 パーティクル・オブジェクト生成
+    // ========================================
+
+    // パーティクル
+    bool CreatePart(const std::string& name, const std::string& texturePath);
+    void PlayPart(const std::string& name, const Vector3& position, int count = 10);
+    void PlayPart(const std::string& name, const Vector3& position, int count,
+                  const Vector3& velocity, float lifeTime = 3.0f);
+
+    // 3Dオブジェクト
+    std::unique_ptr<Object3d> CreateObj3();
     std::unique_ptr<Model> LoadModel(const std::string& modelPath);
-    std::unique_ptr<Object3d> CreateObject3DWithModel(const std::string& modelPath);
-    std::unique_ptr<class InstancedRenderer> CreateInstancedRenderer(size_t maxInstances = 10000);
-    
-    // === アニメーションシステム ===
-    std::unique_ptr<AnimatedModel> CreateAnimatedModel();
-    Animation LoadAnimation(const std::string& directoryPath, const std::string& filename);
-    
-    // === 2Dスプライト作成システム ===
-    std::unique_ptr<Sprite> CreateSprite(const std::string& texturePath);
-    
-    // === 簡易化API ===
-    void LoadTexture(const std::string& path);
-    std::unique_ptr<Skybox> CreateSkybox();
+    std::unique_ptr<Object3d> CreateObjM(const std::string& modelPath);
+    std::unique_ptr<class InstancedRenderer> CreateInst(size_t maxInstances = 10000);
+
+    // アニメーション
+    std::unique_ptr<AnimatedModel> CreateAnim();
+    Animation LoadAnim(const std::string& directoryPath, const std::string& filename);
+
+    // 2Dスプライト
+    std::unique_ptr<Sprite> CreateSpr(const std::string& texturePath);
+
+    // テクスチャ・スカイボックス
+    void LoadTex(const std::string& path);
+    std::unique_ptr<Skybox> CreateSky();
     void LoadSkybox(Skybox* skybox, const std::string& path);
-    void UpdateCameraMouse(); // マウス入力でカメラ更新（一括処理）
-    void UpdateCameraRightStick(); // 右スティック入力でカメラ更新（一括処理）
     
+    // ========================================
+    // 📷 カメラ更新ヘルパー
+    // ========================================
+
+    void UpdCamMouse(); // マウス入力でカメラ更新（一括処理）
+    void UpdCamStick(); // 右スティック入力でカメラ更新（一括処理）
+
+    // ========================================
+    // 🌍 環境マップ
+    // ========================================
+
     template<typename T>
     void SetEnvMap(T* obj) {
         Skybox::SetEnvMap(obj);
     }
-    
+
     template<typename T>
     void SetEnvMap(std::unique_ptr<T>& obj) {
         Skybox::SetEnvMap(obj);
     }
-    
-    // === 衝突判定システム ===
-    bool CheckCollision(const Vector3& pos1, float radius1, const Vector3& pos2, float radius2);
-    
-    // === スムージングシステム ===
-    // 角度を-π～πの範囲に正規化
-    float NormalizeAngle(float angle);
-    // 角度の最短距離を計算
-    float AngleDifference(float from, float to);
-    // 角度を線形補間
+
+    // ========================================
+    // ⚙️ ユーティリティ
+    // ========================================
+
+    // 衝突判定
+    bool ChkCollide(const Vector3& pos1, float radius1, const Vector3& pos2, float radius2);
+
+    // 角度計算・スムージング
+    float NormAngle(float angle);
+    float AngleDiff(float from, float to);
     float LerpAngle(float from, float to, float t);
-    // 値を線形補間
     float Lerp(float from, float to, float t);
-    // Vector3を線形補間
     Vector3 LerpVector3(const Vector3& from, const Vector3& to, float t);
-    // 回転角度をスムージング（deltaTime考慮）
-    float SmoothRotation(float current, float target, float speed, float deltaTime);
+    float SmoothRot(float current, float target, float speed, float deltaTime);
+
+    // 時間管理
+    float GetDelta() const { return deltaTime_; }
+    void UpdateDt();
+
+    // シーン管理
+    void ChgScene(const std::string& sceneName);
+
+    // デバッグ
+    void ShowDebug();
     
-    // === 時間管理 ===
-    // デルタタイムを取得（秒単位）
-    float GetDeltaTime() const { return deltaTime_; }
-    // 前フレームからの経過時間を更新（フレーム開始時に呼ぶ）
-    void UpdateDeltaTime();
-    
-    // === シーン管理 ===
-    void ChangeScene(const std::string& sceneName);
-    
-    // === デバッグ情報 ===
-    void ShowDebugInfo();
-    
-    // === 従来のアクセサ ===
+    // ========================================
+    // 🧱 マネージャー取得
+    // ========================================
+
     WinApp* GetWinApp() const { return winApp_.get(); }
-    DirectXCommon* GetDirectXCommon() const { return dxCommon_.get(); }
+    DirectXCommon* GetDXCom() const { return dxCommon_.get(); }
     Input* GetInput() const { return input_.get(); }
     Camera* GetCamera() const { return camera_.get(); }
-    SpriteCommon* GetSpriteCommon() const { return spriteCommon_.get(); }
-    SrvManager* GetSrvManager() const { return srvManager_.get(); }
-    SceneManager* GetSceneManager() const { return SceneManager::GetInstance(); }
-    TextureManager* GetTextureManager() const { return TextureManager::GetInstance(); }
-    ParticleManager* GetParticleManager() const { return ParticleManager::GetInstance(); }
-    Particle3DManager* GetParticle3DManager() const { return Particle3DManager::GetInstance(); }
-    EffectManager3D* GetEffectManager3D() const { return EffectManager3D::GetInstance(); }
-    AudioManager* GetAudioManager() const { return AudioManager::GetInstance(); }
-    Collision::AABBCollisionManager* GetAABBCollisionManager() const { return Collision::AABBCollisionManager::GetInstance(); }
+    SpriteCommon* GetSprCom() const { return spriteCommon_.get(); }
+    SrvManager* GetSrvMgr() const { return srvManager_.get(); }
+    SceneManager* GetScnMgr() const { return SceneManager::GetInstance(); }
+    TextureManager* GetTexMgr() const { return TextureManager::GetInstance(); }
+    ParticleManager* GetPartMgr() const { return ParticleManager::GetInstance(); }
+    Particle3DManager* GetPart3Mgr() const { return Particle3DManager::GetInstance(); }
+    EffectManager3D* GetEff3Mgr() const { return EffectManager3D::GetInstance(); }
+    AudioManager* GetAudMgr() const { return AudioManager::GetInstance(); }
+    Collision::AABBCollisionManager* GetCollMgr() const { return Collision::AABBCollisionManager::GetInstance(); }
 
-    // === NavMesh関連 ===
+    // ========================================
+    // 🧭 NavMesh システム
+    // ========================================
+
     // NavMeshManagerを取得
-    NavMeshManager* GetNavMeshManager() const { return navMeshManager_.get(); }
+    NavMeshManager* GetNavMgr() const { return navMeshManager_.get(); }
 
-    // NavMeshを初期化
-    void InitializeNavMesh(const std::string& navMeshPath);
-
-    // NavMeshを生成して保存
-    void GenerateNavMesh(const std::vector<std::unique_ptr<Object3d>>& sceneObjects, const std::string& filepath);
-
-    // NavMeshを読み込み
+    // NavMesh初期化・生成
+    void InitNav(const std::string& navMeshPath);
+    void GenNav(const std::vector<std::unique_ptr<Object3d>>& sceneObjects, const std::string& filepath);
     bool LoadNavMesh(const std::string& filepath);
 
-    // NavMesh設定を取得
-    NavMeshBuildSettings& GetNavMeshSettings();
+    // NavMesh設定
+    NavMeshBuildSettings& GetNavSet();
 
-    // NavMesh視覚化を有効/無効
-    void SetNavMeshVisualizationEnabled(bool enabled);
-    bool IsNavMeshVisualizationEnabled() const;
-
-    // NavMesh視覚化を作成
-    void CreateNavMeshVisualization();
-
-    // NavMesh視覚化を描画
-    void DrawNavMeshVisualization();
+    // NavMesh視覚化
+    void SetNavVis(bool enabled);
+    bool IsNavVis() const;
+    void CreateNavVis();
+    void DrawNavVis();
 
     // NavMesh更新
     void UpdateNavMesh();

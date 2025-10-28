@@ -41,7 +41,7 @@ void Enemy::Initialize(Camera* camera) {
 	UnoEngine* engine = UnoEngine::GetInstance();
 
 	// Playerと全く同じ方法でアニメーションモデルを読み込む
-	animatedModel_ = engine->CreateAnimatedModel();
+	animatedModel_ = engine->CreateAnim();
 	animatedModel_->LoadFromFile("Resources/Models/Enemy/EnemyWalk", "EnemyWalk.gltf");
 
 	// Playerと同じパターン: 読み込んだGLTFのアニメーションを取得して登録
@@ -49,12 +49,12 @@ void Enemy::Initialize(Camera* camera) {
 	animatedModel_->AddAnimation("Walk", walkAnim);
 
 	// RunアニメーションとScreamアニメーションも読み込む
-	std::unique_ptr<AnimatedModel> runModel = engine->CreateAnimatedModel();
+	std::unique_ptr<AnimatedModel> runModel = engine->CreateAnim();
 	runModel->LoadFromFile("Resources/Models/Enemy/EnemyRun", "EnemyRun.gltf");
 	Animation runAnim = runModel->GetAnimationPlayer().GetAnimation();
 	animatedModel_->AddAnimation("Run", runAnim);
 
-	std::unique_ptr<AnimatedModel> screamModel = engine->CreateAnimatedModel();
+	std::unique_ptr<AnimatedModel> screamModel = engine->CreateAnim();
 	screamModel->LoadFromFile("Resources/Models/Enemy/EnemyScream", "EnemyScream.gltf");
 	Animation screamAnim = screamModel->GetAnimationPlayer().GetAnimation();
 	animatedModel_->AddAnimation("Scream", screamAnim);
@@ -64,7 +64,7 @@ void Enemy::Initialize(Camera* camera) {
 	animatedModel_->PlayAnimation();
 
 	// Object3Dの作成 - Playerと全く同じ順序
-	object3d_ = engine->CreateObject3D();
+	object3d_ = engine->CreateObj3();
 	object3d_->SetModel(static_cast<Model*>(animatedModel_.get()));
 	object3d_->SetAnimatedModel(animatedModel_.get());
 	object3d_->SetPosition(position_);

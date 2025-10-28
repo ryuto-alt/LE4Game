@@ -23,13 +23,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         engine->Initialize();
 
         // シーンマネージャーの初期化（内部でLogoシーンに設定される）
-        engine->GetSceneManager()->Initialize();
+        engine->GetScnMgr()->Initialize();
                 
         // ゲームループの実行
         engine->Run();
 
         // エンジンの終了処理
-        UnoEngine::DestroyInstance();
+        UnoEngine::DestroyInst();
 
         // COM終了処理
         CoUninitialize();
@@ -37,9 +37,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     catch (const std::exception& e) {
         // 例外発生時のエラーメッセージ表示
         MessageBoxA(nullptr, e.what(), "エラーが発生しました", MB_OK | MB_ICONERROR);
-        
+
         // エラー時も終了処理を実行
-        UnoEngine::DestroyInstance();
+        UnoEngine::DestroyInst();
         
         // COM終了処理
         CoUninitialize();

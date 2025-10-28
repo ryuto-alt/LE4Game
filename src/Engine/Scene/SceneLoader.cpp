@@ -72,7 +72,7 @@ std::vector<std::unique_ptr<Object3d>> SceneLoader::CreateObjects(
     std::vector<std::unique_ptr<Object3d>> objects;
 
     for (const auto& config : data.objects) {
-        auto obj = engine->CreateObject3DWithModel(config.modelPath);
+        auto obj = engine->CreateObjM(config.modelPath);
         if (obj) {
             obj->SetPosition(config.position);
             obj->SetRotation(config.rotation);

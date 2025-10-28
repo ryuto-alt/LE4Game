@@ -304,7 +304,7 @@ void NavMeshManager::CreateVisualization(DirectXCommon* dxCommon, Camera* camera
     }
 
     UnoEngine* unoEngine = UnoEngine::GetInstance();
-    visualizationObject_ = unoEngine->CreateObject3D();
+    visualizationObject_ = unoEngine->CreateObj3();
     visualizationModel_ = std::make_unique<Model>();
 
     auto meshData = navMesh_->GetDebugMeshData();

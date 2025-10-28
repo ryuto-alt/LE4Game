@@ -19,10 +19,10 @@ void MyGame::Initialize() {
         engine_->Initialize();
 
         // シーンマネージャーの初期化
-        engine_->GetSceneManager()->Initialize();
+        engine_->GetScnMgr()->Initialize();
 
         // 初期シーンへの遷移 - 直接GamePlaySceneに
-        engine_->GetSceneManager()->ChangeScene("GamePlay");
+        engine_->GetScnMgr()->ChangeScene("GamePlay");
     }
     catch (const std::exception&) {
         // エラーは無視
@@ -35,7 +35,7 @@ void MyGame::Update() {
         engine_->Update();
 
         // 終了リクエストがあれば反映
-        if (engine_->IsEndRequested()) {
+        if (engine_->IsEnding()) {
             endRequest_ = true;
         }
     }

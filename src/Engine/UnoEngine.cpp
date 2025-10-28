@@ -21,7 +21,7 @@ UnoEngine* UnoEngine::GetInstance() {
     return instance_;
 }
 
-void UnoEngine::DestroyInstance() {
+void UnoEngine::DestroyInst() {
     if (instance_) {
         instance_->Finalize();
         delete instance_;
@@ -114,7 +114,7 @@ void UnoEngine::Initialize() {
 void UnoEngine::Update() {
     try {
         // デルタタイムを更新
-        UpdateDeltaTime();
+        UpdateDt();
 
         // Windowsのメッセージ処理
         if (winApp_->ProcessMessage()) {
@@ -169,7 +169,7 @@ void UnoEngine::Update() {
         }
 
         // 3D空間オーディオの更新
-        UpdateSpatialAudio();
+        UpdateSAud();
 
         // シーンマネージャーの更新
         SceneManager::GetInstance()->Update();
@@ -282,7 +282,7 @@ void UnoEngine::Finalize() {
 
 void UnoEngine::Run() {
     // ゲームループ
-    while (!IsEndRequested()) {
+    while (!IsEnding()) {
         // ImGuiの新しいフレーム
         ImGui_ImplDX12_NewFrame();
         ImGui_ImplWin32_NewFrame();
@@ -329,25 +329,25 @@ void UnoEngine::StopAudio(const std::string& name) {
     AudioManager::GetInstance()->Stop(name);
 }
 
-void UnoEngine::SetAudioVolume(const std::string& name, float volume) {
+void UnoEngine::SetAudVol(const std::string& name, float volume) {
     AudioManager::GetInstance()->SetVolume(name, volume);
 }
 
-bool UnoEngine::IsAudioPlaying(const std::string& name) {
+bool UnoEngine::IsAudPlay(const std::string& name) {
     return AudioManager::GetInstance()->IsPlaying(name);
 }
 
 // === パーティクルシステム ===
-bool UnoEngine::CreateParticleEffect(const std::string& name, const std::string& texturePath) {
+bool UnoEngine::CreatePart(const std::string& name, const std::string& texturePath) {
     ParticleManager::GetInstance()->CreateParticleGroup(name, texturePath);
     return true; // TODO: エラーハンドリングの改善
 }
 
-void UnoEngine::PlayParticle(const std::string& name, const Vector3& position, int count) {
+void UnoEngine::PlayPart(const std::string& name, const Vector3& position, int count) {
     ParticleManager::GetInstance()->Emit(name, position, count);
 }
 
-void UnoEngine::PlayParticle(const std::string& name, const Vector3& position, int count,
+void UnoEngine::PlayPart(const std::string& name, const Vector3& position, int count,
                             const Vector3& velocity, float lifeTime) {
     // より詳細なパラメータでパーティクルを発生
     ParticleManager::GetInstance()->Emit(
@@ -365,14 +365,14 @@ void UnoEngine::PlayParticle(const std::string& name, const Vector3& position, i
 }
 
 // === 3Dオブジェクト作成システム ===
-std::unique_ptr<Object3d> UnoEngine::CreateObject3D() {
+std::unique_ptr<Object3d> UnoEngine::CreateObj3() {
     auto object = std::make_unique<Object3d>();
     object->Initialize(dxCommon_.get(), spriteCommon_.get());
     object->SetCamera(camera_.get());
     return object;
 }
 
-std::unique_ptr<Object3d> UnoEngine::CreateObject3DWithModel(const std::string& modelPath) {
+std::unique_ptr<Object3d> UnoEngine::CreateObjM(const std::string& modelPath) {
     auto object = std::make_unique<Object3d>();
     object->Initialize(dxCommon_.get(), spriteCommon_.get());
     object->SetCamera(camera_.get());
@@ -397,27 +397,27 @@ std::unique_ptr<Model> UnoEngine::LoadModel(const std::string& modelPath) {
     return model;
 }
 
-std::unique_ptr<InstancedRenderer> UnoEngine::CreateInstancedRenderer(size_t maxInstances) {
+std::unique_ptr<InstancedRenderer> UnoEngine::CreateInst(size_t maxInstances) {
     auto renderer = std::make_unique<InstancedRenderer>();
     renderer->Initialize(dxCommon_.get(), spriteCommon_.get(), maxInstances);
     return renderer;
 }
 
 // === アニメーションシステム ===
-std::unique_ptr<AnimatedModel> UnoEngine::CreateAnimatedModel() {
+std::unique_ptr<AnimatedModel> UnoEngine::CreateAnim() {
     auto animatedModel = std::make_unique<AnimatedModel>();
     animatedModel->Initialize(dxCommon_.get());
     return animatedModel;
 }
 
-Animation UnoEngine::LoadAnimation(const std::string& directoryPath, const std::string& filename) {
+Animation UnoEngine::LoadAnim(const std::string& directoryPath, const std::string& filename) {
     return LoadAnimationFile(directoryPath, filename);
 }
 
 // === 2Dスプライト作成システム ===
-std::unique_ptr<Sprite> UnoEngine::CreateSprite(const std::string& texturePath) {
+std::unique_ptr<Sprite> UnoEngine::CreateSpr(const std::string& texturePath) {
     // テクスチャを読み込み
-    LoadTexture(texturePath);
+    LoadTex(texturePath);
     
     auto sprite = std::make_unique<Sprite>();
     sprite->Initialize(spriteCommon_.get(), texturePath);
@@ -426,7 +426,7 @@ std::unique_ptr<Sprite> UnoEngine::CreateSprite(const std::string& texturePath) 
 
 
 // === 衝突判定システム ===
-bool UnoEngine::CheckCollision(const Vector3& pos1, float radius1, const Vector3& pos2, float radius2) {
+bool UnoEngine::ChkCollide(const Vector3& pos1, float radius1, const Vector3& pos2, float radius2) {
     // 簡易的な球同士の衝突判定(距離ベース)
     float dx = pos2.x - pos1.x;
     float dy = pos2.y - pos1.y;
@@ -437,12 +437,12 @@ bool UnoEngine::CheckCollision(const Vector3& pos1, float radius1, const Vector3
 }
 
 // === シーン管理 ===
-void UnoEngine::ChangeScene(const std::string& sceneName) {
+void UnoEngine::ChgScene(const std::string& sceneName) {
     SceneManager::GetInstance()->ChangeScene(sceneName);
 }
 
 // === デバッグ情報 ===
-void UnoEngine::ShowDebugInfo() {
+void UnoEngine::ShowDebug() {
 #ifdef _DEBUG
     ImGui::Begin("UnoEngine デバッグ情報");
 
@@ -478,7 +478,7 @@ void UnoEngine::ShowDebugInfo() {
 }
 
 // === 3D空間オーディオシステム実装 ===
-std::unique_ptr<SpatialAudioSource> UnoEngine::CreateSpatialAudioSource(const std::string& audioName, const Vector3& position) {
+std::unique_ptr<SpatialAudioSource> UnoEngine::CreateSAud(const std::string& audioName, const Vector3& position) {
     auto spatialSource = std::make_unique<SpatialAudioSource>();
     
     if (spatialSource->Initialize(audioName, position)) {
@@ -488,19 +488,19 @@ std::unique_ptr<SpatialAudioSource> UnoEngine::CreateSpatialAudioSource(const st
     return nullptr;
 }
 
-void UnoEngine::SetAudioListenerPosition(const Vector3& position) {
+void UnoEngine::SetListPos(const Vector3& position) {
     if (audioListener_) {
         audioListener_->SetPosition(position);
     }
 }
 
-void UnoEngine::SetAudioListenerOrientation(const Vector3& forward, const Vector3& up) {
+void UnoEngine::SetListOri(const Vector3& forward, const Vector3& up) {
     if (audioListener_) {
         audioListener_->SetOrientation(forward, up);
     }
 }
 
-void UnoEngine::UpdateSpatialAudio() {
+void UnoEngine::UpdateSAud() {
     if (!audioListener_) return;
     
     // 全ての3D空間オーディオソースを更新
@@ -589,21 +589,21 @@ void UnoEngine::InitializeImGui() {
 
 // === スムージングシステム実装 ===
 
-float UnoEngine::NormalizeAngle(float angle) {
+float UnoEngine::NormAngle(float angle) {
     while (angle > (float)M_PI) angle -= 2.0f * (float)M_PI;
     while (angle < -(float)M_PI) angle += 2.0f * (float)M_PI;
     return angle;
 }
 
-float UnoEngine::AngleDifference(float from, float to) {
+float UnoEngine::AngleDiff(float from, float to) {
     float diff = to - from;
-    return NormalizeAngle(diff);
+    return NormAngle(diff);
 }
 
 float UnoEngine::LerpAngle(float from, float to, float t) {
     t = std::clamp(t, 0.0f, 1.0f);
-    float diff = AngleDifference(from, to);
-    return NormalizeAngle(from + diff * t);
+    float diff = AngleDiff(from, to);
+    return NormAngle(from + diff * t);
 }
 
 float UnoEngine::Lerp(float from, float to, float t) {
@@ -620,12 +620,12 @@ Vector3 UnoEngine::LerpVector3(const Vector3& from, const Vector3& to, float t) 
     };
 }
 
-float UnoEngine::SmoothRotation(float current, float target, float speed, float deltaTime) {
+float UnoEngine::SmoothRot(float current, float target, float speed, float deltaTime) {
     float lerpFactor = std::min(1.0f, speed * deltaTime);
     return LerpAngle(current, target, lerpFactor);
 }
 
-void UnoEngine::UpdateDeltaTime() {
+void UnoEngine::UpdateDt() {
     // 初回呼び出し時の処理
     static bool firstCall = true;
     if (firstCall) {
@@ -653,11 +653,11 @@ void UnoEngine::UpdateDeltaTime() {
 }
 
 // === 簡易化API実装 ===
-void UnoEngine::LoadTexture(const std::string& path) {
+void UnoEngine::LoadTex(const std::string& path) {
     TextureManager::GetInstance()->LoadTexture(path);
 }
 
-std::unique_ptr<Skybox> UnoEngine::CreateSkybox() {
+std::unique_ptr<Skybox> UnoEngine::CreateSky() {
     auto skybox = std::make_unique<Skybox>();
     skybox->Initialize(dxCommon_.get(), srvManager_.get(), TextureManager::GetInstance());
     return skybox;
@@ -667,13 +667,13 @@ void UnoEngine::LoadSkybox(Skybox* skybox, const std::string& path) {
     skybox->LoadCubemap(path);
 }
 
-void UnoEngine::UpdateCameraMouse() {
+void UnoEngine::UpdCamMouse() {
     float deltaX, deltaY;
     input_->GetMouseMovement(deltaX, deltaY);
     camera_->ProcessMouseInput(deltaX, deltaY);
 }
 
-void UnoEngine::UpdateCameraRightStick() {
+void UnoEngine::UpdCamStick() {
     float stickX = input_->GetXboxRightStickX();
     float stickY = input_->GetXboxRightStickY();
 
@@ -687,14 +687,14 @@ void UnoEngine::UpdateCameraRightStick() {
 
 // === NavMesh関連の実装 ===
 
-void UnoEngine::InitializeNavMesh(const std::string& navMeshPath) {
+void UnoEngine::InitNav(const std::string& navMeshPath) {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
     }
     navMeshManager_->Initialize(navMeshPath);
 }
 
-void UnoEngine::GenerateNavMesh(const std::vector<std::unique_ptr<Object3d>>& sceneObjects, const std::string& filepath) {
+void UnoEngine::GenNav(const std::vector<std::unique_ptr<Object3d>>& sceneObjects, const std::string& filepath) {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
     }
@@ -708,35 +708,35 @@ bool UnoEngine::LoadNavMesh(const std::string& filepath) {
     return navMeshManager_->LoadNavMesh(filepath);
 }
 
-NavMeshBuildSettings& UnoEngine::GetNavMeshSettings() {
+NavMeshBuildSettings& UnoEngine::GetNavSet() {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
     }
     return navMeshManager_->GetSettings();
 }
 
-void UnoEngine::SetNavMeshVisualizationEnabled(bool enabled) {
+void UnoEngine::SetNavVis(bool enabled) {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
     }
     navMeshManager_->SetVisualizationEnabled(enabled);
 }
 
-bool UnoEngine::IsNavMeshVisualizationEnabled() const {
+bool UnoEngine::IsNavVis() const {
     if (!navMeshManager_) {
         return false;
     }
     return navMeshManager_->IsVisualizationEnabled();
 }
 
-void UnoEngine::CreateNavMeshVisualization() {
+void UnoEngine::CreateNavVis() {
     if (!navMeshManager_) {
         navMeshManager_ = std::make_unique<NavMeshManager>();
     }
     navMeshManager_->CreateVisualization(dxCommon_.get(), camera_.get());
 }
 
-void UnoEngine::DrawNavMeshVisualization() {
+void UnoEngine::DrawNavVis() {
     if (navMeshManager_) {
         navMeshManager_->DrawVisualization();
     }

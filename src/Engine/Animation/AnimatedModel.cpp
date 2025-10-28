@@ -285,8 +285,8 @@ SkinCluster AnimatedModel::CreateSkinCluster()
     // SRVを作成
     // UnoEngineのSrvManagerを使用
     UnoEngine* engine = UnoEngine::GetInstance();
-    if (engine && engine->GetSrvManager()) {
-        SrvManager* srvManager = engine->GetSrvManager();
+    if (engine && engine->GetSrvMgr()) {
+        SrvManager* srvManager = engine->GetSrvMgr();
         uint32_t srvIndex = srvManager->Allocate();
         srvManager->CreateSRVForStructuredBuffer(srvIndex, skinCluster.paletteResource, 
                                                   static_cast<UINT>(skeleton_.joints.size()), sizeof(WellForGPU));
