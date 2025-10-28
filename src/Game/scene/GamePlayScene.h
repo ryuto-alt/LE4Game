@@ -43,6 +43,9 @@ private:
     float fisheyeStrength_ = 2.58f;
     float fisheyeRadius_ = 1.5f;
 
+    // ゲームオーバーフラグ
+    bool isGameOver_ = false;
+
     // NavMeshログ
     std::vector<std::string> navMeshLogs_;
     void AddNavMeshLog(const std::string& message);

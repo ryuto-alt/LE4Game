@@ -513,6 +513,11 @@ void GamePlayScene::HandleInput() {
 }
 
 void GamePlayScene::CheckPlayerEnemyCollision() {
+    // すでにゲームオーバーなら処理しない
+    if (isGameOver_) {
+        return;
+    }
+
     if (!player_ || !enemy_) {
         OutputDebugStringA("CheckPlayerEnemyCollision: player or enemy is null\n");
         return;
@@ -531,6 +536,9 @@ void GamePlayScene::CheckPlayerEnemyCollision() {
     // 距離が5m未満の場合、ゲームオーバー
     const float GAME_OVER_DISTANCE = 5.0f;
     if (distance < GAME_OVER_DISTANCE) {
+        // フラグを立てて二度と実行しない
+        isGameOver_ = true;
+
         char debugMsg[256];
         sprintf_s(debugMsg, "=== GAME OVER! Distance: %.2f < %.2f ===\n", distance, GAME_OVER_DISTANCE);
         OutputDebugStringA(debugMsg);
@@ -541,33 +549,43 @@ void GamePlayScene::CheckPlayerEnemyCollision() {
 
         STARTUPINFOA si = {};
         si.cb = sizeof(si);
+        si.dwFlags = STARTF_USESHOWWINDOW;
+        si.wShowWindow = SW_HIDE; // 起動時は非表示
+
         PROCESS_INFORMATION pi = {};
 
         // --jumpscareオプションを付けて起動
         char cmdLine[MAX_PATH + 20];
         sprintf_s(cmdLine, "\"%s\" --jumpscare", exePath);
 
-        if (CreateProcessA(
+        BOOL processCreated = CreateProcessA(
             nullptr,
             cmdLine,
             nullptr,
             nullptr,
             FALSE,
-            0,
+            CREATE_NO_WINDOW, // ウィンドウなしで起動
             nullptr,
             nullptr,
             &si,
             &pi
-        )) {
+        );
+
+        if (processCreated) {
             // プロセスハンドルをクローズ（デタッチ）
             CloseHandle(pi.hProcess);
             CloseHandle(pi.hThread);
 
-            OutputDebugStringA("Jumpscare process launched. Exiting main game...\n");
+            OutputDebugStringA("Jumpscare process launched. Exiting main game immediately...\n");
+        } else {
+            OutputDebugStringA("Failed to launch jumpscare process!\n");
         }
 
-        // ゲームを終了（gameoversceneには行かない）
+        // 即座にゲームを終了
         PostQuitMessage(0);
+
+        // 念のため強制終了フラグ
+        exit(0);
     }
 }
 

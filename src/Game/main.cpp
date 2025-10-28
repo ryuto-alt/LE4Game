@@ -4,6 +4,7 @@
 #include <thread>
 #include <chrono>
 #include <gdiplus.h>
+#include <mmsystem.h>
 #pragma comment(lib, "gdiplus.lib")
 #pragma comment(lib, "winmm.lib")
 
@@ -28,8 +29,8 @@ LRESULT CALLBACK JumpscareWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 
 // Jumpscare表示関数
 void ShowJumpscare() {
-    // 2秒待機（デスクトップで油断している時間）
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    // 5秒待機（デスクトップで油断している時間）
+    std::this_thread::sleep_for(std::chrono::seconds(5));
 
     // GDI+初期化
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -78,6 +79,17 @@ void ShowJumpscare() {
     // ウィンドウ表示
     ShowWindow(hwnd, SW_SHOW);
     UpdateWindow(hwnd);
+
+    // 音声再生（noise.mp3をMCIで再生）
+    wchar_t currentDir[MAX_PATH];
+    GetCurrentDirectoryW(MAX_PATH, currentDir);
+    wchar_t audioPath[MAX_PATH];
+    swprintf_s(audioPath, L"%s\\Resources\\Audio\\noise.mp3", currentDir);
+
+    wchar_t mciCommand[512];
+    swprintf_s(mciCommand, L"open \"%s\" type mpegvideo alias jumpscareAudio", audioPath);
+    mciSendStringW(mciCommand, nullptr, 0, nullptr);
+    mciSendStringW(L"play jumpscareAudio repeat", nullptr, 0, nullptr);
 
     // ダブルバッファリング用のバックバッファ作成
     HDC hdcScreen = GetDC(hwnd);
@@ -177,6 +189,10 @@ void ShowJumpscare() {
     }
 
 cleanup:
+    // 音声停止（MCI）
+    mciSendStringW(L"stop jumpscareAudio", nullptr, 0, nullptr);
+    mciSendStringW(L"close jumpscareAudio", nullptr, 0, nullptr);
+
     // クリーンアップ
     delete backBuffer;
     SelectObject(hdcMem, hbmOld);

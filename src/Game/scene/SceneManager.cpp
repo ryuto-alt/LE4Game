@@ -20,7 +20,7 @@ void SceneManager::Initialize() {
 #ifdef _DEBUG
     nextScene_ = "GamePlay";  // デバッグ時は直接GamePlayから
 #else
-    nextScene_ = "Logo";      // リリース時はLogoから
+    nextScene_ = "GamePlay";      // リリース時はLogoから
 #endif
 
     // デバッグ出力
