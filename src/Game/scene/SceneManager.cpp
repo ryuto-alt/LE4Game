@@ -2,6 +2,7 @@
 #include "LogoScene.h"
 #include "TitleScene.h"
 #include "GamePlayScene.h"
+#include "GameOverScene.h"
 #include <cassert>
 
 // 静的メンバ変数の実体化
@@ -50,6 +51,14 @@ void SceneManager::Update() {
             currentScene_ = std::make_unique<TitleScene>();
         } else if (nextScene_ == "GamePlay") {
             currentScene_ = std::make_unique<GamePlayScene>();
+        } else if (nextScene_ == "GameOver") {
+            currentScene_ = std::make_unique<GameOverScene>();
+        }
+
+        // シーンが正常に生成されたか確認
+        if (!currentScene_) {
+            OutputDebugStringA(("SceneManager: Failed to create scene: " + nextScene_ + "\n").c_str());
+            return;
         }
 
         // シーンマネージャーのポインタをセット

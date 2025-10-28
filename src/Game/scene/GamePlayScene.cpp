@@ -182,6 +182,9 @@ void GamePlayScene::Update() {
     }
     player_->Update(engine);
 
+    // PlayerとEnemyの距離チェック（5m未満でゲームオーバー）
+    CheckPlayerEnemyCollision();
+
     // NavMesh更新（UnoEngine経由）
     engine->UpdateNavMesh();
 }
@@ -506,6 +509,32 @@ void GamePlayScene::HandleInput() {
         ClearNavMeshLogs();
         AddNavMeshLog("=== Regenerating NavMesh (R key) ===");
         engine->GenNav(sceneObjects_, "externals/navimap/stage.navmesh");
+    }
+}
+
+void GamePlayScene::CheckPlayerEnemyCollision() {
+    if (!player_ || !enemy_) {
+        OutputDebugStringA("CheckPlayerEnemyCollision: player or enemy is null\n");
+        return;
+    }
+
+    // PlayerとEnemyの位置を取得
+    Vector3 playerPos = player_->GetPosition();
+    Vector3 enemyPos = enemy_->GetPosition();
+
+    // 距離を計算
+    float dx = playerPos.x - enemyPos.x;
+    float dy = playerPos.y - enemyPos.y;
+    float dz = playerPos.z - enemyPos.z;
+    float distance = std::sqrt(dx * dx + dy * dy + dz * dz);
+
+    // 距離が5m未満の場合、ゲームオーバー
+    const float GAME_OVER_DISTANCE = 5.0f;
+    if (distance < GAME_OVER_DISTANCE) {
+        char debugMsg[256];
+        sprintf_s(debugMsg, "=== GAME OVER! Distance: %.2f < %.2f ===\n", distance, GAME_OVER_DISTANCE);
+        OutputDebugStringA(debugMsg);
+        sceneManager_->ChangeScene("GameOver");
     }
 }
 
