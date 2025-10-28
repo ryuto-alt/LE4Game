@@ -88,6 +88,12 @@ void ShowJumpscare() {
     // GDI+ Graphicsオブジェクト（バックバッファ用）
     Gdiplus::Graphics* backBuffer = new Gdiplus::Graphics(hdcMem);
 
+    // 高速化のための設定
+    backBuffer->SetInterpolationMode(Gdiplus::InterpolationModeNearestNeighbor);
+    backBuffer->SetSmoothingMode(Gdiplus::SmoothingModeNone);
+    backBuffer->SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
+    backBuffer->SetCompositingQuality(Gdiplus::CompositingQualityHighSpeed);
+
     // GIFアニメーション用のフレーム情報取得
     UINT frameCount = gifImage->GetFrameCount(&Gdiplus::FrameDimensionTime);
 
@@ -106,6 +112,18 @@ void ShowJumpscare() {
     UINT currentFrame = 0;
     auto lastFrameTime = startTime;
     float frameTimer = 0.0f;
+    bool needsRedraw = true; // 最初は描画が必要
+
+    // フレーム遅延を事前に取得
+    float* frameDelays = nullptr;
+    if (frameCount > 1 && propertyItem) {
+        frameDelays = new float[frameCount];
+        LONG* delays = (LONG*)propertyItem->value;
+        for (UINT i = 0; i < frameCount; i++) {
+            frameDelays[i] = delays[i] * 0.01f; // 10ms単位
+            if (frameDelays[i] < 0.01f) frameDelays[i] = 0.033f; // 最低33ms (30fps)
+        }
+    }
 
     while (elapsedTime < DISPLAY_DURATION) {
         // デルタタイム計算
@@ -119,39 +137,43 @@ void ShowJumpscare() {
         MSG msg;
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
             if (msg.message == WM_QUIT) {
+                if (frameDelays) delete[] frameDelays;
                 goto cleanup;
             }
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
 
-        // フレーム遅延チェック
-        float currentFrameDelay = 0.1f; // デフォルト100ms
-        if (frameCount > 1 && propertyItem) {
-            LONG* delays = (LONG*)propertyItem->value;
-            currentFrameDelay = delays[currentFrame] * 0.01f; // 10ms単位
-            if (currentFrameDelay < 0.01f) currentFrameDelay = 0.1f; // 最低10ms
-        }
-
         // 次のフレームへ進む
-        if (frameTimer >= currentFrameDelay) {
-            frameTimer = 0.0f;
+        if (frameCount > 1 && frameDelays && frameTimer >= frameDelays[currentFrame]) {
+            frameTimer -= frameDelays[currentFrame];
             currentFrame = (currentFrame + 1) % frameCount;
 
             // GIFのフレームを選択
             GUID pageGuid = Gdiplus::FrameDimensionTime;
             gifImage->SelectActiveFrame(&pageGuid, currentFrame);
+
+            needsRedraw = true; // フレームが変わったので再描画必要
         }
 
-        // バックバッファに描画
-        backBuffer->Clear(Gdiplus::Color(0, 0, 0)); // 黒でクリア
-        backBuffer->DrawImage(gifImage, 0, 0, screenWidth, screenHeight);
+        // フレームが変わった時だけ描画
+        if (needsRedraw) {
+            // バックバッファに描画（Clearは重いので塗りつぶし）
+            backBuffer->DrawImage(gifImage, 0, 0, screenWidth, screenHeight);
 
-        // バックバッファを画面にBlit（一度に転送）
-        BitBlt(hdcScreen, 0, 0, screenWidth, screenHeight, hdcMem, 0, 0, SRCCOPY);
+            // バックバッファを画面にBlit（一度に転送）
+            BitBlt(hdcScreen, 0, 0, screenWidth, screenHeight, hdcMem, 0, 0, SRCCOPY);
 
-        // 少し待機（CPU使用率を抑える、60FPS相当）
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+            needsRedraw = false;
+        }
+
+        // 少し待機（CPU使用率を抑える）
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+
+    // フレーム遅延配列のクリーンアップ
+    if (frameDelays) {
+        delete[] frameDelays;
     }
 
 cleanup:
