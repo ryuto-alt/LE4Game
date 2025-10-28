@@ -1,6 +1,8 @@
 #include "UnoEngine.h"
 #include "AABBCollision.h" // AABBコリジョンシステム
 #include "InstancedRenderer.h"
+#include "GameObject/Enemy.h"
+#include "GameObject/EnemyAIConfig.h"
 #include <cassert>
 #include <algorithm>
 #include <cctype>
@@ -439,6 +441,34 @@ std::unique_ptr<AnimatedModel> UnoEngine::CreateAnim() {
 // アニメーションファイルを読み込む
 Animation UnoEngine::LoadAnim(const std::string& directoryPath, const std::string& filename) {
     return LoadAnimationFile(directoryPath, filename);
+}
+
+// Enemyを作成（デフォルトAI設定）
+std::unique_ptr<Enemy> UnoEngine::CreateEnemy(const Vector3& position) {
+    auto enemy = std::make_unique<Enemy>();
+    enemy->Initialize(camera_.get());
+    enemy->SetPosition(position);
+
+    // NavMeshが存在する場合は自動設定
+    if (navMeshManager_ && navMeshManager_->GetNavMesh()) {
+        enemy->SetNavMesh(navMeshManager_->GetNavMesh());
+    }
+
+    return enemy;
+}
+
+// Enemyを作成（AI設定指定）
+std::unique_ptr<Enemy> UnoEngine::CreateEnemy(const Vector3& position, const EnemyAIConfig& aiConfig) {
+    auto enemy = std::make_unique<Enemy>();
+    enemy->Initialize(camera_.get(), aiConfig);
+    enemy->SetPosition(position);
+
+    // NavMeshが存在する場合は自動設定
+    if (navMeshManager_ && navMeshManager_->GetNavMesh()) {
+        enemy->SetNavMesh(navMeshManager_->GetNavMesh());
+    }
+
+    return enemy;
 }
 
 // 2Dスプライトを作成

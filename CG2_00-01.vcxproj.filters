@@ -529,6 +529,9 @@
     <ClInclude Include="src\Game\GameObject\Enemy.h">
       <Filter>src\Game\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\GameObject\EnemyAIConfig.h">
+      <Filter>src\Game\Enemy</Filter>
+    </ClInclude>
     <ClInclude Include="src\Game\GameObject\FPSCamera.h">
       <Filter>src\Game\GameObject</Filter>
     </ClInclude>

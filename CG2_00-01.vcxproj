@@ -243,6 +243,7 @@
     <ClInclude Include="src\Game\scene\TitleScene.h" />
     <ClInclude Include="src\Game\GameObject\Player.h" />
     <ClInclude Include="src\Game\GameObject\Enemy.h" />
+    <ClInclude Include="src\Game\GameObject\EnemyAIConfig.h" />
     <ClInclude Include="src\Game\GameObject\FPSCamera.h" />
     <ClInclude Include="src\Game\Manager\LightManager.h" />
     <ClInclude Include="src\Game\Manager\NavMeshManager.h" />

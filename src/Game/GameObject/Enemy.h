@@ -1,5 +1,6 @@
 #pragma once
 #include "UnoEngine.h"
+#include "EnemyAIConfig.h"
 #include <memory>
 #include <vector>
 
@@ -12,7 +13,7 @@ public:
 	Enemy();
 	~Enemy();
 
-	void Initialize(Camera* camera = nullptr);
+	void Initialize(Camera* camera = nullptr, const EnemyAIConfig& aiConfig = EnemyAIConfig{});
 	void Update();
 	void Draw();
 	void Finalize();
@@ -50,6 +51,13 @@ public:
 	// NavMesh
 	void SetNavMesh(NavMesh* navMesh) { navMesh_ = navMesh; }
 
+	// AI parameters
+	void SetIntelligence(float value);
+	void SetAggressiveness(float value);
+	void SetMobility(float value);
+	void SetAIConfig(const EnemyAIConfig& config);
+	const EnemyAIConfig& GetAIConfig() const { return aiConfig_; }
+
 	// Getters
 	Object3d* GetObject() { return object3d_.get(); }
 	AnimatedModel* GetModel() { return animatedModel_.get(); }
@@ -63,6 +71,7 @@ private:
 	bool CheckWallAt(const Vector3& position);
 	void UpdateNavMeshPath();
 	void FollowPath();
+	void ApplyAIConfig();
 
 	// 3D object and model
 	std::unique_ptr<Object3d> object3d_;
@@ -86,6 +95,9 @@ private:
 	// Current animation index for ImGui combo
 	int currentAnimationIndex_{0};
 
+	// AI Config
+	EnemyAIConfig aiConfig_;
+
 	// Player tracking
 	Player* player_{nullptr};
 	float detectionRange_{100.0f};
@@ -101,7 +113,7 @@ private:
 	std::vector<Vector3> currentPath_;
 	int currentWaypointIndex_{0};
 	float pathUpdateTimer_{0.0f};
-	const float PATH_UPDATE_INTERVAL = 0.5f;
+	float pathUpdateInterval_{0.5f};
 	bool isAtCorner_{false};
 	float cornerSlowdownFactor_{1.0f};
 

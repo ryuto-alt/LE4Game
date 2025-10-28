@@ -13,7 +13,26 @@ Enemy::Enemy() = default;
 Enemy::~Enemy() {
 }
 
-void Enemy::Initialize(Camera* camera) {
+void Enemy::ApplyAIConfig() {
+	// Intelligence: 0.0~10.0 → パス更新間隔 2.0~0.1秒
+	// 5.0で0.5秒（デフォルト）
+	pathUpdateInterval_ = 2.0f - (aiConfig_.intelligence * 0.19f);
+
+	// Aggressiveness: 0.0~10.0 → 検知範囲 20.0~200.0
+	// 5.0で100.0（デフォルト）
+	detectionRange_ = 20.0f + (aiConfig_.aggressiveness * 18.0f);
+
+	// Mobility: 0.0~10.0 → 移動速度 0.025~0.25
+	// 5.0で0.125（デフォルト）
+	moveSpeed_ = 0.025f + (aiConfig_.mobility * 0.0225f);
+}
+
+void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
+	// AI設定を適用
+	aiConfig_ = aiConfig;
+	aiConfig_.Clamp();
+	ApplyAIConfig();
+
 	UnoEngine* engine = UnoEngine::GetInstance();
 
 	// Playerと全く同じ方法でアニメーションモデルを読み込む
@@ -123,7 +142,7 @@ void Enemy::Update() {
 			// 定期的にパスを更新
 			if (pathUpdateTimer_ <= 0.0f) {
 				UpdateNavMeshPath();
-				pathUpdateTimer_ = PATH_UPDATE_INTERVAL;
+				pathUpdateTimer_ = pathUpdateInterval_;
 			}
 
 			// パスに沿って移動
@@ -361,6 +380,27 @@ void Enemy::ChangeAnimation(const std::string& animationName) {
 		isBlending_ = true;
 		blendTimer_ = 0.0f;
 	}
+}
+
+void Enemy::SetIntelligence(float value) {
+	aiConfig_.intelligence = std::clamp(value, 0.0f, 10.0f);
+	ApplyAIConfig();
+}
+
+void Enemy::SetAggressiveness(float value) {
+	aiConfig_.aggressiveness = std::clamp(value, 0.0f, 10.0f);
+	ApplyAIConfig();
+}
+
+void Enemy::SetMobility(float value) {
+	aiConfig_.mobility = std::clamp(value, 0.0f, 10.0f);
+	ApplyAIConfig();
+}
+
+void Enemy::SetAIConfig(const EnemyAIConfig& config) {
+	aiConfig_ = config;
+	aiConfig_.Clamp();
+	ApplyAIConfig();
 }
 
 // 指定位置に壁があるかチェック

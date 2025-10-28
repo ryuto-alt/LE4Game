@@ -196,6 +196,10 @@ public:
     std::unique_ptr<AnimatedModel> CreateAnim();
     Animation LoadAnim(const std::string& directoryPath, const std::string& filename);
 
+    // ゲームオブジェクト
+    std::unique_ptr<class Enemy> CreateEnemy(const Vector3& position);
+    std::unique_ptr<class Enemy> CreateEnemy(const Vector3& position, const struct EnemyAIConfig& aiConfig);
+
     // 2Dスプライト
     std::unique_ptr<Sprite> CreateSpr(const std::string& texturePath);
 
