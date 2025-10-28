@@ -113,6 +113,14 @@ void UnoEngine::Initialize() {
         sceneManager->SetCamera(camera_.get());
         sceneManager->SetWinApp(winApp_.get());
 
+        // ポストプロセスの初期化
+        postProcess_ = std::make_unique<PostProcess>();
+        postProcess_->Initialize(dxCommon_.get(), srvManager_.get());
+
+        // ライトマネージャーの初期化
+        lightManager_ = std::make_unique<LightManager>();
+        lightManager_->Initialize();
+
         // 初期化時のGPU同期を実行（削除）
         // dxCommon_->CommandKick();
 
@@ -854,4 +862,103 @@ void UnoEngine::UpdateNavMesh() {
     if (navMeshManager_) {
         navMeshManager_->Update();
     }
+}
+
+// ========================================
+// 🎨 ポストプロセス
+// ========================================
+
+// ポストプロセス描画開始
+void UnoEngine::BeginPostProcess() {
+    if (postProcess_) {
+        postProcess_->PreDraw();
+    }
+}
+
+// ポストプロセス描画終了
+void UnoEngine::EndPostProcess() {
+    if (postProcess_) {
+        postProcess_->PostDraw();
+    }
+}
+
+// ホラーエフェクトパラメータ設定
+void UnoEngine::SetHorrorParams(float time, float noiseIntensity, float distortionAmount,
+                                 float bloodAmount, float vignetteIntensity) {
+    if (postProcess_) {
+        postProcess_->SetHorrorParams(time, noiseIntensity, distortionAmount, bloodAmount, vignetteIntensity);
+    }
+}
+
+// 魚眼レンズエフェクト設定
+void UnoEngine::SetFisheyeStrength(float strength) {
+    if (postProcess_) {
+        postProcess_->SetFisheyeStrength(strength);
+    }
+}
+
+void UnoEngine::SetFisheyeRadius(float radius) {
+    if (postProcess_) {
+        postProcess_->SetFisheyeRadius(radius);
+    }
+}
+
+// ========================================
+// 💡 ライト管理
+// ========================================
+
+// ライト更新
+void UnoEngine::UpdateLights() {
+    if (lightManager_) {
+        lightManager_->Update();
+    }
+}
+
+// 懐中電灯更新
+void UnoEngine::UpdateFlashlight(const Vector3& position, const Vector3& direction) {
+    if (lightManager_) {
+        lightManager_->UpdateFlashlight(position, direction);
+    }
+}
+
+// ========================================
+// 📦 リソースプリロード
+// ========================================
+
+// アニメーションモデルのプリロード
+void UnoEngine::PreloadAnimModel(const std::string& key, const std::string& directoryPath, const std::string& filename) {
+    ResourcePreloader::GetInstance()->PreloadAnimatedModel(key, directoryPath, filename, dxCommon_.get());
+}
+
+void UnoEngine::PreloadAnimModelLightweight(const std::string& key, const std::string& directoryPath, const std::string& filename) {
+    ResourcePreloader::GetInstance()->PreloadAnimatedModelLightweight(key, directoryPath, filename, dxCommon_.get());
+}
+
+// プリロード済みモデル取得
+std::unique_ptr<AnimatedModel> UnoEngine::GetPreloadedModel(const std::string& key) {
+    return ResourcePreloader::GetInstance()->GetPreloadedModel(key);
+}
+
+bool UnoEngine::HasPreloadedModel(const std::string& key) {
+    return ResourcePreloader::GetInstance()->HasPreloadedModel(key);
+}
+
+// プリロード進捗取得
+float UnoEngine::GetPreloadProgress() {
+    return ResourcePreloader::GetInstance()->GetPreloadProgress();
+}
+
+// プリロード済みリソース全削除
+void UnoEngine::ClearPreloadedResources() {
+    ResourcePreloader::GetInstance()->ClearAll();
+}
+
+// ========================================
+// 🎬 シーン読み込み
+// ========================================
+
+// JSONからシーンデータを読み込む
+SceneData UnoEngine::LoadSceneFromJSON(const std::string& jsonPath) {
+    SceneConfigurator configurator;
+    return configurator.LoadSceneFromJSON(jsonPath);
 }

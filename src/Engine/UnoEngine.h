@@ -40,9 +40,20 @@
 // NavMesh関連
 #include "Manager/NavMeshManager.h"
 
+// ポストプロセス関連
+#include "PostProcess.h"
+
 // シーン管理
 #include "SceneManager.h"
 #include "IScene.h"
+#include "Scene/SceneLoader.h"
+#include "Scene/SceneConfigurator.h"
+
+// リソース管理
+#include "Resource/ResourcePreloader.h"
+
+// ライト管理
+#include "Manager/LightManager.h"
 
 // 数学・ユーティリティ関連
 #include "Mymath.h"
@@ -296,6 +307,63 @@ public:
     // NavMesh更新
     void UpdateNavMesh();
 
+    // ========================================
+    // 🎨 ポストプロセス
+    // ========================================
+
+    // ポストプロセス取得
+    PostProcess* GetPostProcess() const { return postProcess_.get(); }
+
+    // ポストプロセス描画制御
+    void BeginPostProcess();
+    void EndPostProcess();
+
+    // ホラーエフェクトパラメータ設定
+    void SetHorrorParams(float time, float noiseIntensity, float distortionAmount,
+                         float bloodAmount, float vignetteIntensity);
+
+    // 魚眼レンズエフェクト設定
+    void SetFisheyeStrength(float strength);
+    void SetFisheyeRadius(float radius);
+
+    // ========================================
+    // 💡 ライト管理
+    // ========================================
+
+    // ライトマネージャー取得
+    LightManager* GetLightMgr() const { return lightManager_.get(); }
+
+    // ライト更新
+    void UpdateLights();
+
+    // 懐中電灯更新
+    void UpdateFlashlight(const Vector3& position, const Vector3& direction);
+
+    // ========================================
+    // 📦 リソースプリロード
+    // ========================================
+
+    // アニメーションモデルのプリロード
+    void PreloadAnimModel(const std::string& key, const std::string& directoryPath, const std::string& filename);
+    void PreloadAnimModelLightweight(const std::string& key, const std::string& directoryPath, const std::string& filename);
+
+    // プリロード済みモデル取得
+    std::unique_ptr<AnimatedModel> GetPreloadedModel(const std::string& key);
+    bool HasPreloadedModel(const std::string& key);
+
+    // プリロード進捗取得
+    float GetPreloadProgress();
+
+    // プリロード済みリソース全削除
+    void ClearPreloadedResources();
+
+    // ========================================
+    // 🎬 シーン読み込み
+    // ========================================
+
+    // JSONからシーンデータを読み込む（SceneLoaderを使用）
+    SceneData LoadSceneFromJSON(const std::string& jsonPath);
+
 private:
     // シングルトンインスタンス
     static UnoEngine* instance_;
@@ -324,6 +392,12 @@ private:
 
     // NavMesh関連
     std::unique_ptr<NavMeshManager> navMeshManager_;
+
+    // ポストプロセス関連
+    std::unique_ptr<PostProcess> postProcess_;
+
+    // ライト管理関連
+    std::unique_ptr<LightManager> lightManager_;
 
     // ImGuiの初期化
     void InitializeImGui();
