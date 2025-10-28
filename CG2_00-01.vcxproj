@@ -121,6 +121,7 @@
     <ClCompile Include="src\Engine\Camera\Camera.cpp" />
     <ClCompile Include="src\Engine\Camera\Frustum.cpp" />
     <ClCompile Include="src\Engine\Collision\AABBCollision.cpp" />
+    <ClCompile Include="src\Engine\Collision\CollisionHelper.cpp" />
     <ClCompile Include="src\Engine\Core\Framework.cpp" />
     <ClCompile Include="src\Engine\Graphics\D3DResourceCheck.cpp" />
     <ClCompile Include="src\Engine\Graphics\DirectXCommon.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="src\Game\Manager\NavMeshManager.cpp" />
     <ClCompile Include="src\Game\NavMesh\NavMesh.cpp" />
     <ClCompile Include="src\Game\NavMesh\NavMeshBuilder.cpp" />
+    <ClCompile Include="src\Game\NavMesh\NavMeshHelper.cpp" />
     <ClCompile Include="src\Engine\Animation\AnimatedModel.cpp" />
     <ClCompile Include="src\Engine\Animation\AnimationBlender.cpp" />
     <ClCompile Include="src\Engine\Animation\AnimationPlayer.cpp" />
@@ -204,6 +206,7 @@
     <ClInclude Include="src\Engine\Camera\Camera.h" />
     <ClInclude Include="src\Engine\Camera\Frustum.h" />
     <ClInclude Include="src\Engine\Collision\AABBCollision.h" />
+    <ClInclude Include="src\Engine\Collision\CollisionHelper.h" />
     <ClInclude Include="src\Engine\Collision\CollisionPrimitive.h" />
     <ClInclude Include="src\Engine\Core\Framework.h" />
     <ClInclude Include="src\Engine\Graphics\D3DResourceCheck.h" />
@@ -245,6 +248,7 @@
     <ClInclude Include="src\Game\Manager\NavMeshManager.h" />
     <ClInclude Include="src\Game\NavMesh\NavMesh.h" />
     <ClInclude Include="src\Game\NavMesh\NavMeshBuilder.h" />
+    <ClInclude Include="src\Game\NavMesh\NavMeshHelper.h" />
     <ClInclude Include="src\Engine\Animation\Animation.h" />
     <ClInclude Include="src\Engine\Animation\AnimatedModel.h" />
     <ClInclude Include="src\Engine\Animation\AnimationBlender.h" />

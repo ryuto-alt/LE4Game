@@ -239,6 +239,9 @@
     <ClCompile Include="src\Engine\Collision\AABBCollision.cpp">
       <Filter>src\engine\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Collision\CollisionHelper.cpp">
+      <Filter>src\engine\Collision</Filter>
+    </ClCompile>
     <ClCompile Include="src\Game\GameObject\Player.cpp">
       <Filter>src\Game\Player</Filter>
     </ClCompile>
@@ -282,6 +285,9 @@
       <Filter>src\Game\NavMesh</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\NavMesh\NavMeshBuilder.cpp">
+      <Filter>src\Game\NavMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\NavMesh\NavMeshHelper.cpp">
       <Filter>src\Game\NavMesh</Filter>
     </ClCompile>
     <ClCompile Include="externals\recastnavigation\Recast\Source\Recast.cpp">
@@ -493,6 +499,9 @@
     <ClInclude Include="src\Engine\Collision\AABBCollision.h">
       <Filter>src\engine\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Collision\CollisionHelper.h">
+      <Filter>src\engine\Collision</Filter>
+    </ClInclude>
     <ClInclude Include="src\Game\GameObject\Player.h">
       <Filter>src\Game\Player</Filter>
     </ClInclude>
@@ -536,6 +545,9 @@
       <Filter>src\Game\NavMesh</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\NavMesh\NavMeshBuilder.h">
+      <Filter>src\Game\NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\NavMesh\NavMeshHelper.h">
       <Filter>src\Game\NavMesh</Filter>
     </ClInclude>
   </ItemGroup>

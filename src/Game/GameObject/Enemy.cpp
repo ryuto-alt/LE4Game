@@ -2,8 +2,10 @@
 #include "Player.h"
 #include "NavMesh/NavMesh.h"
 #include "NavMesh/NavMeshBuilder.h"
+#include "NavMesh/NavMeshHelper.h"
 #include <cmath>
 #include "Collision/AABBCollision.h"
+#include "Collision/CollisionHelper.h"
 #include "DetourNavMeshQuery.h"
 
 Enemy::Enemy() = default;
@@ -397,80 +399,11 @@ bool Enemy::CheckWallAt(const Vector3& checkPosition) {
 
 // 衝突応答処理
 void Enemy::HandleCollisionResponse() {
-	auto* collisionManager = Collision::AABBCollisionManager::GetInstance();
-	if (!collisionManager || !object3d_) return;
-
-	auto enemyColObj = collisionManager->FindCollisionObject(object3d_.get());
-	if (!enemyColObj || !enemyColObj->IsEnabled()) return;
-
-	const int maxIterations = 5;  // 反復回数を増やして確実に押し出す
-
-	for (int iteration = 0; iteration < maxIterations; ++iteration) {
-		bool hadCollision = false;
-		const Collision::AABB& enemyAABB = enemyColObj->GetWorldAABB();
-
-		for (const auto& colObj : collisionManager->GetCollisionObjects()) {
-			if (colObj.get() == enemyColObj.get()) continue;
-			if (!colObj->IsEnabled()) continue;
-
-			// プレイヤーと壁との衝突は無視
-			if (colObj->GetName() == "Player") continue;
-			if (colObj->GetName() == "wall") continue;
-
-			const Collision::AABB& otherAABB = colObj->GetWorldAABB();
-
-			if (Collision::CheckAABBCollision(enemyAABB, otherAABB)) {
-				hadCollision = true;
-
-				// 押し出しベクトルを計算
-				Vector3 overlapMin = {
-					(std::max)(enemyAABB.min.x, otherAABB.min.x),
-					(std::max)(enemyAABB.min.y, otherAABB.min.y),
-					(std::max)(enemyAABB.min.z, otherAABB.min.z)
-				};
-				Vector3 overlapMax = {
-					(std::min)(enemyAABB.max.x, otherAABB.max.x),
-					(std::min)(enemyAABB.max.y, otherAABB.max.y),
-					(std::min)(enemyAABB.max.z, otherAABB.max.z)
-				};
-
-				Vector3 overlap = {
-					overlapMax.x - overlapMin.x,
-					overlapMax.y - overlapMin.y,
-					overlapMax.z - overlapMin.z
-				};
-
-				// 最小の押し出し方向を選択（Y軸は無視）
-				Vector3 pushOut = {0.0f, 0.0f, 0.0f};
-				const float PUSHOUT_MARGIN = 0.1f;  // 余裕を大きく
-				if (overlap.x < overlap.z) {
-					if (enemyAABB.GetCenter().x < otherAABB.GetCenter().x) {
-						pushOut.x = -(overlap.x + PUSHOUT_MARGIN);
-					} else {
-						pushOut.x = overlap.x + PUSHOUT_MARGIN;
-					}
-				} else {
-					if (enemyAABB.GetCenter().z < otherAABB.GetCenter().z) {
-						pushOut.z = -(overlap.z + PUSHOUT_MARGIN);
-					} else {
-						pushOut.z = overlap.z + PUSHOUT_MARGIN;
-					}
-				}
-
-				// 位置を補正
-				position_.x += pushOut.x;
-				position_.z += pushOut.z;
-
-				object3d_->SetPosition(position_);
-				object3d_->Update();
-
-				enemyColObj->Update();
-				break;
-			}
-		}
-
-		if (!hadCollision) break;
-	}
+	Collision::CollisionHelper::HandleAABBPushout(
+		position_,
+		object3d_.get(),
+		{"Player", "wall"}
+	);
 }
 
 // NavMeshパスを更新
@@ -501,138 +434,15 @@ void Enemy::UpdateNavMeshPath() {
 
 // パスに沿って移動（先読みで滑らかに）
 void Enemy::FollowPath() {
-	if (currentPath_.empty() || currentWaypointIndex_ >= static_cast<int>(currentPath_.size())) {
-		return;
-	}
-
-	const Vector3& targetWaypoint = currentPath_[currentWaypointIndex_];
-
-	// 目標ウェイポイントへのベクトル
-	Vector3 toWaypoint = {
-		targetWaypoint.x - position_.x,
-		0.0f,  // Y軸は無視
-		targetWaypoint.z - position_.z
-	};
-
-	float distanceToWaypoint = std::sqrt(toWaypoint.x * toWaypoint.x + toWaypoint.z * toWaypoint.z);
-
-	// ウェイポイントに到達したら次へ（判定を緩くして曲がり角でスムーズに）
-	const float WAYPOINT_REACH_THRESHOLD = 3.0f;  // さらに緩く
-	if (distanceToWaypoint < WAYPOINT_REACH_THRESHOLD) {
-		currentWaypointIndex_++;
-		if (currentWaypointIndex_ >= static_cast<int>(currentPath_.size())) {
-			// パスの終端に到達
-			currentPath_.clear();
-			currentWaypointIndex_ = 0;
-		}
-		return;
-	}
-
-	// 先読み：次のウェイポイントがある場合、そちらにも少し引き寄せられる
-	Vector3 targetDirection = toWaypoint;
-	isAtCorner_ = false;
-	cornerSlowdownFactor_ = 1.0f;
-
-	if (currentWaypointIndex_ + 1 < static_cast<int>(currentPath_.size())) {
-		const Vector3& nextWaypoint = currentPath_[currentWaypointIndex_ + 1];
-		Vector3 toNextWaypoint = {
-			nextWaypoint.x - position_.x,
-			0.0f,
-			nextWaypoint.z - position_.z
-		};
-
-		float distToNext = std::sqrt(toNextWaypoint.x * toNextWaypoint.x + toNextWaypoint.z * toNextWaypoint.z);
-		if (distToNext > 0.001f) {
-			toNextWaypoint.x /= distToNext;
-			toNextWaypoint.z /= distToNext;
-
-			// 正規化された方向ベクトル
-			float normalizedToWaypointX = toWaypoint.x / distanceToWaypoint;
-			float normalizedToWaypointZ = toWaypoint.z / distanceToWaypoint;
-
-			// 角度を計算（内積）
-			float dotProduct = normalizedToWaypointX * toNextWaypoint.x + normalizedToWaypointZ * toNextWaypoint.z;
-			float angle = std::acos(std::clamp(dotProduct, -1.0f, 1.0f));
-
-			// 角度が大きい（急カーブ）場合は減速
-			const float SHARP_TURN_THRESHOLD = 1.0f; // 約57度
-			if (angle > SHARP_TURN_THRESHOLD) {
-				isAtCorner_ = true;
-				// 角度が急なほど減速（0.3倍～1.0倍）
-				cornerSlowdownFactor_ = 0.3f + (1.0f - angle / 3.14159f) * 0.7f;
-			}
-
-			// 現在のウェイポイントに近いほど次のウェイポイントの影響を強くする
-			float blendFactor = 1.0f - (distanceToWaypoint / WAYPOINT_REACH_THRESHOLD);
-			blendFactor = std::clamp(blendFactor, 0.0f, 0.6f);  // 最大60%の影響
-
-			targetDirection.x = normalizedToWaypointX * (1.0f - blendFactor) + toNextWaypoint.x * blendFactor;
-			targetDirection.z = normalizedToWaypointZ * (1.0f - blendFactor) + toNextWaypoint.z * blendFactor;
-		}
-	}
-
-	// 正規化
-	float targetLength = std::sqrt(targetDirection.x * targetDirection.x + targetDirection.z * targetDirection.z);
-	if (targetLength > 0.001f) {
-		targetDirection.x /= targetLength;
-		targetDirection.z /= targetLength;
-	}
-
-	// 目標回転角を計算
-	targetRotationY_ = std::atan2(targetDirection.x, targetDirection.z);
-
-	// 回転の補間（滑らかに回転）
-	const float ROTATION_LERP_FACTOR = 0.15f;  // 回転の滑らかさ（0.0～1.0）
-
-	// 角度差を-π～πの範囲に正規化
-	float angleDiff = targetRotationY_ - currentRotationY_;
-	while (angleDiff > 3.14159f) angleDiff -= 2.0f * 3.14159f;
-	while (angleDiff < -3.14159f) angleDiff += 2.0f * 3.14159f;
-
-	// 補間
-	currentRotationY_ += angleDiff * ROTATION_LERP_FACTOR;
-
-	// 速度の補間（滑らかに加減速）
-	const float SPEED_LERP_FACTOR = 0.1f;  // 加減速の滑らかさ（0.0～1.0）
-	float targetSpeed = moveSpeed_ * cornerSlowdownFactor_;
-	currentSpeed_ += (targetSpeed - currentSpeed_) * SPEED_LERP_FACTOR;
-
-	// 移動
-	Vector3 newPosition = position_;
-	newPosition.x += targetDirection.x * currentSpeed_;
-	newPosition.z += targetDirection.z * currentSpeed_;
-
-	// NavMesh上の有効な位置に補正
-	if (navMesh_ && navMesh_->IsValid()) {
-		float startPos[3] = {newPosition.x, newPosition.y, newPosition.z};
-		float extents[3] = {2.0f, 4.0f, 2.0f};  // 探索範囲
-
-		dtNavMeshQuery* query = navMesh_->GetBuilder()->GetNavMesh() ?
-			dtAllocNavMeshQuery() : nullptr;
-
-		if (query && navMesh_->GetBuilder()->GetNavMesh()) {
-			query->init(navMesh_->GetBuilder()->GetNavMesh(), 2048);
-
-			dtQueryFilter filter;
-			filter.setIncludeFlags(0xffff);
-			filter.setExcludeFlags(0);
-
-			dtPolyRef nearestPoly = 0;
-			float nearestPoint[3];
-
-			// 最も近いNavMesh上の点を探す
-			dtStatus status = query->findNearestPoly(startPos, extents, &filter, &nearestPoly, nearestPoint);
-
-			if (dtStatusSucceed(status) && nearestPoly != 0) {
-				// NavMesh上の有効な位置に補正
-				newPosition.x = nearestPoint[0];
-				newPosition.y = nearestPoint[1];
-				newPosition.z = nearestPoint[2];
-			}
-
-			dtFreeNavMeshQuery(query);
-		}
-	}
-
-	position_ = newPosition;
+	NavMeshHelper::FollowPath(
+		position_,
+		currentRotationY_,
+		currentSpeed_,
+		currentPath_,
+		currentWaypointIndex_,
+		moveSpeed_,
+		navMesh_,
+		&isAtCorner_,
+		&cornerSlowdownFactor_
+	);
 }
