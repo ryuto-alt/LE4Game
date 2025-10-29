@@ -29,8 +29,8 @@ LRESULT CALLBACK JumpscareWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 
 // Jumpscare表示関数
 void ShowJumpscare() {
-    // 5秒待機（デスクトップで油断している時間）
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+    // 2秒待機（デスクトップで油断している時間）
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 
     // GDI+初期化
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -38,7 +38,7 @@ void ShowJumpscare() {
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
 
     // GIF画像を読み込み
-    Gdiplus::Image* gifImage = new Gdiplus::Image(L"Resources/textures/jumpscare.gif");
+    Gdiplus::Image* gifImage = new Gdiplus::Image(L"Resources/textures/gameover.gif");
 
     if (gifImage->GetLastStatus() != Gdiplus::Ok) {
         delete gifImage;
@@ -80,16 +80,16 @@ void ShowJumpscare() {
     ShowWindow(hwnd, SW_SHOW);
     UpdateWindow(hwnd);
 
-    // 音声再生（noise.mp3をMCIで再生）
+    // 音声再生（gameover.mp3をMCIで再生）
     wchar_t currentDir[MAX_PATH];
     GetCurrentDirectoryW(MAX_PATH, currentDir);
     wchar_t audioPath[MAX_PATH];
-    swprintf_s(audioPath, L"%s\\Resources\\Audio\\noise.mp3", currentDir);
+    swprintf_s(audioPath, L"%s\\Resources\\Audio\\gameover.mp3", currentDir);
 
     wchar_t mciCommand[512];
     swprintf_s(mciCommand, L"open \"%s\" type mpegvideo alias jumpscareAudio", audioPath);
     mciSendStringW(mciCommand, nullptr, 0, nullptr);
-    mciSendStringW(L"play jumpscareAudio repeat", nullptr, 0, nullptr);
+    mciSendStringW(L"play jumpscareAudio", nullptr, 0, nullptr);
 
     // ダブルバッファリング用のバックバッファ作成
     HDC hdcScreen = GetDC(hwnd);
@@ -117,29 +117,35 @@ void ShowJumpscare() {
         gifImage->GetPropertyItem(PropertyTagFrameDelay, propertySize, propertyItem);
     }
 
-    // デルタタイムで4秒間表示
+    // デルタタイムでGIFを最後まで表示
     auto startTime = std::chrono::high_resolution_clock::now();
-    const float DISPLAY_DURATION = 4.0f; // 4秒間表示
     float elapsedTime = 0.0f;
     UINT currentFrame = 0;
     auto lastFrameTime = startTime;
     float frameTimer = 0.0f;
     bool needsRedraw = true; // 最初は描画が必要
 
-    // フレーム遅延を事前に取得
+    // フレーム遅延を事前に取得し、総再生時間を計算
     float* frameDelays = nullptr;
+    float totalGifDuration = 0.0f;
     if (frameCount > 1 && propertyItem) {
         frameDelays = new float[frameCount];
         LONG* delays = (LONG*)propertyItem->value;
         for (UINT i = 0; i < frameCount; i++) {
             frameDelays[i] = delays[i] * 0.01f; // 10ms単位
             if (frameDelays[i] < 0.01f) frameDelays[i] = 0.033f; // 最低33ms (30fps)
+            totalGifDuration += frameDelays[i];
         }
+    } else {
+        // 単一フレームの場合は2秒表示
+        totalGifDuration = 2.0f;
     }
 
-    OutputDebugStringA("Starting 4 second display loop\n");
+    char durationMsg[256];
+    sprintf_s(durationMsg, "Starting GIF display loop (duration: %.2f seconds)\n", totalGifDuration);
+    OutputDebugStringA(durationMsg);
 
-    while (elapsedTime < DISPLAY_DURATION) {
+    while (elapsedTime < totalGifDuration) {
         // デルタタイム計算
         auto currentTime = std::chrono::high_resolution_clock::now();
         float deltaTime = std::chrono::duration<float>(currentTime - lastFrameTime).count();
@@ -186,7 +192,7 @@ void ShowJumpscare() {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
-    OutputDebugStringA("4 second loop completed normally\n");
+    OutputDebugStringA("GIF display loop completed normally\n");
 
     // フレーム遅延配列のクリーンアップ
     if (frameDelays) {
