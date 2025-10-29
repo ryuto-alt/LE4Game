@@ -289,6 +289,14 @@ bool NavMeshManager::LoadNavMesh(const std::string& filepath) {
 }
 
 void NavMeshManager::Update() {
+    // 可視化の更新が必要な場合、次のフレームで実行
+    if (needsVisualizationUpdate_) {
+        needsVisualizationUpdate_ = false;
+        if (dxCommon_ && camera_) {
+            CreateVisualization(dxCommon_, camera_);
+        }
+    }
+
     // 視覚化オブジェクトの更新
     if (showVisualization_ && visualizationObject_) {
         visualizationObject_->Update();
@@ -302,6 +310,11 @@ void NavMeshManager::CreateVisualization(DirectXCommon* dxCommon, Camera* camera
     if (!navMesh_ || !navMesh_->IsValid()) {
         return;
     }
+
+    // 古い可視化リソースをクリア
+    // 注: リソースは自動的にスマートポインタによって管理されます
+    visualizationObject_.reset();
+    visualizationModel_.reset();
 
     UnoEngine* unoEngine = UnoEngine::GetInstance();
     visualizationObject_ = unoEngine->CreateObj3();

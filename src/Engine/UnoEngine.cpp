@@ -850,6 +850,14 @@ void UnoEngine::CreateNavVis() {
     navMeshManager_->CreateVisualization(dxCommon_.get(), camera_.get());
 }
 
+// NavMeshの可視化更新をリクエスト
+void UnoEngine::RequestNavVisUpdate() {
+    if (!navMeshManager_) {
+        navMeshManager_ = std::make_unique<NavMeshManager>();
+    }
+    navMeshManager_->RequestVisualizationUpdate();
+}
+
 // NavMeshの視覚化を描画
 void UnoEngine::DrawNavVis() {
     if (navMeshManager_) {

@@ -321,6 +321,12 @@ void GamePlayScene::Draw() {
                     AddNavMeshLog("New AI System re-initialized");
                 }
             }
+
+            // 可視化が有効な場合は次のフレームで更新
+            if (engine->IsNavVis()) {
+                engine->RequestNavVisUpdate();
+                AddNavMeshLog("NavMesh visualization will update next frame");
+            }
         }
 
         ImGui::SameLine();
@@ -506,6 +512,12 @@ void GamePlayScene::HandleInput() {
         ClearNavMeshLogs();
         AddNavMeshLog("=== Regenerating NavMesh (R key) ===");
         engine->GenNav(sceneObjects_, "externals/navimap/stage.navmesh");
+
+        // 可視化が有効な場合は次のフレームで更新
+        if (engine->IsNavVis()) {
+            engine->RequestNavVisUpdate();
+            AddNavMeshLog("NavMesh visualization will update next frame");
+        }
     }
 }
 

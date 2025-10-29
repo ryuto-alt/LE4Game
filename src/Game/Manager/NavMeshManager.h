@@ -41,6 +41,7 @@ public:
     bool IsVisualizationEnabled() const { return showVisualization_; }
     void DrawVisualization();
     void CreateVisualization(DirectXCommon* dxCommon, Camera* camera);
+    void RequestVisualizationUpdate() { needsVisualizationUpdate_ = true; }
 
     // ログコールバック
     void SetLogCallback(std::function<void(const std::string&)> callback) {
@@ -58,6 +59,7 @@ private:
 
     // 視覚化用
     bool showVisualization_ = false;
+    bool needsVisualizationUpdate_ = false;  // 可視化の更新が必要かどうか
     std::unique_ptr<Object3d> visualizationObject_;
     std::unique_ptr<Model> visualizationModel_;
     DirectXCommon* dxCommon_ = nullptr;

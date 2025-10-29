@@ -272,6 +272,7 @@ bool NavMeshBuilder::SaveToFile(const std::string& filepath) const {
     sprintf_s(msg, "NavMeshBuilder: Attempting to save to: %s", filepath.c_str());
     const_cast<NavMeshBuilder*>(this)->Log(msg);
 
+    // ファイルをバイナリモードで開く（既存ファイルは上書き）
     std::ofstream file(filepath, std::ios::binary);
     if (!file.is_open()) {
         sprintf_s(msg, "NavMeshBuilder: Failed to open file for writing: %s", filepath.c_str());

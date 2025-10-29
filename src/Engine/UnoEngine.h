@@ -302,6 +302,7 @@ public:
     void SetNavVis(bool enabled);
     bool IsNavVis() const;
     void CreateNavVis();
+    void RequestNavVisUpdate();  // 可視化の更新をリクエスト
     void DrawNavVis();
 
     // NavMesh更新
