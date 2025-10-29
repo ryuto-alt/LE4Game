@@ -29,8 +29,7 @@ LRESULT CALLBACK JumpscareWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 
 // Jumpscare表示関数
 void ShowJumpscare() {
-    // 2秒待機（デスクトップで油断している時間）
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    // 待機なし（即座に表示）
 
     // GDI+初期化
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
