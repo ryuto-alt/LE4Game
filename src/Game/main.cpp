@@ -137,6 +137,8 @@ void ShowJumpscare() {
         }
     }
 
+    OutputDebugStringA("Starting 4 second display loop\n");
+
     while (elapsedTime < DISPLAY_DURATION) {
         // デルタタイム計算
         auto currentTime = std::chrono::high_resolution_clock::now();
@@ -149,6 +151,7 @@ void ShowJumpscare() {
         MSG msg;
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
             if (msg.message == WM_QUIT) {
+                OutputDebugStringA("WM_QUIT received during jumpscare - exiting early\n");
                 if (frameDelays) delete[] frameDelays;
                 goto cleanup;
             }
@@ -183,12 +186,16 @@ void ShowJumpscare() {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
+    OutputDebugStringA("4 second loop completed normally\n");
+
     // フレーム遅延配列のクリーンアップ
     if (frameDelays) {
         delete[] frameDelays;
     }
 
 cleanup:
+    OutputDebugStringA("Jumpscare cleanup started\n");
+
     // 音声停止（MCI）
     mciSendStringW(L"stop jumpscareAudio", nullptr, 0, nullptr);
     mciSendStringW(L"close jumpscareAudio", nullptr, 0, nullptr);
@@ -208,15 +215,26 @@ cleanup:
     delete gifImage;
     Gdiplus::GdiplusShutdown(gdiplusToken);
 
+    OutputDebugStringA("About to show continue dialog\n");
+
+    // 少し待機してから表示
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
     // コンティニュー確認ダイアログ
     int result = MessageBoxW(
         nullptr,
         L"コンティニューしますか？",
         L"ゲームオーバー",
-        MB_YESNO | MB_ICONQUESTION | MB_TOPMOST
+        MB_YESNO | MB_ICONQUESTION | MB_TOPMOST | MB_SETFOREGROUND | MB_SYSTEMMODAL
     );
 
+    char debugMsg[256];
+    sprintf_s(debugMsg, "Dialog result: %d (IDYES=%d, IDNO=%d)\n", result, IDYES, IDNO);
+    OutputDebugStringA(debugMsg);
+
     if (result == IDYES) {
+        OutputDebugStringA("User chose YES - restarting game\n");
+
         // 「はい」が押された場合、ゲームを再起動
         char exePath[MAX_PATH];
         GetModuleFileNameA(nullptr, exePath, MAX_PATH);
@@ -240,7 +258,12 @@ cleanup:
         )) {
             CloseHandle(pi.hProcess);
             CloseHandle(pi.hThread);
+            OutputDebugStringA("Game restarted successfully\n");
+        } else {
+            OutputDebugStringA("Failed to restart game\n");
         }
+    } else {
+        OutputDebugStringA("User chose NO or closed dialog\n");
     }
 }
 
