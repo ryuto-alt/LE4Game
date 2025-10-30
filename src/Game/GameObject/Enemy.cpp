@@ -169,22 +169,44 @@ void Enemy::Update() {
 		// プレイヤー検知と追跡 (NavMeshベース)
 		if (player_ && navMesh_ && navMesh_->IsValid()) {
 			// 視界内にプレイヤーがいるかチェック
-			bool shouldChase = IsPlayerInVision();
+			bool playerVisible = IsPlayerInVision();
+			Vector3 playerPos = player_->GetPosition();
+			Vector3 toPlayer = {
+				playerPos.x - position_.x,
+				playerPos.y - position_.y,
+				playerPos.z - position_.z
+			};
+			float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.y * toPlayer.y + toPlayer.z * toPlayer.z);
+
+			// 追跡条件：視界内にいる OR (視界を失って5秒以内 AND 15m以内)
+			bool shouldChase = playerVisible ||
+			                   (isChasing_ && lostSightTimer_ < LOST_SIGHT_GRACE_PERIOD && distanceToPlayer <= CHASE_RELEASE_DISTANCE);
+
+			if (playerVisible) {
+				// プレイヤーが見えている：最後に見た位置を更新
+				lastSeenPlayerPosition_ = playerPos;
+				lostSightTimer_ = 0.0f;
+			} else if (isChasing_) {
+				// 視界を失ったがまだ追跡中：タイマーを進める
+				lostSightTimer_ += deltaTime;
+			}
 
 			if (shouldChase) {
-				// プレイヤーを発見：追跡モードに切り替え
+				// プレイヤーを追跡
 				if (!isChasing_) {
 					ChangeAnimation("Run");
 					isChasing_ = true;
+					lostSightTimer_ = 0.0f;
 				}
 
 				// パス更新タイマーを減算
 				pathUpdateTimer_ -= deltaTime;
 
-				// 定期的にパスを更新
+				// 追跡中は頻繁に経路を更新（0.1秒間隔）
+				float chaseUpdateInterval = 0.1f;
 				if (pathUpdateTimer_ <= 0.0f) {
 					UpdateNavMeshPath();
-					pathUpdateTimer_ = pathUpdateInterval_;
+					pathUpdateTimer_ = chaseUpdateInterval;
 				}
 
 				// パスに沿って移動
@@ -192,13 +214,14 @@ void Enemy::Update() {
 					FollowPath();
 				}
 			} else {
-				// プレイヤーが視界外 - 徘徊モード
+				// プレイヤーが視界外 & 追跡時間切れ - 徘徊モード
 				if (isChasing_) {
 					// 追跡終了：徘徊状態に
 					ChangeAnimation("Walk");
 					isChasing_ = false;
 					currentPath_.clear();
 					currentWaypointIndex_ = 0;
+					lostSightTimer_ = 0.0f;
 				}
 
 				// 徘徊ロジック

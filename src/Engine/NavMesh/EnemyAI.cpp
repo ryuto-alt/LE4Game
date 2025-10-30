@@ -183,8 +183,8 @@ void EnemyAI::UpdateState(const Vector3& playerPosition) {
             break;
 
         case EnemyState::Chase:
-            // プレイヤーが範囲外に出たら捜索モードへ
-            if (distanceToPlayer > detectionRange_ * 1.5f) {
+            // プレイヤーが15m以上離れたら捜索モードへ
+            if (distanceToPlayer > 15.0f) {
                 currentState_ = EnemyState::Search;
                 targetPosition_ = playerPosition; // 最後に見た位置を記憶
             }

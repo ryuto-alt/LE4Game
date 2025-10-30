@@ -125,7 +125,12 @@ private:
 	const float VISION_RANGE = 30.0f;  // 視界範囲30m
 	const float VISION_ANGLE = 60.0f;  // 視野角±60度（合計120度）
 	const float VISION_DETECTION_DISTANCE = 20.0f;  // 視界検知距離15m
-	const float CHASE_RELEASE_DISTANCE = 22.0f;  // 追跡解除距離25m
+	const float CHASE_RELEASE_DISTANCE = 15.0f;  // 追跡解除距離15m
+	const float LOST_SIGHT_GRACE_PERIOD = 5.0f;  // 視界を失ってから追跡を続ける時間（秒）
+
+	// Chase persistence
+	Vector3 lastSeenPlayerPosition_{0, 0, 0};  // 最後に見たプレイヤーの位置
+	float lostSightTimer_{0.0f};  // 視界を失ってからの経過時間
 
 	// Wall avoidance (for UI/future use)
 	float avoidanceRadius_{5.0f};
@@ -144,7 +149,7 @@ private:
 	// Stack detection and recovery
 	Vector3 previousPosition_{0.0f, 0.0f, 0.0f};  // 前フレームの位置
 	float stuckTimer_{0.0f};  // スタック時間カウンター
-	const float STUCK_DETECTION_TIME = 1.5f;  // スタック判定時間（1.5秒に短縮）
+	const float STUCK_DETECTION_TIME = 2.5f;  // スタック判定時間（1.5秒に短縮）
 	const float STUCK_DISTANCE_THRESHOLD = 0.3f;  // スタック判定距離（より敏感に）
 	bool isRecoveringFromStuck_{false};  // スタック回避中フラグ
 	int stuckRecoveryAttempts_{0};  // スタック回避試行回数

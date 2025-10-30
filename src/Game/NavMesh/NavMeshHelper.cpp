@@ -72,8 +72,8 @@ void NavMeshHelper::FollowPath(
 
 	float distanceToWaypoint = std::sqrt(toWaypoint.x * toWaypoint.x + toWaypoint.z * toWaypoint.z);
 
-	// ウェイポイントに到達したら次へ
-	const float WAYPOINT_REACH_THRESHOLD = 3.0f;
+	// ウェイポイントに到達したら次へ（より近くまで進んでから曲がる）
+	const float WAYPOINT_REACH_THRESHOLD = 0.5f;  // 0.5mまで近づいてから次へ
 	if (distanceToWaypoint < WAYPOINT_REACH_THRESHOLD) {
 		currentWaypointIndex++;
 		if (currentWaypointIndex >= static_cast<int>(currentPath.size())) {
@@ -116,9 +116,14 @@ void NavMeshHelper::FollowPath(
 				slowdownFactor = 0.3f + (1.0f - angle / 3.14159f) * 0.7f;
 			}
 
-			// 現在のウェイポイントに近いほど次のウェイポイントの影響を強くする
-			float blendFactor = 1.0f - (distanceToWaypoint / WAYPOINT_REACH_THRESHOLD);
-			blendFactor = std::clamp(blendFactor, 0.0f, 0.6f);
+			// 現在のウェイポイントに近い場合のみ次のウェイポイントへの先読みを行う
+			// 角度が急な場合は先読みを抑制して壁に突っかからないようにする
+			float baseBlendFactor = 1.0f - (distanceToWaypoint / WAYPOINT_REACH_THRESHOLD);
+			baseBlendFactor = std::clamp(baseBlendFactor, 0.0f, 1.0f);
+
+			// 角度が急なほどブレンドを弱くする（早く曲がりすぎないように）
+			float angleInfluence = std::clamp(1.0f - (angle / 1.57f), 0.0f, 1.0f);  // 90度以上でブレンド無効化
+			float blendFactor = baseBlendFactor * angleInfluence * 0.3f;  // 最大30%のブレンド
 
 			targetDirection.x = normalizedToWaypointX * (1.0f - blendFactor) + toNextWaypoint.x * blendFactor;
 			targetDirection.z = normalizedToWaypointZ * (1.0f - blendFactor) + toNextWaypoint.z * blendFactor;

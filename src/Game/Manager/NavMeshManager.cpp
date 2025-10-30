@@ -7,15 +7,15 @@
 NavMeshManager::NavMeshManager() {
     navMesh_ = std::make_unique<NavMesh>();
 
-    // デフォルト設定
-    settings_.cellSize = 0.202f;
-    settings_.cellHeight = 0.100f;
-    settings_.agentHeight = 2.000f;
-    settings_.agentRadius = 2.031f;
-    settings_.agentMaxClimb = 0.315f;
-    settings_.agentMaxSlope = 45.000f;
-    settings_.edgeMaxError = 1.300f;
-    settings_.detailSampleDist = 6.080f;
+    // デフォルト設定（迷路型ステージ向け）
+    settings_.cellSize = 0.15f;        // より細かいグリッド
+    settings_.cellHeight = 0.2f;       // 高さ方向の精度
+    settings_.agentHeight = 2.0f;      // Enemyの高さ
+    settings_.agentRadius = 0.4f;      // 狭い通路を通れるように小さく
+    settings_.agentMaxClimb = 0.5f;    // 登れる段差
+    settings_.agentMaxSlope = 45.0f;   // 登れる坂の角度
+    settings_.edgeMaxError = 0.8f;     // 角の滑らかさ
+    settings_.detailSampleDist = 6.0f; // 詳細メッシュのサンプリング距離
 }
 
 NavMeshManager::~NavMeshManager() {
