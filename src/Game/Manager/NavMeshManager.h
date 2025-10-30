@@ -3,6 +3,7 @@
 #include "Object3d.h"
 #include "Model.h"
 #include "Camera.h"
+#include "LineRenderer.h"
 #include <memory>
 #include <vector>
 #include <string>
@@ -43,6 +44,13 @@ public:
     void CreateVisualization(DirectXCommon* dxCommon, Camera* camera);
     void RequestVisualizationUpdate() { needsVisualizationUpdate_ = true; }
 
+    // デバッグプレビュー
+    void SetDebugPreviewEnabled(bool enabled) { showDebugPreview_ = enabled; }
+    bool IsDebugPreviewEnabled() const { return showDebugPreview_; }
+    void DrawDebugPreview();
+    void CreateDebugPreview(DirectXCommon* dxCommon, Camera* camera, const NavMeshBuildSettings& settings, const Vector3& agentPosition = {0, 0, 0});
+    void SetPreviewBounds(const Vector3& min, const Vector3& max);
+
     // ログコールバック
     void SetLogCallback(std::function<void(const std::string&)> callback) {
         logCallback_ = callback;
@@ -64,6 +72,12 @@ private:
     std::unique_ptr<Model> visualizationModel_;
     DirectXCommon* dxCommon_ = nullptr;
     Camera* camera_ = nullptr;
+
+    // デバッグプレビュー用
+    bool showDebugPreview_ = false;
+    std::unique_ptr<LineRenderer> lineRenderer_;
+    Vector3 previewBoundsMin_{-100.0f, 0.0f, -100.0f};
+    Vector3 previewBoundsMax_{100.0f, 10.0f, 100.0f};
 
     // ログコールバック
     std::function<void(const std::string&)> logCallback_;

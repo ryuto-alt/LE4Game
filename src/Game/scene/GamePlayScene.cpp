@@ -214,6 +214,14 @@ void GamePlayScene::Draw() {
     // NavMeshの視覚化（UnoEngine経由）
     UnoEngine::GetInstance()->DrawNavVis();
 
+    // NavMeshデバッグプレビュー描画
+    {
+        auto* navMeshManager = UnoEngine::GetInstance()->GetNavMgr();
+        if (navMeshManager) {
+            navMeshManager->DrawDebugPreview();
+        }
+    }
+
     // ポストプロセスを適用して画面に描画
     if (postProcess_) {
         postProcess_->PostDraw();
@@ -275,6 +283,77 @@ void GamePlayScene::Draw() {
         }
 
         NavMeshBuildSettings& settings = engine->GetNavSet();
+
+        // リアルタイムプレビュー機能
+        static bool showPreview = false;
+        static NavMeshBuildSettings lastSettings = settings;
+        bool settingsChanged = false;
+
+        // プレビュー範囲の設定
+        static float previewRadius = 30.0f;  // Enemyの周りに表示する範囲
+        static bool useEnemyCenter = true;   // Enemyを中心にするか
+
+        if (ImGui::Checkbox("Show Grid Preview (Real-time)", &showPreview)) {
+            navMeshManager->SetDebugPreviewEnabled(showPreview);
+        }
+
+        if (showPreview) {
+            ImGui::SameLine();
+            ImGui::Checkbox("Center on Enemy", &useEnemyCenter);
+
+            // Agent設定に基づいた表示範囲
+            static bool useAgentSettings = true;
+            ImGui::Checkbox("Use Agent Settings for Preview", &useAgentSettings);
+
+            if (!useAgentSettings) {
+                ImGui::SliderFloat("Preview Radius", &previewRadius, 10.0f, 100.0f);
+            }
+
+            // バウンド計算
+            Vector3 center;
+            if (useEnemyCenter && enemy_) {
+                center = enemy_->GetPosition();
+            } else {
+                // シーン全体を表示
+                center = {0.0f, 3.0f, 15.55f};
+            }
+
+            // Agent設定に基づいた範囲計算
+            float displayRadius = previewRadius;
+            if (useAgentSettings) {
+                // Agent Radiusの5倍程度を表示範囲とする
+                displayRadius = settings.agentRadius * 5.0f;
+                if (displayRadius < 10.0f) displayRadius = 10.0f;
+                if (displayRadius > 50.0f) displayRadius = 50.0f;
+            }
+
+            Vector3 minBounds = {
+                center.x - displayRadius,
+                center.y - settings.agentHeight,
+                center.z - displayRadius
+            };
+            Vector3 maxBounds = {
+                center.x + displayRadius,
+                center.y + settings.agentHeight,
+                center.z + displayRadius
+            };
+
+            // 毎フレーム更新（Enemyが動いた場合も反映）
+            navMeshManager->SetPreviewBounds(minBounds, maxBounds);
+            navMeshManager->CreateDebugPreview(engine->GetDXCom(), engine->GetCamera(), settings, enemy_ ? enemy_->GetPosition() : center);
+
+            // デバッグ情報表示
+            ImGui::Text("Debug Info:");
+            ImGui::Text("  Preview Enabled: %s", navMeshManager->IsDebugPreviewEnabled() ? "YES" : "NO");
+            ImGui::Text("  Center: (%.1f, %.1f, %.1f)", center.x, center.y, center.z);
+            ImGui::Text("  Display Radius: %.1f", displayRadius);
+            ImGui::Text("  Agent Radius: %.2f", settings.agentRadius);
+            ImGui::Text("  Agent Height: %.2f", settings.agentHeight);
+            ImGui::Text("  Cell Size: %.3f", settings.cellSize);
+        }
+
+        ImGui::Separator();
+
         if (ImGui::CollapsingHeader("NavMesh Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
             ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Quick Fix: Apply High Precision Preset");
             ImGui::Separator();
@@ -289,20 +368,22 @@ void GamePlayScene::Draw() {
                 settings.edgeMaxError = 0.8f;
                 settings.detailSampleDist = 6.0f;
                 AddNavMeshLog("Applied high precision preset");
+                settingsChanged = true;
             }
 
             ImGui::Separator();
-            ImGui::SliderFloat("Cell Size", &settings.cellSize, 0.05f, 1.0f);
-            ImGui::SliderFloat("Cell Height", &settings.cellHeight, 0.05f, 0.5f);
-            ImGui::SliderFloat("Agent Height", &settings.agentHeight, 0.5f, 5.0f);
-            ImGui::SliderFloat("Agent Radius", &settings.agentRadius, 0.1f, 5.0f);
-            ImGui::SliderFloat("Agent Max Climb", &settings.agentMaxClimb, 0.1f, 1.0f);
-            ImGui::SliderFloat("Agent Max Slope", &settings.agentMaxSlope, 0.0f, 90.0f);
+            if (ImGui::SliderFloat("Cell Size", &settings.cellSize, 0.05f, 1.0f)) settingsChanged = true;
+            if (ImGui::SliderFloat("Cell Height", &settings.cellHeight, 0.05f, 0.5f)) settingsChanged = true;
+            if (ImGui::SliderFloat("Agent Height", &settings.agentHeight, 0.5f, 5.0f)) settingsChanged = true;
+            if (ImGui::SliderFloat("Agent Radius", &settings.agentRadius, 0.1f, 5.0f)) settingsChanged = true;
+            if (ImGui::SliderFloat("Agent Max Climb", &settings.agentMaxClimb, 0.1f, 1.0f)) settingsChanged = true;
+            if (ImGui::SliderFloat("Agent Max Slope", &settings.agentMaxSlope, 0.0f, 90.0f)) settingsChanged = true;
 
             ImGui::Separator();
             ImGui::Text("Corner Smoothness Settings");
-            ImGui::SliderFloat("Edge Max Error", &settings.edgeMaxError, 0.1f, 3.0f);
-            ImGui::SliderFloat("Detail Sample Dist", &settings.detailSampleDist, 1.0f, 10.0f);
+            if (ImGui::SliderFloat("Edge Max Error", &settings.edgeMaxError, 0.1f, 3.0f)) settingsChanged = true;
+            if (ImGui::SliderFloat("Detail Sample Dist", &settings.detailSampleDist, 1.0f, 10.0f)) settingsChanged = true;
+
         }
 
         if (ImGui::Button("Generate NavMesh")) {

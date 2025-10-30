@@ -465,3 +465,150 @@ void NavMeshManager::AddLog(const std::string& message) {
         logCallback_(message);
     }
 }
+
+// デバッグプレビュー機能
+
+void NavMeshManager::SetPreviewBounds(const Vector3& min, const Vector3& max) {
+    previewBoundsMin_ = min;
+    previewBoundsMax_ = max;
+}
+
+void NavMeshManager::CreateDebugPreview(DirectXCommon* dxCommon, Camera* camera, const NavMeshBuildSettings& settings, const Vector3& agentPosition) {
+    dxCommon_ = dxCommon;
+    camera_ = camera;
+
+    // LineRendererを初期化（初回のみ）
+    if (!lineRenderer_) {
+        lineRenderer_ = std::make_unique<LineRenderer>();
+        lineRenderer_->Initialize(dxCommon, camera);
+        AddLog("LineRenderer initialized");
+    }
+
+    // 前回のラインをクリア
+    lineRenderer_->Clear();
+
+    AddLog("CreateDebugPreview called");
+
+    // セルサイズに基づいてグリッドを生成
+    float cellSize = settings.cellSize;
+    float minX = previewBoundsMin_.x;
+    float minZ = previewBoundsMin_.z;
+    float maxX = previewBoundsMax_.x;
+    float maxZ = previewBoundsMax_.z;
+    float y = previewBoundsMin_.y + 0.5f;  // 地面から少し浮かせる
+
+    Vector4 gridColor = {0.0f, 1.0f, 1.0f, 1.0f};  // シアン（明るい青緑）
+
+    int lineCount = 0;
+
+    // X軸に平行な線
+    for (float z = minZ; z <= maxZ; z += cellSize) {
+        lineRenderer_->AddLine({minX, y, z}, {maxX, y, z}, gridColor);
+        lineCount++;
+    }
+
+    // Z軸に平行な線
+    for (float x = minX; x <= maxX; x += cellSize) {
+        lineRenderer_->AddLine({x, y, minZ}, {x, y, maxZ}, gridColor);
+        lineCount++;
+    }
+
+    char msg[256];
+    sprintf_s(msg, "Grid lines added: %d (cellSize=%.3f, bounds=(%.1f,%.1f,%.1f)-(%.1f,%.1f,%.1f))",
+        lineCount, cellSize, minX, previewBoundsMin_.y, minZ, maxX, previewBoundsMax_.y, maxZ);
+    AddLog(msg);
+
+    // バウンディングボックスの8頂点
+    Vector3 corners[8] = {
+        {minX, previewBoundsMin_.y, minZ},
+        {maxX, previewBoundsMin_.y, minZ},
+        {maxX, previewBoundsMin_.y, maxZ},
+        {minX, previewBoundsMin_.y, maxZ},
+        {minX, previewBoundsMax_.y, minZ},
+        {maxX, previewBoundsMax_.y, minZ},
+        {maxX, previewBoundsMax_.y, maxZ},
+        {minX, previewBoundsMax_.y, maxZ}
+    };
+
+    // 12本のエッジを描画
+    int edges[12][2] = {
+        {0,1}, {1,2}, {2,3}, {3,0},  // 底面
+        {4,5}, {5,6}, {6,7}, {7,4},  // 上面
+        {0,4}, {1,5}, {2,6}, {3,7}   // 縦
+    };
+
+    Vector4 boundsColor = {1.0f, 1.0f, 0.0f, 1.0f};  // 黄色
+    for (int i = 0; i < 12; i++) {
+        lineRenderer_->AddLine(corners[edges[i][0]], corners[edges[i][1]], boundsColor);
+    }
+
+    // Agent Radiusの可視化（円）
+    Vector4 agentRadiusColor = {1.0f, 0.0f, 0.0f, 1.0f};  // 赤色
+    const int circleSegments = 32;
+    for (int i = 0; i < circleSegments; i++) {
+        float angle1 = (float)i / circleSegments * 3.14159265f * 2.0f;
+        float angle2 = (float)(i + 1) / circleSegments * 3.14159265f * 2.0f;
+
+        Vector3 p1 = {
+            agentPosition.x + std::cos(angle1) * settings.agentRadius,
+            agentPosition.y,
+            agentPosition.z + std::sin(angle1) * settings.agentRadius
+        };
+        Vector3 p2 = {
+            agentPosition.x + std::cos(angle2) * settings.agentRadius,
+            agentPosition.y,
+            agentPosition.z + std::sin(angle2) * settings.agentRadius
+        };
+
+        lineRenderer_->AddLine(p1, p2, agentRadiusColor);
+    }
+
+    // Agent Heightの可視化（垂直線）
+    Vector4 agentHeightColor = {0.0f, 1.0f, 0.0f, 1.0f};  // 緑色
+    Vector3 heightBottom = {agentPosition.x, agentPosition.y, agentPosition.z};
+    Vector3 heightTop = {agentPosition.x, agentPosition.y + settings.agentHeight, agentPosition.z};
+    lineRenderer_->AddLine(heightBottom, heightTop, agentHeightColor);
+
+    // Agent Heightの上端を示す水平円
+    for (int i = 0; i < circleSegments; i++) {
+        float angle1 = (float)i / circleSegments * 3.14159265f * 2.0f;
+        float angle2 = (float)(i + 1) / circleSegments * 3.14159265f * 2.0f;
+
+        Vector3 p1 = {
+            agentPosition.x + std::cos(angle1) * settings.agentRadius,
+            agentPosition.y + settings.agentHeight,
+            agentPosition.z + std::sin(angle1) * settings.agentRadius
+        };
+        Vector3 p2 = {
+            agentPosition.x + std::cos(angle2) * settings.agentRadius,
+            agentPosition.y + settings.agentHeight,
+            agentPosition.z + std::sin(angle2) * settings.agentRadius
+        };
+
+        lineRenderer_->AddLine(p1, p2, agentHeightColor);
+    }
+
+    // Agent Radiusを示す十字線（4方向）
+    for (int i = 0; i < 4; i++) {
+        float angle = (float)i / 4.0f * 3.14159265f * 2.0f;
+        Vector3 radiusEnd = {
+            agentPosition.x + std::cos(angle) * settings.agentRadius,
+            agentPosition.y,
+            agentPosition.z + std::sin(angle) * settings.agentRadius
+        };
+        lineRenderer_->AddLine({agentPosition.x, agentPosition.y, agentPosition.z}, radiusEnd, agentRadiusColor);
+    }
+}
+
+void NavMeshManager::DrawDebugPreview() {
+    if (!showDebugPreview_) {
+        return;
+    }
+
+    if (!lineRenderer_) {
+        AddLog("DrawDebugPreview: lineRenderer_ is null!");
+        return;
+    }
+
+    lineRenderer_->Render();
+}

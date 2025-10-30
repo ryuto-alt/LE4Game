@@ -126,6 +126,7 @@
     <ClCompile Include="src\Engine\Graphics\D3DResourceCheck.cpp" />
     <ClCompile Include="src\Engine\Graphics\DirectXCommon.cpp" />
     <ClCompile Include="src\Engine\Graphics\InstancedRenderer.cpp" />
+    <ClCompile Include="src\Engine\Graphics\LineRenderer.cpp" />
     <ClCompile Include="src\Engine\Graphics\Model.cpp" />
     <ClCompile Include="src\Engine\Graphics\Object3d.cpp" />
     <ClCompile Include="src\Engine\Graphics\RenderingPipeline.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="src\Engine\Graphics\D3DResourceCheck.h" />
     <ClInclude Include="src\Engine\Graphics\DirectXCommon.h" />
     <ClInclude Include="src\Engine\Graphics\InstancedRenderer.h" />
+    <ClInclude Include="src\Engine\Graphics\LineRenderer.h" />
     <ClInclude Include="src\Engine\Graphics\Model.h" />
     <ClInclude Include="src\Engine\Graphics\Object3d.h" />
     <ClInclude Include="src\Engine\Graphics\RenderingPipeline.h" />
