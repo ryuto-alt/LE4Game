@@ -303,7 +303,11 @@ void GamePlayScene::Draw() {
 
             // Agent設定に基づいた表示範囲
             static bool useAgentSettings = true;
+            static bool showBoundingBox = true;
+            static bool showGrid = true;
             ImGui::Checkbox("Use Agent Settings for Preview", &useAgentSettings);
+            ImGui::Checkbox("Show Grid (Cyan)", &showGrid);
+            ImGui::Checkbox("Show Bounding Box (Yellow)", &showBoundingBox);
 
             if (!useAgentSettings) {
                 ImGui::SliderFloat("Preview Radius", &previewRadius, 10.0f, 100.0f);
@@ -340,7 +344,7 @@ void GamePlayScene::Draw() {
 
             // 毎フレーム更新（Enemyが動いた場合も反映）
             navMeshManager->SetPreviewBounds(minBounds, maxBounds);
-            navMeshManager->CreateDebugPreview(engine->GetDXCom(), engine->GetCamera(), settings, enemy_ ? enemy_->GetPosition() : center);
+            navMeshManager->CreateDebugPreview(engine->GetDXCom(), engine->GetCamera(), settings, enemy_ ? enemy_->GetPosition() : center, showBoundingBox, showGrid);
 
             // デバッグ情報表示
             ImGui::Text("Debug Info:");

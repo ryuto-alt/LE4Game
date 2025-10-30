@@ -473,7 +473,7 @@ void NavMeshManager::SetPreviewBounds(const Vector3& min, const Vector3& max) {
     previewBoundsMax_ = max;
 }
 
-void NavMeshManager::CreateDebugPreview(DirectXCommon* dxCommon, Camera* camera, const NavMeshBuildSettings& settings, const Vector3& agentPosition) {
+void NavMeshManager::CreateDebugPreview(DirectXCommon* dxCommon, Camera* camera, const NavMeshBuildSettings& settings, const Vector3& agentPosition, bool showBoundingBox, bool showGrid) {
     dxCommon_ = dxCommon;
     camera_ = camera;
 
@@ -497,49 +497,55 @@ void NavMeshManager::CreateDebugPreview(DirectXCommon* dxCommon, Camera* camera,
     float maxZ = previewBoundsMax_.z;
     float y = previewBoundsMin_.y + 0.5f;  // 地面から少し浮かせる
 
-    Vector4 gridColor = {0.0f, 1.0f, 1.0f, 1.0f};  // シアン（明るい青緑）
+    // グリッドの描画（オプション）
+    if (showGrid) {
+        Vector4 gridColor = {0.0f, 1.0f, 1.0f, 1.0f};  // シアン（明るい青緑）
 
-    int lineCount = 0;
+        int lineCount = 0;
 
-    // X軸に平行な線
-    for (float z = minZ; z <= maxZ; z += cellSize) {
-        lineRenderer_->AddLine({minX, y, z}, {maxX, y, z}, gridColor);
-        lineCount++;
+        // X軸に平行な線
+        for (float z = minZ; z <= maxZ; z += cellSize) {
+            lineRenderer_->AddLine({minX, y, z}, {maxX, y, z}, gridColor);
+            lineCount++;
+        }
+
+        // Z軸に平行な線
+        for (float x = minX; x <= maxX; x += cellSize) {
+            lineRenderer_->AddLine({x, y, minZ}, {x, y, maxZ}, gridColor);
+            lineCount++;
+        }
+
+        char msg[256];
+        sprintf_s(msg, "Grid lines added: %d (cellSize=%.3f, bounds=(%.1f,%.1f,%.1f)-(%.1f,%.1f,%.1f))",
+            lineCount, cellSize, minX, previewBoundsMin_.y, minZ, maxX, previewBoundsMax_.y, maxZ);
+        AddLog(msg);
     }
 
-    // Z軸に平行な線
-    for (float x = minX; x <= maxX; x += cellSize) {
-        lineRenderer_->AddLine({x, y, minZ}, {x, y, maxZ}, gridColor);
-        lineCount++;
-    }
+    // バウンディングボックスの描画（オプション）
+    if (showBoundingBox) {
+        // バウンディングボックスの8頂点
+        Vector3 corners[8] = {
+            {minX, previewBoundsMin_.y, minZ},
+            {maxX, previewBoundsMin_.y, minZ},
+            {maxX, previewBoundsMin_.y, maxZ},
+            {minX, previewBoundsMin_.y, maxZ},
+            {minX, previewBoundsMax_.y, minZ},
+            {maxX, previewBoundsMax_.y, minZ},
+            {maxX, previewBoundsMax_.y, maxZ},
+            {minX, previewBoundsMax_.y, maxZ}
+        };
 
-    char msg[256];
-    sprintf_s(msg, "Grid lines added: %d (cellSize=%.3f, bounds=(%.1f,%.1f,%.1f)-(%.1f,%.1f,%.1f))",
-        lineCount, cellSize, minX, previewBoundsMin_.y, minZ, maxX, previewBoundsMax_.y, maxZ);
-    AddLog(msg);
+        // 12本のエッジを描画
+        int edges[12][2] = {
+            {0,1}, {1,2}, {2,3}, {3,0},  // 底面
+            {4,5}, {5,6}, {6,7}, {7,4},  // 上面
+            {0,4}, {1,5}, {2,6}, {3,7}   // 縦
+        };
 
-    // バウンディングボックスの8頂点
-    Vector3 corners[8] = {
-        {minX, previewBoundsMin_.y, minZ},
-        {maxX, previewBoundsMin_.y, minZ},
-        {maxX, previewBoundsMin_.y, maxZ},
-        {minX, previewBoundsMin_.y, maxZ},
-        {minX, previewBoundsMax_.y, minZ},
-        {maxX, previewBoundsMax_.y, minZ},
-        {maxX, previewBoundsMax_.y, maxZ},
-        {minX, previewBoundsMax_.y, maxZ}
-    };
-
-    // 12本のエッジを描画
-    int edges[12][2] = {
-        {0,1}, {1,2}, {2,3}, {3,0},  // 底面
-        {4,5}, {5,6}, {6,7}, {7,4},  // 上面
-        {0,4}, {1,5}, {2,6}, {3,7}   // 縦
-    };
-
-    Vector4 boundsColor = {1.0f, 1.0f, 0.0f, 1.0f};  // 黄色
-    for (int i = 0; i < 12; i++) {
-        lineRenderer_->AddLine(corners[edges[i][0]], corners[edges[i][1]], boundsColor);
+        Vector4 boundsColor = {1.0f, 1.0f, 0.0f, 1.0f};  // 黄色
+        for (int i = 0; i < 12; i++) {
+            lineRenderer_->AddLine(corners[edges[i][0]], corners[edges[i][1]], boundsColor);
+        }
     }
 
     // Agent Radiusの可視化（円）

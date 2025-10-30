@@ -48,7 +48,7 @@ public:
     void SetDebugPreviewEnabled(bool enabled) { showDebugPreview_ = enabled; }
     bool IsDebugPreviewEnabled() const { return showDebugPreview_; }
     void DrawDebugPreview();
-    void CreateDebugPreview(DirectXCommon* dxCommon, Camera* camera, const NavMeshBuildSettings& settings, const Vector3& agentPosition = {0, 0, 0});
+    void CreateDebugPreview(DirectXCommon* dxCommon, Camera* camera, const NavMeshBuildSettings& settings, const Vector3& agentPosition = {0, 0, 0}, bool showBoundingBox = true, bool showGrid = true);
     void SetPreviewBounds(const Vector3& min, const Vector3& max);
 
     // ログコールバック
