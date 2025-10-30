@@ -285,13 +285,20 @@ void GamePlayScene::Draw() {
         NavMeshBuildSettings& settings = engine->GetNavSet();
 
         // リアルタイムプレビュー機能
-        static bool showPreview = false;
+        static bool showPreview = true;  // 最初からON
         static NavMeshBuildSettings lastSettings = settings;
         bool settingsChanged = false;
 
         // プレビュー範囲の設定
         static float previewRadius = 30.0f;  // Enemyの周りに表示する範囲
         static bool useEnemyCenter = true;   // Enemyを中心にするか
+
+        // 初回のみDebugPreviewを有効化
+        static bool initialized = false;
+        if (!initialized) {
+            navMeshManager->SetDebugPreviewEnabled(true);
+            initialized = true;
+        }
 
         if (ImGui::Checkbox("Show Grid Preview (Real-time)", &showPreview)) {
             navMeshManager->SetDebugPreviewEnabled(showPreview);
@@ -303,8 +310,8 @@ void GamePlayScene::Draw() {
 
             // Agent設定に基づいた表示範囲
             static bool useAgentSettings = true;
-            static bool showBoundingBox = true;
-            static bool showGrid = true;
+            static bool showBoundingBox = false;  // 黄色い箱は最初はOFF
+            static bool showGrid = false;  // グリッドも最初はOFF
             ImGui::Checkbox("Use Agent Settings for Preview", &useAgentSettings);
             ImGui::Checkbox("Show Grid (Cyan)", &showGrid);
             ImGui::Checkbox("Show Bounding Box (Yellow)", &showBoundingBox);
