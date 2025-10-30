@@ -1,0 +1,8 @@
+cellSize=0.15
+cellHeight=0.2
+agentHeight=5
+agentRadius=1.413
+agentMaxClimb=0.5
+agentMaxSlope=45
+edgeMaxError=0.8
+detailSampleDist=6

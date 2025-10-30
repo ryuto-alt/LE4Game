@@ -26,6 +26,10 @@ public:
     // NavMeshの読み込み
     bool LoadNavMesh(const std::string& filepath);
 
+    // 設定の保存・読み込み
+    void SaveSettings(const std::string& filepath);
+    bool LoadSettings(const std::string& filepath);
+
     // 更新
     void Update();
 

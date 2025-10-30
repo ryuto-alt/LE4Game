@@ -2,6 +2,7 @@
 #include "UnoEngine.h"
 #include "imgui.h"
 #include <filesystem>
+#include <fstream>
 #include <cmath>
 
 NavMeshManager::NavMeshManager() {
@@ -47,6 +48,14 @@ void NavMeshManager::Initialize(const std::string& navMeshPath) {
         AddLog("Loading existing NavMesh...");
         if (navMesh_->LoadFromFile(navMeshPath)) {
             AddLog("SUCCESS: NavMesh loaded from file");
+
+            // 設定ファイルも読み込む
+            std::string settingsPath = navMeshPath + ".settings";
+            if (LoadSettings(settingsPath)) {
+                AddLog("SUCCESS: NavMesh settings loaded from file");
+            } else {
+                AddLog("WARNING: NavMesh settings file not found, using defaults");
+            }
         } else {
             AddLog("Failed to load NavMesh from file");
         }
@@ -258,6 +267,12 @@ void NavMeshManager::GenerateAndSaveNavMesh(
 
         if (navMesh_->SaveToFile(filepath)) {
             AddLog("SUCCESS: NavMesh saved to file!");
+
+            // 設定も保存
+            std::string settingsPath = filepath + ".settings";
+            SaveSettings(settingsPath);
+            AddLog("SUCCESS: NavMesh settings saved");
+
             sprintf_s(msg, "=== NavMesh Generation Complete ===");
             AddLog(msg);
             sprintf_s(msg, "File: %s", filepath.c_str());
@@ -277,6 +292,15 @@ bool NavMeshManager::LoadNavMesh(const std::string& filepath) {
     if (std::filesystem::exists(filepath)) {
         if (navMesh_->LoadFromFile(filepath)) {
             AddLog("SUCCESS: NavMesh loaded from file");
+
+            // 設定ファイルも読み込む
+            std::string settingsPath = filepath + ".settings";
+            if (LoadSettings(settingsPath)) {
+                AddLog("SUCCESS: NavMesh settings loaded");
+            } else {
+                AddLog("WARNING: NavMesh settings file not found, using defaults");
+            }
+
             return true;
         } else {
             AddLog("ERROR: Failed to load NavMesh");
@@ -286,6 +310,64 @@ bool NavMeshManager::LoadNavMesh(const std::string& filepath) {
         AddLog("ERROR: NavMesh file not found: " + filepath);
         return false;
     }
+}
+
+void NavMeshManager::SaveSettings(const std::string& filepath) {
+    std::ofstream file(filepath);
+    if (!file.is_open()) {
+        AddLog("ERROR: Failed to save settings to " + filepath);
+        return;
+    }
+
+    // 設定をテキスト形式で保存
+    file << "cellSize=" << settings_.cellSize << "\n";
+    file << "cellHeight=" << settings_.cellHeight << "\n";
+    file << "agentHeight=" << settings_.agentHeight << "\n";
+    file << "agentRadius=" << settings_.agentRadius << "\n";
+    file << "agentMaxClimb=" << settings_.agentMaxClimb << "\n";
+    file << "agentMaxSlope=" << settings_.agentMaxSlope << "\n";
+    file << "edgeMaxError=" << settings_.edgeMaxError << "\n";
+    file << "detailSampleDist=" << settings_.detailSampleDist << "\n";
+
+    file.close();
+}
+
+bool NavMeshManager::LoadSettings(const std::string& filepath) {
+    std::ifstream file(filepath);
+    if (!file.is_open()) {
+        return false;
+    }
+
+    char msg[256];
+    sprintf_s(msg, "Loading settings from: %s", filepath.c_str());
+    AddLog(msg);
+
+    std::string line;
+    while (std::getline(file, line)) {
+        size_t pos = line.find('=');
+        if (pos == std::string::npos) continue;
+
+        std::string key = line.substr(0, pos);
+        float value = std::stof(line.substr(pos + 1));
+
+        if (key == "cellSize") settings_.cellSize = value;
+        else if (key == "cellHeight") settings_.cellHeight = value;
+        else if (key == "agentHeight") settings_.agentHeight = value;
+        else if (key == "agentRadius") settings_.agentRadius = value;
+        else if (key == "agentMaxClimb") settings_.agentMaxClimb = value;
+        else if (key == "agentMaxSlope") settings_.agentMaxSlope = value;
+        else if (key == "edgeMaxError") settings_.edgeMaxError = value;
+        else if (key == "detailSampleDist") settings_.detailSampleDist = value;
+    }
+
+    file.close();
+
+    // 読み込んだ設定を表示
+    sprintf_s(msg, "Loaded settings: cellSize=%.3f, agentRadius=%.3f, agentHeight=%.3f",
+        settings_.cellSize, settings_.agentRadius, settings_.agentHeight);
+    AddLog(msg);
+
+    return true;
 }
 
 void NavMeshManager::Update() {
