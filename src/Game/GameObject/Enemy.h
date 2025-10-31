@@ -73,6 +73,7 @@ public:
 
 	// Debug
 	bool debugDrawVision_{false};  // 視界デバッグ描画フラグ
+	bool debugStopMovement_{false};  // デバッグ用：移動停止フラグ
 
 	// Debug accessors for ImGui (public for debugging)
 	std::unique_ptr<EnemyAI> enemyAI_;

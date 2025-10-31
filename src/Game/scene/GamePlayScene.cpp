@@ -132,6 +132,16 @@ void GamePlayScene::Update() {
     ImGui::SliderFloat("Fisheye Strength", &fisheyeStrength_, 0.0f, 100.0f);
     ImGui::SliderFloat("Fisheye Radius", &fisheyeRadius_, 0.1f, 3.0f);
 
+    //Enemy設定
+	ImGui::Separator();
+	ImGui::Text("Enemy Settings");
+    if (enemy_) {
+        ImGui::Checkbox("stop Enmey Move", &enemy_->debugStopMovement_);
+    }
+
+
+
+
     ImGui::End();
 #endif
 

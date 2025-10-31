@@ -46,6 +46,7 @@ void LightManager::Update() {
     UpdateLightIntensity();
     UpdateFlickerEffect();
 
+#ifdef _DEBUG
     // F2キーでデバッグ明るさモードの切り替え
     static bool prevF2State = false;
     bool currentF2State = (GetAsyncKeyState(VK_F2) & 0x8000) != 0;
@@ -70,6 +71,7 @@ void LightManager::Update() {
     }
 
     prevF2State = currentF2State;
+#endif
 }
 
 void LightManager::DrawImGui() {

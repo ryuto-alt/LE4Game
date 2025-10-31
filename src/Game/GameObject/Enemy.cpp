@@ -120,6 +120,20 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 void Enemy::Update() {
 	const float deltaTime = 1.0f / 60.0f; // 60 FPS想定
 
+#ifdef _DEBUG
+	// デバッグ用：移動停止フラグが有効な場合は移動処理をスキップ
+	if (debugStopMovement_) {
+		// アニメーションの更新のみ実行
+		UpdateAnimation();
+		if (object3d_) {
+			object3d_->SetPosition(position_);
+			object3d_->SetRotation(Vector3{0.0f, currentRotationY_, 0.0f});
+			object3d_->Update();
+		}
+		return;
+	}
+#endif
+
 	// 新しいAIシステムを使用する場合
 	if (useNewAI_ && enemyAI_ && player_) {
 		// EnemyAIを更新
@@ -446,6 +460,12 @@ void Enemy::DrawDebugVision() {
 
 	// ImGuiウィンドウで視界情報を表示
 	ImGui::Begin("Enemy Vision Debug");
+
+	// デバッグ用：Enemyストップボタン
+#ifdef _DEBUG
+	ImGui::Checkbox("Stop Enemy Movement", &debugStopMovement_);
+	ImGui::Separator();
+#endif
 
 	// プレイヤーとの距離を計算
 	Vector3 playerPos = player_->GetPosition();
