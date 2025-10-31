@@ -186,48 +186,7 @@ void Player::Draw() {
 
 
 void Player::DrawUI() {
-#ifdef _DEBUG
-    ImGui::Begin("Player");
 
-    ImGui::Text("Controls:");
-    ImGui::Separator();
-    ImGui::Text("WASD - Move Player");
-    ImGui::Text("P - Pause/Resume Animation");
-    ImGui::Text("R - Reset Animation");
-    ImGui::Text("1/RShift - Toggle SneakWalk");
-    ImGui::Text("ESC - Exit Game");
-    ImGui::Text("F1 - Toggle Free Camera");
-    ImGui::Text("TAB - Toggle Mouse Look");
-
-    ImGui::Separator();
-
-    if (camera_) {
-        Vector3 cameraPos = camera_->GetTranslate();
-        ImGui::Text("Camera: (%.1f, %.1f, %.1f)", cameraPos.x, cameraPos.y, cameraPos.z);
-
-        ImGui::Text("Camera Mode: %s", camera_->IsFreeCameraMode() ? "Free" : "Follow Player");
-    }
-
-    ImGui::Separator();
-    ImGui::Text("Animation: %s", GetCurrentAnimationName().c_str());
-    ImGui::Text("State: %s", IsMoving() ? "Moving" : "Idle");
-
-    if (IsBlending()) {
-        ImGui::Text("Blending: %.1f%%", GetBlendProgress() * 100.0f);
-    }
-
-    ImGui::Separator();
-    ImGui::Text("Position: (%.2f, %.2f, %.2f)", position_.x, position_.y, position_.z);
-    ImGui::Text("Velocity: (%.2f, %.2f, %.2f)", velocity_.x, velocity_.y, velocity_.z);
-    ImGui::Text("Grounded: %s", isGrounded_ ? "YES" : "NO");
-
-    float smoothingSpeed = GetRotationSmoothingSpeed();
-    if (ImGui::SliderFloat("Smoothing Speed", &smoothingSpeed, 0.1f, 20.0f)) {
-        SetRotationSmoothingSpeed(smoothingSpeed);
-    }
-
-    ImGui::End();
-#endif
 }
 
 void Player::Finalize() {
