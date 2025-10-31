@@ -143,6 +143,7 @@ private:
         float fogStart;         // Fogの開始距離
         float fogEnd;           // Fogの終了距離
         float fogDensity;       // Fogの濃度
+        int enableFog;          // Fog有効/無効フラグ
         float padding;          // アライメント用パディング
     };
     CameraData* cameraData_;

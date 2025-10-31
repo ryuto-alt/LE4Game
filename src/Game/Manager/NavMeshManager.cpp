@@ -512,7 +512,9 @@ void NavMeshManager::DrawVisualization() {
 
 void NavMeshManager::DrawImGui() {
 #ifdef _DEBUG
-    ImGui::Begin("NavMesh Manager");
+    if (!showDebugWindow_) return;
+
+    ImGui::Begin("NavMesh Manager (M キーで表示切替)");
 
     ImGui::Checkbox("Show NavMesh Visualization", &showVisualization_);
 

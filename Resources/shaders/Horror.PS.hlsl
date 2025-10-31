@@ -106,8 +106,8 @@ PixelShaderOutput main(VertexShaderOutput input)
     PixelShaderOutput output;
     float32_t2 uv = input.texcoord;
 
-    // 魚眼レンズエフェクト（ポストプロセス）
-    // 正しい魚眼レンズの実装: 半球面への投影
+    // 魚眼レンズエフェクト（
+    // 魚眼レンズの実装: 半球面への投影
     if (fisheyeStrength > 0.0)
     {
         // UV座標を-1～1の範囲に変換（中心を原点に）
@@ -124,7 +124,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         float apertureHalf = 0.5 * aperture * (3.14159265 / 180.0);
         float maxFactor = sin(apertureHalf);
 
-        // 魚眼レンズの有効範囲（シェーダー定数から取得）
+        // 魚眼レンズの有効範囲
         // 歪みを適用する範囲内かチェック
         if (d < fisheyeRadius)
         {
@@ -135,11 +135,11 @@ PixelShaderOutput main(VertexShaderOutput input)
             float r = atan2(scaledD, z) / 3.14159265;
             float phi = atan2(xy.y, xy.x);
 
-            // 極座標から直交座標に戻す（範囲に合わせてスケール）
+            // 極座標から直交座標に戻す
             uv.x = r * cos(phi) * (fisheyeRadius / maxFactor) + 0.5;
             uv.y = r * sin(phi) * (fisheyeRadius / maxFactor) + 0.5;
         }
-        // else: 範囲外はそのまま（歪みなし）
+       
     }
 
     // 色収差効果を適用

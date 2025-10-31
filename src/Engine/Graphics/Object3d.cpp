@@ -118,6 +118,7 @@ void Object3d::Initialize(DirectXCommon* dxCommon, SpriteCommon* spriteCommon) {
 	cameraData_->fogStart = 5.0f;   // 5m先からFog開始
 	cameraData_->fogEnd = 10.0f;    // 10m先で完全に暗闇
 	cameraData_->fogDensity = 1.0f; // Fog濃度100%
+	cameraData_->enableFog = 1;     // Fogを有効化(デフォルトON)
 	cameraData_->padding = 0.0f;
 	
 	// デフォルトテクスチャを事前にロードして描画中の動的SRV作成を避ける

@@ -63,6 +63,10 @@ public:
     // ImGui描画
     void DrawImGui();
 
+    // デバッグ表示の切り替え
+    void ToggleDebugDisplay() { showDebugWindow_ = !showDebugWindow_; }
+    bool IsDebugDisplayShown() const { return showDebugWindow_; }
+
 private:
     void AddLog(const std::string& message);
 
@@ -85,4 +89,7 @@ private:
 
     // ログコールバック
     std::function<void(const std::string&)> logCallback_;
+
+    // ImGuiデバッグウィンドウ表示フラグ
+    bool showDebugWindow_ = false;
 };

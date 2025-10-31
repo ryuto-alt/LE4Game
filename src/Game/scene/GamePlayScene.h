@@ -46,4 +46,7 @@ private:
     std::vector<std::string> navMeshLogs_;
     void AddNavMeshLog(const std::string& message);
     void ClearNavMeshLogs();
+
+    // NavMesh Debug表示フラグ
+    bool showNavMeshDebug_ = false;
 };

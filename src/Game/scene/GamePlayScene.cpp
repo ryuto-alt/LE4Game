@@ -117,8 +117,8 @@ void GamePlayScene::Update() {
         postProcess_->SetFisheyeRadius(fisheyeRadius_);
     }
 
-    HandleInput();
     player_->HandleInput(engine);
+    HandleInput();
 
     // デルタタイムを取得
     const float deltaTime = engine->GetDelta();
@@ -240,12 +240,13 @@ void GamePlayScene::Draw() {
     }
 
     // NavMeshデバッグウィンドウ
-    ImGui::Begin("NavMesh Debug");
+    if (showNavMeshDebug_) {
+        ImGui::Begin("NavMesh Debug (M キーで表示切替)");
 
-    UnoEngine* engine = UnoEngine::GetInstance();
-    NavMeshManager* navMeshManager = engine->GetNavMgr();
+        UnoEngine* engine = UnoEngine::GetInstance();
+        NavMeshManager* navMeshManager = engine->GetNavMgr();
 
-    if (navMeshManager) {
+        if (navMeshManager) {
         // NavMeshManagerのImGui描画
         bool showViz = engine->IsNavVis();
         if (ImGui::Checkbox("Show NavMesh Visualization", &showViz)) {
@@ -541,7 +542,8 @@ void GamePlayScene::Draw() {
         ImGui::EndChild();
     }
 
-    ImGui::End();
+        ImGui::End();
+    }
 #endif
 }
 
@@ -584,6 +586,10 @@ void GamePlayScene::HandleInput() {
 
     if (engine->IsKeyTrig(DIK_F)) {
         lightManager_->ToggleDebugDisplay();
+    }
+
+    if (engine->IsKeyTrig(DIK_M)) {
+        showNavMeshDebug_ = !showNavMeshDebug_;
     }
 
     if (engine->IsKeyTrig(DIK_V)) {
