@@ -85,12 +85,18 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 		if (!material.isPBR) {
 			MaterialData& mutableMaterial = const_cast<MaterialData&>(animatedModel_->GetMaterial());
 			mutableMaterial.isPBR = true;
-			mutableMaterial.baseColorFactor = { 0.8f, 0.8f, 0.8f, 1.0f };
+			mutableMaterial.baseColorFactor = { 0.5f, 0.5f, 0.5f, 1.0f };  // より暗く
 			mutableMaterial.metallicFactor = 0.0f;
 			mutableMaterial.roughnessFactor = 0.8f;
-			mutableMaterial.emissiveFactor = { 0.0f, 0.0f, 0.0f };
+			mutableMaterial.emissiveFactor = { 0.0f, 0.0f, 0.0f };  // 自己発光なし
 			mutableMaterial.alphaMode = "OPAQUE";
 			mutableMaterial.doubleSided = false;
+			object3d_->SetModel(static_cast<Model*>(animatedModel_.get()));
+		}
+		else {
+			// PBRマテリアルでもエミッシブを強制的にオフにして、ライティングのみに依存
+			MaterialData& mutableMaterial = const_cast<MaterialData&>(animatedModel_->GetMaterial());
+			mutableMaterial.emissiveFactor = { 0.0f, 0.0f, 0.0f };  // 自己発光を無効化
 			object3d_->SetModel(static_cast<Model*>(animatedModel_.get()));
 		}
 	}

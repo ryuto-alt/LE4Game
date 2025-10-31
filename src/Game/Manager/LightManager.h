@@ -66,4 +66,8 @@ private:
     bool isBlinking_ = false;
     float blinkDuration_ = 0.0f;
     float blinkProgress_ = 0.0f;
+
+    // デバッグモード用
+    bool isDebugBrightMode_ = false;
+    DirectionalLight originalDirectionalLight_;  // 元の設定を保存
 };

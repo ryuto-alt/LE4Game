@@ -23,16 +23,16 @@ void LightManager::Initialize() {
     directionalLight_.ambientIntensity = 0.5f;  // マテリアルの色が見えるように明るく設定
 
     // スポットライトの初期設定
-    spotLight_.color = { 16.0f / 255.0f, 16.0f / 255.0f, 16.0f / 255.0f, 1.0f };
+    spotLight_.color = { 140.0f / 255.0f, 140.0f / 255.0f, 135.0f / 255.0f, 1.0f };  // 適度な明るさ RGB(140, 140, 135)
     spotLight_.position = { 0.0f, 5.0f, -2.0f };
-    spotLight_.intensity = 3.5f;  // やや強めに
+    spotLight_.intensity = 4.0f;  // 適度な明るさに調整
     spotLight_.direction = { 0.0f, -1.0f, 0.3f };
-    spotLight_.innerCone = cosf(20.0f * 3.14159265f / 180.0f);
-    // 距離減衰を強めに設定（近いところは明るく、遠いところは暗く）
+    spotLight_.innerCone = cosf(30.0f * 3.14159265f / 180.0f);  // 30度
+    // 距離減衰をさらに緩やかに（より遠くまで光が届く）
     // attenuation = {定数減衰, 線形減衰, 二次減衰}
-    // 7m先で暗闇になるように設定（OGRE標準値）
-    spotLight_.attenuation = { 1.0f, 0.7f, 1.8f };  // Range=7mの標準減衰パラメータ
-    spotLight_.outerCone = cosf(35.0f * 3.14159265f / 180.0f);
+    // 減衰を弱くして約30m先まで光が届くように設定
+    spotLight_.attenuation = { 1.0f, 0.09f, 0.23f };  // Quadratic 0.23
+    spotLight_.outerCone = cosf(45.0f * 3.14159265f / 180.0f);  // 45度
 
     // 初期値をバックアップ
     dirLightIntensityBackup_ = directionalLight_.intensity;
@@ -45,6 +45,31 @@ void LightManager::Initialize() {
 void LightManager::Update() {
     UpdateLightIntensity();
     UpdateFlickerEffect();
+
+    // F2キーでデバッグ明るさモードの切り替え
+    static bool prevF2State = false;
+    bool currentF2State = (GetAsyncKeyState(VK_F2) & 0x8000) != 0;
+
+    if (currentF2State && !prevF2State) {
+        // F2が押された瞬間
+        isDebugBrightMode_ = !isDebugBrightMode_;
+
+        if (isDebugBrightMode_) {
+            // デバッグモードON: 元の設定を保存してライトを最大に
+            originalDirectionalLight_ = directionalLight_;
+            directionalLight_.color = { 1.0f, 1.0f, 1.0f, 1.0f };  // RGB(255, 255, 255)
+            directionalLight_.intensity = 100.0f;  // 最大の明るさ
+            directionalLight_.ambientColor = { 1.0f, 1.0f, 1.0f };
+            directionalLight_.ambientIntensity = 5.0f;
+            OutputDebugStringA("LightManager: Debug bright mode ON (F2 pressed)\n");
+        } else {
+            // デバッグモードOFF: 元の設定に戻す
+            directionalLight_ = originalDirectionalLight_;
+            OutputDebugStringA("LightManager: Debug bright mode OFF (F2 pressed)\n");
+        }
+    }
+
+    prevF2State = currentF2State;
 }
 
 void LightManager::DrawImGui() {
@@ -96,7 +121,7 @@ void LightManager::DrawImGui() {
         ImGui::Text("Attenuation");
         ImGui::SliderFloat("Constant", &spotLight_.attenuation.x, 0.0f, 2.0f);
         ImGui::SliderFloat("Linear", &spotLight_.attenuation.y, 0.0f, 0.5f);
-        ImGui::SliderFloat("Quadratic", &spotLight_.attenuation.z, 0.0f, 100.0f);
+        ImGui::SliderFloat("Quadratic", &spotLight_.attenuation.z, 0.0f, 10.0f);
     }
     
     // 現在のライト値の表示

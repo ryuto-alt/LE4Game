@@ -166,9 +166,9 @@ PixelShaderOutput main(VertexShaderOutput input)
     if (gPBRMaterial.hasBaseColorTexture)
     {
         float32_t4 baseColorTexture = gBaseColorTexture.Sample(gSampler, uv);
-        // テクスチャをリニア空間に変換（sRGBテクスチャの場合）
-        // DirectXTexはデフォルトでsRGBフォーマットを使用しないため、手動で変換
-        baseColorTexture.rgb = GammaToLinear(baseColorTexture.rgb);
+        // テクスチャはsRGB形式で保存されているが、リニア空間で読み込まれるため
+        // 明るさ補正として軽めのガンマ補正のみ適用
+        baseColorTexture.rgb = pow(baseColorTexture.rgb, 2.0);
         baseColor *= baseColorTexture;
     }
     
