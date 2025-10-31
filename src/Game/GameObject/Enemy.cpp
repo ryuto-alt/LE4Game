@@ -293,8 +293,8 @@ void Enemy::Update() {
 		object3d_->Update();
 	}
 
-	// 衝突応答処理
-	HandleCollisionResponse();
+	// 衝突応答処理（NavMeshで経路制御しているため無効化）
+	// HandleCollisionResponse();
 }
 
 void Enemy::UpdateAnimation() {
