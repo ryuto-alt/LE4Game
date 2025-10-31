@@ -166,7 +166,9 @@ PixelShaderOutput main(VertexShaderOutput input)
     if (gPBRMaterial.hasBaseColorTexture)
     {
         float32_t4 baseColorTexture = gBaseColorTexture.Sample(gSampler, uv);
-        // テクスチャはsRGB形式で読み込まれているため、ガンマ補正は不要
+        // テクスチャをリニア空間に変換（sRGBテクスチャの場合）
+        // DirectXTexはデフォルトでsRGBフォーマットを使用しないため、手動で変換
+        baseColorTexture.rgb = GammaToLinear(baseColorTexture.rgb);
         baseColor *= baseColorTexture;
     }
     
@@ -310,10 +312,13 @@ PixelShaderOutput main(VertexShaderOutput input)
     
     // エミッシブ追加
     color += emissive;
-    
-    // HDRトーンマッピング（Reinhard）
-    color = color / (color + float32_t3(1.0, 1.0, 1.0));
-    
+
+    // HDRトーンマッピング（ACES Filmic - より明るく自然な結果）
+    // Reinhardは暗すぎるため、より明るいACES風のトーンマッピングを使用
+    float32_t3 a = color * (color + 0.0245786f) - 0.000090537f;
+    float32_t3 b = color * (0.983729f * color + 0.4329510f) + 0.238081f;
+    color = a / b;
+
     // ガンマ補正
     color = LinearToGamma(color);
 

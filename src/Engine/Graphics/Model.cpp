@@ -773,6 +773,10 @@ ModelData Model::LoadGltfFile(const std::string& directoryPath, const std::strin
 		// デフォルトマテリアルを作成
 		MaterialData matData;
 		matData.textureFilePath = "Resources/Debug/white1x1.png";
+		matData.baseColorFactor = { 1.0f, 1.0f, 1.0f, 1.0f };
+		matData.metallicFactor = 0.0f;
+		matData.roughnessFactor = 1.0f;
+		matData.isPBR = true; // GLTFファイルはPBRとして扱う
 		TextureManager::GetInstance()->LoadTexture(matData.textureFilePath);
 
 		MaterialTemplate matTemplate;
@@ -844,15 +848,49 @@ ModelData Model::LoadGltfFile(const std::string& directoryPath, const std::strin
 				TextureManager::GetInstance()->LoadTexture(matData.textureFilePath);
 			}
 
+			// ベースカラーファクターの取得
+			aiColor4D baseColor(1.0f, 1.0f, 1.0f, 1.0f);
+			if (material->Get(AI_MATKEY_BASE_COLOR, baseColor) == AI_SUCCESS) {
+				matData.baseColorFactor = { baseColor.r, baseColor.g, baseColor.b, baseColor.a };
+				OutputDebugStringA(("Model: Material baseColorFactor: R=" + std::to_string(baseColor.r) +
+					" G=" + std::to_string(baseColor.g) + " B=" + std::to_string(baseColor.b) +
+					" A=" + std::to_string(baseColor.a) + "\n").c_str());
+			}
+			else if (material->Get(AI_MATKEY_COLOR_DIFFUSE, baseColor) == AI_SUCCESS) {
+				// フォールバック: ディフューズカラーを使用
+				matData.baseColorFactor = { baseColor.r, baseColor.g, baseColor.b, baseColor.a };
+				OutputDebugStringA(("Model: Material diffuse color (fallback): R=" + std::to_string(baseColor.r) +
+					" G=" + std::to_string(baseColor.g) + " B=" + std::to_string(baseColor.b) +
+					" A=" + std::to_string(baseColor.a) + "\n").c_str());
+			}
+			else {
+				matData.baseColorFactor = { 1.0f, 1.0f, 1.0f, 1.0f };
+			}
+
 			// メタリックファクターの取得
 			float metallic = 0.0f;
 			if (material->Get(AI_MATKEY_METALLIC_FACTOR, metallic) == AI_SUCCESS) {
 				matTemplate.metallic = metallic;
+				matData.metallicFactor = metallic;
 				OutputDebugStringA(("Model: Material metallic factor: " + std::to_string(metallic) + "\n").c_str());
 			}
 			else {
 				matTemplate.metallic = 0.0f;
+				matData.metallicFactor = 0.0f;
 			}
+
+			// ラフネスファクターの取得
+			float roughness = 1.0f;
+			if (material->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness) == AI_SUCCESS) {
+				matData.roughnessFactor = roughness;
+				OutputDebugStringA(("Model: Material roughness factor: " + std::to_string(roughness) + "\n").c_str());
+			}
+			else {
+				matData.roughnessFactor = 1.0f;
+			}
+
+			// GLTFファイルはPBRマテリアルとして扱う
+			matData.isPBR = true;
 
 			modelData.materials.push_back(matData);
 			modelData.materialTemplates.push_back(matTemplate);

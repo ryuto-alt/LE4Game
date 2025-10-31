@@ -19,8 +19,8 @@ void LightManager::Initialize() {
     directionalLight_.intensity = 0.010f;
 
     // アンビエントライトの初期設定（暗い面を防ぐための環境光）
-    directionalLight_.ambientColor = { 0.08f, 0.08f, 0.12f };  // 青みがかった暗い環境光
-    directionalLight_.ambientIntensity = 0.003f;  // 最低限の視認性
+    directionalLight_.ambientColor = { 0.3f, 0.3f, 0.35f };  // より明るい環境光
+    directionalLight_.ambientIntensity = 0.5f;  // マテリアルの色が見えるように明るく設定
 
     // スポットライトの初期設定
     spotLight_.color = { 16.0f / 255.0f, 16.0f / 255.0f, 16.0f / 255.0f, 1.0f };
