@@ -270,34 +270,36 @@ void Camera::UpdateMouseControl() {
 
     if (mouseLookEnabled_) {
         // マウス視点移動ON時
-        // マウスカーソルを非表示
+#ifdef _DEBUG
+        // Debug時は常にマウスカーソルを表示
+        ShowCursor(TRUE);
+#else
+        // Release時のみマウスカーソルを非表示
         ShowCursor(FALSE);
-        
+#endif
+
         // ウィンドウの中央座標を取得
         GetClientRect(windowHandle_, &windowRect_);
         POINT centerPoint = {
             windowRect_.right / 2,
             windowRect_.bottom / 2
         };
-        
+
         // クライアント座標をスクリーン座標に変換
         ClientToScreen(windowHandle_, &centerPoint);
-        
+
         // マウスを中央に固定
         SetCursorPos(centerPoint.x, centerPoint.y);
         lastMousePos_ = centerPoint;
-        
-        // マウスをウィンドウ内にクリップ
-        RECT clipRect = windowRect_;
-        ClientToScreen(windowHandle_, reinterpret_cast<POINT*>(&clipRect.left));
-        ClientToScreen(windowHandle_, reinterpret_cast<POINT*>(&clipRect.right));
-        ClipCursor(&clipRect);
-        
+
+        // マウスクリップはしない（ウィンドウ外に出られるようにする）
+        ClipCursor(nullptr);
+
     } else {
         // マウス視点移動OFF時
         // マウスカーソルを表示
         ShowCursor(TRUE);
-        
+
         // マウスクリップを解除
         ClipCursor(nullptr);
     }

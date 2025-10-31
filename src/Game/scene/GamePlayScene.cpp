@@ -101,13 +101,37 @@ void GamePlayScene::Update() {
     }
 
 #ifdef _DEBUG
-    // ImGuiで魚眼レンズ強度と範囲を調整
-    ImGui::Begin("Scene Settings");
-    ImGui::Text("Camera FOV (degrees): %.2f", sceneData_.camera.fovDegrees);
-    ImGui::Text("Camera FOV (radians): %.2f", camera_->GetFovY());
+    // デバッグ用：Fog & Lighting調整
+    ImGui::Begin("Debug: Visibility");
+
+    // Fog設定
+    ImGui::Text("Fog Settings");
+    static bool enableFog = true;
+    if (ImGui::Checkbox("Enable Fog", &enableFog)) {
+        // 全てのObject3dのFogを切り替え
+        for (auto& obj : sceneObjects_) {
+            obj->SetFogEnabled(enableFog);
+        }
+    }
+
+    // ライティング設定
+    ImGui::Separator();
+    ImGui::Text("Lighting Settings");
+    if (lightManager_) {
+        static float lightBoost = 1.0f;
+        if (ImGui::SliderFloat("Light Intensity Boost", &lightBoost, 1.0f, 100.0f)) {
+            lightManager_->SetLightBoost(lightBoost);
+        }
+        if (ImGui::Button("Reset Light")) {
+            lightBoost = 1.0f;
+            lightManager_->ResetLightBoost();
+        }
+    }
+
     ImGui::Separator();
     ImGui::SliderFloat("Fisheye Strength", &fisheyeStrength_, 0.0f, 100.0f);
     ImGui::SliderFloat("Fisheye Radius", &fisheyeRadius_, 0.1f, 3.0f);
+
     ImGui::End();
 #endif
 
@@ -232,11 +256,6 @@ void GamePlayScene::Draw() {
 
     if (lightManager_) {
         lightManager_->DrawImGui();
-    }
-
-    auto* collisionManager = Collision::AABBCollisionManager::GetInstance();
-    if (collisionManager) {
-        collisionManager->DrawImGui();
     }
 
     // NavMeshデバッグウィンドウ
@@ -600,7 +619,8 @@ void GamePlayScene::HandleInput() {
     }
 
     if (engine->IsKeyTrig(DIK_TAB)) {
-        if (fpsCamera_ && fpsCamera_->IsFPSMode()) {
+        // TABキーでマウス固定/非固定を切り替え
+        if (fpsCamera_) {
             fpsCamera_->ToggleMouseLook();
         }
     }

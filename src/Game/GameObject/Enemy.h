@@ -124,7 +124,7 @@ private:
 	// Vision-based detection
 	const float VISION_RANGE = 30.0f;  // 視界範囲30m
 	const float VISION_ANGLE = 60.0f;  // 視野角±60度（合計120度）
-	const float VISION_DETECTION_DISTANCE = 20.0f;  // 視界検知距離15m
+	const float VISION_DETECTION_DISTANCE = 10.0f;  // 視界検知距離15m
 	const float CHASE_RELEASE_DISTANCE = 15.0f;  // 追跡解除距離15m
 	const float LOST_SIGHT_GRACE_PERIOD = 5.0f;  // 視界を失ってから追跡を続ける時間（秒）
 

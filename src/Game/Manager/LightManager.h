@@ -20,6 +20,10 @@ public:
     // デバッグ表示の切り替え
     void ToggleDebugDisplay() { showDebugWindow_ = !showDebugWindow_; }
     bool IsDebugDisplayShown() const { return showDebugWindow_; }
+
+    // 光度調整
+    void SetLightBoost(float boost);
+    void ResetLightBoost();
     
     // ライトの有効/無効
     bool IsDirectionalLightEnabled() const { return enableDirectionalLight_; }

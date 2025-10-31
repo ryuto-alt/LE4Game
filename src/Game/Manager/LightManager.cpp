@@ -223,6 +223,19 @@ void LightManager::UpdateFlickerEffect() {
     }
 }
 
+void LightManager::SetLightBoost(float boost) {
+    // スポットライトの強度をブースト
+    spotLight_.intensity = spotLightIntensityBackup_ * boost;
+
+    // ディレクショナルライトの強度もブースト
+    directionalLight_.intensity = dirLightIntensityBackup_ * boost;
+}
+
+void LightManager::ResetLightBoost() {
+    spotLight_.intensity = spotLightIntensityBackup_;
+    directionalLight_.intensity = dirLightIntensityBackup_;
+}
+
 void LightManager::UpdateFlashlight(const Vector3& playerPosition, const Vector3& cameraRotation) {
     // カメラの回転から方向ベクトルを計算
     float cosY = cosf(cameraRotation.y);

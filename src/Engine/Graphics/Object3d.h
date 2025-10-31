@@ -40,6 +40,10 @@ public:
     // カメラを使用するUpdateメソッド
     void Update();
 
+    // Fog設定
+    void SetFogEnabled(bool enabled);
+    bool IsFogEnabled() const;
+
     // 座標の設定
     void SetPosition(const Vector3& position) { transform_.translate = position; }
     const Vector3& GetPosition() const { return transform_.translate; }

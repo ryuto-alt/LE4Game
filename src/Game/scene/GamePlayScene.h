@@ -49,4 +49,7 @@ private:
 
     // NavMesh Debug表示フラグ
     bool showNavMeshDebug_ = false;
+
+    // マウスカーソル表示フラグ (TABで切替)
+    bool showMouseCursor_ = false;
 };

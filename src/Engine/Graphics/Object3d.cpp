@@ -120,7 +120,7 @@ void Object3d::Initialize(DirectXCommon* dxCommon, SpriteCommon* spriteCommon) {
 	cameraData_->fogDensity = 1.0f; // Fog濃度100%
 	cameraData_->enableFog = 1;     // Fogを有効化(デフォルトON)
 	cameraData_->padding = 0.0f;
-	
+
 	// デフォルトテクスチャを事前にロードして描画中の動的SRV作成を避ける
 	TextureManager::GetInstance()->LoadDefaultTexture();
 	
@@ -976,4 +976,17 @@ void Object3d::SetEnvironmentMapIntensity(float intensity) {
 	if (materialData_) {
 		materialData_->environmentMapIntensity = environmentMapIntensity_;
 	}
+}
+
+void Object3d::SetFogEnabled(bool enabled) {
+	if (cameraData_) {
+		cameraData_->enableFog = enabled ? 1 : 0;
+	}
+}
+
+bool Object3d::IsFogEnabled() const {
+	if (cameraData_) {
+		return cameraData_->enableFog != 0;
+	}
+	return false;
 }
