@@ -30,7 +30,8 @@ void LightManager::Initialize() {
     spotLight_.innerCone = cosf(20.0f * 3.14159265f / 180.0f);
     // 距離減衰を強めに設定（近いところは明るく、遠いところは暗く）
     // attenuation = {定数減衰, 線形減衰, 二次減衰}
-    spotLight_.attenuation = { 0.5f, 0.35f, 0.44f };  // より強い距離減衰
+    // 7m先で暗闇になるように設定（OGRE標準値）
+    spotLight_.attenuation = { 1.0f, 0.7f, 1.8f };  // Range=7mの標準減衰パラメータ
     spotLight_.outerCone = cosf(35.0f * 3.14159265f / 180.0f);
 
     // 初期値をバックアップ
@@ -95,7 +96,7 @@ void LightManager::DrawImGui() {
         ImGui::Text("Attenuation");
         ImGui::SliderFloat("Constant", &spotLight_.attenuation.x, 0.0f, 2.0f);
         ImGui::SliderFloat("Linear", &spotLight_.attenuation.y, 0.0f, 0.5f);
-        ImGui::SliderFloat("Quadratic", &spotLight_.attenuation.z, 0.0f, 0.1f);
+        ImGui::SliderFloat("Quadratic", &spotLight_.attenuation.z, 0.0f, 100.0f);
     }
     
     // 現在のライト値の表示

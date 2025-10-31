@@ -70,6 +70,11 @@ struct CameraData
 {
     float32_t3 worldPosition;
     float32_t fisheyeStrength;
+    float32_t3 fogColor;        // Fogの色（黒: 0,0,0）
+    float32_t fogStart;          // Fogの開始距離
+    float32_t fogEnd;            // Fogの終了距離（完全に霧になる距離）
+    float32_t fogDensity;        // Fogの濃度
+    float32_t padding;           // アライメント用パディング
 };
 
 // PBR計算のヘルパー関数
@@ -310,7 +315,17 @@ PixelShaderOutput main(VertexShaderOutput input)
     
     // ガンマ補正
     color = LinearToGamma(color);
-    
+
+    // ============== Fog計算 ==============
+    // カメラからの距離を計算
+    float32_t distanceFromCamera = length(gCameraData.worldPosition - input.worldPosition);
+
+    // 線形Fog: fogStart〜fogEnd間で線形補間
+    float32_t fogFactor = saturate((gCameraData.fogEnd - distanceFromCamera) / (gCameraData.fogEnd - gCameraData.fogStart));
+
+    // Fogの色とブレンド
+    color = lerp(gCameraData.fogColor, color, fogFactor);
+
     output.color = float32_t4(color, baseColor.a);
     return output;
 }

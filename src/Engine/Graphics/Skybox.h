@@ -82,6 +82,11 @@ private:
     struct CameraData {
         Vector3 worldPosition;
         float fisheyeStrength;
+        Vector3 fogColor;       // Fogの色
+        float fogStart;         // Fogの開始距離
+        float fogEnd;           // Fogの終了距離
+        float fogDensity;       // Fogの濃度
+        float padding;          // アライメント用パディング
     };
     CameraData* cameraData_ = nullptr;
 

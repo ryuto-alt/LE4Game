@@ -114,6 +114,11 @@ void Object3d::Initialize(DirectXCommon* dxCommon, SpriteCommon* spriteCommon) {
 	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
 	cameraData_->worldPosition = { 0.0f, 0.0f, 0.0f };
 	cameraData_->fisheyeStrength = 0.0f;  // 初期値は魚眼レンズオフ
+	cameraData_->fogColor = { 0.0f, 0.0f, 0.0f };  // 黒い霧
+	cameraData_->fogStart = 5.0f;   // 5m先からFog開始
+	cameraData_->fogEnd = 10.0f;    // 10m先で完全に暗闇
+	cameraData_->fogDensity = 1.0f; // Fog濃度100%
+	cameraData_->padding = 0.0f;
 	
 	// デフォルトテクスチャを事前にロードして描画中の動的SRV作成を避ける
 	TextureManager::GetInstance()->LoadDefaultTexture();
