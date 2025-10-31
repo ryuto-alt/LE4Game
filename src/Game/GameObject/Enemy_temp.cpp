@@ -32,22 +32,17 @@ void Enemy::Initialize(Camera* camera) {
 
 	// Playerと全く同じ方法でアニメーションモデルを読み込む
 	animatedModel_ = engine->CreateAnimatedModel();
-	animatedModel_->LoadFromFile("Resources/Models/Enemy/EnemyWalk", "EnemyWalk.gltf");
+	animatedModel_->LoadFromFile("Resources/Models/Enemy/Enemy_Walk", "Enemy_Walk.gltf");
 
 	// Playerと同じパターン: 読み込んだGLTFのアニメーションを取得して登録
 	Animation walkAnim = animatedModel_->GetAnimationPlayer().GetAnimation();
 	animatedModel_->AddAnimation("Walk", walkAnim);
 
-	// RunアニメーションとScreamアニメーションも読み込む
+	// Runアニメーションも読み込む
 	std::unique_ptr<AnimatedModel> runModel = engine->CreateAnimatedModel();
-	runModel->LoadFromFile("Resources/Models/Enemy/EnemyRun", "EnemyRun.gltf");
+	runModel->LoadFromFile("Resources/Models/Enemy/Enemy_Run", "Enemy_Run.gltf");
 	Animation runAnim = runModel->GetAnimationPlayer().GetAnimation();
 	animatedModel_->AddAnimation("Run", runAnim);
-
-	std::unique_ptr<AnimatedModel> screamModel = engine->CreateAnimatedModel();
-	screamModel->LoadFromFile("Resources/Models/Enemy/EnemyScream", "EnemyScream.gltf");
-	Animation screamAnim = screamModel->GetAnimationPlayer().GetAnimation();
-	animatedModel_->AddAnimation("Scream", screamAnim);
 
 	// Playerと同じ: アニメーションを変更して再生
 	animatedModel_->ChangeAnimation("Walk");
@@ -107,7 +102,7 @@ void Enemy::Initialize(Camera* camera) {
 		}
 	}
 
-	OutputDebugStringA("Enemy: Initialization complete with Walk, Run, and Scream animations\n");
+	OutputDebugStringA("Enemy: Initialization complete with Walk and Run animations\n");
 }
 
 void Enemy::Update() {
@@ -273,11 +268,6 @@ void Enemy::DrawUI() {
 	if (ImGui::Button("Run", ImVec2(100, 0))) {
 		ChangeAnimation("Run");
 		currentAnimationIndex_ = 1;
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Scream", ImVec2(100, 0))) {
-		ChangeAnimation("Scream");
-		currentAnimationIndex_ = 2;
 	}
 
 	// AI設定

@@ -371,6 +371,7 @@ serena/
 *.png
 # But include texture files
 !resources/textures/**/*.png
+!Resources/Models/**/*.png
 
 # Large texture files (DDS files)
 *.dds

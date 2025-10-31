@@ -37,22 +37,17 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 
 	// Playerと全く同じ方法でアニメーションモデルを読み込む
 	animatedModel_ = engine->CreateAnim();
-	animatedModel_->LoadFromFile("Resources/Models/Enemy/EnemyWalk", "EnemyWalk.gltf");
+	animatedModel_->LoadFromFile("Resources/Models/Enemy/Enemy_Walk", "Enemy_Walk.gltf");
 
 	// Playerと同じパターン: 読み込んだGLTFのアニメーションを取得して登録
 	Animation walkAnim = animatedModel_->GetAnimationPlayer().GetAnimation();
 	animatedModel_->AddAnimation("Walk", walkAnim);
 
-	// RunアニメーションとScreamアニメーションも読み込む
+	// Runアニメーションも読み込む
 	std::unique_ptr<AnimatedModel> runModel = engine->CreateAnim();
-	runModel->LoadFromFile("Resources/Models/Enemy/EnemyRun", "EnemyRun.gltf");
+	runModel->LoadFromFile("Resources/Models/Enemy/Enemy_Run", "Enemy_Run.gltf");
 	Animation runAnim = runModel->GetAnimationPlayer().GetAnimation();
 	animatedModel_->AddAnimation("Run", runAnim);
-
-	std::unique_ptr<AnimatedModel> screamModel = engine->CreateAnim();
-	screamModel->LoadFromFile("Resources/Models/Enemy/EnemyScream", "EnemyScream.gltf");
-	Animation screamAnim = screamModel->GetAnimationPlayer().GetAnimation();
-	animatedModel_->AddAnimation("Scream", screamAnim);
 
 	// Playerと同じ: アニメーションを変更して再生
 	animatedModel_->ChangeAnimation("Walk");
@@ -63,7 +58,7 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	object3d_->SetModel(static_cast<Model*>(animatedModel_.get()));
 	object3d_->SetAnimatedModel(animatedModel_.get());
 	object3d_->SetPosition(position_);
-	object3d_->SetScale(Vector3{3.0f, 3.0f, 3.0f});
+	object3d_->SetScale(Vector3{0.05f, 0.05f, 0.05f });
 	object3d_->SetRotation(Vector3{0.0f, 3.14f, 0.0f}); // Playerと同じY軸180度回転
 	object3d_->SetEnableLighting(true);
 	object3d_->SetEnableAnimation(true);
@@ -144,8 +139,8 @@ void Enemy::Update() {
 				}
 				break;
 			case EnemyState::Attack:
-				if (GetCurrentAnimationName() != "Scream") {
-					ChangeAnimation("Scream");
+				if (GetCurrentAnimationName() != "Run") {
+					ChangeAnimation("Run");
 				}
 				break;
 			default:
