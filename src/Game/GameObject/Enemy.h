@@ -179,9 +179,15 @@ private:
 	// Foot bone tracking for footstep sounds
 	float previousLeftFootY_{0.0f};
 	float previousRightFootY_{0.0f};
-	bool leftFootWasAboveGround_{false};
-	bool rightFootWasAboveGround_{false};
-	const float FOOT_GROUND_THRESHOLD = 0.5f;  // 地面判定の閾値
+	bool leftFootWasAboveGround_{true};  // 初期値をtrueに（最初は空中と仮定）
+	bool rightFootWasAboveGround_{true};  // 初期値をtrueに（最初は空中と仮定）
+	const float FOOT_GROUND_THRESHOLD = 0.15f;  // 地面判定の閾値（低めに設定して足の上げ下げを検出）
+	const float FOOT_LIFT_THRESHOLD = 0.25f;  // 足が上がったと判定する閾値（これ以上上がったら次の着地検出可能）
+	float lastLeftFootLandTime_{-999.0f};  // 最後に左足が着地した時間
+	float lastRightFootLandTime_{-999.0f};  // 最後に右足が着地した時間
+	const float FOOTSTEP_COOLDOWN = 0.3f;  // 足音のクールダウン時間（秒）- 交互検出を強制
+	enum class LastFootLanded { None, Left, Right };
+	LastFootLanded lastFootLanded_{LastFootLanded::None};  // 最後に着地した足
 
 	// Detection Sound
 	std::unique_ptr<SpatialAudioSource> detectionSound_;

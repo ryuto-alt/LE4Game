@@ -164,8 +164,17 @@ void GamePlayScene::Update() {
             ImGui::Text("Foot Debug Info:");
 
             const Skeleton& skeleton = enemy_->GetModel()->GetSkeleton();
-            auto leftFootIt = skeleton.jointMap.find("mixamorig:LeftFoot");
-            auto rightFootIt = skeleton.jointMap.find("mixamorig:RightFoot");
+
+            // つま先ボーンを検索（UpdateFootstepAudioと同じロジック）
+            auto leftFootIt = skeleton.jointMap.find("mixamorig:LeftToeBase");
+            auto rightFootIt = skeleton.jointMap.find("mixamorig:RightToeBase");
+
+            if (leftFootIt == skeleton.jointMap.end()) {
+                leftFootIt = skeleton.jointMap.find("mixamorig:LeftFoot");
+            }
+            if (rightFootIt == skeleton.jointMap.end()) {
+                rightFootIt = skeleton.jointMap.find("mixamorig:RightFoot");
+            }
 
             if (leftFootIt != skeleton.jointMap.end() && rightFootIt != skeleton.jointMap.end()) {
                 const Joint& leftFootJoint = skeleton.joints[leftFootIt->second];
@@ -178,10 +187,14 @@ void GamePlayScene::Update() {
                 float leftFootWorldY = enemy_->GetPosition().y + leftFootY * modelScale;
                 float rightFootWorldY = enemy_->GetPosition().y + rightFootY * modelScale;
 
-                ImGui::Text("Left Foot Y: %.3f", leftFootWorldY);
-                ImGui::Text("Right Foot Y: %.3f", rightFootWorldY);
+                bool leftGrounded = leftFootWorldY <= 0.0f + 0.15f;
+                bool rightGrounded = rightFootWorldY <= 0.0f + 0.15f;
+
+                ImGui::Text("Left Foot Y: %.3f %s", leftFootWorldY, leftGrounded ? "[GREEN]" : "[RED]");
+                ImGui::Text("Right Foot Y: %.3f %s", rightFootWorldY, rightGrounded ? "[GREEN]" : "[RED]");
+                ImGui::Text("Difference: %.3f", std::abs(leftFootWorldY - rightFootWorldY));
                 ImGui::Text("Ground Level: 0.000");
-                ImGui::Text("Threshold: 0.500");
+                ImGui::Text("Threshold: 0.150");
             }
         }
     }
