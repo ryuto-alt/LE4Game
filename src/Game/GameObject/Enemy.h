@@ -1,6 +1,7 @@
 #pragma once
 #include "UnoEngine.h"
 #include "EnemyAIConfig.h"
+#include "LineRenderer.h"
 #include <memory>
 #include <vector>
 
@@ -74,6 +75,10 @@ public:
 	// Debug
 	bool debugDrawVision_{false};  // 視界デバッグ描画フラグ
 	bool debugStopMovement_{false};  // デバッグ用：移動停止フラグ
+	bool debugDrawFootBones_{true};  // 足のボーンデバッグ描画フラグ（デフォルトON）
+	float debugAnimationSpeed_{1.0f};  // アニメーション速度（1.0 = 通常速度）
+	bool debugManualAnimationControl_{false};  // 手動アニメーション制御フラグ
+	float debugManualAnimationTime_{0.0f};  // 手動アニメーション時間
 
 	// Debug accessors for ImGui (public for debugging)
 	std::unique_ptr<EnemyAI> enemyAI_;
@@ -91,6 +96,7 @@ private:
 	void RecoverFromStuck();
 	bool IsPlayerInVision();
 	Vector3 GetRandomPatrolPoint();  // 徘徊用ランダムポイント取得
+	void DrawFootBoneDebug();  // 足のボーンデバッグ描画
 
 	// 3D object and model
 	std::unique_ptr<Object3d> object3d_;
@@ -170,10 +176,20 @@ private:
 	float lastAnimationTime_{0.0f};
 	const float FOOTSTEP_INTERVAL = 0.3f;
 
+	// Foot bone tracking for footstep sounds
+	float previousLeftFootY_{0.0f};
+	float previousRightFootY_{0.0f};
+	bool leftFootWasAboveGround_{false};
+	bool rightFootWasAboveGround_{false};
+	const float FOOT_GROUND_THRESHOLD = 0.5f;  // 地面判定の閾値
+
 	// Detection Sound
 	std::unique_ptr<SpatialAudioSource> detectionSound_;
 	float lastDetectionSoundEndTime_{-10.0f};  // 最後にサウンドが終了した時刻
 	bool isDetectionSoundPlaying_{false};  // サウンドが再生中かどうか
 	const float DETECTION_SOUND_COOLDOWN = 3.0f;  // 再生終了後3秒のクールタイム
 	const float DETECTION_SOUND_RANGE = 20.0f;
+
+	// Foot debug visualization
+	std::unique_ptr<LineRenderer> footDebugLineRenderer_;
 };

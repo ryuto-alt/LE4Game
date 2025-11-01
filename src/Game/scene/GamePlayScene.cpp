@@ -136,11 +136,55 @@ void GamePlayScene::Update() {
 	ImGui::Separator();
 	ImGui::Text("Enemy Settings");
     if (enemy_) {
-        ImGui::Checkbox("stop Enmey Move", &enemy_->debugStopMovement_);
+        ImGui::Checkbox("Stop Enemy Move", &enemy_->debugStopMovement_);
+        ImGui::Checkbox("Draw Foot Bones", &enemy_->debugDrawFootBones_);
+
+        ImGui::Separator();
+        ImGui::Text("Animation Control:");
+
+        // アニメーション速度スライダー
+        ImGui::SliderFloat("Animation Speed", &enemy_->debugAnimationSpeed_, 0.0f, 2.0f, "%.2fx");
+        if (ImGui::Button("Reset Speed")) {
+            enemy_->debugAnimationSpeed_ = 1.0f;
+        }
+
+        // 手動アニメーション制御
+        ImGui::Checkbox("Manual Control", &enemy_->debugManualAnimationControl_);
+        if (enemy_->debugManualAnimationControl_ && enemy_->GetModel()) {
+            float maxTime = enemy_->GetModel()->GetAnimationPlayer().GetDuration();
+            ImGui::SliderFloat("Animation Time", &enemy_->debugManualAnimationTime_, 0.0f, maxTime, "%.3fs");
+            if (ImGui::Button("Reset Time")) {
+                enemy_->debugManualAnimationTime_ = 0.0f;
+            }
+        }
+
+        // 足のボーン位置デバッグ情報
+        if (enemy_->debugDrawFootBones_ && enemy_->GetModel()) {
+            ImGui::Separator();
+            ImGui::Text("Foot Debug Info:");
+
+            const Skeleton& skeleton = enemy_->GetModel()->GetSkeleton();
+            auto leftFootIt = skeleton.jointMap.find("mixamorig:LeftFoot");
+            auto rightFootIt = skeleton.jointMap.find("mixamorig:RightFoot");
+
+            if (leftFootIt != skeleton.jointMap.end() && rightFootIt != skeleton.jointMap.end()) {
+                const Joint& leftFootJoint = skeleton.joints[leftFootIt->second];
+                const Joint& rightFootJoint = skeleton.joints[rightFootIt->second];
+
+                float leftFootY = leftFootJoint.skeletonSpaceMatrix.m[3][1];
+                float rightFootY = rightFootJoint.skeletonSpaceMatrix.m[3][1];
+
+                const float modelScale = 0.05f;
+                float leftFootWorldY = enemy_->GetPosition().y + leftFootY * modelScale;
+                float rightFootWorldY = enemy_->GetPosition().y + rightFootY * modelScale;
+
+                ImGui::Text("Left Foot Y: %.3f", leftFootWorldY);
+                ImGui::Text("Right Foot Y: %.3f", rightFootWorldY);
+                ImGui::Text("Ground Level: 0.000");
+                ImGui::Text("Threshold: 0.500");
+            }
+        }
     }
-
-
-
 
     ImGui::End();
 #endif

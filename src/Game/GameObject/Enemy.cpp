@@ -96,15 +96,15 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 		}
 	}
 
-	// 3D空間オーディオの初期化
+	// 3D空間オーディオの初期化 (新しいEnemy_feet.mp3を使用)
 	footstepSource1_ = std::make_unique<SpatialAudioSource>();
-	footstepSource1_->Initialize("Resources/Audio/EnemyWalk_1.mp3", position_);
+	footstepSource1_->Initialize("Resources/Audio/Enemy_feet.mp3", position_);
 	footstepSource1_->SetVolume(0.8f);
 	footstepSource1_->SetMaxDistance(30.0f);
 	footstepSource1_->SetMinDistance(1.0f);
 
 	footstepSource2_ = std::make_unique<SpatialAudioSource>();
-	footstepSource2_->Initialize("Resources/Audio/EnemyWalk_2.mp3", position_);
+	footstepSource2_->Initialize("Resources/Audio/Enemy_feet.mp3", position_);
 	footstepSource2_->SetVolume(0.8f);
 	footstepSource2_->SetMaxDistance(30.0f);
 	footstepSource2_->SetMinDistance(1.0f);
@@ -115,6 +115,10 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	detectionSound_->SetVolume(2.2f);  // 大き目の音量
 	detectionSound_->SetMaxDistance(40.0f);
 	detectionSound_->SetMinDistance(1.0f);
+
+	// 足のボーンデバッグ用LineRenderer初期化
+	footDebugLineRenderer_ = std::make_unique<LineRenderer>();
+	footDebugLineRenderer_->Initialize(engine->GetDXCom(), camera);
 }
 
 void Enemy::Update() {
@@ -336,9 +340,15 @@ void Enemy::UpdateAnimation() {
 	float deltaTime = 1.0f / 60.0f; // 60 FPS想定
 
 	if (animatedModel_) {
-		// Playerと同じパターン
-		if (!animationPaused_) {
-			animatedModel_->Update(deltaTime);
+		// 手動アニメーション制御が有効な場合
+		if (debugManualAnimationControl_) {
+			// 手動で時間を設定
+			animatedModel_->GetAnimationPlayer().SetTime(debugManualAnimationTime_);
+		}
+		// 通常のアニメーション更新
+		else if (!animationPaused_) {
+			// デバッグ速度を適用
+			animatedModel_->Update(deltaTime * debugAnimationSpeed_);
 		} else {
 			animatedModel_->Update(0.0f);
 		}
@@ -355,9 +365,6 @@ void Enemy::UpdateAnimation() {
 }
 
 void Enemy::UpdateFootstepAudio() {
-	// 足音を無効化
-	return;
-
 	// WalkまたはRunアニメーション中のみ足音を再生
 	std::string currentAnim = GetCurrentAnimationName();
 	if (currentAnim != "Walk" && currentAnim != "Run") {
@@ -374,39 +381,58 @@ void Enemy::UpdateFootstepAudio() {
 		return;
 	}
 
-	// アニメーションの現在時刻を取得
-	float currentTime = animatedModel_->GetAnimationPlayer().GetTime();
+	// スケルトンから左右の足のボーン位置を取得
+	const Skeleton& skeleton = animatedModel_->GetSkeleton();
 
-	// 前回の時刻から一定時間経過したかチェック
-	if (currentTime - lastAnimationTime_ >= FOOTSTEP_INTERVAL) {
-		// 3D位置を更新して再生
-		if (footstepSource1_ && footstepSource2_) {
-			// リスナーの位置と向きを取得
-			Vector3 listenerPos = audioListener_->GetPosition();
-			Vector3 listenerForward = audioListener_->GetForward();
+	// 左足のボーンを検索
+	auto leftFootIt = skeleton.jointMap.find("mixamorig:LeftFoot");
+	auto rightFootIt = skeleton.jointMap.find("mixamorig:RightFoot");
 
-			// 交互に足音を再生
-			if (useFootstep1_) {
-				footstepSource1_->SetPosition(position_);
-				footstepSource1_->Update(listenerPos, listenerForward);
-				footstepSource1_->Play(false);  // ループなし
-			} else {
-				footstepSource2_->SetPosition(position_);
-				footstepSource2_->Update(listenerPos, listenerForward);
-				footstepSource2_->Play(false);  // ループなし
-			}
+	if (leftFootIt == skeleton.jointMap.end() || rightFootIt == skeleton.jointMap.end()) {
+		return;  // ボーンが見つからない場合は処理しない
+	}
 
-			// 次回は別の足音を使用
-			useFootstep1_ = !useFootstep1_;
+	// 左足と右足のジョイントを取得
+	const Joint& leftFootJoint = skeleton.joints[leftFootIt->second];
+	const Joint& rightFootJoint = skeleton.joints[rightFootIt->second];
+
+	// ワールド空間での足の位置を計算（skeletonSpaceMatrixから抽出）
+	float leftFootY = leftFootJoint.skeletonSpaceMatrix.m[3][1];
+	float rightFootY = rightFootJoint.skeletonSpaceMatrix.m[3][1];
+
+	// Enemyのワールド位置を加算して実際のワールド座標に変換
+	float worldLeftFootY = position_.y + leftFootY;
+	float worldRightFootY = position_.y + rightFootY;
+
+	// リスナーの位置と向きを取得
+	Vector3 listenerPos = audioListener_->GetPosition();
+	Vector3 listenerForward = audioListener_->GetForward();
+
+	// 左足の接地判定
+	bool leftFootIsAboveGround = worldLeftFootY > GROUND_HEIGHT + FOOT_GROUND_THRESHOLD;
+	if (leftFootWasAboveGround_ && !leftFootIsAboveGround) {
+		// 左足が地面に着地した瞬間
+		if (footstepSource1_) {
+			footstepSource1_->SetPosition(position_);
+			footstepSource1_->Update(listenerPos, listenerForward);
+			footstepSource1_->Play(false);  // ループなし
 		}
-
-		lastAnimationTime_ = currentTime;
 	}
+	leftFootWasAboveGround_ = leftFootIsAboveGround;
+	previousLeftFootY_ = worldLeftFootY;
 
-	// アニメーションがループした場合のリセット
-	if (currentTime < lastAnimationTime_) {
-		lastAnimationTime_ = 0.0f;
+	// 右足の接地判定
+	bool rightFootIsAboveGround = worldRightFootY > GROUND_HEIGHT + FOOT_GROUND_THRESHOLD;
+	if (rightFootWasAboveGround_ && !rightFootIsAboveGround) {
+		// 右足が地面に着地した瞬間
+		if (footstepSource2_) {
+			footstepSource2_->SetPosition(position_);
+			footstepSource2_->Update(listenerPos, listenerForward);
+			footstepSource2_->Play(false);  // ループなし
+		}
 	}
+	rightFootWasAboveGround_ = rightFootIsAboveGround;
+	previousRightFootY_ = worldRightFootY;
 }
 
 void Enemy::UpdateDetectionSound() {
@@ -471,6 +497,11 @@ void Enemy::Draw() {
 	if (debugDrawVision_) {
 		DrawDebugVision();
 	}
+
+	// 足のボーンデバッグ描画
+	if (debugDrawFootBones_) {
+		DrawFootBoneDebug();
+	}
 }
 
 void Enemy::DrawDebugVision() {
@@ -481,9 +512,8 @@ void Enemy::DrawDebugVision() {
 	// ImGuiウィンドウで視界情報を表示
 	ImGui::Begin("Enemy Vision Debug");
 
-	// デバッグ用：Enemyストップボタン
+	// デバッグ用
 #ifdef _DEBUG
-	ImGui::Checkbox("Stop Enemy Movement", &debugStopMovement_);
 	ImGui::Separator();
 #endif
 
@@ -905,6 +935,106 @@ Vector3 Enemy::GetRandomPatrolPoint() {
 		position_.y,
 		position_.z + distance * std::sin(angle)
 	};
+}
+
+// 足のボーンデバッグ描画
+void Enemy::DrawFootBoneDebug() {
+	if (!animatedModel_ || !footDebugLineRenderer_) {
+		return;
+	}
+
+	// スケルトンから左右の足のボーン位置を取得
+	const Skeleton& skeleton = animatedModel_->GetSkeleton();
+
+	// 左足のボーンを検索
+	auto leftFootIt = skeleton.jointMap.find("mixamorig:LeftFoot");
+	auto rightFootIt = skeleton.jointMap.find("mixamorig:RightFoot");
+
+	if (leftFootIt == skeleton.jointMap.end() || rightFootIt == skeleton.jointMap.end()) {
+		return;  // ボーンが見つからない場合は処理しない
+	}
+
+	// 左足と右足のジョイントを取得
+	const Joint& leftFootJoint = skeleton.joints[leftFootIt->second];
+	const Joint& rightFootJoint = skeleton.joints[rightFootIt->second];
+
+	// スケルトン空間での足の位置（行列の4列目）
+	Vector3 leftFootSkeletonPos = {
+		leftFootJoint.skeletonSpaceMatrix.m[3][0],
+		leftFootJoint.skeletonSpaceMatrix.m[3][1],
+		leftFootJoint.skeletonSpaceMatrix.m[3][2]
+	};
+
+	Vector3 rightFootSkeletonPos = {
+		rightFootJoint.skeletonSpaceMatrix.m[3][0],
+		rightFootJoint.skeletonSpaceMatrix.m[3][1],
+		rightFootJoint.skeletonSpaceMatrix.m[3][2]
+	};
+
+	// モデルのスケール（Object3dで設定した0.05f）を考慮してワールド座標に変換
+	const float modelScale = 0.05f;
+	Vector3 leftFootWorldPos = {
+		position_.x + leftFootSkeletonPos.x * modelScale,
+		position_.y + leftFootSkeletonPos.y * modelScale,
+		position_.z + leftFootSkeletonPos.z * modelScale
+	};
+
+	Vector3 rightFootWorldPos = {
+		position_.x + rightFootSkeletonPos.x * modelScale,
+		position_.y + rightFootSkeletonPos.y * modelScale,
+		position_.z + rightFootSkeletonPos.z * modelScale
+	};
+
+	// 接地判定
+	bool leftFootGrounded = leftFootWorldPos.y <= GROUND_HEIGHT + FOOT_GROUND_THRESHOLD;
+	bool rightFootGrounded = rightFootWorldPos.y <= GROUND_HEIGHT + FOOT_GROUND_THRESHOLD;
+
+	// 色の設定（接地=赤、空中=緑）
+	Vector4 leftFootColor = leftFootGrounded ? Vector4{1.0f, 0.0f, 0.0f, 1.0f} : Vector4{0.0f, 1.0f, 0.0f, 1.0f};
+	Vector4 rightFootColor = rightFootGrounded ? Vector4{1.0f, 0.0f, 0.0f, 1.0f} : Vector4{0.0f, 1.0f, 0.0f, 1.0f};
+
+	footDebugLineRenderer_->Clear();
+
+	// グリッド描画設定
+	const float gridSize = 1.0f;
+	const int gridDivisions = 10;
+	const float cellSize = gridSize / gridDivisions;
+
+	// 左足グリッド（地面に投影）
+	for (int i = 0; i <= gridDivisions; ++i) {
+		float offset = -gridSize / 2.0f + i * cellSize;
+
+		// X方向の線（地面レベル）
+		Vector3 start1 = {leftFootWorldPos.x + offset, GROUND_HEIGHT, leftFootWorldPos.z - gridSize / 2.0f};
+		Vector3 end1 = {leftFootWorldPos.x + offset, GROUND_HEIGHT, leftFootWorldPos.z + gridSize / 2.0f};
+		footDebugLineRenderer_->AddLine(start1, end1, leftFootColor);
+
+		// Z方向の線（地面レベル）
+		Vector3 start2 = {leftFootWorldPos.x - gridSize / 2.0f, GROUND_HEIGHT, leftFootWorldPos.z + offset};
+		Vector3 end2 = {leftFootWorldPos.x + gridSize / 2.0f, GROUND_HEIGHT, leftFootWorldPos.z + offset};
+		footDebugLineRenderer_->AddLine(start2, end2, leftFootColor);
+	}
+
+	// 右足グリッド（地面に投影）
+	for (int i = 0; i <= gridDivisions; ++i) {
+		float offset = -gridSize / 2.0f + i * cellSize;
+
+		// X方向の線（地面レベル）
+		Vector3 start1 = {rightFootWorldPos.x + offset, GROUND_HEIGHT, rightFootWorldPos.z - gridSize / 2.0f};
+		Vector3 end1 = {rightFootWorldPos.x + offset, GROUND_HEIGHT, rightFootWorldPos.z + gridSize / 2.0f};
+		footDebugLineRenderer_->AddLine(start1, end1, rightFootColor);
+
+		// Z方向の線（地面レベル）
+		Vector3 start2 = {rightFootWorldPos.x - gridSize / 2.0f, GROUND_HEIGHT, rightFootWorldPos.z + offset};
+		Vector3 end2 = {rightFootWorldPos.x + gridSize / 2.0f, GROUND_HEIGHT, rightFootWorldPos.z + offset};
+		footDebugLineRenderer_->AddLine(start2, end2, rightFootColor);
+	}
+
+	// 足の位置から地面までの垂直線を追加（デバッグ用）
+	footDebugLineRenderer_->AddLine(leftFootWorldPos, Vector3{leftFootWorldPos.x, GROUND_HEIGHT, leftFootWorldPos.z}, leftFootColor);
+	footDebugLineRenderer_->AddLine(rightFootWorldPos, Vector3{rightFootWorldPos.x, GROUND_HEIGHT, rightFootWorldPos.z}, rightFootColor);
+
+	footDebugLineRenderer_->Render();
 }
 
 // プレイヤーが視界内にいるかチェック
