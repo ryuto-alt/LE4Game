@@ -121,17 +121,8 @@ void Enemy::Update() {
 	const float deltaTime = 1.0f / 60.0f; // 60 FPS想定
 
 #ifdef _DEBUG
-	// デバッグ用：移動停止フラグが有効な場合は移動処理をスキップ
-	if (debugStopMovement_) {
-		// アニメーションの更新のみ実行
-		UpdateAnimation();
-		if (object3d_) {
-			object3d_->SetPosition(position_);
-			object3d_->SetRotation(Vector3{0.0f, currentRotationY_, 0.0f});
-			object3d_->Update();
-		}
-		return;
-	}
+	// デバッグ用：移動停止フラグが有効な場合は移動処理をスキップ（オーディオは継続）
+	if (!debugStopMovement_) {
 #endif
 
 	// 新しいAIシステムを使用する場合
@@ -291,6 +282,10 @@ void Enemy::Update() {
 		// スタック検出と回避処理
 		CheckAndHandleStuck();
 	}
+
+#ifdef _DEBUG
+	}  // debugStopMovement_のif文の終わり
+#endif
 
 	// アニメーションの更新
 	UpdateAnimation();
