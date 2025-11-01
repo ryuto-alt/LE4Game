@@ -102,6 +102,13 @@ private:
 	float targetRotationY_{0.0f};
 	float currentSpeed_{0.0f};
 
+	// Gravity and ground collision
+	float velocityY_{0.0f};  // 垂直方向の速度
+	bool isGrounded_{false};  // 地面に接地しているか
+	const float GRAVITY = -0.5f;  // 重力加速度
+	const float GROUND_HEIGHT = 0.0f;  // 地面の高さ
+	const float GROUND_CHECK_OFFSET = 0.1f;  // 地面判定のオフセット
+
 	// Animation
 	bool animationPaused_{false};
 	bool isBlending_{false};

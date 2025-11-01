@@ -287,6 +287,31 @@ void Enemy::Update() {
 	}  // debugStopMovement_のif文の終わり
 #endif
 
+	// 重力処理
+	// 地面より上にいる場合、重力を適用
+	if (position_.y > GROUND_HEIGHT + GROUND_CHECK_OFFSET) {
+		velocityY_ += GRAVITY * deltaTime;
+		isGrounded_ = false;
+	}
+	else {
+		// 地面に着地
+		if (velocityY_ < 0.0f) {
+			velocityY_ = 0.0f;
+			position_.y = GROUND_HEIGHT;
+			isGrounded_ = true;
+		}
+	}
+
+	// Y座標を更新
+	position_.y += velocityY_;
+
+	// 地面より下に行かないように制限
+	if (position_.y < GROUND_HEIGHT) {
+		position_.y = GROUND_HEIGHT;
+		velocityY_ = 0.0f;
+		isGrounded_ = true;
+	}
+
 	// アニメーションの更新
 	UpdateAnimation();
 
@@ -431,7 +456,7 @@ void Enemy::UpdateDetectionSound() {
 		if (!isDetectionSoundPlaying_ &&
 		    totalTime - lastDetectionSoundEndTime_ >= DETECTION_SOUND_COOLDOWN) {
 			// 再生
-			detectionSound_->Play(false);  // ループなし
+			//detectionSound_->Play(false);  // ループなし
 			isDetectionSoundPlaying_ = true;
 		}
 	}
