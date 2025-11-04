@@ -17,7 +17,7 @@ public:
 	~Enemy();
 
 	void Initialize(Camera* camera = nullptr, const EnemyAIConfig& aiConfig = EnemyAIConfig{});
-	void Update();
+	void Update(UnoEngine* engine);
 	void Draw();
 	void DrawDebugVision();  // 視界デバッグ描画
 	void Finalize();
@@ -85,8 +85,8 @@ public:
 	bool useNewAI_{true};
 
 private:
-	void UpdateAnimation();
-	void UpdateFootstepAudio();
+	void UpdateAnimation(float deltaTime);
+	void UpdateFootstepAudio(float deltaTime);
 	void UpdateDetectionSound();
 	bool CheckWallAt(const Vector3& position);
 	void UpdateNavMeshPath();

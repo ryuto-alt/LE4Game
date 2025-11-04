@@ -258,7 +258,7 @@ void GamePlayScene::Update() {
     if (enemy_) {
         enemy_->SetDirectionalLight(const_cast<DirectionalLight*>(&dirLight));
         enemy_->SetSpotLight(const_cast<SpotLight*>(&spotLight));
-        enemy_->Update();
+        enemy_->Update(UnoEngine::GetInstance());
     }
 
     // 全シーンオブジェクトを更新

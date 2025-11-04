@@ -122,8 +122,8 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	footDebugLineRenderer_->Initialize(engine->GetDXCom(), camera);
 }
 
-void Enemy::Update() {
-	const float deltaTime = 1.0f / 60.0f; // 60 FPS想定
+void Enemy::Update(UnoEngine* engine) {
+	const float deltaTime = engine->GetDelta();
 
 #ifdef _DEBUG
 	// デバッグ用：移動停止フラグが有効な場合は移動処理をスキップ（オーディオは継続）
@@ -318,10 +318,10 @@ void Enemy::Update() {
 	}
 
 	// アニメーションの更新
-	UpdateAnimation();
+	UpdateAnimation(deltaTime);
 
 	// 足音の更新
-	UpdateFootstepAudio();
+	UpdateFootstepAudio(deltaTime);
 
 	// 検知サウンドの更新
 	UpdateDetectionSound();
@@ -337,8 +337,7 @@ void Enemy::Update() {
 	// HandleCollisionResponse();
 }
 
-void Enemy::UpdateAnimation() {
-	float deltaTime = 1.0f / 60.0f; // 60 FPS想定
+void Enemy::UpdateAnimation(float deltaTime) {
 
 	if (animatedModel_) {
 		// 手動アニメーション制御が有効な場合
@@ -365,7 +364,7 @@ void Enemy::UpdateAnimation() {
 	}
 }
 
-void Enemy::UpdateFootstepAudio() {
+void Enemy::UpdateFootstepAudio(float deltaTime) {
 	// WalkまたはRunアニメーション中のみ足音を再生
 	std::string currentAnim = GetCurrentAnimationName();
 	if (currentAnim != "Walk" && currentAnim != "Run") {
@@ -429,7 +428,6 @@ void Enemy::UpdateFootstepAudio() {
 
 	// 現在時刻を取得（秒）
 	static float totalTime = 0.0f;
-	const float deltaTime = 1.0f / 60.0f;
 	totalTime += deltaTime;
 
 	// 左足の接地判定
