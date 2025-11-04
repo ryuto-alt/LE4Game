@@ -185,7 +185,7 @@ private:
 	const float FOOT_LIFT_THRESHOLD = 0.25f;  // 足が上がったと判定する閾値（これ以上上がったら次の着地検出可能）
 	float lastLeftFootLandTime_{-999.0f};  // 最後に左足が着地した時間
 	float lastRightFootLandTime_{-999.0f};  // 最後に右足が着地した時間
-	const float FOOTSTEP_COOLDOWN = 0.3f;  // 足音のクールダウン時間（秒）- 交互検出を強制
+	const float FOOTSTEP_COOLDOWN = 0.2f;  // 足音のクールダウン時間（秒）- 交互検出を強制（1.5倍速対応）
 	enum class LastFootLanded { None, Left, Right };
 	LastFootLanded lastFootLanded_{LastFootLanded::None};  // 最後に着地した足
 

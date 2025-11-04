@@ -811,6 +811,13 @@ void Enemy::ChangeAnimation(const std::string& animationName) {
 		animatedModel_->TransitionToAnimation(animationName, BLEND_DURATION);
 		isBlending_ = true;
 		blendTimer_ = 0.0f;
+
+		// Runアニメーション時は速度を1.3倍に、それ以外は通常速度
+		if (animationName == "Run") {
+			debugAnimationSpeed_ = 1.3f;
+		} else if (animationName == "Walk") {
+			debugAnimationSpeed_ = 1.0f;
+		}
 	}
 }
 
