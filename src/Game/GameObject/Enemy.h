@@ -89,6 +89,7 @@ private:
 	void UpdateFootstepAudio(float deltaTime);
 	void UpdateDetectionSound();
 	void UpdateBarkSound(float deltaTime);
+	void UpdateChaseBGM(float deltaTime, UnoEngine* engine);
 	bool CheckWallAt(const Vector3& position);
 	void UpdateNavMeshPath();
 	void FollowPath();
@@ -203,6 +204,17 @@ private:
 	float nextBarkInterval_{10.0f};  // 次の吠え声までの間隔（ランダムに変化）
 	const float BARK_MIN_INTERVAL = 8.0f;  // 吠え声の最小間隔（秒）
 	const float BARK_MAX_INTERVAL = 12.0f;  // 吠え声の最大間隔（秒）
+
+	// Chase BGM
+	bool chaseBGMLoaded_{false};  // chaseBGMがロード済みかどうか
+	bool chaseBGMPlaying_{false};  // chaseBGMが再生中かどうか
+	float chaseBGMVolume_{0.0f};  // 現在のchaseBGMボリューム
+	float chaseBGMTargetVolume_{0.0f};  // 目標ボリューム
+	bool isFadingIn_{false};  // フェードイン中かどうか
+	bool isFadingOut_{false};  // フェードアウト中かどうか
+	const float CHASE_BGM_MAX_VOLUME = 0.2f;  // chaseBGMの最大ボリューム
+	const float FADE_IN_DURATION = 2.0f;  // フェードイン時間（秒）
+	const float FADE_OUT_DURATION = 3.0f;  // フェードアウト時間（秒）
 
 	// Foot debug visualization
 	std::unique_ptr<LineRenderer> footDebugLineRenderer_;

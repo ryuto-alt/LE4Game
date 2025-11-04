@@ -336,6 +336,9 @@ void Enemy::Update(UnoEngine* engine) {
 	// 吠え声の更新
 	UpdateBarkSound(deltaTime);
 
+	// Chase BGMの更新
+	UpdateChaseBGM(deltaTime, engine);
+
 	// オブジェクトの位置と回転を更新
 	if (object3d_) {
 		object3d_->SetPosition(position_);
@@ -625,6 +628,95 @@ void Enemy::UpdateBarkSound(float deltaTime) {
 #ifdef _DEBUG
 			OutputDebugStringA("[Enemy] Bark sound played during chase!\n");
 #endif
+		}
+	}
+}
+
+void Enemy::UpdateChaseBGM(float deltaTime, UnoEngine* engine) {
+	if (!engine) {
+		return;
+	}
+
+	// 初回のみBGMをロード
+	if (!chaseBGMLoaded_) {
+		engine->LoadAudio("chaseBGM", "Resources/Audio/chaseBGM.mp3");
+		chaseBGMLoaded_ = true;
+	}
+
+	// 追跡フェーズに入った時
+	if (isChasing_ && !chaseBGMPlaying_) {
+		// stagebgmを停止
+		if (engine->IsAudPlay("stagebgm")) {
+			engine->StopAudio("stagebgm");
+#ifdef _DEBUG
+			OutputDebugStringA("[Enemy] Stage BGM stopped for chase BGM\n");
+#endif
+		}
+
+		// BGMを再生開始（ループあり）
+		engine->PlayAudio("chaseBGM", true, 0.0f);  // 初期ボリューム0でスタート
+		chaseBGMPlaying_ = true;
+		chaseBGMVolume_ = 0.0f;
+		chaseBGMTargetVolume_ = CHASE_BGM_MAX_VOLUME;
+		isFadingIn_ = true;
+		isFadingOut_ = false;
+
+#ifdef _DEBUG
+		OutputDebugStringA("[Enemy] Chase BGM started (fading in)!\n");
+#endif
+	}
+	// 追跡フェーズから抜けた時
+	else if (!isChasing_ && chaseBGMPlaying_ && !isFadingOut_) {
+		// フェードアウト開始
+		chaseBGMTargetVolume_ = 0.0f;
+		isFadingOut_ = true;
+		isFadingIn_ = false;
+
+#ifdef _DEBUG
+		OutputDebugStringA("[Enemy] Chase BGM fading out...\n");
+#endif
+	}
+
+	// フェードイン処理
+	if (isFadingIn_) {
+		float fadeSpeed = CHASE_BGM_MAX_VOLUME / FADE_IN_DURATION;
+		chaseBGMVolume_ += fadeSpeed * deltaTime;
+
+		if (chaseBGMVolume_ >= chaseBGMTargetVolume_) {
+			chaseBGMVolume_ = chaseBGMTargetVolume_;
+			isFadingIn_ = false;
+#ifdef _DEBUG
+			OutputDebugStringA("[Enemy] Chase BGM fade in complete!\n");
+#endif
+		}
+
+		engine->SetAudVol("chaseBGM", chaseBGMVolume_);
+	}
+
+	// フェードアウト処理
+	if (isFadingOut_) {
+		float fadeSpeed = CHASE_BGM_MAX_VOLUME / FADE_OUT_DURATION;
+		chaseBGMVolume_ -= fadeSpeed * deltaTime;
+
+		if (chaseBGMVolume_ <= 0.0f) {
+			chaseBGMVolume_ = 0.0f;
+			isFadingOut_ = false;
+			chaseBGMPlaying_ = false;
+			engine->StopAudio("chaseBGM");
+
+			// stagebgmを再開
+			if (!engine->IsAudPlay("stagebgm")) {
+				engine->PlayAudio("stagebgm", true, 0.1f);  // 元のボリューム0.1で再開
+#ifdef _DEBUG
+				OutputDebugStringA("[Enemy] Stage BGM resumed after chase\n");
+#endif
+			}
+
+#ifdef _DEBUG
+			OutputDebugStringA("[Enemy] Chase BGM stopped (fade out complete)!\n");
+#endif
+		} else {
+			engine->SetAudVol("chaseBGM", chaseBGMVolume_);
 		}
 	}
 }
