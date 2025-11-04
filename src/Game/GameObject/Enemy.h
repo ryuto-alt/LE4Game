@@ -88,6 +88,7 @@ private:
 	void UpdateAnimation(float deltaTime);
 	void UpdateFootstepAudio(float deltaTime);
 	void UpdateDetectionSound();
+	void UpdateBarkSound(float deltaTime);
 	bool CheckWallAt(const Vector3& position);
 	void UpdateNavMeshPath();
 	void FollowPath();
@@ -195,6 +196,13 @@ private:
 	bool isDetectionSoundPlaying_{false};  // サウンドが再生中かどうか
 	const float DETECTION_SOUND_COOLDOWN = 3.0f;  // 再生終了後3秒のクールタイム
 	const float DETECTION_SOUND_RANGE = 20.0f;
+
+	// Bark Sound (during chase)
+	std::unique_ptr<SpatialAudioSource> barkSound_;
+	float lastBarkTime_{-999.0f};  // 最後に吠えた時刻
+	float nextBarkInterval_{10.0f};  // 次の吠え声までの間隔（ランダムに変化）
+	const float BARK_MIN_INTERVAL = 8.0f;  // 吠え声の最小間隔（秒）
+	const float BARK_MAX_INTERVAL = 12.0f;  // 吠え声の最大間隔（秒）
 
 	// Foot debug visualization
 	std::unique_ptr<LineRenderer> footDebugLineRenderer_;

@@ -117,6 +117,13 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	detectionSound_->SetMaxDistance(40.0f);
 	detectionSound_->SetMinDistance(1.0f);
 
+	// 吠え声サウンドの初期化
+	barkSound_ = std::make_unique<SpatialAudioSource>();
+	barkSound_->Initialize("Resources/Audio/enemy_bark.mp3", position_);
+	barkSound_->SetVolume(1.2f);
+	barkSound_->SetMaxDistance(35.0f);
+	barkSound_->SetMinDistance(1.0f);
+
 	// 足のボーンデバッグ用LineRenderer初期化
 	footDebugLineRenderer_ = std::make_unique<LineRenderer>();
 	footDebugLineRenderer_->Initialize(engine->GetDXCom(), camera);
@@ -325,6 +332,9 @@ void Enemy::Update(UnoEngine* engine) {
 
 	// 検知サウンドの更新
 	UpdateDetectionSound();
+
+	// 吠え声の更新
+	UpdateBarkSound(deltaTime);
 
 	// オブジェクトの位置と回転を更新
 	if (object3d_) {
@@ -572,6 +582,49 @@ void Enemy::UpdateDetectionSound() {
 			// 再生
 			//detectionSound_->Play(false);  // ループなし
 			isDetectionSoundPlaying_ = true;
+		}
+	}
+}
+
+void Enemy::UpdateBarkSound(float deltaTime) {
+	// 追跡中でない場合は何もしない
+	if (!isChasing_) {
+		return;
+	}
+
+	// リスナーが設定されていない場合はスキップ
+	if (!audioListener_ || !barkSound_) {
+		return;
+	}
+
+	// リスナーの位置と向きを取得（毎フレーム更新）
+	Vector3 listenerPos = audioListener_->GetPosition();
+	Vector3 listenerForward = audioListener_->GetForward();
+
+	// 3D位置を常に更新
+	barkSound_->SetPosition(position_);
+	barkSound_->Update(listenerPos, listenerForward);
+
+	// 現在の時刻を取得（秒単位）
+	static float totalTime = 0.0f;
+	totalTime += deltaTime;
+
+	// 最後の吠え声から次の吠え声までの時間が経過したかチェック
+	if (totalTime - lastBarkTime_ >= nextBarkInterval_) {
+		// 吠え声を再生
+		if (!barkSound_->IsPlaying()) {
+			barkSound_->Play(false);  // ループなし
+			lastBarkTime_ = totalTime;
+
+			// 次の吠え声までのランダムな間隔を設定（8〜12秒）
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_real_distribution<float> dist(BARK_MIN_INTERVAL, BARK_MAX_INTERVAL);
+			nextBarkInterval_ = dist(gen);
+
+#ifdef _DEBUG
+			OutputDebugStringA("[Enemy] Bark sound played during chase!\n");
+#endif
 		}
 	}
 }
