@@ -279,6 +279,7 @@ void EnemyAI::FollowPath(float deltaTime) {
 
     // Arrival behavior (mdファイル: ステアリングビヘイビア)
     float speed = moveSpeed_;
+
     if (currentWaypointIndex_ == static_cast<int>(currentPath_.size()) - 1) {
         // 最終ウェイポイントに近づいたら減速
         float slowingDistance = 3.0f;

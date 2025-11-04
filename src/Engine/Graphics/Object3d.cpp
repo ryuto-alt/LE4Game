@@ -116,7 +116,7 @@ void Object3d::Initialize(DirectXCommon* dxCommon, SpriteCommon* spriteCommon) {
 	cameraData_->fisheyeStrength = 0.0f;  // 初期値は魚眼レンズオフ
 	cameraData_->fogColor = { 0.0f, 0.0f, 0.0f };  // 黒い霧
 	cameraData_->fogStart = 4.0f;   // 8m先からFog開始
-	cameraData_->fogEnd = 7.0f;    // 15m先で完全に暗闇
+	cameraData_->fogEnd = 8.0f;    // 15m先で完全に暗闇
 	cameraData_->fogDensity = 1.0f; // Fog濃度100%
 	cameraData_->enableFog = 1;     // Fogを有効化(デフォルトON)
 	cameraData_->padding = 0.0f;

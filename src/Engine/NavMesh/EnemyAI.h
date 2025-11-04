@@ -3,6 +3,7 @@
 #include "../Math/Mymath.h"
 #include <vector>
 #include <memory>
+#include <string>
 
 // 敵AIのステート
 enum class EnemyState {

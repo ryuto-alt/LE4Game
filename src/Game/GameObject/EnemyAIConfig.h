@@ -30,7 +30,7 @@ struct EnemyAIConfig {
     /// 5.0: 移動速度 0.125f（デフォルト）
     /// 10.0: 移動速度 0.25f
     /// </summary>
-    float mobility = 7.0f;
+    float mobility = 7.05f;
 
     /// <summary>
     /// パラメータを有効範囲にクランプ

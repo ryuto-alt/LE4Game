@@ -2,13 +2,13 @@
 #include "UnoEngine.h"
 #include "EnemyAIConfig.h"
 #include "LineRenderer.h"
+#include "NavMesh/EnemyAI.h"  // EnemyStateの定義のため
 #include <memory>
 #include <vector>
 
 // Forward declaration
 class Player;
 class NavMesh;
-class EnemyAI;
 class NavMeshSystem;  // forward declarationのまま（cppでインクルード）
 
 class Enemy {
@@ -176,7 +176,7 @@ private:
 	std::unique_ptr<SpatialAudioSource> footstepSource2_;
 	bool useFootstep1_{true};
 	float lastAnimationTime_{0.0f};
-	const float FOOTSTEP_INTERVAL = 0.3f;
+	const float FOOTSTEP_INTERVAL = 0.25f;
 
 	// Foot bone tracking for footstep sounds
 	float previousLeftFootY_{0.0f};

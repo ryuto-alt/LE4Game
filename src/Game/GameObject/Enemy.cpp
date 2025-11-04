@@ -54,6 +54,9 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	animatedModel_->ChangeAnimation("Walk");
 	animatedModel_->PlayAnimation();
 
+	// 初期アニメーション速度を設定（徘徊用）
+	debugAnimationSpeed_ = 1.0f;
+
 	// Object3Dの作成 - Playerと全く同じ順序
 	object3d_ = engine->CreateObj3();
 	object3d_->SetModel(static_cast<Model*>(animatedModel_.get()));
@@ -100,14 +103,14 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	// 3D空間オーディオの初期化 (左足と右足で別々のファイル)
 	footstepSource1_ = std::make_unique<SpatialAudioSource>();
 	footstepSource1_->Initialize("Resources/Audio/Enemy_feet.mp3", position_);
-	footstepSource1_->SetVolume(0.8f);
-	footstepSource1_->SetMaxDistance(30.0f);
+	footstepSource1_->SetVolume(1.2f);
+	footstepSource1_->SetMaxDistance(22.0f);
 	footstepSource1_->SetMinDistance(1.0f);
 
 	footstepSource2_ = std::make_unique<SpatialAudioSource>();
 	footstepSource2_->Initialize("Resources/Audio/Enemy_feet2.mp3", position_);
-	footstepSource2_->SetVolume(0.8f);
-	footstepSource2_->SetMaxDistance(30.0f);
+	footstepSource2_->SetVolume(1.2f);
+	footstepSource2_->SetMaxDistance(22.0f);
 	footstepSource2_->SetMinDistance(1.0f);
 
 	// 検知サウンドの初期化
@@ -120,7 +123,7 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	// 吠え声サウンドの初期化
 	barkSound_ = std::make_unique<SpatialAudioSource>();
 	barkSound_->Initialize("Resources/Audio/enemy_bark.mp3", position_);
-	barkSound_->SetVolume(1.2f);
+	barkSound_->SetVolume(1.5f);
 	barkSound_->SetMaxDistance(35.0f);
 	barkSound_->SetMinDistance(1.0f);
 
@@ -955,11 +958,17 @@ void Enemy::ChangeAnimation(const std::string& animationName) {
 		isBlending_ = true;
 		blendTimer_ = 0.0f;
 
-		// Runアニメーション時は速度を1.3倍に、それ以外は通常速度
+		// Runアニメーション時は速度を1.3倍に、Walkは1.0倍
 		if (animationName == "Run") {
 			debugAnimationSpeed_ = 1.3f;
+#ifdef _DEBUG
+			OutputDebugStringA("[Enemy] Animation changed to Run, speed = 1.3x\n");
+#endif
 		} else if (animationName == "Walk") {
 			debugAnimationSpeed_ = 1.0f;
+#ifdef _DEBUG
+			OutputDebugStringA("[Enemy] Animation changed to Walk, speed = 1.0x\n");
+#endif
 		}
 	}
 }
