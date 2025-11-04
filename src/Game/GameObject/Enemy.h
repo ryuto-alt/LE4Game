@@ -134,7 +134,7 @@ private:
 
 	// Player tracking
 	Player* player_{nullptr};
-	float moveSpeed_{0.125f};
+	float moveSpeed_{0.135f};
 	bool isChasing_{false};
 
 	// Vision-based detection
@@ -212,7 +212,7 @@ private:
 	float chaseBGMTargetVolume_{0.0f};  // 目標ボリューム
 	bool isFadingIn_{false};  // フェードイン中かどうか
 	bool isFadingOut_{false};  // フェードアウト中かどうか
-	const float CHASE_BGM_MAX_VOLUME = 0.2f;  // chaseBGMの最大ボリューム
+	const float CHASE_BGM_MAX_VOLUME = 0.3f;  // chaseBGMの最大ボリューム
 	const float FADE_IN_DURATION = 2.0f;  // フェードイン時間（秒）
 	const float FADE_OUT_DURATION = 3.0f;  // フェードアウト時間（秒）
 
