@@ -156,6 +156,7 @@
     <ClCompile Include="src\Game\scene\SceneManager.cpp" />
     <ClCompile Include="src\Game\scene\TitleScene.cpp" />
     <ClCompile Include="src\Game\GameObject\Player.cpp" />
+    <ClCompile Include="src\Game\GameObject\Orb.cpp" />
     <ClCompile Include="src\Game\GameObject\Enemy.cpp" />
     <ClCompile Include="src\Game\GameObject\FPSCamera.cpp" />
     <ClCompile Include="src\Game\Manager\LightManager.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="src\Game\scene\SceneManager.h" />
     <ClInclude Include="src\Game\scene\TitleScene.h" />
     <ClInclude Include="src\Game\GameObject\Player.h" />
+    <ClInclude Include="src\Game\GameObject\Orb.h" />
     <ClInclude Include="src\Game\GameObject\Enemy.h" />
     <ClInclude Include="src\Game\GameObject\EnemyAIConfig.h" />
     <ClInclude Include="src\Game\GameObject\FPSCamera.h" />

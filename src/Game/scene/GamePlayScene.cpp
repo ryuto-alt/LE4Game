@@ -80,6 +80,12 @@ void GamePlayScene::Initialize() {
             AddNavMeshLog("Player and AudioListener set to Enemy");
         }
     }
+
+    // Orbの初期化（1個のみ）
+    orbs_.clear();
+    auto orb = std::make_unique<Orb>();
+    orb->Initialize(Vector3{0.0f, 0.5f, 5.0f}, camera_);  // Y座標を0に設定
+    orbs_.push_back(std::move(orb));
 }
 
 
@@ -273,6 +279,28 @@ void GamePlayScene::Update() {
     }
     player_->Update(engine);
 
+    // Orbの更新と衝突判定
+    for (auto& orb : orbs_) {
+        if (orb && orb->IsActive()) {
+            // ライト設定
+            orb->SetDirectionalLight(dirLight);
+
+            // 更新
+            orb->Update(deltaTime);
+
+            // プレイヤーとの衝突判定（簡易的な球体判定）
+            if (player_) {
+                Vector3 playerPos = player_->GetPosition();
+                float playerRadius = 1.0f;  // プレイヤーの衝突半径
+
+                if (orb->CheckCollisionWithPlayer(playerPos, playerRadius)) {
+                    orb->SetActive(false);  // Orbを消す
+                    OutputDebugStringA("Orb collected!\n");
+                }
+            }
+        }
+    }
+
     // NavMesh更新（UnoEngine経由）
     engine->UpdateNavMesh();
 }
@@ -296,6 +324,13 @@ void GamePlayScene::Draw() {
 
     if (!fpsCamera_ || !fpsCamera_->IsFPSMode()) {
         player_->Draw();
+    }
+
+    // Orbの描画
+    for (auto& orb : orbs_) {
+        if (orb && orb->IsActive()) {
+            orb->Draw();
+        }
     }
 
     if (enemy_) {
@@ -648,6 +683,15 @@ void GamePlayScene::Finalize() {
         enemy_->Finalize();
         enemy_.reset();
     }
+
+    // Orbのクリーンアップ
+    for (auto& orb : orbs_) {
+        if (orb) {
+            orb->Finalize();
+        }
+    }
+    orbs_.clear();
+
     sceneObjects_.clear();
     skybox_.reset();
     lightManager_.reset();
