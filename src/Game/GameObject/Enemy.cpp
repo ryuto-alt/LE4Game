@@ -23,9 +23,8 @@ void Enemy::ApplyAIConfig() {
 	// 5.0で0.5秒（デフォルト）
 	pathUpdateInterval_ = 2.0f - (aiConfig_.intelligence * 0.19f);
 
-	// Mobility: 0.0~10.0 → 移動速度 0.025~0.25
-	// 5.0で0.125（デフォルト）
-	moveSpeed_ = 0.025f + (aiConfig_.mobility * 0.0225f);
+	// Mobility: 移動速度を直接指定（0.0~10.0）
+	moveSpeed_ = aiConfig_.mobility;
 }
 
 void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
@@ -873,7 +872,7 @@ void Enemy::SetNavMeshSystem(NavMeshSystem* navMeshSystem) {
 
 	// AI設定を適用
 	enemyAI_->SetDetectionRange(aiConfig_.aggressiveness);
-	enemyAI_->SetMoveSpeed(0.025f + (aiConfig_.mobility * 0.0225f));
+	enemyAI_->SetMoveSpeed(aiConfig_.mobility);
 	enemyAI_->SetUpdateRate(2.0f - (aiConfig_.intelligence * 0.19f));
 
 	// 徘徊モードを有効化

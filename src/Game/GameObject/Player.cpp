@@ -608,16 +608,7 @@ void Player::HandleInput(UnoEngine* engine) {
         ToggleSneakWalk();
     }
 
-    // ジャンプ処理
-    if (engine->IsKeyTrig(DIK_SPACE)) {
-        char debugMsg[128];
-        sprintf_s(debugMsg, "SPACE pressed! isGrounded: %s\n", isGrounded_ ? "true" : "false");
-        OutputDebugStringA(debugMsg);
-
-        if (isGrounded_) {
-            Jump();
-        }
-    }
+    
 
 #ifdef _DEBUG
     if (camera_->IsFreeCameraMode()) {
