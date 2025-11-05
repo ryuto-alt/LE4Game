@@ -138,6 +138,32 @@ void GamePlayScene::Update() {
     ImGui::SliderFloat("Fisheye Strength", &fisheyeStrength_, 0.0f, 100.0f);
     ImGui::SliderFloat("Fisheye Radius", &fisheyeRadius_, 0.1f, 3.0f);
 
+    // カリング統計の表示
+    ImGui::Separator();
+    ImGui::Text("=== Culling Statistics ===");
+    ImGui::Text("Total Objects: %d", cullingStats_.totalObjects);
+    ImGui::Text("Visible Objects: %d", cullingStats_.visibleObjects);
+    ImGui::Text("Culled Objects: %d", cullingStats_.culledObjects);
+    ImGui::Text("Culling Rate: %.1f%%", cullingStats_.cullingRate);
+    ImGui::Separator();
+    ImGui::Text("Visible Meshes: %d", cullingStats_.visibleMeshes);
+    ImGui::Text("Culled Meshes: %d", cullingStats_.culledMeshes);
+    if (cullingStats_.visibleMeshes + cullingStats_.culledMeshes > 0) {
+        float meshCullingRate = (float)cullingStats_.culledMeshes /
+                                (cullingStats_.visibleMeshes + cullingStats_.culledMeshes) * 100.0f;
+        ImGui::Text("Mesh Culling Rate: %.1f%%", meshCullingRate);
+    }
+
+    // パフォーマンス向上の目安
+    ImGui::Separator();
+    if (cullingStats_.cullingRate > 50.0f) {
+        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Good culling efficiency!");
+    } else if (cullingStats_.cullingRate > 25.0f) {
+        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Moderate culling efficiency");
+    } else {
+        ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "Low culling efficiency");
+    }
+
     //Enemy設定
 	ImGui::Separator();
 	ImGui::Text("Enemy Settings");
@@ -317,9 +343,33 @@ void GamePlayScene::Draw() {
 
     spriteCommon_->CommonDraw();
 
-    // 全シーンオブジェクトを描画
+    // カリング統計をリセット
+    cullingStats_.totalObjects = 0;
+    cullingStats_.visibleObjects = 0;
+    cullingStats_.culledObjects = 0;
+    cullingStats_.visibleMeshes = 0;
+    cullingStats_.culledMeshes = 0;
+
+    // 全シーンオブジェクトを描画（カリング統計付き）
     for (auto& obj : sceneObjects_) {
-        obj->Draw(camera_);
+        int visibleMeshCount = 0;
+        int culledMeshCount = 0;
+        obj->Draw(camera_, &visibleMeshCount, &culledMeshCount);
+
+        cullingStats_.totalObjects++;
+        cullingStats_.visibleMeshes += visibleMeshCount;
+        cullingStats_.culledMeshes += culledMeshCount;
+
+        if (visibleMeshCount > 0) {
+            cullingStats_.visibleObjects++;
+        } else {
+            cullingStats_.culledObjects++;
+        }
+    }
+
+    // カリング率を計算
+    if (cullingStats_.totalObjects > 0) {
+        cullingStats_.cullingRate = (float)cullingStats_.culledObjects / cullingStats_.totalObjects * 100.0f;
     }
 
     if (!fpsCamera_ || !fpsCamera_->IsFPSMode()) {

@@ -54,4 +54,14 @@ private:
 
     // マウスカーソル表示フラグ (TABで切替)
     bool showMouseCursor_ = false;
+
+    // カリング統計
+    struct CullingStats {
+        int totalObjects = 0;
+        int visibleObjects = 0;
+        int culledObjects = 0;
+        int visibleMeshes = 0;
+        int culledMeshes = 0;
+        float cullingRate = 0.0f;
+    } cullingStats_;
 };
