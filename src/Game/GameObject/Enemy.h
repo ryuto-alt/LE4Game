@@ -92,9 +92,9 @@ private:
 	void UpdateChaseBGM(float deltaTime, UnoEngine* engine);
 	bool CheckWallAt(const Vector3& position);
 	void UpdateNavMeshPath();
-	void FollowPath();
+	void FollowPath(float deltaTime);
 	void ApplyAIConfig();
-	void CheckAndHandleStuck();
+	void CheckAndHandleStuck(float deltaTime);
 	void RecoverFromStuck();
 	bool IsPlayerInVision();
 	Vector3 GetRandomPatrolPoint();  // 徘徊用ランダムポイント取得
@@ -134,7 +134,7 @@ private:
 
 	// Player tracking
 	Player* player_{nullptr};
-	float moveSpeed_{0.135f};
+	float moveSpeed_{8.0f};  // 1秒あたり8ユニット（60FPSで約0.133/frame）
 	bool isChasing_{false};
 
 	// Vision-based detection

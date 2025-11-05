@@ -26,10 +26,10 @@ struct EnemyAIConfig {
 
     /// <summary>
     /// 機動力（移動速度）
-    /// 値がそのまま移動速度として使用される（0.0 ~ 10.0）
-    /// 推奨: 0.1 ~ 0.3 の範囲で設定
+    /// 0.0 ~ 10.0 → 移動速度 0.0 ~ 15.0 units/sec
+    /// 5.0: 約7.5 units/sec（デフォルト）
     /// </summary>
-    float mobility = 0.185f;
+    float mobility = 7.3f;
 
     /// <summary>
     /// パラメータを有効範囲にクランプ

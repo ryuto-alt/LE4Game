@@ -32,6 +32,7 @@ public:
 	/// <param name="currentPath">ウェイポイントのリスト</param>
 	/// <param name="currentWaypointIndex">現在のウェイポイントインデックス（更新される）</param>
 	/// <param name="moveSpeed">移動速度</param>
+	/// <param name="deltaTime">デルタタイム（フレーム間の経過時間）</param>
 	/// <param name="navMesh">NavMeshインスタンス（nullptrでもOK）</param>
 	/// <param name="isAtCorner">角を曲がっているか（出力）</param>
 	/// <param name="cornerSlowdownFactor">角での減速率（出力）</param>
@@ -42,6 +43,7 @@ public:
 		std::vector<Vector3>& currentPath,
 		int& currentWaypointIndex,
 		float moveSpeed,
+		float deltaTime,
 		NavMesh* navMesh = nullptr,
 		bool* isAtCorner = nullptr,
 		float* cornerSlowdownFactor = nullptr

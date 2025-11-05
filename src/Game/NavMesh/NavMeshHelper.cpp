@@ -53,6 +53,7 @@ void NavMeshHelper::FollowPath(
 	std::vector<Vector3>& currentPath,
 	int& currentWaypointIndex,
 	float moveSpeed,
+	float deltaTime,
 	NavMesh* navMesh,
 	bool* isAtCorner,
 	float* cornerSlowdownFactor
@@ -152,10 +153,10 @@ void NavMeshHelper::FollowPath(
 	float targetSpeed = moveSpeed * slowdownFactor;
 	currentSpeed += (targetSpeed - currentSpeed) * SPEED_LERP_FACTOR;
 
-	// 移動
+	// 移動（デルタタイムを適用）
 	Vector3 newPosition = position;
-	newPosition.x += targetDirection.x * currentSpeed;
-	newPosition.z += targetDirection.z * currentSpeed;
+	newPosition.x += targetDirection.x * currentSpeed * deltaTime;
+	newPosition.z += targetDirection.z * currentSpeed * deltaTime;
 
 	// NavMesh上の有効な位置に補正
 	newPosition = ClampToNavMesh(newPosition, navMesh);

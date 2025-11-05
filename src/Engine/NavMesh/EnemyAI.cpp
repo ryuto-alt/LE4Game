@@ -13,7 +13,7 @@ EnemyAI::EnemyAI()
     , currentState_(EnemyState::Idle)
     , previousState_(EnemyState::Idle)
     , detectionRange_(20.0f)        // mdファイル推奨値
-    , moveSpeed_(3.0f)
+    , moveSpeed_(8.0f)  // 1秒あたり8ユニットの移動速度
     , pathUpdateRate_(0.2f)          // mdファイル推奨: 0.1～0.5秒
     , pathUpdateTimer_(0.0f)
     , fieldOfView_(110.0f)           // mdファイル推奨: 110度

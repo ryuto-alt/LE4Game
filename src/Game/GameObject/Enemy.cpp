@@ -23,8 +23,9 @@ void Enemy::ApplyAIConfig() {
 	// 5.0で0.5秒（デフォルト）
 	pathUpdateInterval_ = 2.0f - (aiConfig_.intelligence * 0.19f);
 
-	// Mobility: 移動速度を直接指定（0.0~10.0）
-	moveSpeed_ = aiConfig_.mobility;
+	// Mobility: 0.0~10.0 → 移動速度 0.0~15.0 units/sec
+	// 5.0で約8.0 units/sec（デフォルト）
+	moveSpeed_ = aiConfig_.mobility * 1.5f;
 }
 
 void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
@@ -231,7 +232,7 @@ void Enemy::Update(UnoEngine* engine) {
 
 				// パスに沿って移動
 				if (!currentPath_.empty()) {
-					FollowPath();
+					FollowPath(deltaTime);
 				}
 			} else {
 				// プレイヤーが視界外 & 追跡時間切れ - 徘徊モード
@@ -288,13 +289,13 @@ void Enemy::Update(UnoEngine* engine) {
 
 				// パスに沿って移動
 				if (!currentPath_.empty()) {
-					FollowPath();
+					FollowPath(deltaTime);
 				}
 			}
 		}
 
 		// スタック検出と回避処理
-		CheckAndHandleStuck();
+		CheckAndHandleStuck(deltaTime);
 	}
 
 #ifdef _DEBUG
@@ -1063,7 +1064,7 @@ void Enemy::UpdateNavMeshPath() {
 }
 
 // パスに沿って移動（先読みで滑らかに）
-void Enemy::FollowPath() {
+void Enemy::FollowPath(float deltaTime) {
 	NavMeshHelper::FollowPath(
 		position_,
 		currentRotationY_,
@@ -1071,6 +1072,7 @@ void Enemy::FollowPath() {
 		currentPath_,
 		currentWaypointIndex_,
 		moveSpeed_,
+		deltaTime,
 		navMesh_,
 		&isAtCorner_,
 		&cornerSlowdownFactor_
@@ -1079,8 +1081,7 @@ void Enemy::FollowPath() {
 
 
 // スタック検出と処理
-void Enemy::CheckAndHandleStuck() {
-	const float deltaTime = 1.0f / 60.0f;
+void Enemy::CheckAndHandleStuck(float deltaTime) {
 
 	// スタック回避中は特別な処理
 	if (isRecoveringFromStuck_) {
