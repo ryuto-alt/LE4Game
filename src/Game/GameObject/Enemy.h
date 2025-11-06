@@ -68,6 +68,7 @@ public:
 	// Getters
 	Object3d* GetObject() { return object3d_.get(); }
 	AnimatedModel* GetModel() { return animatedModel_.get(); }
+	bool IsChasing() const { return isChasing_; }
 
 	// Collision response
 	void HandleCollisionResponse();

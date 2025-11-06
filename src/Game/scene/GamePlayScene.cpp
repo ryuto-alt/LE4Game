@@ -6,6 +6,7 @@
 #include "NavMesh/NavMeshSystem.h"
 #include "NavMesh/EnemyAI.h"
 #include <cmath>
+#include <algorithm>
 #include <filesystem>
 
 void GamePlayScene::Initialize() {
@@ -300,6 +301,63 @@ void GamePlayScene::Update() {
         enemy_->SetDirectionalLight(const_cast<DirectionalLight*>(&dirLight));
         enemy_->SetSpotLight(const_cast<SpotLight*>(&spotLight));
         enemy_->Update(UnoEngine::GetInstance());
+
+        // 追跡モード時の距離に応じたビネット効果とカメラ振動
+        if (enemy_->IsChasing() && player_ && postProcess_) {
+            Vector3 playerPos = player_->GetPosition();
+            Vector3 enemyPos = enemy_->GetPosition();
+
+            // プレイヤーとEnemyの距離を計算
+            float dx = enemyPos.x - playerPos.x;
+            float dy = enemyPos.y - playerPos.y;
+            float dz = enemyPos.z - playerPos.z;
+            float distance = sqrtf(dx * dx + dy * dy + dz * dz);
+
+            // 距離に応じてビネット強度を計算（近いほど強く）
+            const float MIN_DISTANCE = 3.0f;   // この距離で最大効果
+            const float MAX_DISTANCE = 15.0f;  // この距離で効果なし
+
+            float vignetteIntensity = 0.0f;
+            float fearShakeIntensity = 0.0f;
+
+            if (distance < MAX_DISTANCE) {
+                // 距離を0.0～1.0の範囲に正規化（近いほど1.0）
+                float normalizedDistance = 1.0f - ((distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE));
+                normalizedDistance = (std::max)(0.0f, (std::min)(1.0f, normalizedDistance));
+
+                // 黒いビネット効果を適用
+                vignetteIntensity = normalizedDistance * 0.8f;  // 黒いビネット
+
+                // カメラ振動の強度を設定
+                fearShakeIntensity = normalizedDistance;  // 0.0～1.0
+
+                // ポストエフェクトに設定
+                static float time = 0.0f;
+                time += deltaTime;
+                postProcess_->SetHorrorParams(time, 0.0f, 0.0f, 0.0f, vignetteIntensity);
+            } else {
+                // 距離が遠い時はエフェクトをリセット
+                static float time = 0.0f;
+                time += deltaTime;
+                postProcess_->SetHorrorParams(time, 0.0f, 0.0f, 0.0f, 0.0f);
+                fearShakeIntensity = 0.0f;
+            }
+
+            // FPSカメラに恐怖シェイクの強度を設定
+            if (fpsCamera_) {
+                fpsCamera_->SetFearShakeIntensity(fearShakeIntensity);
+            }
+        } else {
+            // 追跡していない時はエフェクトをリセット
+            if (postProcess_) {
+                static float time = 0.0f;
+                time += deltaTime;
+                postProcess_->SetHorrorParams(time, 0.0f, 0.0f, 0.0f, 0.0f);
+            }
+            if (fpsCamera_) {
+                fpsCamera_->SetFearShakeIntensity(0.0f);
+            }
+        }
     }
 
     // 全シーンオブジェクトを更新

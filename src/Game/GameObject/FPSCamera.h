@@ -35,6 +35,9 @@ public:
     void UpdateCameraShake(bool isMoving, bool isRunning, float deltaTime, class UnoEngine* engine);
     Vector3 GetCameraShakeOffset() const { return cameraShakeOffset_; }
 
+    // 敵接近による恐怖シェイク
+    void SetFearShakeIntensity(float intensity) { fearShakeIntensity_ = intensity; }
+
 private:
     bool isFPSMode_ = false;           // true: 一人称, false: 三人称
     bool mouseLookEnabled_ = false;    // マウスによる視点移動の有効/無効（デフォルトはOFF）
@@ -60,4 +63,7 @@ private:
     // 足音用
     float previousYOffset_ = 0.0f;  // 前フレームのY方向オフセット
     bool footSoundLoaded_ = false;  // 足音が読み込まれたかどうか
+
+    // 敵接近による恐怖シェイク
+    float fearShakeIntensity_ = 0.0f;  // 恐怖シェイクの強度 (0.0-1.0)
 };
