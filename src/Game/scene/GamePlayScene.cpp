@@ -343,9 +343,14 @@ void GamePlayScene::Update() {
                 fearShakeIntensity = 0.0f;
             }
 
-            // FPSカメラに恐怖シェイクの強度を設定
-            if (fpsCamera_) {
-                fpsCamera_->SetFearShakeIntensity(fearShakeIntensity);
+            // FPSカメラに恐怖シェイクの強度を設定（無効化）
+            // if (fpsCamera_) {
+            //     fpsCamera_->SetFearShakeIntensity(fearShakeIntensity);
+            // }
+
+            // ライトマネージャーに恐怖点滅の強度を設定
+            if (lightManager_) {
+                lightManager_->SetFearFlickerIntensity(fearShakeIntensity);
             }
         } else {
             // 追跡していない時はエフェクトをリセット
@@ -354,8 +359,11 @@ void GamePlayScene::Update() {
                 time += deltaTime;
                 postProcess_->SetHorrorParams(time, 0.0f, 0.0f, 0.0f, 0.0f);
             }
-            if (fpsCamera_) {
-                fpsCamera_->SetFearShakeIntensity(0.0f);
+            // if (fpsCamera_) {
+            //     fpsCamera_->SetFearShakeIntensity(0.0f);
+            // }
+            if (lightManager_) {
+                lightManager_->SetFearFlickerIntensity(0.0f);
             }
         }
     }

@@ -157,7 +157,7 @@ void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning, float deltaTime
         }
     }
 
-    // 敵接近による恐怖シェイクを追加
+    // 敵接近による恐怖シェイクを追加（横揺れのみ）
     if (fearShakeIntensity_ > 0.0f) {
         shakeTimer_ += deltaTime;
 
@@ -165,14 +165,12 @@ void FPSCamera::UpdateCameraShake(bool isMoving, bool isRunning, float deltaTime
         float fearFrequency = 25.0f;  // 高周波（小刻み）
         float fearAmplitude = 0.015f * fearShakeIntensity_;  // 強度に応じた振幅
 
-        // ランダムな方向に小刻みに揺らす
+        // 横方向（X軸）のみに小刻みに揺らす
         float fearX = std::sin(shakeTimer_ * fearFrequency) * fearAmplitude;
-        float fearY = std::cos(shakeTimer_ * fearFrequency * 1.3f) * fearAmplitude;
         float fearZ = std::sin(shakeTimer_ * fearFrequency * 0.7f) * fearAmplitude * 0.5f;
 
-        // 既存のシェイクに加算
+        // 既存のシェイクに加算（Yは加算しない）
         cameraShakeOffset_.x += fearX;
-        cameraShakeOffset_.y += fearY;
         cameraShakeOffset_.z += fearZ;
     }
 }

@@ -188,15 +188,27 @@ void LightManager::UpdateFlickerEffect() {
     // 点滅タイマーを進める
     blinkTimer_ += deltaTime;
 
+    // 恐怖強度に応じて点滅頻度を調整（より自然に）
     // 点滅の管理
     if (!isBlinking_ && blinkTimer_ >= nextBlinkTime_) {
         // 点滅開始
         isBlinking_ = true;
         blinkProgress_ = 0.0f;
-        blinkDuration_ = 0.3f + (static_cast<float>(rand()) / RAND_MAX) * 0.4f;  // 0.3〜0.7秒
+        // 恐怖時は点滅の持続時間も短く、よりランダムに
+        float baseDuration = 0.15f + (static_cast<float>(rand()) / RAND_MAX) * 0.25f;  // 0.15〜0.4秒
+        blinkDuration_ = baseDuration / (1.0f + fearFlickerIntensity_ * 1.5f);
         blinkTimer_ = 0.0f;
-        // 次の点滅は3〜8秒後
-        nextBlinkTime_ = 3.0f + (static_cast<float>(rand()) / RAND_MAX) * 5.0f;
+
+        // 次の点滅までの間隔（恐怖が強いほど短くなるが、よりランダムに）
+        if (fearFlickerIntensity_ > 0.1f) {
+            // 恐怖が強い時: 不規則な短い間隔
+            float minInterval = 0.1f / fearFlickerIntensity_;  // 恐怖が強いほど最小間隔が短く
+            float maxInterval = 0.5f / fearFlickerIntensity_;  // 恐怖が強いほど最大間隔も短く
+            nextBlinkTime_ = minInterval + (static_cast<float>(rand()) / RAND_MAX) * (maxInterval - minInterval);
+        } else {
+            // 恐怖が弱い時: 通常の間隔
+            nextBlinkTime_ = 3.0f + (static_cast<float>(rand()) / RAND_MAX) * 5.0f;
+        }
     }
 
     float blinkMultiplier = 1.0f;
@@ -208,27 +220,28 @@ void LightManager::UpdateFlickerEffect() {
             isBlinking_ = false;
             blinkMultiplier = 1.0f;
         } else {
-            // 点滅中: ライトが消えかかる効果
+            // 点滅中: ライトが消えかかる効果（完全には消えない）
             float blinkPhase = blinkProgress_ / blinkDuration_;
 
-            // 消える → 復帰 のパターン
+            // 消えかかる → 復帰 のパターン（最低でも40%の明るさを維持）
             if (blinkPhase < 0.3f) {
                 // 急激に暗くなる
-                blinkMultiplier = 1.0f - (blinkPhase / 0.3f) * 0.9f;
+                blinkMultiplier = 1.0f - (blinkPhase / 0.3f) * 0.6f;  // 1.0 → 0.4
             } else if (blinkPhase < 0.5f) {
-                // ほぼ消えた状態
-                blinkMultiplier = 0.1f + sinf((blinkPhase - 0.3f) / 0.2f * 3.14159f * 4.0f) * 0.05f;
+                // 消えかかった状態で揺らぐ
+                blinkMultiplier = 0.4f + sinf((blinkPhase - 0.3f) / 0.2f * 3.14159f * 4.0f) * 0.1f;
             } else {
                 // 徐々に復帰
-                blinkMultiplier = 0.1f + ((blinkPhase - 0.5f) / 0.5f) * 0.9f;
+                blinkMultiplier = 0.4f + ((blinkPhase - 0.5f) / 0.5f) * 0.6f;  // 0.4 → 1.0
             }
 
-            blinkMultiplier = blinkMultiplier < 0.05f ? 0.05f : blinkMultiplier;
+            blinkMultiplier = blinkMultiplier < 0.4f ? 0.4f : blinkMultiplier;  // 最低40%
         }
     }
 
-    // 通常のちらつきタイマーを進める
-    flickerTimer_ += deltaTime * flickerSpeed_;
+    // 通常のちらつきタイマーを進める（恐怖強度に応じて速度を上げる）
+    float effectiveFlickerSpeed = flickerSpeed_ * (1.0f + fearFlickerIntensity_ * 5.0f);  // 恐怖が強いと5倍速（より自然に）
+    flickerTimer_ += deltaTime * effectiveFlickerSpeed;
 
     // パーリンノイズ風の複雑なちらつきパターン
     float flicker1 = sinf(flickerTimer_) * 0.5f + 0.5f;
@@ -238,9 +251,12 @@ void LightManager::UpdateFlickerEffect() {
     // 複数の波を組み合わせて不規則なちらつきを作る
     float flickerValue = (flicker1 * 0.5f + flicker2 * 0.3f + flicker3 * 0.2f);
 
-    // ちらつきの範囲を調整（基本強度 ± ちらつき量）
-    float minIntensity = flickerBaseIntensity_ * (1.0f - flickerAmount_);
-    float maxIntensity = flickerBaseIntensity_ * (1.0f + flickerAmount_ * 0.3f);
+    // ちらつきの範囲を調整（恐怖時はちらつき量を増やす）
+    float effectiveFlickerAmount = flickerAmount_ * (1.0f + fearFlickerIntensity_ * 2.0f);  // 恐怖時はちらつき量2倍
+    effectiveFlickerAmount = effectiveFlickerAmount > 1.0f ? 1.0f : effectiveFlickerAmount;  // 最大100%
+
+    float minIntensity = flickerBaseIntensity_ * (1.0f - effectiveFlickerAmount);
+    float maxIntensity = flickerBaseIntensity_ * (1.0f + effectiveFlickerAmount * 0.3f);
 
     float baseIntensity = minIntensity + (maxIntensity - minIntensity) * flickerValue;
 

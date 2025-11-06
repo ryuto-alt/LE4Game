@@ -29,6 +29,9 @@ public:
     bool IsDirectionalLightEnabled() const { return enableDirectionalLight_; }
     bool IsSpotLightEnabled() const { return enableSpotLight_; }
 
+    // 恐怖による点滅速度の設定
+    void SetFearFlickerIntensity(float intensity) { fearFlickerIntensity_ = intensity; }
+
 private:
     void NormalizeDirectionalLightDirection();
     void UpdateLightIntensity();
@@ -70,4 +73,7 @@ private:
     // デバッグモード用
     bool isDebugBrightMode_ = false;
     DirectionalLight originalDirectionalLight_;  // 元の設定を保存
+
+    // 恐怖による点滅強度 (0.0～1.0)
+    float fearFlickerIntensity_ = 0.0f;
 };
