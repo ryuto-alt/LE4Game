@@ -19,6 +19,7 @@ public:
 
     // ライトの設定
     void SetDirectionalLight(const DirectionalLight& light);
+    void SetSpotLight(const SpotLight& light);
 
     // 衝突判定用
     Object3d* GetObject() const { return object3d_.get(); }
@@ -28,6 +29,8 @@ public:
     bool CheckCollisionWithPlayer(const Vector3& playerPos, float playerRadius);
 
 private:
+    // スポットライトの照射判定
+    void CheckSpotLightIllumination();
     std::unique_ptr<Object3d> object3d_;
     std::unique_ptr<AnimatedModel> animatedModel_;
 
@@ -48,4 +51,9 @@ private:
     const float collisionRadius_ = 1.0f;
 
     Camera* camera_ = nullptr;
+
+    // スポットライト照射判定用
+    bool isIlluminatedBySpotLight_ = false;
+    float glowIntensity_ = 0.0f;
+    const SpotLight* currentSpotLight_ = nullptr;
 };

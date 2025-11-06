@@ -310,6 +310,7 @@ void GamePlayScene::Update() {
         if (orb && orb->IsActive()) {
             // ライト設定
             orb->SetDirectionalLight(dirLight);
+            orb->SetSpotLight(spotLight);
 
             // 更新
             orb->Update(deltaTime);
