@@ -56,18 +56,7 @@ void GamePlayScene::Initialize() {
             enemy_->SetNavMesh(navMeshManager->GetNavMesh());
             AddNavMeshLog("NavMesh set to Enemy");
 
-            // 新しいAIシステム用にNavMeshSystemを作成して設定
-            // 注意: 今は旧NavMeshシステムを使用（useNewAI_ = false）
-            // NavMeshSystemのロードに失敗するため、一時的に無効化
-            /*
-            navMeshSystem_ = std::make_unique<NavMeshSystem>();
-            if (navMeshSystem_->LoadNavMeshFromFile("externals/navimap/stage.navmesh")) {
-                enemy_->SetNavMeshSystem(navMeshSystem_.get());
-                AddNavMeshLog("New AI System initialized with NavMeshSystem");
-            } else {
-                AddNavMeshLog("Warning: Failed to load NavMeshSystem for new AI");
-            }
-            */
+            
             // 旧システムを使用
             enemy_->useNewAI_ = false;
             AddNavMeshLog("Using old AI system (NavMeshSystem load failed)");
@@ -88,84 +77,11 @@ void GamePlayScene::Initialize() {
     std::vector<Vector3> orbPositions;
     const std::string orbPositionFile = "Resources/Models/orb/orb_positions.json";
 
-    if (JsonLoader::LoadOrbPositions(orbPositionFile, orbPositions)) {
-        OutputDebugStringA(("Successfully loaded " + std::to_string(orbPositions.size()) + " orb positions from JSON\n").c_str());
-    } else {
-        OutputDebugStringA("Warning: Failed to load orb positions from JSON, using fallback positions\n");
-        // フォールバック：ハードコードされた位置を使用
-        orbPositions = {
-            {0.0f, 0.342f, -0.0f},
-            {9.0f, 0.342f, -0.0f},
-            {9.0f, 0.342f, -12.0f},
-            {21.0f, 0.342f, -12.0f},
-            {27.0f, 0.342f, -24.0f},
-        {9.0f, 0.342f, -24.0f},
-        {3.0f, 0.342f, -24.0f},
-        {3.0f, 0.342f, -6.0f},
-        {-15.0f, 0.342f, -6.0f},
-        {-9.0f, 0.342f, -0.0f},
-        {27.0f, 0.342f, -12.0f},
-        {27.0f, 0.342f, -0.0f},
-        {15.0f, 0.342f, -3.0f},
-        {27.0f, 0.342f, 6.0f},
-        {15.0f, 0.342f, 6.0f},
-        {27.0f, 0.342f, 12.0f},
-        {15.0f, 0.342f, 12.0f},
-        {15.0f, 0.342f, 24.0f},
-        {27.0f, 0.342f, 24.0f},
-        {-3.0f, 0.342f, 24.0f},
-        {-3.0f, 0.342f, 18.0f},
-        {-27.0f, 0.342f, 18.0f},
-        {-15.0f, 0.342f, 24.0f},
-        {-27.0f, 0.342f, 24.0f},
-        {-9.0f, 0.342f, 18.0f},
-        {-9.0f, 0.342f, 6.0f},
-        {-27.0f, 0.342f, 6.0f},
-        {-27.0f, 0.342f, -0.0f},
-        {-21.0f, 0.342f, -0.0f},
-        {-21.0f, 0.342f, -12.0f},
-        {-15.0f, 0.342f, -12.0f},
-        {-9.0f, 0.342f, -12.0f},
-        {3.0f, 0.342f, -12.0f},
-        {3.0f, 0.342f, -18.0f},
-        {-9.0f, 0.342f, -18.0f},
-        {-3.0f, 0.342f, -18.0f},
-        {-21.0f, 0.342f, -18.0f},
-        {-15.0f, 0.342f, -18.0f},
-        {-27.0f, 0.342f, -12.0f},
-        {-27.0f, 0.342f, -18.0f},
-        {-21.0f, 0.342f, -36.0f},
-        {-21.0f, 0.342f, -24.0f},
-        {-9.0f, 0.342f, -24.0f},
-        {-9.0f, 0.342f, -36.0f},
-        {2.0f, 0.342f, -36.0f},
-        {2.0f, 0.342f, -30.0f},
-        {-3.0f, 0.342f, -30.0f},
-        {-20.0f, 0.342f, 18.0f},
-        {-3.0f, 0.342f, 12.0f},
-        {3.0f, 0.342f, 6.0f},
-        {23.0f, 0.342f, -30.0f},
-        {27.0f, 0.342f, -48.0f},
-        {23.0f, 0.342f, -36.0f},
-        {2.0f, 0.342f, -42.0f},
-        {2.0f, 0.342f, -48.0f},
-        {17.0f, 0.342f, -48.0f},
-        {8.0f, 0.342f, -48.0f},
-        {17.0f, 0.342f, -42.0f},
-        {27.0f, 0.342f, -42.0f},
-        {8.0f, 0.342f, -42.0f},
-        {8.0f, 0.342f, -36.0f},
-        {17.0f, 0.342f, -36.0f},
-        {21.0f, 0.342f, -24.0f},
-        {-6.0f, 0.342f, -48.0f},
-        {-15.0f, 0.342f, -48.0f},
-        {-27.0f, 0.342f, -48.0f},
-        {-27.0f, 0.342f, -42.0f},
-        {-15.0f, 0.342f, -42.0f},
-            {-27.0f, 0.342f, -30.0f},
-            {11.0f, 0.342f, 18.0f}
-        };
+    if (!JsonLoader::LoadOrbPositions(orbPositionFile, orbPositions)) {
+        OutputDebugStringA("ERROR: Failed to load orb positions from JSON!\n");
+        return; // JSONファイルが読み込めない場合は初期化を中断
     }
+    OutputDebugStringA(("Successfully loaded " + std::to_string(orbPositions.size()) + " orb positions from JSON\n").c_str());
 
     // 各位置にOrbを生成
     for (const auto& pos : orbPositions) {
