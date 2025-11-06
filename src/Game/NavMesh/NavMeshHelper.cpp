@@ -141,17 +141,27 @@ void NavMeshHelper::FollowPath(
 	// 目標回転角を計算
 	float targetRotationY = std::atan2(targetDirection.x, targetDirection.z);
 
-	// 回転の補間
-	const float ROTATION_LERP_FACTOR = 0.15f;
+	// 回転の補間（デルタタイムを考慮）
+	const float ROTATION_SPEED = 9.0f;  // 1秒あたりの回転速度（ラジアン/秒）
 	float angleDiff = targetRotationY - currentRotationY;
 	while (angleDiff > 3.14159f) angleDiff -= 2.0f * 3.14159f;
 	while (angleDiff < -3.14159f) angleDiff += 2.0f * 3.14159f;
-	currentRotationY += angleDiff * ROTATION_LERP_FACTOR;
 
-	// 速度の補間
-	const float SPEED_LERP_FACTOR = 0.1f;
+	// 回転速度を制限（最大速度で回転）
+	float rotationStep = ROTATION_SPEED * deltaTime;
+	if (std::abs(angleDiff) > rotationStep) {
+		// 角度差が大きい場合は一定速度で回転
+		currentRotationY += (angleDiff > 0 ? rotationStep : -rotationStep);
+	} else {
+		// 角度差が小さい場合は即座に目標角度に
+		currentRotationY = targetRotationY;
+	}
+
+	// 速度の補間（デルタタイムを考慮）
+	const float SPEED_LERP_RATE = 6.0f;  // 1秒あたりの補間速度
 	float targetSpeed = moveSpeed * slowdownFactor;
-	currentSpeed += (targetSpeed - currentSpeed) * SPEED_LERP_FACTOR;
+	float speedLerpFactor = 1.0f - std::exp(-SPEED_LERP_RATE * deltaTime);
+	currentSpeed += (targetSpeed - currentSpeed) * speedLerpFactor;
 
 	// 移動（デルタタイムを適用）
 	Vector3 newPosition = position;
