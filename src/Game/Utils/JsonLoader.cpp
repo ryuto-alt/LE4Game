@@ -100,10 +100,22 @@ bool JsonLoader::ParseJson(const std::string& json, std::vector<Vector3>& positi
         }
 
         if (values.size() >= 3) {
-            // The positions are already in game coordinates (X, Y, Z)
-            positions.push_back(Vector3(values[0], values[1], values[2]));
+            // Convert from Blender coordinates to DirectX coordinates
+            // Blender: X=right, Y=forward, Z=up
+            // DirectX: X=right, Y=up, Z=forward
+            // Conversion: Game.X = -Blender.X (flip), Game.Y = Blender.Z, Game.Z = -Blender.Y (180deg rotation on Y axis)
+            float blender_x = values[0];
+            float blender_y = values[1];
+            float blender_z = values[2];
+
+            float game_x = -blender_x;  // Flip X
+            float game_y = blender_z;   // Z becomes Y
+            float game_z = -blender_y;  // Y becomes -Z (180deg rotation)
+
+            positions.push_back(Vector3(game_x, game_y, game_z));
             count++;
-            std::cout << "Loaded position " << count << ": (" << values[0] << ", " << values[1] << ", " << values[2] << ")" << std::endl;
+            std::cout << "Loaded position " << count << ": Blender(" << blender_x << ", " << blender_y << ", " << blender_z
+                      << ") -> Game(" << game_x << ", " << game_y << ", " << game_z << ")" << std::endl;
         }
 
         // Move to next position
@@ -199,7 +211,16 @@ bool JsonLoader::ParseJsonDetailed(const std::string& json, std::vector<OrbPosit
                 }
 
                 if (values.size() >= 3) {
-                    orbPos.position = Vector3(values[0], values[1], values[2]);
+                    // Convert from Blender coordinates to DirectX coordinates
+                    float blender_x = values[0];
+                    float blender_y = values[1];
+                    float blender_z = values[2];
+
+                    float game_x = -blender_x;  // Flip X
+                    float game_y = blender_z;   // Z becomes Y
+                    float game_z = -blender_y;  // Y becomes -Z (180deg rotation)
+
+                    orbPos.position = Vector3(game_x, game_y, game_z);
                     positions.push_back(orbPos);
                 }
             }

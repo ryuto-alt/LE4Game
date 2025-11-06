@@ -1,7 +1,7 @@
 cellSize=0.15
 cellHeight=0.2
-agentHeight=5
-agentRadius=1.413
+agentHeight=3.134
+agentRadius=1.512
 agentMaxClimb=0.5
 agentMaxSlope=45
 edgeMaxError=0.8

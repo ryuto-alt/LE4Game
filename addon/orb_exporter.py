@@ -68,41 +68,24 @@ class ExportOrbPositionsJSON(bpy.types.Operator, ExportHelper):
             # Get world position
             world_pos = obj.location
 
-            # Convert Blender coordinates to game coordinates
-            # Blender: X=right, Y=forward, Z=up
-            # Game: X=right, Y=up, Z=forward
-            # So: Game.X = Blender.X, Game.Y = Blender.Z, Game.Z = -Blender.Y
+            # Export Blender coordinates as-is (no conversion)
+            # Conversion will be done in JsonLoader.cpp
             game_x = round(world_pos.x, 3)
-            game_y = round(world_pos.z, 3)
-            game_z = round(-world_pos.y, 3)
+            game_y = round(world_pos.y, 3)
+            game_z = round(world_pos.z, 3)
 
             position_data = {
                 "index": i,
                 "name": obj.name,
-                "blender_position": {
-                    "x": round(world_pos.x, 3),
-                    "y": round(world_pos.y, 3),
-                    "z": round(world_pos.z, 3)
-                },
-                "game_position": {
-                    "x": game_x,
-                    "y": game_y,
-                    "z": game_z
-                },
-                "position_array": [game_x, game_y, game_z]
+                "position": [game_x, game_y, game_z]
             }
 
             orb_positions.append(position_data)
 
         # Create output data
         output_data = {
-            "export_info": {
-                "blender_version": f"{bpy.app.version[0]}.{bpy.app.version[1]}.{bpy.app.version[2]}",
-                "object_count": len(orb_positions),
-                "coordinate_system": "Game Engine (X=right, Y=up, Z=-forward)"
-            },
-            "positions": orb_positions,
-            "position_arrays_only": [pos["position_array"] for pos in orb_positions]
+            "orb_count": len(orb_positions),
+            "positions": orb_positions
         }
 
         # Write JSON file
@@ -123,11 +106,11 @@ class ExportOrbPositionsJSON(bpy.types.Operator, ExportHelper):
         """Export positions in C++ format"""
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write("// Orb positions for C++ (copy into GamePlayScene.cpp)\n")
-            f.write("// Generated from Blender scene\n\n")
+            f.write("// Blender coordinates - will be converted in JsonLoader\n\n")
             f.write("const std::vector<Vector3> orbPositions = {\n")
 
             for pos in orb_positions:
-                x, y, z = pos["position_array"]
+                x, y, z = pos["position"]
                 name = pos["name"]
                 # Clean up name for C++ comment
                 clean_name = name.encode('ascii', 'replace').decode('ascii')
@@ -160,10 +143,10 @@ class ExportOrbPositionsCPP(bpy.types.Operator, ExportHelper):
             for i, obj in enumerate(mesh_objects):
                 world_pos = obj.location
 
-                # Convert coordinates
+                # Export Blender coordinates as-is
                 game_x = round(world_pos.x, 3)
-                game_y = round(world_pos.z, 3)
-                game_z = round(-world_pos.y, 3)
+                game_y = round(world_pos.y, 3)
+                game_z = round(world_pos.z, 3)
 
                 # Clean up name for comment
                 clean_name = obj.name.encode('ascii', 'replace').decode('ascii')
@@ -196,24 +179,23 @@ class QuickExportOrbPositions(bpy.types.Operator):
         for i, obj in enumerate(mesh_objects):
             world_pos = obj.location
 
-            # Convert coordinates
+            # Export Blender coordinates as-is
             game_x = round(world_pos.x, 3)
-            game_y = round(world_pos.z, 3)
-            game_z = round(-world_pos.y, 3)
+            game_y = round(world_pos.y, 3)
+            game_z = round(world_pos.z, 3)
 
             position_data = {
                 "index": i,
                 "name": obj.name,
-                "position_array": [game_x, game_y, game_z]
+                "position": [game_x, game_y, game_z]
             }
 
             orb_positions.append(position_data)
 
         # Write JSON
         output_data = {
-            "object_count": len(orb_positions),
-            "positions": orb_positions,
-            "position_arrays_only": [pos["position_array"] for pos in orb_positions]
+            "orb_count": len(orb_positions),
+            "positions": orb_positions
         }
 
         with open(json_path, 'w', encoding='utf-8') as f:
@@ -222,10 +204,11 @@ class QuickExportOrbPositions(bpy.types.Operator):
         # Write C++
         with open(cpp_path, 'w', encoding='utf-8') as f:
             f.write("// Orb positions for C++ (copy into GamePlayScene.cpp)\n")
+            f.write("// Blender coordinates - will be converted in JsonLoader\n")
             f.write("const std::vector<Vector3> orbPositions = {\n")
 
             for pos in orb_positions:
-                x, y, z = pos["position_array"]
+                x, y, z = pos["position"]
                 clean_name = pos["name"].encode('ascii', 'replace').decode('ascii')
                 f.write(f"    Vector3({x}f, {y}f, {z}f),  // {clean_name}\n")
 
