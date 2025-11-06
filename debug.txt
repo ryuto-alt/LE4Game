@@ -17060,3 +17060,1091 @@ Frame 4850 | Left Y: 0.112119 [GREEN] | Right Y: 0.187435 [RED] | Diff: 0.075315
 Frame 4860 | Left Y: 0.359924 [RED] | Right Y: 0.125345 [GREEN] | Diff: 0.234579
 >>> RIGHT FOOT LANDED at Y=0.125345 (cooldown: 0.429314s)
 Frame 4870 | Left Y: 0.195836 [RED] | Right Y: 0.106049 [GREEN] | Diff: 0.0897875
+Frame 0 | Left Y: 0 [GREEN] | Right Y: 0 [GREEN] | Diff: 0
+>>> LEFT FOOT LANDED at Y=0 (cooldown: 999.008s)
+Frame 10 | Left Y: 0.413309 [RED] | Right Y: 0.213853 [RED] | Diff: 0.199456
+Frame 20 | Left Y: 0.10674 [GREEN] | Right Y: 0.190065 [RED] | Diff: 0.0833255
+Frame 30 | Left Y: 0.236943 [RED] | Right Y: 0.352892 [RED] | Diff: 0.115949
+>>> RIGHT FOOT LANDED at Y=0.121905 (cooldown: 0.760975s)
+Frame 40 | Left Y: 0.110569 [GREEN] | Right Y: 0.107005 [GREEN] | Diff: 0.00356429
+Frame 50 | Left Y: 0.421795 [RED] | Right Y: 0.185098 [RED] | Diff: 0.236698
+>>> LEFT FOOT LANDED at Y=0.13126 (cooldown: 0.457898s)
+Frame 60 | Left Y: 0.106961 [GREEN] | Right Y: 0.185325 [RED] | Diff: 0.0783631
+Frame 70 | Left Y: 0.276166 [RED] | Right Y: 0.32833 [RED] | Diff: 0.0521645
+>>> RIGHT FOOT LANDED at Y=0.133352 (cooldown: 0.416325s)
+Frame 80 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 90 | Left Y: 0.407217 [RED] | Right Y: 0.23281 [RED] | Diff: 0.174407
+>>> LEFT FOOT LANDED at Y=0.145394 (cooldown: 0.461154s)
+Frame 100 | Left Y: 0.107041 [GREEN] | Right Y: 0.18487 [RED] | Diff: 0.0778287
+Frame 110 | Left Y: 0.27822 [RED] | Right Y: 0.32639 [RED] | Diff: 0.0481696
+>>> RIGHT FOOT LANDED at Y=0.131837 (cooldown: 0.4231s)
+Frame 120 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 130 | Left Y: 0.401715 [RED] | Right Y: 0.247775 [RED] | Diff: 0.15394
+>>> LEFT FOOT LANDED at Y=0.125423 (cooldown: 0.46891s)
+Frame 140 | Left Y: 0.106722 [GREEN] | Right Y: 0.181474 [RED] | Diff: 0.0747527
+Frame 150 | Left Y: 0.284216 [RED] | Right Y: 0.320867 [RED] | Diff: 0.0366517
+>>> RIGHT FOOT LANDED at Y=0.126426 (cooldown: 0.418401s)
+Frame 160 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 170 | Left Y: 0.398344 [RED] | Right Y: 0.253094 [RED] | Diff: 0.14525
+>>> LEFT FOOT LANDED at Y=0.121852 (cooldown: 0.467262s)
+Frame 180 | Left Y: 0.106619 [GREEN] | Right Y: 0.180115 [RED] | Diff: 0.0734969
+Frame 190 | Left Y: 0.297881 [RED] | Right Y: 0.308977 [RED] | Diff: 0.0110967
+>>> RIGHT FOOT LANDED at Y=0.124311 (cooldown: 0.419315s)
+Frame 200 | Left Y: 0.108486 [GREEN] | Right Y: 0.107074 [GREEN] | Diff: 0.00141182
+Frame 210 | Left Y: 0.394309 [RED] | Right Y: 0.259787 [RED] | Diff: 0.134523
+>>> LEFT FOOT LANDED at Y=0.119587 (cooldown: 0.464607s)
+Frame 220 | Left Y: 0.106739 [GREEN] | Right Y: 0.17951 [RED] | Diff: 0.072771
+Frame 230 | Left Y: 0.304224 [RED] | Right Y: 0.303749 [RED] | Diff: 0.00047493
+>>> RIGHT FOOT LANDED at Y=0.120976 (cooldown: 0.422138s)
+Frame 240 | Left Y: 0.108028 [GREEN] | Right Y: 0.106855 [GREEN] | Diff: 0.00117228
+Frame 250 | Left Y: 0.388899 [RED] | Right Y: 0.269338 [RED] | Diff: 0.119561
+>>> LEFT FOOT LANDED at Y=0.108699 (cooldown: 0.465998s)
+Frame 260 | Left Y: 0.106885 [GREEN] | Right Y: 0.17945 [RED] | Diff: 0.0725652
+Frame 270 | Left Y: 0.307168 [RED] | Right Y: 0.301065 [RED] | Diff: 0.00610396
+>>> RIGHT FOOT LANDED at Y=0.121086 (cooldown: 0.416679s)
+Frame 280 | Left Y: 0.108062 [GREEN] | Right Y: 0.10687 [GREEN] | Diff: 0.00119212
+Frame 290 | Left Y: 0.395306 [RED] | Right Y: 0.2581 [RED] | Diff: 0.137206
+>>> LEFT FOOT LANDED at Y=0.116951 (cooldown: 0.464787s)
+Frame 300 | Left Y: 0.106685 [GREEN] | Right Y: 0.179614 [RED] | Diff: 0.0729286
+Frame 310 | Left Y: 0.306475 [RED] | Right Y: 0.301933 [RED] | Diff: 0.00454178
+>>> RIGHT FOOT LANDED at Y=0.121465 (cooldown: 0.418728s)
+Frame 320 | Left Y: 0.107747 [GREEN] | Right Y: 0.10675 [GREEN] | Diff: 0.000996687
+Frame 330 | Left Y: 0.385436 [RED] | Right Y: 0.275819 [RED] | Diff: 0.109616
+>>> LEFT FOOT LANDED at Y=0.105993 (cooldown: 0.470196s)
+Frame 340 | Left Y: 0.107002 [GREEN] | Right Y: 0.179002 [RED] | Diff: 0.0719992
+Frame 350 | Left Y: 0.32423 [RED] | Right Y: 0.267375 [RED] | Diff: 0.0568556
+>>> RIGHT FOOT LANDED at Y=0.137471 (cooldown: 0.400159s)
+Frame 360 | Left Y: 0.106844 [GREEN] | Right Y: 0.107005 [GREEN] | Diff: 0.000161171
+Frame 370 | Left Y: 0.326319 [RED] | Right Y: 0.318763 [RED] | Diff: 0.00755572
+>>> LEFT FOOT LANDED at Y=0.113452 (cooldown: 0.478323s)
+Frame 380 | Left Y: 0.110741 [GREEN] | Right Y: 0.193137 [RED] | Diff: 0.0823952
+Frame 390 | Left Y: 0.360162 [RED] | Right Y: 0.125782 [GREEN] | Diff: 0.23438
+>>> RIGHT FOOT LANDED at Y=0.125782 (cooldown: 0.413898s)
+Frame 400 | Left Y: 0.196747 [RED] | Right Y: 0.105995 [GREEN] | Diff: 0.0907521
+Frame 410 | Left Y: 0.161347 [RED] | Right Y: 0.341281 [RED] | Diff: 0.179934
+>>> LEFT FOOT LANDED at Y=0.106718 (cooldown: 0.473278s)
+Frame 420 | Left Y: 0.109633 [GREEN] | Right Y: 0.206591 [RED] | Diff: 0.0969577
+>>> RIGHT FOOT LANDED at Y=0.130081 (cooldown: 0.405805s)
+Frame 430 | Left Y: 0.344367 [RED] | Right Y: 0.115859 [GREEN] | Diff: 0.228508
+Frame 440 | Left Y: 0.2349 [RED] | Right Y: 0.106449 [GREEN] | Diff: 0.128451
+Frame 450 | Left Y: 0.137742 [GREEN] | Right Y: 0.340166 [RED] | Diff: 0.202425
+>>> LEFT FOOT LANDED at Y=0.137742 (cooldown: 0.460958s)
+Frame 460 | Left Y: 0.108915 [GREEN] | Right Y: 0.222407 [RED] | Diff: 0.113493
+>>> RIGHT FOOT LANDED at Y=0.125433 (cooldown: 0.4263s)
+Frame 470 | Left Y: 0.340814 [RED] | Right Y: 0.115265 [GREEN] | Diff: 0.225549
+Frame 480 | Left Y: 0.239951 [RED] | Right Y: 0.105875 [GREEN] | Diff: 0.134077
+>>> LEFT FOOT LANDED at Y=0.144367 (cooldown: 0.456856s)
+Frame 490 | Left Y: 0.105374 [GREEN] | Right Y: 0.328323 [RED] | Diff: 0.222949
+Frame 500 | Left Y: 0.0982344 [GREEN] | Right Y: 0.250099 [RED] | Diff: 0.151865
+>>> RIGHT FOOT LANDED at Y=0.0605393 (cooldown: 0.343032s)
+Frame 510 | Left Y: 0.138887 [GREEN] | Right Y: 0.333708 [RED] | Diff: 0.194822
+Frame 520 | Left Y: 0.127798 [GREEN] | Right Y: 0.347281 [RED] | Diff: 0.219482
+>>> LEFT FOOT LANDED at Y=0.107909 (cooldown: 0.571753s)
+Frame 530 | Left Y: 0.1148 [GREEN] | Right Y: 0.105508 [GREEN] | Diff: 0.00929177
+Frame 540 | Left Y: 0.100234 [GREEN] | Right Y: 0.321647 [RED] | Diff: 0.221413
+Frame 550 | Left Y: 0.146316 [GREEN] | Right Y: 0.368158 [RED] | Diff: 0.221842
+>>> RIGHT FOOT LANDED at Y=0.135736 (cooldown: 0.556818s)
+Frame 560 | Left Y: 0.108738 [GREEN] | Right Y: 0.106562 [GREEN] | Diff: 0.002176
+Frame 570 | Left Y: 0.119648 [GREEN] | Right Y: 0.334231 [RED] | Diff: 0.214582
+>>> LEFT FOOT LANDED at Y=0.119648 (cooldown: 0.356262s)
+Frame 580 | Left Y: 0.12448 [GREEN] | Right Y: 0.339934 [RED] | Diff: 0.215454
+>>> RIGHT FOOT LANDED at Y=0.119331 (cooldown: 0.325084s)
+Frame 590 | Left Y: 0.10774 [GREEN] | Right Y: 0.105774 [GREEN] | Diff: 0.00196578
+Frame 600 | Left Y: 0.224722 [RED] | Right Y: 0.333526 [RED] | Diff: 0.108805
+>>> LEFT FOOT LANDED at Y=0.123176 (cooldown: 0.347675s)
+Frame 610 | Left Y: 0.111067 [GREEN] | Right Y: 0.304796 [RED] | Diff: 0.193729
+>>> RIGHT FOOT LANDED at Y=0.11465 (cooldown: 0.331883s)
+Frame 620 | Left Y: 0.116131 [GREEN] | Right Y: 0.10661 [GREEN] | Diff: 0.00952149
+Frame 630 | Left Y: 0.266197 [RED] | Right Y: 0.327719 [RED] | Diff: 0.0615219
+>>> LEFT FOOT LANDED at Y=0.0999124 (cooldown: 0.353243s)
+Frame 640 | Left Y: 0.106112 [GREEN] | Right Y: 0.269408 [RED] | Diff: 0.163295
+>>> RIGHT FOOT LANDED at Y=0.128647 (cooldown: 0.308207s)
+Frame 650 | Left Y: 0.149667 [GREEN] | Right Y: 0.104179 [GREEN] | Diff: 0.0454883
+Frame 660 | Left Y: 0.323377 [RED] | Right Y: 0.303145 [RED] | Diff: 0.0202324
+>>> LEFT FOOT LANDED at Y=0.127408 (cooldown: 0.351562s)
+Frame 670 | Left Y: 0.104914 [GREEN] | Right Y: 0.234545 [RED] | Diff: 0.129631
+>>> RIGHT FOOT LANDED at Y=0.115721 (cooldown: 0.331536s)
+Frame 680 | Left Y: 0.190632 [RED] | Right Y: 0.10492 [GREEN] | Diff: 0.0857114
+Frame 690 | Left Y: 0.359756 [RED] | Right Y: 0.290141 [RED] | Diff: 0.0696156
+>>> LEFT FOOT LANDED at Y=0.100867 (cooldown: 0.353483s)
+Frame 700 | Left Y: 0.107718 [GREEN] | Right Y: 0.214868 [RED] | Diff: 0.10715
+>>> RIGHT FOOT LANDED at Y=0.130325 (cooldown: 0.30826s)
+Frame 710 | Left Y: 0.227435 [RED] | Right Y: 0.106727 [GREEN] | Diff: 0.120708
+Frame 720 | Left Y: 0.387675 [RED] | Right Y: 0.261912 [RED] | Diff: 0.125763
+>>> LEFT FOOT LANDED at Y=0.119638 (cooldown: 0.355389s)
+Frame 730 | Left Y: 0.106189 [GREEN] | Right Y: 0.192311 [RED] | Diff: 0.0861224
+>>> RIGHT FOOT LANDED at Y=0.114777 (cooldown: 0.330606s)
+Frame 740 | Left Y: 0.25023 [RED] | Right Y: 0.10559 [GREEN] | Diff: 0.14464
+Frame 750 | Left Y: 0.399045 [RED] | Right Y: 0.227444 [RED] | Diff: 0.171601
+>>> LEFT FOOT LANDED at Y=0.0990774 (cooldown: 0.355961s)
+Frame 760 | Left Y: 0.106475 [GREEN] | Right Y: 0.184251 [RED] | Diff: 0.0777758
+>>> RIGHT FOOT LANDED at Y=0.131248 (cooldown: 0.303474s)
+Frame 770 | Left Y: 0.289703 [RED] | Right Y: 0.107272 [GREEN] | Diff: 0.182431
+Frame 780 | Left Y: 0.423206 [RED] | Right Y: 0.176494 [RED] | Diff: 0.246712
+>>> LEFT FOOT LANDED at Y=0.140254 (cooldown: 0.350111s)
+Frame 790 | Left Y: 0.109033 [GREEN] | Right Y: 0.172253 [RED] | Diff: 0.0632196
+>>> RIGHT FOOT LANDED at Y=0.120948 (cooldown: 0.328152s)
+Frame 800 | Left Y: 0.319805 [RED] | Right Y: 0.109362 [GREEN] | Diff: 0.210443
+Frame 810 | Left Y: 0.423614 [RED] | Right Y: 0.127235 [GREEN] | Diff: 0.296379
+>>> LEFT FOOT LANDED at Y=0.106419 (cooldown: 0.354437s)
+Frame 820 | Left Y: 0.10606 [GREEN] | Right Y: 0.168612 [RED] | Diff: 0.0625519
+>>> RIGHT FOOT LANDED at Y=0.135904 (cooldown: 0.312815s)
+Frame 830 | Left Y: 0.328153 [RED] | Right Y: 0.111003 [GREEN] | Diff: 0.21715
+Frame 840 | Left Y: 0.425263 [RED] | Right Y: 0.116985 [GREEN] | Diff: 0.308278
+>>> LEFT FOOT LANDED at Y=0.109618 (cooldown: 0.358376s)
+Frame 850 | Left Y: 0.105608 [GREEN] | Right Y: 0.169402 [RED] | Diff: 0.063794
+>>> RIGHT FOOT LANDED at Y=0.149515 (cooldown: 0.308477s)
+Frame 860 | Left Y: 0.338649 [RED] | Right Y: 0.113967 [GREEN] | Diff: 0.224682
+Frame 870 | Left Y: 0.429189 [RED] | Right Y: 0.109605 [GREEN] | Diff: 0.319584
+>>> LEFT FOOT LANDED at Y=0.100015 (cooldown: 0.374514s)
+Frame 880 | Left Y: 0.106231 [GREEN] | Right Y: 0.177944 [RED] | Diff: 0.0717131
+Frame 890 | Left Y: 0.357193 [RED] | Right Y: 0.121511 [GREEN] | Diff: 0.235682
+>>> RIGHT FOOT LANDED at Y=0.121511 (cooldown: 0.310799s)
+Frame 900 | Left Y: 0.40649 [RED] | Right Y: 0.106028 [GREEN] | Diff: 0.300462
+>>> LEFT FOOT LANDED at Y=0.122081 (cooldown: 0.348698s)
+Frame 910 | Left Y: 0.104189 [GREEN] | Right Y: 0.187359 [RED] | Diff: 0.0831697
+Frame 920 | Left Y: 0.354799 [RED] | Right Y: 0.169858 [RED] | Diff: 0.184941
+>>> RIGHT FOOT LANDED at Y=0.119025 (cooldown: 0.326538s)
+Frame 930 | Left Y: 0.351304 [RED] | Right Y: 0.104535 [GREEN] | Diff: 0.246769
+>>> LEFT FOOT LANDED at Y=0.123625 (cooldown: 0.347948s)
+Frame 940 | Left Y: 0.104268 [GREEN] | Right Y: 0.185843 [RED] | Diff: 0.0815751
+Frame 950 | Left Y: 0.355729 [RED] | Right Y: 0.15977 [RED] | Diff: 0.195958
+>>> RIGHT FOOT LANDED at Y=0.116887 (cooldown: 0.328127s)
+Frame 960 | Left Y: 0.342567 [RED] | Right Y: 0.105092 [GREEN] | Diff: 0.237476
+>>> LEFT FOOT LANDED at Y=0.108573 (cooldown: 0.347742s)
+Frame 970 | Left Y: 0.106582 [GREEN] | Right Y: 0.21488 [RED] | Diff: 0.108298
+Frame 980 | Left Y: 0.337418 [RED] | Right Y: 0.226143 [RED] | Diff: 0.111275
+>>> RIGHT FOOT LANDED at Y=0.115292 (cooldown: 0.327879s)
+Frame 990 | Left Y: 0.276429 [RED] | Right Y: 0.100425 [GREEN] | Diff: 0.176003
+>>> LEFT FOOT LANDED at Y=0.103951 (cooldown: 0.351294s)
+Frame 1000 | Left Y: 0.104244 [GREEN] | Right Y: 0.244229 [RED] | Diff: 0.139985
+Frame 1010 | Left Y: 0.300528 [RED] | Right Y: 0.280075 [RED] | Diff: 0.0204532
+>>> RIGHT FOOT LANDED at Y=0.136646 (cooldown: 0.307423s)
+Frame 1020 | Left Y: 0.2092 [RED] | Right Y: 0.101304 [GREEN] | Diff: 0.107896
+>>> LEFT FOOT LANDED at Y=0.14576 (cooldown: 0.349943s)
+Frame 1030 | Left Y: 0.105662 [GREEN] | Right Y: 0.280397 [RED] | Diff: 0.174735
+Frame 1040 | Left Y: 0.257445 [RED] | Right Y: 0.341454 [RED] | Diff: 0.084009
+>>> RIGHT FOOT LANDED at Y=0.122869 (cooldown: 0.328545s)
+Frame 1050 | Left Y: 0.160888 [RED] | Right Y: 0.103724 [GREEN] | Diff: 0.057164
+>>> LEFT FOOT LANDED at Y=0.138947 (cooldown: 0.345472s)
+Frame 1060 | Left Y: 0.0984469 [GREEN] | Right Y: 0.31445 [RED] | Diff: 0.216003
+Frame 1070 | Left Y: 0.153447 [RED] | Right Y: 0.365556 [RED] | Diff: 0.21211
+>>> RIGHT FOOT LANDED at Y=0.129233 (cooldown: 0.327005s)
+Frame 1080 | Left Y: 0.11114 [GREEN] | Right Y: 0.106238 [GREEN] | Diff: 0.00490107
+Frame 1090 | Left Y: 0.143307 [GREEN] | Right Y: 0.333614 [RED] | Diff: 0.190307
+>>> LEFT FOOT LANDED at Y=0.143307 (cooldown: 0.345713s)
+Frame 1100 | Left Y: 0.118444 [GREEN] | Right Y: 0.325758 [RED] | Diff: 0.207314
+>>> RIGHT FOOT LANDED at Y=0.137333 (cooldown: 0.321899s)
+Frame 1110 | Left Y: 0.108554 [GREEN] | Right Y: 0.106868 [GREEN] | Diff: 0.00168552
+Frame 1120 | Left Y: 0.286035 [RED] | Right Y: 0.318559 [RED] | Diff: 0.0325243
+>>> LEFT FOOT LANDED at Y=0.105235 (cooldown: 0.361197s)
+Frame 1130 | Left Y: 0.104733 [GREEN] | Right Y: 0.244332 [RED] | Diff: 0.139599
+>>> RIGHT FOOT LANDED at Y=0.116808 (cooldown: 0.324053s)
+Frame 1140 | Left Y: 0.202292 [RED] | Right Y: 0.105646 [GREEN] | Diff: 0.096646
+Frame 1150 | Left Y: 0.388198 [RED] | Right Y: 0.260158 [RED] | Diff: 0.12804
+>>> LEFT FOOT LANDED at Y=0.129971 (cooldown: 0.342022s)
+Frame 1160 | Left Y: 0.106213 [GREEN] | Right Y: 0.186006 [RED] | Diff: 0.0797931
+>>> RIGHT FOOT LANDED at Y=0.13193 (cooldown: 0.320881s)
+Frame 1170 | Left Y: 0.289579 [RED] | Right Y: 0.107262 [GREEN] | Diff: 0.182318
+Frame 1180 | Left Y: 0.423467 [RED] | Right Y: 0.157363 [RED] | Diff: 0.266103
+>>> LEFT FOOT LANDED at Y=0.10189 (cooldown: 0.362719s)
+Frame 1190 | Left Y: 0.106405 [GREEN] | Right Y: 0.168624 [RED] | Diff: 0.0622186
+>>> RIGHT FOOT LANDED at Y=0.139958 (cooldown: 0.307463s)
+Frame 1200 | Left Y: 0.331681 [RED] | Right Y: 0.111907 [GREEN] | Diff: 0.219774
+Frame 1210 | Left Y: 0.42663 [RED] | Right Y: 0.113064 [GREEN] | Diff: 0.313566
+>>> LEFT FOOT LANDED at Y=0.135071 (cooldown: 0.354401s)
+Frame 1220 | Left Y: 0.105564 [GREEN] | Right Y: 0.172743 [RED] | Diff: 0.0671789
+Frame 1230 | Left Y: 0.355197 [RED] | Right Y: 0.119918 [GREEN] | Diff: 0.235279
+>>> RIGHT FOOT LANDED at Y=0.119918 (cooldown: 0.328392s)
+Frame 1240 | Left Y: 0.41527 [RED] | Right Y: 0.106903 [GREEN] | Diff: 0.308367
+>>> LEFT FOOT LANDED at Y=0.113703 (cooldown: 0.350439s)
+Frame 1250 | Left Y: 0.104557 [GREEN] | Right Y: 0.183468 [RED] | Diff: 0.0789113
+Frame 1260 | Left Y: 0.356157 [RED] | Right Y: 0.154424 [RED] | Diff: 0.201733
+>>> RIGHT FOOT LANDED at Y=0.114906 (cooldown: 0.329155s)
+Frame 1270 | Left Y: 0.356889 [RED] | Right Y: 0.104312 [GREEN] | Diff: 0.252577
+>>> LEFT FOOT LANDED at Y=0.100853 (cooldown: 0.3519s)
+Frame 1280 | Left Y: 0.10483 [GREEN] | Right Y: 0.200512 [RED] | Diff: 0.0956824
+Frame 1290 | Left Y: 0.349918 [RED] | Right Y: 0.20874 [RED] | Diff: 0.141177
+>>> RIGHT FOOT LANDED at Y=0.143872 (cooldown: 0.303391s)
+Frame 1300 | Left Y: 0.295332 [RED] | Right Y: 0.103128 [GREEN] | Diff: 0.192204
+>>> LEFT FOOT LANDED at Y=0.0995021 (cooldown: 0.371845s)
+Frame 1310 | Left Y: 0.104591 [GREEN] | Right Y: 0.237416 [RED] | Diff: 0.132825
+Frame 1320 | Left Y: 0.296928 [RED] | Right Y: 0.285637 [RED] | Diff: 0.0112907
+>>> RIGHT FOOT LANDED at Y=0.129447 (cooldown: 0.307352s)
+Frame 1330 | Left Y: 0.223873 [RED] | Right Y: 0.0993472 [GREEN] | Diff: 0.124526
+>>> LEFT FOOT LANDED at Y=0.142768 (cooldown: 0.347166s)
+Frame 1340 | Left Y: 0.10539 [GREEN] | Right Y: 0.277433 [RED] | Diff: 0.172043
+Frame 1350 | Left Y: 0.231892 [RED] | Right Y: 0.345844 [RED] | Diff: 0.113952
+>>> RIGHT FOOT LANDED at Y=0.130398 (cooldown: 0.32489s)
+Frame 1360 | Left Y: 0.149124 [GREEN] | Right Y: 0.103179 [GREEN] | Diff: 0.0459455
+Frame 1370 | Left Y: 0.0997184 [GREEN] | Right Y: 0.320095 [RED] | Diff: 0.220376
+>>> LEFT FOOT LANDED at Y=0.0997184 (cooldown: 0.368938s)
+Frame 1380 | Left Y: 0.14412 [GREEN] | Right Y: 0.369005 [RED] | Diff: 0.224885
+>>> RIGHT FOOT LANDED at Y=0.137417 (cooldown: 0.301096s)
+Frame 1390 | Left Y: 0.108351 [GREEN] | Right Y: 0.106201 [GREEN] | Diff: 0.00214987
+Frame 1400 | Left Y: 0.153771 [RED] | Right Y: 0.333429 [RED] | Diff: 0.179658
+>>> LEFT FOOT LANDED at Y=0.099314 (cooldown: 0.370275s)
+Frame 1410 | Left Y: 0.11664 [GREEN] | Right Y: 0.321204 [RED] | Diff: 0.204564
+>>> RIGHT FOOT LANDED at Y=0.132079 (cooldown: 0.305853s)
+Frame 1420 | Left Y: 0.107886 [GREEN] | Right Y: 0.106006 [GREEN] | Diff: 0.00187996
+Frame 1430 | Left Y: 0.240071 [RED] | Right Y: 0.333854 [RED] | Diff: 0.0937836
+>>> LEFT FOOT LANDED at Y=0.140402 (cooldown: 0.350525s)
+Frame 1440 | Left Y: 0.107187 [GREEN] | Right Y: 0.279603 [RED] | Diff: 0.172416
+>>> RIGHT FOOT LANDED at Y=0.123744 (cooldown: 0.326103s)
+Frame 1450 | Left Y: 0.143779 [GREEN] | Right Y: 0.104352 [GREEN] | Diff: 0.0394272
+Frame 1460 | Left Y: 0.327074 [RED] | Right Y: 0.301738 [RED] | Diff: 0.0253362
+>>> LEFT FOOT LANDED at Y=0.139827 (cooldown: 0.346548s)
+Frame 1470 | Left Y: 0.105668 [GREEN] | Right Y: 0.22547 [RED] | Diff: 0.119802
+>>> RIGHT FOOT LANDED at Y=0.125691 (cooldown: 0.325977s)
+Frame 1480 | Left Y: 0.222568 [RED] | Right Y: 0.107286 [GREEN] | Diff: 0.115282
+Frame 1490 | Left Y: 0.389811 [RED] | Right Y: 0.254859 [RED] | Diff: 0.134952
+>>> LEFT FOOT LANDED at Y=0.135677 (cooldown: 0.347248s)
+Frame 1500 | Left Y: 0.106241 [GREEN] | Right Y: 0.18575 [RED] | Diff: 0.0795095
+>>> RIGHT FOOT LANDED at Y=0.136703 (cooldown: 0.319389s)
+Frame 1510 | Left Y: 0.297592 [RED] | Right Y: 0.107998 [GREEN] | Diff: 0.189593
+Frame 1520 | Left Y: 0.397189 [RED] | Right Y: 0.232567 [RED] | Diff: 0.164622
+>>> LEFT FOOT LANDED at Y=0.125036 (cooldown: 0.356422s)
+Frame 1530 | Left Y: 0.106241 [GREEN] | Right Y: 0.185746 [RED] | Diff: 0.0795051
+>>> RIGHT FOOT LANDED at Y=0.13214 (cooldown: 0.318916s)
+Frame 1540 | Left Y: 0.290947 [RED] | Right Y: 0.107379 [GREEN] | Diff: 0.183568
+Frame 1550 | Left Y: 0.424032 [RED] | Right Y: 0.166788 [RED] | Diff: 0.257244
+>>> LEFT FOOT LANDED at Y=0.0993528 (cooldown: 0.368835s)
+Frame 1560 | Left Y: 0.10763 [GREEN] | Right Y: 0.169867 [RED] | Diff: 0.0622363
+>>> RIGHT FOOT LANDED at Y=0.130146 (cooldown: 0.306366s)
+Frame 1570 | Left Y: 0.324672 [RED] | Right Y: 0.110223 [GREEN] | Diff: 0.21445
+Frame 1580 | Left Y: 0.424346 [RED] | Right Y: 0.121351 [GREEN] | Diff: 0.302995
+>>> LEFT FOOT LANDED at Y=0.119182 (cooldown: 0.354294s)
+Frame 1590 | Left Y: 0.105553 [GREEN] | Right Y: 0.16972 [RED] | Diff: 0.0641671
+Frame 1600 | Left Y: 0.341755 [RED] | Right Y: 0.114982 [GREEN] | Diff: 0.226773
+>>> RIGHT FOOT LANDED at Y=0.114982 (cooldown: 0.329834s)
+Frame 1610 | Left Y: 0.430716 [RED] | Right Y: 0.108878 [GREEN] | Diff: 0.321837
+>>> LEFT FOOT LANDED at Y=0.10036 (cooldown: 0.353798s)
+Frame 1620 | Left Y: 0.106549 [GREEN] | Right Y: 0.180214 [RED] | Diff: 0.0736658
+Frame 1630 | Left Y: 0.357279 [RED] | Right Y: 0.129978 [GREEN] | Diff: 0.2273
+>>> RIGHT FOOT LANDED at Y=0.129978 (cooldown: 0.307667s)
+Frame 1640 | Left Y: 0.40754 [RED] | Right Y: 0.106124 [GREEN] | Diff: 0.301416
+>>> LEFT FOOT LANDED at Y=0.119454 (cooldown: 0.353867s)
+Frame 1650 | Left Y: 0.104257 [GREEN] | Right Y: 0.185989 [RED] | Diff: 0.0817322
+Frame 1660 | Left Y: 0.355873 [RED] | Right Y: 0.158036 [RED] | Diff: 0.197837
+>>> RIGHT FOOT LANDED at Y=0.116229 (cooldown: 0.330631s)
+Frame 1670 | Left Y: 0.346866 [RED] | Right Y: 0.104785 [GREEN] | Diff: 0.242081
+>>> LEFT FOOT LANDED at Y=0.108873 (cooldown: 0.345055s)
+Frame 1680 | Left Y: 0.107084 [GREEN] | Right Y: 0.218348 [RED] | Diff: 0.111264
+Frame 1690 | Left Y: 0.336637 [RED] | Right Y: 0.227242 [RED] | Diff: 0.109395
+>>> RIGHT FOOT LANDED at Y=0.115112 (cooldown: 0.328857s)
+Frame 1700 | Left Y: 0.281096 [RED] | Right Y: 0.100998 [GREEN] | Diff: 0.180099
+>>> LEFT FOOT LANDED at Y=0.100674 (cooldown: 0.352348s)
+Frame 1710 | Left Y: 0.104413 [GREEN] | Right Y: 0.240283 [RED] | Diff: 0.13587
+Frame 1720 | Left Y: 0.305545 [RED] | Right Y: 0.272431 [RED] | Diff: 0.0331141
+>>> RIGHT FOOT LANDED at Y=0.13154 (cooldown: 0.307072s)
+Frame 1730 | Left Y: 0.218386 [RED] | Right Y: 0.0999367 [GREEN] | Diff: 0.118449
+>>> LEFT FOOT LANDED at Y=0.0988323 (cooldown: 0.370213s)
+Frame 1740 | Left Y: 0.105981 [GREEN] | Right Y: 0.283596 [RED] | Diff: 0.177615
+Frame 1750 | Left Y: 0.233684 [RED] | Right Y: 0.345513 [RED] | Diff: 0.111829
+>>> RIGHT FOOT LANDED at Y=0.132604 (cooldown: 0.303783s)
+Frame 1760 | Left Y: 0.149217 [GREEN] | Right Y: 0.103181 [GREEN] | Diff: 0.0460363
+Frame 1770 | Left Y: 0.100489 [GREEN] | Right Y: 0.322347 [RED] | Diff: 0.221858
+>>> LEFT FOOT LANDED at Y=0.100489 (cooldown: 0.366009s)
+Frame 1780 | Left Y: 0.137738 [GREEN] | Right Y: 0.368155 [RED] | Diff: 0.230417
+>>> RIGHT FOOT LANDED at Y=0.140942 (cooldown: 0.302826s)
+Frame 1790 | Left Y: 0.108411 [GREEN] | Right Y: 0.106256 [GREEN] | Diff: 0.00215497
+Frame 1800 | Left Y: 0.0989939 [GREEN] | Right Y: 0.317407 [RED] | Diff: 0.218413
+>>> LEFT FOOT LANDED at Y=0.0989939 (cooldown: 0.372414s)
+Frame 1810 | Left Y: 0.147513 [GREEN] | Right Y: 0.367705 [RED] | Diff: 0.220191
+>>> RIGHT FOOT LANDED at Y=0.141382 (cooldown: 0.300453s)
+Frame 1820 | Left Y: 0.108103 [GREEN] | Right Y: 0.105979 [GREEN] | Diff: 0.00212392
+Frame 1830 | Left Y: 0.189793 [RED] | Right Y: 0.333186 [RED] | Diff: 0.143393
+>>> LEFT FOOT LANDED at Y=0.104955 (cooldown: 0.364082s)
+Frame 1840 | Left Y: 0.111781 [GREEN] | Right Y: 0.307293 [RED] | Diff: 0.195512
+>>> RIGHT FOOT LANDED at Y=0.114487 (cooldown: 0.327198s)
+Frame 1850 | Left Y: 0.108209 [GREEN] | Right Y: 0.106435 [GREEN] | Diff: 0.00177389
+Frame 1860 | Left Y: 0.239215 [RED] | Right Y: 0.333833 [RED] | Diff: 0.0946185
+>>> LEFT FOOT LANDED at Y=0.137616 (cooldown: 0.337101s)
+Frame 1870 | Left Y: 0.109997 [GREEN] | Right Y: 0.300256 [RED] | Diff: 0.190259
+>>> RIGHT FOOT LANDED at Y=0.116858 (cooldown: 0.332943s)
+Frame 1880 | Left Y: 0.12134 [GREEN] | Right Y: 0.105953 [GREEN] | Diff: 0.0153875
+Frame 1890 | Left Y: 0.285902 [RED] | Right Y: 0.318618 [RED] | Diff: 0.0327163
+>>> LEFT FOOT LANDED at Y=0.104158 (cooldown: 0.349934s)
+Frame 1900 | Left Y: 0.105403 [GREEN] | Right Y: 0.260751 [RED] | Diff: 0.155348
+>>> RIGHT FOOT LANDED at Y=0.137651 (cooldown: 0.310272s)
+Frame 1910 | Left Y: 0.157929 [RED] | Right Y: 0.104071 [GREEN] | Diff: 0.0538582
+Frame 1920 | Left Y: 0.318439 [RED] | Right Y: 0.305057 [RED] | Diff: 0.0133817
+>>> LEFT FOOT LANDED at Y=0.129145 (cooldown: 0.354721s)
+Frame 1930 | Left Y: 0.105377 [GREEN] | Right Y: 0.228105 [RED] | Diff: 0.122729
+>>> RIGHT FOOT LANDED at Y=0.118543 (cooldown: 0.329094s)
+Frame 1940 | Left Y: 0.199171 [RED] | Right Y: 0.105432 [GREEN] | Diff: 0.0937393
+Frame 1950 | Left Y: 0.367129 [RED] | Right Y: 0.287725 [RED] | Diff: 0.0794043
+>>> LEFT FOOT LANDED at Y=0.109952 (cooldown: 0.355324s)
+Frame 1960 | Left Y: 0.270282 [RED] | Right Y: 0.0915125 [GREEN] | Diff: 0.17877
+Frame 1970 | Left Y: 0.106957 [GREEN] | Right Y: 0.213822 [RED] | Diff: 0.106865
+Frame 1980 | Left Y: 0.175733 [RED] | Right Y: 0.370304 [RED] | Diff: 0.194572
+>>> RIGHT FOOT LANDED at Y=0.120549 (cooldown: 0.705357s)
+Frame 1990 | Left Y: 0.134653 [GREEN] | Right Y: 0.106978 [GREEN] | Diff: 0.0276753
+Frame 2000 | Left Y: 0.431111 [RED] | Right Y: 0.156981 [RED] | Diff: 0.27413
+>>> LEFT FOOT LANDED at Y=0.112303 (cooldown: 0.46328s)
+Frame 2010 | Left Y: 0.107023 [GREEN] | Right Y: 0.215527 [RED] | Diff: 0.108503
+Frame 2020 | Left Y: 0.178259 [RED] | Right Y: 0.369803 [RED] | Diff: 0.191544
+>>> RIGHT FOOT LANDED at Y=0.12302 (cooldown: 0.416439s)
+Frame 2030 | Left Y: 0.158374 [RED] | Right Y: 0.106946 [GREEN] | Diff: 0.0514279
+Frame 2040 | Left Y: 0.435155 [RED] | Right Y: 0.125503 [GREEN] | Diff: 0.309651
+>>> LEFT FOOT LANDED at Y=0.14755 (cooldown: 0.453064s)
+Frame 2050 | Left Y: 0.106877 [GREEN] | Right Y: 0.238349 [RED] | Diff: 0.131472
+Frame 2060 | Left Y: 0.133176 [GREEN] | Right Y: 0.370724 [RED] | Diff: 0.237548
+>>> RIGHT FOOT LANDED at Y=0.141888 (cooldown: 0.41534s)
+Frame 2070 | Left Y: 0.197577 [RED] | Right Y: 0.106898 [GREEN] | Diff: 0.0906793
+Frame 2080 | Left Y: 0.43535 [RED] | Right Y: 0.108742 [GREEN] | Diff: 0.326609
+>>> LEFT FOOT LANDED at Y=0.149 (cooldown: 0.466885s)
+Frame 2090 | Left Y: 0.106843 [GREEN] | Right Y: 0.236177 [RED] | Diff: 0.129334
+Frame 2100 | Left Y: 0.13985 [GREEN] | Right Y: 0.371052 [RED] | Diff: 0.231203
+>>> RIGHT FOOT LANDED at Y=0.136872 (cooldown: 0.420319s)
+Frame 2110 | Left Y: 0.181805 [RED] | Right Y: 0.107039 [GREEN] | Diff: 0.0747663
+Frame 2120 | Left Y: 0.435777 [RED] | Right Y: 0.109856 [GREEN] | Diff: 0.325921
+Frame 0 | Left Y: 0 [GREEN] | Right Y: 0 [GREEN] | Diff: 0
+>>> LEFT FOOT LANDED at Y=0 (cooldown: 999.008s)
+Frame 10 | Left Y: 0.406724 [RED] | Right Y: 0.234475 [RED] | Diff: 0.172249
+Frame 20 | Left Y: 0.106807 [GREEN] | Right Y: 0.178284 [RED] | Diff: 0.0714777
+Frame 30 | Left Y: 0.340931 [RED] | Right Y: 0.234137 [RED] | Diff: 0.106793
+>>> RIGHT FOOT LANDED at Y=0.122066 (cooldown: 0.763023s)
+Frame 40 | Left Y: 0.116706 [GREEN] | Right Y: 0.106792 [GREEN] | Diff: 0.00991464
+Frame 50 | Left Y: 0.279681 [RED] | Right Y: 0.330252 [RED] | Diff: 0.0505706
+>>> LEFT FOOT LANDED at Y=0.109311 (cooldown: 0.467116s)
+Frame 60 | Left Y: 0.112154 [GREEN] | Right Y: 0.187366 [RED] | Diff: 0.0752121
+Frame 70 | Left Y: 0.355771 [RED] | Right Y: 0.119991 [GREEN] | Diff: 0.23578
+>>> RIGHT FOOT LANDED at Y=0.119991 (cooldown: 0.419664s)
+Frame 80 | Left Y: 0.122944 [GREEN] | Right Y: 0.106552 [GREEN] | Diff: 0.016391
+Frame 90 | Left Y: 0.403488 [RED] | Right Y: 0.245074 [RED] | Diff: 0.158414
+>>> LEFT FOOT LANDED at Y=0.123088 (cooldown: 0.452171s)
+Frame 100 | Left Y: 0.107168 [GREEN] | Right Y: 0.219539 [RED] | Diff: 0.112371
+Frame 110 | Left Y: 0.112833 [GREEN] | Right Y: 0.343554 [RED] | Diff: 0.230721
+>>> RIGHT FOOT LANDED at Y=0.130682 (cooldown: 0.414953s)
+Frame 120 | Left Y: 0.327755 [RED] | Right Y: 0.111915 [GREEN] | Diff: 0.215839
+Frame 130 | Left Y: 0.164486 [RED] | Right Y: 0.106093 [GREEN] | Diff: 0.0583923
+Frame 140 | Left Y: 0.371997 [RED] | Right Y: 0.293407 [RED] | Diff: 0.0785901
+>>> LEFT FOOT LANDED at Y=0.113798 (cooldown: 0.472179s)
+Frame 150 | Left Y: 0.106809 [GREEN] | Right Y: 0.192066 [RED] | Diff: 0.085257
+Frame 160 | Left Y: 0.12726 [GREEN] | Right Y: 0.370596 [RED] | Diff: 0.243336
+>>> RIGHT FOOT LANDED at Y=0.148105 (cooldown: 0.399795s)
+Frame 170 | Left Y: 0.293389 [RED] | Right Y: 0.108054 [GREEN] | Diff: 0.185335
+Frame 180 | Left Y: 0.242949 [RED] | Right Y: 0.105594 [GREEN] | Diff: 0.137355
+Frame 190 | Left Y: 0.302188 [RED] | Right Y: 0.326395 [RED] | Diff: 0.0242071
+>>> LEFT FOOT LANDED at Y=0.141194 (cooldown: 0.472922s)
+Frame 200 | Left Y: 0.106676 [GREEN] | Right Y: 0.17964 [RED] | Diff: 0.0729641
+Frame 210 | Left Y: 0.187383 [RED] | Right Y: 0.368152 [RED] | Diff: 0.180769
+>>> RIGHT FOOT LANDED at Y=0.143181 (cooldown: 0.412302s)
+Frame 220 | Left Y: 0.252345 [RED] | Right Y: 0.107021 [GREEN] | Diff: 0.145324
+Frame 230 | Left Y: 0.291928 [RED] | Right Y: 0.106204 [GREEN] | Diff: 0.185724
+Frame 240 | Left Y: 0.227373 [RED] | Right Y: 0.338204 [RED] | Diff: 0.110831
+>>> LEFT FOOT LANDED at Y=0.108806 (cooldown: 0.484966s)
+Frame 250 | Left Y: 0.106538 [GREEN] | Right Y: 0.177056 [RED] | Diff: 0.0705182
+Frame 260 | Left Y: 0.231329 [RED] | Right Y: 0.3557 [RED] | Diff: 0.124371
+>>> RIGHT FOOT LANDED at Y=0.126037 (cooldown: 0.411876s)
+Frame 270 | Left Y: 0.221863 [RED] | Right Y: 0.107326 [GREEN] | Diff: 0.114537
+Frame 280 | Left Y: 0.326529 [RED] | Right Y: 0.108987 [GREEN] | Diff: 0.217542
+Frame 290 | Left Y: 0.206727 [RED] | Right Y: 0.341287 [RED] | Diff: 0.134559
+>>> LEFT FOOT LANDED at Y=0.141256 (cooldown: 0.456905s)
+Frame 300 | Left Y: 0.106717 [GREEN] | Right Y: 0.176965 [RED] | Diff: 0.0702483
+Frame 310 | Left Y: 0.234951 [RED] | Right Y: 0.353879 [RED] | Diff: 0.118928
+>>> RIGHT FOOT LANDED at Y=0.147821 (cooldown: 0.411696s)
+Frame 320 | Left Y: 0.200118 [RED] | Right Y: 0.106907 [GREEN] | Diff: 0.0932109
+Frame 330 | Left Y: 0.370155 [RED] | Right Y: 0.114344 [GREEN] | Diff: 0.255811
+Frame 340 | Left Y: 0.150944 [RED] | Right Y: 0.341434 [RED] | Diff: 0.19049
+>>> LEFT FOOT LANDED at Y=0.108637 (cooldown: 0.486034s)
+Frame 350 | Left Y: 0.108721 [GREEN] | Right Y: 0.176815 [RED] | Diff: 0.0680942
+Frame 360 | Left Y: 0.261124 [RED] | Right Y: 0.341665 [RED] | Diff: 0.0805414
+>>> RIGHT FOOT LANDED at Y=0.135782 (cooldown: 0.40286s)
+Frame 370 | Left Y: 0.199613 [RED] | Right Y: 0.106905 [GREEN] | Diff: 0.0927085
+Frame 380 | Left Y: 0.336186 [RED] | Right Y: 0.110787 [GREEN] | Diff: 0.2254
+Frame 390 | Left Y: 0.193597 [RED] | Right Y: 0.341173 [RED] | Diff: 0.147576
+>>> LEFT FOOT LANDED at Y=0.135636 (cooldown: 0.467404s)
+Frame 400 | Left Y: 0.107296 [GREEN] | Right Y: 0.177742 [RED] | Diff: 0.0704459
+Frame 410 | Left Y: 0.242611 [RED] | Right Y: 0.350142 [RED] | Diff: 0.107532
+>>> RIGHT FOOT LANDED at Y=0.139285 (cooldown: 0.413613s)
+Frame 420 | Left Y: 0.205422 [RED] | Right Y: 0.106954 [GREEN] | Diff: 0.0984672
+Frame 430 | Left Y: 0.351724 [RED] | Right Y: 0.114179 [GREEN] | Diff: 0.237545
+Frame 440 | Left Y: 0.158697 [RED] | Right Y: 0.341314 [RED] | Diff: 0.182617
+>>> LEFT FOOT LANDED at Y=0.112372 (cooldown: 0.481168s)
+Frame 450 | Left Y: 0.112264 [GREEN] | Right Y: 0.179855 [RED] | Diff: 0.0675911
+Frame 460 | Left Y: 0.298493 [RED] | Right Y: 0.308465 [RED] | Diff: 0.00997227
+>>> RIGHT FOOT LANDED at Y=0.140246 (cooldown: 0.401439s)
+Frame 470 | Left Y: 0.148025 [GREEN] | Right Y: 0.106839 [GREEN] | Diff: 0.0411861
+Frame 480 | Left Y: 0.411106 [RED] | Right Y: 0.113992 [GREEN] | Diff: 0.297114
+Frame 490 | Left Y: 0.114349 [GREEN] | Right Y: 0.33597 [RED] | Diff: 0.221621
+>>> LEFT FOOT LANDED at Y=0.114349 (cooldown: 0.480561s)
+Frame 500 | Left Y: 0.111814 [GREEN] | Right Y: 0.182403 [RED] | Diff: 0.0705884
+Frame 510 | Left Y: 0.320036 [RED] | Right Y: 0.275547 [RED] | Diff: 0.0444891
+>>> RIGHT FOOT LANDED at Y=0.126358 (cooldown: 0.414676s)
+Frame 520 | Left Y: 0.119926 [GREEN] | Right Y: 0.106939 [GREEN] | Diff: 0.0129878
+Frame 530 | Left Y: 0.43398 [RED] | Right Y: 0.10701 [GREEN] | Diff: 0.32697
+>>> LEFT FOOT LANDED at Y=0.145204 (cooldown: 0.455543s)
+Frame 540 | Left Y: 0.106376 [GREEN] | Right Y: 0.316102 [RED] | Diff: 0.209726
+Frame 550 | Left Y: 0.110738 [GREEN] | Right Y: 0.202075 [RED] | Diff: 0.0913365
+Frame 560 | Left Y: 0.353147 [RED] | Right Y: 0.20029 [RED] | Diff: 0.152857
+>>> RIGHT FOOT LANDED at Y=0.124346 (cooldown: 0.42892s)
+Frame 570 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 580 | Left Y: 0.436422 [RED] | Right Y: 0.111724 [GREEN] | Diff: 0.324698
+>>> LEFT FOOT LANDED at Y=0.124037 (cooldown: 0.462727s)
+Frame 590 | Left Y: 0.106016 [GREEN] | Right Y: 0.306454 [RED] | Diff: 0.200439
+Frame 600 | Left Y: 0.109495 [GREEN] | Right Y: 0.207406 [RED] | Diff: 0.0979108
+Frame 610 | Left Y: 0.357689 [RED] | Right Y: 0.18738 [RED] | Diff: 0.170308
+>>> RIGHT FOOT LANDED at Y=0.143741 (cooldown: 0.406317s)
+Frame 620 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 0 | Left Y: 0 [GREEN] | Right Y: 0 [GREEN] | Diff: 0
+>>> LEFT FOOT LANDED at Y=0 (cooldown: 999.008s)
+Frame 10 | Left Y: 0.40814 [RED] | Right Y: 0.229754 [RED] | Diff: 0.178385
+Frame 20 | Left Y: 0.106621 [GREEN] | Right Y: 0.180022 [RED] | Diff: 0.0734006
+Frame 30 | Left Y: 0.319076 [RED] | Right Y: 0.277427 [RED] | Diff: 0.0416495
+>>> RIGHT FOOT LANDED at Y=0.136131 (cooldown: 0.750308s)
+Frame 40 | Left Y: 0.108742 [GREEN] | Right Y: 0.106742 [GREEN] | Diff: 0.00200055
+Frame 50 | Left Y: 0.343778 [RED] | Right Y: 0.313574 [RED] | Diff: 0.0302036
+>>> LEFT FOOT LANDED at Y=0.146863 (cooldown: 0.464141s)
+Frame 60 | Left Y: 0.112046 [GREEN] | Right Y: 0.179241 [RED] | Diff: 0.0671956
+Frame 70 | Left Y: 0.365235 [RED] | Right Y: 0.150064 [RED] | Diff: 0.215171
+>>> RIGHT FOOT LANDED at Y=0.120315 (cooldown: 0.433617s)
+Frame 80 | Left Y: 0.149339 [GREEN] | Right Y: 0.106378 [GREEN] | Diff: 0.0429611
+Frame 90 | Left Y: 0.226671 [RED] | Right Y: 0.338316 [RED] | Diff: 0.111645
+>>> LEFT FOOT LANDED at Y=0.138443 (cooldown: 0.453198s)
+Frame 100 | Left Y: 0.110669 [GREEN] | Right Y: 0.197996 [RED] | Diff: 0.0873266
+>>> RIGHT FOOT LANDED at Y=0.129607 (cooldown: 0.423083s)
+Frame 110 | Left Y: 0.341642 [RED] | Right Y: 0.115406 [GREEN] | Diff: 0.226236
+Frame 120 | Left Y: 0.276802 [RED] | Right Y: 0.105146 [GREEN] | Diff: 0.171656
+>>> LEFT FOOT LANDED at Y=0.142711 (cooldown: 0.458182s)
+Frame 130 | Left Y: 0.105347 [GREEN] | Right Y: 0.327895 [RED] | Diff: 0.222548
+Frame 140 | Left Y: 0.108501 [GREEN] | Right Y: 0.276022 [RED] | Diff: 0.167521
+>>> RIGHT FOOT LANDED at Y=0.137895 (cooldown: 0.416158s)
+Frame 150 | Left Y: 0.288996 [RED] | Right Y: 0.107783 [GREEN] | Diff: 0.181213
+Frame 160 | Left Y: 0.403931 [RED] | Right Y: 0.115773 [GREEN] | Diff: 0.288157
+>>> LEFT FOOT LANDED at Y=0.106125 (cooldown: 0.484983s)
+Frame 170 | Left Y: 0.107072 [GREEN] | Right Y: 0.276301 [RED] | Diff: 0.16923
+Frame 180 | Left Y: 0.115796 [GREEN] | Right Y: 0.362405 [RED] | Diff: 0.246609
+>>> RIGHT FOOT LANDED at Y=0.123857 (cooldown: 0.410562s)
+Frame 190 | Left Y: 0.208266 [RED] | Right Y: 0.106994 [GREEN] | Diff: 0.101272
+Frame 200 | Left Y: 0.437146 [RED] | Right Y: 0.115973 [GREEN] | Diff: 0.321172
+>>> LEFT FOOT LANDED at Y=0.131191 (cooldown: 0.459785s)
+Frame 210 | Left Y: 0.107007 [GREEN] | Right Y: 0.222787 [RED] | Diff: 0.11578
+Frame 220 | Left Y: 0.179182 [RED] | Right Y: 0.369625 [RED] | Diff: 0.190442
+>>> RIGHT FOOT LANDED at Y=0.14761 (cooldown: 0.407399s)
+Frame 230 | Left Y: 0.127716 [GREEN] | Right Y: 0.10719 [GREEN] | Diff: 0.0205258
+Frame 240 | Left Y: 0.425862 [RED] | Right Y: 0.170335 [RED] | Diff: 0.255527
+>>> LEFT FOOT LANDED at Y=0.132884 (cooldown: 0.474488s)
+Frame 250 | Left Y: 0.106944 [GREEN] | Right Y: 0.194256 [RED] | Diff: 0.0873119
+Frame 260 | Left Y: 0.246948 [RED] | Right Y: 0.34809 [RED] | Diff: 0.101143
+>>> RIGHT FOOT LANDED at Y=0.143632 (cooldown: 0.409723s)
+Frame 270 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 280 | Left Y: 0.404001 [RED] | Right Y: 0.244007 [RED] | Diff: 0.159993
+>>> LEFT FOOT LANDED at Y=0.128419 (cooldown: 0.47509s)
+Frame 290 | Left Y: 0.106698 [GREEN] | Right Y: 0.179581 [RED] | Diff: 0.0728821
+Frame 300 | Left Y: 0.314963 [RED] | Right Y: 0.28552 [RED] | Diff: 0.0294432
+>>> RIGHT FOOT LANDED at Y=0.145105 (cooldown: 0.407864s)
+Frame 310 | Left Y: 0.106916 [GREEN] | Right Y: 0.106823 [GREEN] | Diff: 9.30056e-05
+Frame 320 | Left Y: 0.37106 [RED] | Right Y: 0.294496 [RED] | Diff: 0.0765644
+>>> LEFT FOOT LANDED at Y=0.123305 (cooldown: 0.477153s)
+Frame 330 | Left Y: 0.107096 [GREEN] | Right Y: 0.177691 [RED] | Diff: 0.0705959
+Frame 340 | Left Y: 0.35592 [RED] | Right Y: 0.192437 [RED] | Diff: 0.163483
+>>> RIGHT FOOT LANDED at Y=0.138111 (cooldown: 0.41008s)
+Frame 350 | Left Y: 0.132792 [GREEN] | Right Y: 0.106622 [GREEN] | Diff: 0.0261701
+Frame 360 | Left Y: 0.267659 [RED] | Right Y: 0.33201 [RED] | Diff: 0.0643506
+>>> LEFT FOOT LANDED at Y=0.10653 (cooldown: 0.483085s)
+Frame 370 | Left Y: 0.11185 [GREEN] | Right Y: 0.188026 [RED] | Diff: 0.0761763
+Frame 380 | Left Y: 0.361877 [RED] | Right Y: 0.1291 [GREEN] | Diff: 0.232777
+>>> RIGHT FOOT LANDED at Y=0.1291 (cooldown: 0.406605s)
+Frame 390 | Left Y: 0.19828 [RED] | Right Y: 0.105913 [GREEN] | Diff: 0.0923666
+Frame 400 | Left Y: 0.15886 [RED] | Right Y: 0.341312 [RED] | Diff: 0.182452
+>>> LEFT FOOT LANDED at Y=0.106296 (cooldown: 0.477541s)
+Frame 410 | Left Y: 0.109321 [GREEN] | Right Y: 0.20859 [RED] | Diff: 0.0992684
+>>> RIGHT FOOT LANDED at Y=0.12239 (cooldown: 0.411948s)
+Frame 420 | Left Y: 0.336627 [RED] | Right Y: 0.114076 [GREEN] | Diff: 0.222551
+Frame 430 | Left Y: 0.268172 [RED] | Right Y: 0.104823 [GREEN] | Diff: 0.163349
+>>> LEFT FOOT LANDED at Y=0.144341 (cooldown: 0.452578s)
+Frame 440 | Left Y: 0.105487 [GREEN] | Right Y: 0.329334 [RED] | Diff: 0.223848
+Frame 450 | Left Y: 0.10851 [GREEN] | Right Y: 0.255996 [RED] | Diff: 0.147486
+>>> RIGHT FOOT LANDED at Y=0.120529 (cooldown: 0.433995s)
+Frame 460 | Left Y: 0.301591 [RED] | Right Y: 0.108554 [GREEN] | Diff: 0.193038
+Frame 470 | Left Y: 0.36112 [RED] | Right Y: 0.114204 [GREEN] | Diff: 0.246916
+>>> LEFT FOOT LANDED at Y=0.141238 (cooldown: 0.451023s)
+Frame 480 | Left Y: 0.106377 [GREEN] | Right Y: 0.303592 [RED] | Diff: 0.197215
+Frame 490 | Left Y: 0.110219 [GREEN] | Right Y: 0.311779 [RED] | Diff: 0.201561
+>>> RIGHT FOOT LANDED at Y=0.121509 (cooldown: 0.431499s)
+Frame 500 | Left Y: 0.258668 [RED] | Right Y: 0.10716 [GREEN] | Diff: 0.151508
+Frame 510 | Left Y: 0.42713 [RED] | Right Y: 0.109883 [GREEN] | Diff: 0.317247
+>>> LEFT FOOT LANDED at Y=0.125822 (cooldown: 0.459196s)
+Frame 520 | Left Y: 0.106845 [GREEN] | Right Y: 0.254042 [RED] | Diff: 0.147197
+Frame 530 | Left Y: 0.160963 [RED] | Right Y: 0.373162 [RED] | Diff: 0.212199
+>>> RIGHT FOOT LANDED at Y=0.120207 (cooldown: 0.42621s)
+Frame 540 | Left Y: 0.126863 [GREEN] | Right Y: 0.107224 [GREEN] | Diff: 0.0196391
+Frame 550 | Left Y: 0.425198 [RED] | Right Y: 0.172412 [RED] | Diff: 0.252786
+>>> LEFT FOOT LANDED at Y=0.121983 (cooldown: 0.458245s)
+Frame 560 | Left Y: 0.106749 [GREEN] | Right Y: 0.187869 [RED] | Diff: 0.0811198
+Frame 570 | Left Y: 0.288218 [RED] | Right Y: 0.317289 [RED] | Diff: 0.0290715
+>>> RIGHT FOOT LANDED at Y=0.12413 (cooldown: 0.421461s)
+Frame 580 | Left Y: 0.106994 [GREEN] | Right Y: 0.106742 [GREEN] | Diff: 0.00025215
+Frame 590 | Left Y: 0.369992 [RED] | Right Y: 0.295759 [RED] | Diff: 0.0742323
+>>> LEFT FOOT LANDED at Y=0.119979 (cooldown: 0.462635s)
+Frame 600 | Left Y: 0.107235 [GREEN] | Right Y: 0.177837 [RED] | Diff: 0.0706016
+Frame 610 | Left Y: 0.361687 [RED] | Right Y: 0.17214 [RED] | Diff: 0.189547
+>>> RIGHT FOOT LANDED at Y=0.126973 (cooldown: 0.416535s)
+Frame 0 | Left Y: 0 [GREEN] | Right Y: 0 [GREEN] | Diff: 0
+>>> LEFT FOOT LANDED at Y=0 (cooldown: 999.008s)
+Frame 10 | Left Y: 0.391178 [RED] | Right Y: 0.265232 [RED] | Diff: 0.125947
+Frame 20 | Left Y: 0.106746 [GREEN] | Right Y: 0.177012 [RED] | Diff: 0.0702659
+Frame 30 | Left Y: 0.362788 [RED] | Right Y: 0.165652 [RED] | Diff: 0.197136
+>>> RIGHT FOOT LANDED at Y=0.124704 (cooldown: 0.762542s)
+Frame 40 | Left Y: 0.189224 [RED] | Right Y: 0.10655 [GREEN] | Diff: 0.0826739
+Frame 50 | Left Y: 0.110202 [GREEN] | Right Y: 0.335211 [RED] | Diff: 0.225009
+>>> LEFT FOOT LANDED at Y=0.110202 (cooldown: 0.467885s)
+Frame 60 | Left Y: 0.10833 [GREEN] | Right Y: 0.265028 [RED] | Diff: 0.156698
+>>> RIGHT FOOT LANDED at Y=0.126374 (cooldown: 0.413888s)
+Frame 70 | Left Y: 0.253293 [RED] | Right Y: 0.107038 [GREEN] | Diff: 0.146255
+Frame 80 | Left Y: 0.43654 [RED] | Right Y: 0.112082 [GREEN] | Diff: 0.324457
+>>> LEFT FOOT LANDED at Y=0.12221 (cooldown: 0.464264s)
+Frame 90 | Left Y: 0.106837 [GREEN] | Right Y: 0.208848 [RED] | Diff: 0.102011
+Frame 100 | Left Y: 0.284191 [RED] | Right Y: 0.32089 [RED] | Diff: 0.0366987
+>>> RIGHT FOOT LANDED at Y=0.122729 (cooldown: 0.42162s)
+Frame 110 | Left Y: 0.107679 [GREEN] | Right Y: 0.106913 [GREEN] | Diff: 0.000765465
+Frame 120 | Left Y: 0.299476 [RED] | Right Y: 0.327288 [RED] | Diff: 0.0278119
+>>> LEFT FOOT LANDED at Y=0.109721 (cooldown: 0.468351s)
+Frame 130 | Left Y: 0.110648 [GREEN] | Right Y: 0.194764 [RED] | Diff: 0.0841168
+>>> RIGHT FOOT LANDED at Y=0.119252 (cooldown: 0.419943s)
+Frame 140 | Left Y: 0.328518 [RED] | Right Y: 0.112077 [GREEN] | Diff: 0.216441
+Frame 150 | Left Y: 0.374899 [RED] | Right Y: 0.114461 [GREEN] | Diff: 0.260438
+>>> LEFT FOOT LANDED at Y=0.105508 (cooldown: 0.470045s)
+Frame 160 | Left Y: 0.106791 [GREEN] | Right Y: 0.266772 [RED] | Diff: 0.159981
+Frame 170 | Left Y: 0.156832 [RED] | Right Y: 0.372635 [RED] | Diff: 0.215803
+>>> RIGHT FOOT LANDED at Y=0.145873 (cooldown: 0.392565s)
+Frame 180 | Left Y: 0.110615 [GREEN] | Right Y: 0.106999 [GREEN] | Diff: 0.0036163
+Frame 190 | Left Y: 0.386559 [RED] | Right Y: 0.273686 [RED] | Diff: 0.112873
+>>> LEFT FOOT LANDED at Y=0.137459 (cooldown: 0.472317s)
+Frame 200 | Left Y: 0.110785 [GREEN] | Right Y: 0.177852 [RED] | Diff: 0.0670666
+Frame 210 | Left Y: 0.359664 [RED] | Right Y: 0.124876 [GREEN] | Diff: 0.234788
+>>> RIGHT FOOT LANDED at Y=0.124876 (cooldown: 0.423538s)
+Frame 220 | Left Y: 0.238242 [RED] | Right Y: 0.106054 [GREEN] | Diff: 0.132188
+>>> LEFT FOOT LANDED at Y=0.143644 (cooldown: 0.456318s)
+Frame 230 | Left Y: 0.105331 [GREEN] | Right Y: 0.327237 [RED] | Diff: 0.221906
+Frame 240 | Left Y: 0.111388 [GREEN] | Right Y: 0.329778 [RED] | Diff: 0.21839
+>>> RIGHT FOOT LANDED at Y=0.135072 (cooldown: 0.421258s)
+Frame 250 | Left Y: 0.214209 [RED] | Right Y: 0.107111 [GREEN] | Diff: 0.107097
+Frame 260 | Left Y: 0.434198 [RED] | Right Y: 0.131584 [GREEN] | Diff: 0.302614
+>>> LEFT FOOT LANDED at Y=0.106219 (cooldown: 0.480103s)
+Frame 270 | Left Y: 0.107094 [GREEN] | Right Y: 0.198431 [RED] | Diff: 0.0913372
+Frame 280 | Left Y: 0.270398 [RED] | Right Y: 0.333919 [RED] | Diff: 0.0635215
+>>> RIGHT FOOT LANDED at Y=0.12648 (cooldown: 0.408434s)
+Frame 290 | Left Y: 0.107146 [GREEN] | Right Y: 0.106677 [GREEN] | Diff: 0.000469089
+Frame 300 | Left Y: 0.368651 [RED] | Right Y: 0.297382 [RED] | Diff: 0.0712697
+>>> LEFT FOOT LANDED at Y=0.114999 (cooldown: 0.467876s)
+Frame 310 | Left Y: 0.111257 [GREEN] | Right Y: 0.17832 [RED] | Diff: 0.0670632
+Frame 320 | Left Y: 0.364448 [RED] | Right Y: 0.134659 [GREEN] | Diff: 0.229789
+>>> RIGHT FOOT LANDED at Y=0.134659 (cooldown: 0.408019s)
+Frame 330 | Left Y: 0.247279 [RED] | Right Y: 0.105263 [GREEN] | Diff: 0.142015
+>>> LEFT FOOT LANDED at Y=0.115658 (cooldown: 0.475749s)
+Frame 340 | Left Y: 0.106393 [GREEN] | Right Y: 0.316205 [RED] | Diff: 0.209812
+Frame 350 | Left Y: 0.110525 [GREEN] | Right Y: 0.318134 [RED] | Diff: 0.207609
+>>> RIGHT FOOT LANDED at Y=0.137835 (cooldown: 0.406287s)
+Frame 360 | Left Y: 0.224981 [RED] | Right Y: 0.107229 [GREEN] | Diff: 0.117752
+Frame 370 | Left Y: 0.436618 [RED] | Right Y: 0.118191 [GREEN] | Diff: 0.318427
+>>> LEFT FOOT LANDED at Y=0.118402 (cooldown: 0.474943s)
+Frame 380 | Left Y: 0.106978 [GREEN] | Right Y: 0.214396 [RED] | Diff: 0.107418
+Frame 390 | Left Y: 0.219333 [RED] | Right Y: 0.362014 [RED] | Diff: 0.142681
+>>> RIGHT FOOT LANDED at Y=0.12622 (cooldown: 0.41654s)
+Frame 400 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 410 | Left Y: 0.408273 [RED] | Right Y: 0.229316 [RED] | Diff: 0.178957
+>>> LEFT FOOT LANDED at Y=0.136007 (cooldown: 0.460864s)
+Frame 420 | Left Y: 0.106658 [GREEN] | Right Y: 0.179707 [RED] | Diff: 0.0730486
+Frame 430 | Left Y: 0.328459 [RED] | Right Y: 0.259198 [RED] | Diff: 0.0692614
+>>> RIGHT FOOT LANDED at Y=0.128327 (cooldown: 0.421718s)
+Frame 440 | Left Y: 0.11409 [GREEN] | Right Y: 0.106966 [GREEN] | Diff: 0.00712357
+Frame 450 | Left Y: 0.279869 [RED] | Right Y: 0.330225 [RED] | Diff: 0.0503561
+>>> LEFT FOOT LANDED at Y=0.10612 (cooldown: 0.476762s)
+Frame 460 | Left Y: 0.110903 [GREEN] | Right Y: 0.201344 [RED] | Diff: 0.0904414
+>>> RIGHT FOOT LANDED at Y=0.123395 (cooldown: 0.410064s)
+Frame 470 | Left Y: 0.336333 [RED] | Right Y: 0.113996 [GREEN] | Diff: 0.222337
+Frame 480 | Left Y: 0.308955 [RED] | Right Y: 0.106807 [GREEN] | Diff: 0.202148
+>>> LEFT FOOT LANDED at Y=0.107149 (cooldown: 0.470295s)
+Frame 490 | Left Y: 0.105888 [GREEN] | Right Y: 0.311149 [RED] | Diff: 0.205261
+Frame 500 | Left Y: 0.111924 [GREEN] | Right Y: 0.335371 [RED] | Diff: 0.223448
+>>> RIGHT FOOT LANDED at Y=0.127204 (cooldown: 0.410934s)
+Frame 510 | Left Y: 0.199707 [RED] | Right Y: 0.106905 [GREEN] | Diff: 0.0928013
+Frame 520 | Left Y: 0.43217 [RED] | Right Y: 0.152223 [RED] | Diff: 0.279947
+>>> LEFT FOOT LANDED at Y=0.145713 (cooldown: 0.457332s)
+Frame 530 | Left Y: 0.106931 [GREEN] | Right Y: 0.194072 [RED] | Diff: 0.0871413
+Frame 540 | Left Y: 0.299302 [RED] | Right Y: 0.307791 [RED] | Diff: 0.00848919
+>>> RIGHT FOOT LANDED at Y=0.120656 (cooldown: 0.434649s)
+Frame 550 | Left Y: 0.108651 [GREEN] | Right Y: 0.106747 [GREEN] | Diff: 0.00190382
+Frame 560 | Left Y: 0.316393 [RED] | Right Y: 0.321836 [RED] | Diff: 0.00544345
+>>> LEFT FOOT LANDED at Y=0.122673 (cooldown: 0.457378s)
+Frame 570 | Left Y: 0.112236 [GREEN] | Right Y: 0.186446 [RED] | Diff: 0.0742101
+>>> RIGHT FOOT LANDED at Y=0.147265 (cooldown: 0.402117s)
+Frame 580 | Left Y: 0.354066 [RED] | Right Y: 0.119176 [GREEN] | Diff: 0.234889
+Frame 590 | Left Y: 0.265211 [RED] | Right Y: 0.104777 [GREEN] | Diff: 0.160435
+>>> LEFT FOOT LANDED at Y=0.114889 (cooldown: 0.483793s)
+Frame 600 | Left Y: 0.106326 [GREEN] | Right Y: 0.315785 [RED] | Diff: 0.209459
+Frame 610 | Left Y: 0.111239 [GREEN] | Right Y: 0.328076 [RED] | Diff: 0.216837
+>>> RIGHT FOOT LANDED at Y=0.135948 (cooldown: 0.406783s)
+Frame 620 | Left Y: 0.227054 [RED] | Right Y: 0.107162 [GREEN] | Diff: 0.119892
+Frame 630 | Left Y: 0.436355 [RED] | Right Y: 0.119372 [GREEN] | Diff: 0.316983
+>>> LEFT FOOT LANDED at Y=0.121492 (cooldown: 0.473328s)
+Frame 640 | Left Y: 0.10687 [GREEN] | Right Y: 0.210784 [RED] | Diff: 0.103913
+Frame 650 | Left Y: 0.243194 [RED] | Right Y: 0.349864 [RED] | Diff: 0.10667
+>>> RIGHT FOOT LANDED at Y=0.146344 (cooldown: 0.402473s)
+Frame 660 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 670 | Left Y: 0.394191 [RED] | Right Y: 0.259987 [RED] | Diff: 0.134204
+>>> LEFT FOOT LANDED at Y=0.10633 (cooldown: 0.488998s)
+Frame 680 | Left Y: 0.106586 [GREEN] | Right Y: 0.176812 [RED] | Diff: 0.0702264
+Frame 690 | Left Y: 0.353168 [RED] | Right Y: 0.200231 [RED] | Diff: 0.152938
+>>> RIGHT FOOT LANDED at Y=0.137241 (cooldown: 0.40036s)
+Frame 700 | Left Y: 0.13438 [GREEN] | Right Y: 0.106678 [GREEN] | Diff: 0.0277017
+Frame 710 | Left Y: 0.220158 [RED] | Right Y: 0.339364 [RED] | Diff: 0.119206
+>>> LEFT FOOT LANDED at Y=0.133818 (cooldown: 0.469061s)
+Frame 720 | Left Y: 0.110842 [GREEN] | Right Y: 0.201758 [RED] | Diff: 0.0909153
+>>> RIGHT FOOT LANDED at Y=0.123289 (cooldown: 0.426731s)
+Frame 730 | Left Y: 0.335194 [RED] | Right Y: 0.113691 [GREEN] | Diff: 0.221503
+Frame 740 | Left Y: 0.328423 [RED] | Right Y: 0.109307 [GREEN] | Diff: 0.219115
+>>> LEFT FOOT LANDED at Y=0.106035 (cooldown: 0.47131s)
+Frame 750 | Left Y: 0.10588 [GREEN] | Right Y: 0.308825 [RED] | Diff: 0.202945
+Frame 760 | Left Y: 0.111421 [GREEN] | Right Y: 0.330155 [RED] | Diff: 0.218734
+>>> RIGHT FOOT LANDED at Y=0.140595 (cooldown: 0.397474s)
+Frame 770 | Left Y: 0.232418 [RED] | Right Y: 0.107032 [GREEN] | Diff: 0.125387
+Frame 780 | Left Y: 0.434358 [RED] | Right Y: 0.106913 [GREEN] | Diff: 0.327445
+>>> LEFT FOOT LANDED at Y=0.107709 (cooldown: 0.48403s)
+Frame 790 | Left Y: 0.106861 [GREEN] | Right Y: 0.23745 [RED] | Diff: 0.13059
+Frame 800 | Left Y: 0.16867 [RED] | Right Y: 0.371818 [RED] | Diff: 0.203148
+>>> RIGHT FOOT LANDED at Y=0.120215 (cooldown: 0.416697s)
+Frame 810 | Left Y: 0.134371 [GREEN] | Right Y: 0.106985 [GREEN] | Diff: 0.0273866
+Frame 820 | Left Y: 0.424249 [RED] | Right Y: 0.175575 [RED] | Diff: 0.248673
+>>> LEFT FOOT LANDED at Y=0.127403 (cooldown: 0.456425s)
+Frame 830 | Left Y: 0.10675 [GREEN] | Right Y: 0.190517 [RED] | Diff: 0.0837668
+Frame 840 | Left Y: 0.271126 [RED] | Right Y: 0.333202 [RED] | Diff: 0.0620759
+>>> RIGHT FOOT LANDED at Y=0.131653 (cooldown: 0.417509s)
+Frame 850 | Left Y: 0.107404 [GREEN] | Right Y: 0.10667 [GREEN] | Diff: 0.000734299
+Frame 860 | Left Y: 0.362277 [RED] | Right Y: 0.305716 [RED] | Diff: 0.0565608
+>>> LEFT FOOT LANDED at Y=0.105628 (cooldown: 0.481594s)
+Frame 870 | Left Y: 0.111872 [GREEN] | Right Y: 0.180823 [RED] | Diff: 0.0689503
+Frame 880 | Left Y: 0.362726 [RED] | Right Y: 0.130857 [GREEN] | Diff: 0.231868
+>>> RIGHT FOOT LANDED at Y=0.130857 (cooldown: 0.400799s)
+Frame 890 | Left Y: 0.20911 [RED] | Right Y: 0.105604 [GREEN] | Diff: 0.103506
+Frame 900 | Left Y: 0.123137 [GREEN] | Right Y: 0.337558 [RED] | Diff: 0.214421
+>>> LEFT FOOT LANDED at Y=0.123137 (cooldown: 0.469486s)
+Frame 910 | Left Y: 0.108215 [GREEN] | Right Y: 0.241799 [RED] | Diff: 0.133584
+>>> RIGHT FOOT LANDED at Y=0.142995 (cooldown: 0.405411s)
+Frame 920 | Left Y: 0.292421 [RED] | Right Y: 0.10799 [GREEN] | Diff: 0.184431
+Frame 930 | Left Y: 0.409505 [RED] | Right Y: 0.114647 [GREEN] | Diff: 0.294859
+>>> LEFT FOOT LANDED at Y=0.105442 (cooldown: 0.490622s)
+Frame 940 | Left Y: 0.106839 [GREEN] | Right Y: 0.268303 [RED] | Diff: 0.161464
+Frame 950 | Left Y: 0.145109 [GREEN] | Right Y: 0.371435 [RED] | Diff: 0.226325
+>>> RIGHT FOOT LANDED at Y=0.122772 (cooldown: 0.408751s)
+Frame 960 | Left Y: 0.123486 [GREEN] | Right Y: 0.107222 [GREEN] | Diff: 0.0162641
+Frame 970 | Left Y: 0.413491 [RED] | Right Y: 0.213331 [RED] | Diff: 0.20016
+>>> LEFT FOOT LANDED at Y=0.135454 (cooldown: 0.461618s)
+Frame 980 | Left Y: 0.106988 [GREEN] | Right Y: 0.177467 [RED] | Diff: 0.0704786
+Frame 990 | Left Y: 0.363772 [RED] | Right Y: 0.133129 [GREEN] | Diff: 0.230642
+>>> RIGHT FOOT LANDED at Y=0.133129 (cooldown: 0.412628s)
+Frame 1000 | Left Y: 0.395985 [RED] | Right Y: 0.139326 [GREEN] | Diff: 0.256658
+>>> LEFT FOOT LANDED at Y=0.10057 (cooldown: 0.334608s)
+Frame 1010 | Left Y: 0.106859 [GREEN] | Right Y: 0.198554 [RED] | Diff: 0.0916949
+>>> RIGHT FOOT LANDED at Y=0.121119 (cooldown: 0.313547s)
+Frame 1020 | Left Y: 0.176865 [RED] | Right Y: 0.104337 [GREEN] | Diff: 0.0725278
+Frame 1030 | Left Y: 0.269034 [RED] | Right Y: 0.326364 [RED] | Diff: 0.0573302
+>>> LEFT FOOT LANDED at Y=0.0981436 (cooldown: 0.366896s)
+Frame 1040 | Left Y: 0.122452 [GREEN] | Right Y: 0.335312 [RED] | Diff: 0.212859
+>>> RIGHT FOOT LANDED at Y=0.138505 (cooldown: 0.298252s)
+Frame 1050 | Left Y: 0.125501 [GREEN] | Right Y: 0.104002 [GREEN] | Diff: 0.021499
+>>> LEFT FOOT LANDED at Y=0.113532 (cooldown: 0.359615s)
+Frame 1060 | Left Y: 0.0997915 [GREEN] | Right Y: 0.299741 [RED] | Diff: 0.19995
+Frame 1070 | Left Y: 0.291745 [RED] | Right Y: 0.293765 [RED] | Diff: 0.00202048
+>>> RIGHT FOOT LANDED at Y=0.134989 (cooldown: 0.314886s)
+Frame 1080 | Left Y: 0.285255 [RED] | Right Y: 0.101562 [GREEN] | Diff: 0.183694
+>>> LEFT FOOT LANDED at Y=0.117204 (cooldown: 0.355103s)
+Frame 1090 | Left Y: 0.105693 [GREEN] | Right Y: 0.20822 [RED] | Diff: 0.102527
+Frame 1100 | Left Y: 0.355678 [RED] | Right Y: 0.160363 [RED] | Diff: 0.195315
+>>> RIGHT FOOT LANDED at Y=0.115003 (cooldown: 0.33234s)
+Frame 1110 | Left Y: 0.417589 [RED] | Right Y: 0.107159 [GREEN] | Diff: 0.310431
+>>> LEFT FOOT LANDED at Y=0.0983321 (cooldown: 0.35759s)
+Frame 1120 | Left Y: 0.105586 [GREEN] | Right Y: 0.169511 [RED] | Diff: 0.063925
+>>> RIGHT FOOT LANDED at Y=0.13543 (cooldown: 0.300682s)
+Frame 1130 | Left Y: 0.325532 [RED] | Right Y: 0.110404 [GREEN] | Diff: 0.215128
+Frame 1140 | Left Y: 0.423113 [RED] | Right Y: 0.136336 [GREEN] | Diff: 0.286777
+>>> LEFT FOOT LANDED at Y=0.101126 (cooldown: 0.365019s)
+Frame 1150 | Left Y: 0.111171 [GREEN] | Right Y: 0.176771 [RED] | Diff: 0.0656005
+>>> RIGHT FOOT LANDED at Y=0.124391 (cooldown: 0.312778s)
+Frame 1160 | Left Y: 0.268063 [RED] | Right Y: 0.1059 [GREEN] | Diff: 0.162163
+Frame 1170 | Left Y: 0.388915 [RED] | Right Y: 0.257784 [RED] | Diff: 0.131131
+>>> LEFT FOOT LANDED at Y=0.106221 (cooldown: 0.356009s)
+Frame 1180 | Left Y: 0.1061 [GREEN] | Right Y: 0.222398 [RED] | Diff: 0.116298
+>>> RIGHT FOOT LANDED at Y=0.142251 (cooldown: 0.308285s)
+Frame 1190 | Left Y: 0.149989 [GREEN] | Right Y: 0.104172 [GREEN] | Diff: 0.0458177
+Frame 1200 | Left Y: 0.249643 [RED] | Right Y: 0.334115 [RED] | Diff: 0.0844718
+>>> LEFT FOOT LANDED at Y=0.143033 (cooldown: 0.354729s)
+Frame 1210 | Left Y: 0.115257 [GREEN] | Right Y: 0.317557 [RED] | Diff: 0.2023
+>>> RIGHT FOOT LANDED at Y=0.118783 (cooldown: 0.331514s)
+Frame 1220 | Left Y: 0.108372 [GREEN] | Right Y: 0.106221 [GREEN] | Diff: 0.00215135
+Frame 1230 | Left Y: 0.101454 [GREEN] | Right Y: 0.32471 [RED] | Diff: 0.223256
+>>> LEFT FOOT LANDED at Y=0.101454 (cooldown: 0.356224s)
+Frame 1240 | Left Y: 0.19006 [RED] | Right Y: 0.354815 [RED] | Diff: 0.164755
+>>> RIGHT FOOT LANDED at Y=0.144679 (cooldown: 0.304029s)
+Frame 1250 | Left Y: 0.179165 [RED] | Right Y: 0.105524 [GREEN] | Diff: 0.073641
+>>> LEFT FOOT LANDED at Y=0.133257 (cooldown: 0.355164s)
+Frame 1260 | Left Y: 0.10454 [GREEN] | Right Y: 0.265529 [RED] | Diff: 0.160989
+Frame 1270 | Left Y: 0.174061 [RED] | Right Y: 0.225499 [RED] | Diff: 0.0514378
+>>> RIGHT FOOT LANDED at Y=0.137774 (cooldown: 0.306511s)
+Frame 1280 | Left Y: 0.16342 [RED] | Right Y: 0.341257 [RED] | Diff: 0.177837
+>>> LEFT FOOT LANDED at Y=0.106438 (cooldown: 0.241175s)
+Frame 1290 | Left Y: 0.108821 [GREEN] | Right Y: 0.215077 [RED] | Diff: 0.106256
+>>> RIGHT FOOT LANDED at Y=0.148186 (cooldown: 0.392632s)
+Frame 1300 | Left Y: 0.330251 [RED] | Right Y: 0.112463 [GREEN] | Diff: 0.217787
+Frame 1310 | Left Y: 0.298092 [RED] | Right Y: 0.106238 [GREEN] | Diff: 0.191854
+>>> LEFT FOOT LANDED at Y=0.120486 (cooldown: 0.480219s)
+Frame 1320 | Left Y: 0.106998 [GREEN] | Right Y: 0.320358 [RED] | Diff: 0.21336
+Frame 1330 | Left Y: 0.108889 [GREEN] | Right Y: 0.284833 [RED] | Diff: 0.175944
+>>> RIGHT FOOT LANDED at Y=0.134309 (cooldown: 0.410177s)
+Frame 1340 | Left Y: 0.284351 [RED] | Right Y: 0.107551 [GREEN] | Diff: 0.176799
+Frame 1350 | Left Y: 0.41666 [RED] | Right Y: 0.112105 [GREEN] | Diff: 0.304555
+>>> LEFT FOOT LANDED at Y=0.10577 (cooldown: 0.483353s)
+Frame 1360 | Left Y: 0.107123 [GREEN] | Right Y: 0.274227 [RED] | Diff: 0.167104
+Frame 1370 | Left Y: 0.115702 [GREEN] | Right Y: 0.362073 [RED] | Diff: 0.24637
+>>> RIGHT FOOT LANDED at Y=0.122955 (cooldown: 0.412647s)
+Frame 1380 | Left Y: 0.198982 [RED] | Right Y: 0.106902 [GREEN] | Diff: 0.0920796
+Frame 1390 | Left Y: 0.434318 [RED] | Right Y: 0.130748 [GREEN] | Diff: 0.30357
+>>> LEFT FOOT LANDED at Y=0.116783 (cooldown: 0.461933s)
+Frame 1400 | Left Y: 0.106911 [GREEN] | Right Y: 0.212372 [RED] | Diff: 0.105461
+Frame 1410 | Left Y: 0.210497 [RED] | Right Y: 0.364934 [RED] | Diff: 0.154437
+>>> RIGHT FOOT LANDED at Y=0.132521 (cooldown: 0.409885s)
+Frame 1420 | Left Y: 0.111667 [GREEN] | Right Y: 0.106886 [GREEN] | Diff: 0.0047816
+Frame 1430 | Left Y: 0.412059 [RED] | Right Y: 0.217511 [RED] | Diff: 0.194548
+>>> LEFT FOOT LANDED at Y=0.141862 (cooldown: 0.462681s)
+Frame 1440 | Left Y: 0.107148 [GREEN] | Right Y: 0.183981 [RED] | Diff: 0.0768336
+Frame 1450 | Left Y: 0.279848 [RED] | Right Y: 0.324871 [RED] | Diff: 0.0450235
+>>> RIGHT FOOT LANDED at Y=0.130979 (cooldown: 0.422523s)
+Frame 1460 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 1470 | Left Y: 0.399848 [RED] | Right Y: 0.250691 [RED] | Diff: 0.149158
+>>> LEFT FOOT LANDED at Y=0.115793 (cooldown: 0.471828s)
+Frame 1480 | Left Y: 0.106761 [GREEN] | Right Y: 0.178108 [RED] | Diff: 0.0713467
+Frame 1490 | Left Y: 0.329504 [RED] | Right Y: 0.257185 [RED] | Diff: 0.0723193
+>>> RIGHT FOOT LANDED at Y=0.132711 (cooldown: 0.409775s)
+Frame 1500 | Left Y: 0.108047 [GREEN] | Right Y: 0.106825 [GREEN] | Diff: 0.00122228
+Frame 1510 | Left Y: 0.360633 [RED] | Right Y: 0.308054 [RED] | Diff: 0.052579
+>>> LEFT FOOT LANDED at Y=0.105695 (cooldown: 0.483871s)
+Frame 1520 | Left Y: 0.112422 [GREEN] | Right Y: 0.179762 [RED] | Diff: 0.0673401
+Frame 1530 | Left Y: 0.365415 [RED] | Right Y: 0.148824 [GREEN] | Diff: 0.216591
+>>> RIGHT FOOT LANDED at Y=0.148824 (cooldown: 0.390667s)
+Frame 1540 | Left Y: 0.151071 [RED] | Right Y: 0.106314 [GREEN] | Diff: 0.0447573
+Frame 1550 | Left Y: 0.22695 [RED] | Right Y: 0.338271 [RED] | Diff: 0.11132
+>>> LEFT FOOT LANDED at Y=0.138161 (cooldown: 0.473721s)
+Frame 1560 | Left Y: 0.11072 [GREEN] | Right Y: 0.193401 [RED] | Diff: 0.0826808
+Frame 1570 | Left Y: 0.357163 [RED] | Right Y: 0.120708 [GREEN] | Diff: 0.236455
+>>> RIGHT FOOT LANDED at Y=0.120708 (cooldown: 0.431026s)
+Frame 1580 | Left Y: 0.229885 [RED] | Right Y: 0.106148 [GREEN] | Diff: 0.123737
+Frame 1590 | Left Y: 0.132899 [GREEN] | Right Y: 0.339303 [RED] | Diff: 0.206404
+>>> LEFT FOOT LANDED at Y=0.132899 (cooldown: 0.453686s)
+Frame 1600 | Left Y: 0.10884 [GREEN] | Right Y: 0.21451 [RED] | Diff: 0.105671
+>>> RIGHT FOOT LANDED at Y=0.125302 (cooldown: 0.423309s)
+Frame 1610 | Left Y: 0.34023 [RED] | Right Y: 0.115094 [GREEN] | Diff: 0.225136
+Frame 1620 | Left Y: 0.27139 [RED] | Right Y: 0.104911 [GREEN] | Diff: 0.166479
+Frame 1630 | Left Y: 0.107979 [GREEN] | Right Y: 0.3348 [RED] | Diff: 0.226821
+>>> LEFT FOOT LANDED at Y=0.107979 (cooldown: 0.471394s)
+Frame 1640 | Left Y: 0.108419 [GREEN] | Right Y: 0.227966 [RED] | Diff: 0.119547
+>>> RIGHT FOOT LANDED at Y=0.145224 (cooldown: 0.39719s)
+Frame 1650 | Left Y: 0.32918 [RED] | Right Y: 0.112222 [GREEN] | Diff: 0.216958
+Frame 1660 | Left Y: 0.290755 [RED] | Right Y: 0.10622 [GREEN] | Diff: 0.184535
+>>> LEFT FOOT LANDED at Y=0.136047 (cooldown: 0.474186s)
+Frame 1670 | Left Y: 0.105411 [GREEN] | Right Y: 0.325687 [RED] | Diff: 0.220275
+Frame 1680 | Left Y: 0.108505 [GREEN] | Right Y: 0.247449 [RED] | Diff: 0.138944
+>>> RIGHT FOOT LANDED at Y=0.128198 (cooldown: 0.420815s)
+Frame 1690 | Left Y: 0.3176 [RED] | Right Y: 0.11027 [GREEN] | Diff: 0.207329
+Frame 1700 | Left Y: 0.326299 [RED] | Right Y: 0.108949 [GREEN] | Diff: 0.21735
+>>> LEFT FOOT LANDED at Y=0.116444 (cooldown: 0.469891s)
+Frame 1710 | Left Y: 0.106962 [GREEN] | Right Y: 0.31904 [RED] | Diff: 0.212078
+Frame 1720 | Left Y: 0.108571 [GREEN] | Right Y: 0.278018 [RED] | Diff: 0.169447
+>>> RIGHT FOOT LANDED at Y=0.13495 (cooldown: 0.410019s)
+Frame 1730 | Left Y: 0.281114 [RED] | Right Y: 0.107427 [GREEN] | Diff: 0.173687
+Frame 0 | Left Y: 0 [GREEN] | Right Y: 0 [GREEN] | Diff: 0
+>>> LEFT FOOT LANDED at Y=0 (cooldown: 999.008s)
+Frame 10 | Left Y: 0.398672 [RED] | Right Y: 0.252566 [RED] | Diff: 0.146107
+Frame 20 | Left Y: 0.107251 [GREEN] | Right Y: 0.177811 [RED] | Diff: 0.0705596
+Frame 30 | Left Y: 0.364246 [RED] | Right Y: 0.156613 [RED] | Diff: 0.207633
+>>> RIGHT FOOT LANDED at Y=0.121034 (cooldown: 0.764601s)
+Frame 40 | Left Y: 0.163843 [RED] | Right Y: 0.106093 [GREEN] | Diff: 0.0577493
+Frame 50 | Left Y: 0.174074 [RED] | Right Y: 0.341172 [RED] | Diff: 0.167098
+>>> LEFT FOOT LANDED at Y=0.110314 (cooldown: 0.466424s)
+Frame 60 | Left Y: 0.108788 [GREEN] | Right Y: 0.217364 [RED] | Diff: 0.108576
+>>> RIGHT FOOT LANDED at Y=0.129335 (cooldown: 0.411386s)
+Frame 70 | Left Y: 0.306237 [RED] | Right Y: 0.108942 [GREEN] | Diff: 0.197295
+Frame 80 | Left Y: 0.418965 [RED] | Right Y: 0.111478 [GREEN] | Diff: 0.307488
+>>> LEFT FOOT LANDED at Y=0.109654 (cooldown: 0.472488s)
+Frame 90 | Left Y: 0.10685 [GREEN] | Right Y: 0.236726 [RED] | Diff: 0.129876
+Frame 100 | Left Y: 0.182213 [RED] | Right Y: 0.369057 [RED] | Diff: 0.186844
+>>> RIGHT FOOT LANDED at Y=0.128083 (cooldown: 0.410364s)
+Frame 110 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 120 | Left Y: 0.373364 [RED] | Right Y: 0.291854 [RED] | Diff: 0.0815103
+>>> LEFT FOOT LANDED at Y=0.117188 (cooldown: 0.470152s)
+Frame 130 | Left Y: 0.112052 [GREEN] | Right Y: 0.179249 [RED] | Diff: 0.0671969
+Frame 140 | Left Y: 0.360457 [RED] | Right Y: 0.126331 [GREEN] | Diff: 0.234126
+>>> RIGHT FOOT LANDED at Y=0.126331 (cooldown: 0.413318s)
+Frame 150 | Left Y: 0.255687 [RED] | Right Y: 0.104865 [GREEN] | Diff: 0.150822
+>>> LEFT FOOT LANDED at Y=0.138825 (cooldown: 0.458812s)
+Frame 160 | Left Y: 0.105353 [GREEN] | Right Y: 0.326417 [RED] | Diff: 0.221064
+Frame 170 | Left Y: 0.108373 [GREEN] | Right Y: 0.270845 [RED] | Diff: 0.162472
+>>> RIGHT FOOT LANDED at Y=0.136795 (cooldown: 0.416085s)
+Frame 180 | Left Y: 0.285117 [RED] | Right Y: 0.107585 [GREEN] | Diff: 0.177531
+Frame 190 | Left Y: 0.415347 [RED] | Right Y: 0.112501 [GREEN] | Diff: 0.302846
+>>> LEFT FOOT LANDED at Y=0.143698 (cooldown: 0.466113s)
+Frame 200 | Left Y: 0.106752 [GREEN] | Right Y: 0.265155 [RED] | Diff: 0.158403
+Frame 210 | Left Y: 0.132894 [GREEN] | Right Y: 0.370714 [RED] | Diff: 0.23782
+>>> RIGHT FOOT LANDED at Y=0.134147 (cooldown: 0.419811s)
+Frame 220 | Left Y: 0.159881 [RED] | Right Y: 0.106976 [GREEN] | Diff: 0.0529051
+Frame 230 | Left Y: 0.432311 [RED] | Right Y: 0.150085 [RED] | Diff: 0.282225
+>>> LEFT FOOT LANDED at Y=0.106619 (cooldown: 0.47948s)
+Frame 240 | Left Y: 0.106882 [GREEN] | Right Y: 0.20264 [RED] | Diff: 0.0957582
+Frame 250 | Left Y: 0.257031 [RED] | Right Y: 0.343478 [RED] | Diff: 0.0864468
+>>> RIGHT FOOT LANDED at Y=0.13535 (cooldown: 0.402246s)
+Frame 260 | Left Y: 0.108895 [GREEN] | Right Y: 0.107301 [GREEN] | Diff: 0.00159359
+Frame 270 | Left Y: 0.383278 [RED] | Right Y: 0.280006 [RED] | Diff: 0.103272
+>>> LEFT FOOT LANDED at Y=0.142098 (cooldown: 0.463744s)
+Frame 280 | Left Y: 0.106688 [GREEN] | Right Y: 0.176921 [RED] | Diff: 0.0702335
+Frame 290 | Left Y: 0.352909 [RED] | Right Y: 0.200961 [RED] | Diff: 0.151948
+>>> RIGHT FOOT LANDED at Y=0.141289 (cooldown: 0.415387s)
+Frame 300 | Left Y: 0.121254 [GREEN] | Right Y: 0.106594 [GREEN] | Diff: 0.0146602
+Frame 310 | Left Y: 0.299543 [RED] | Right Y: 0.327266 [RED] | Diff: 0.0277222
+>>> LEFT FOOT LANDED at Y=0.114778 (cooldown: 0.479355s)
+Frame 320 | Left Y: 0.111863 [GREEN] | Right Y: 0.183281 [RED] | Diff: 0.0714175
+Frame 330 | Left Y: 0.362294 [RED] | Right Y: 0.129953 [GREEN] | Diff: 0.232341
+>>> RIGHT FOOT LANDED at Y=0.129953 (cooldown: 0.412886s)
+Frame 340 | Left Y: 0.206081 [RED] | Right Y: 0.105645 [GREEN] | Diff: 0.100436
+Frame 350 | Left Y: 0.138131 [GREEN] | Right Y: 0.340236 [RED] | Diff: 0.202105
+>>> LEFT FOOT LANDED at Y=0.138131 (cooldown: 0.461159s)
+Frame 360 | Left Y: 0.108864 [GREEN] | Right Y: 0.21389 [RED] | Diff: 0.105026
+>>> RIGHT FOOT LANDED at Y=0.126015 (cooldown: 0.424809s)
+Frame 370 | Left Y: 0.340689 [RED] | Right Y: 0.115228 [GREEN] | Diff: 0.225461
+Frame 380 | Left Y: 0.256211 [RED] | Right Y: 0.10485 [GREEN] | Diff: 0.15136
+Frame 390 | Left Y: 0.107543 [GREEN] | Right Y: 0.334719 [RED] | Diff: 0.227176
+>>> LEFT FOOT LANDED at Y=0.107543 (cooldown: 0.471191s)
+Frame 400 | Left Y: 0.108137 [GREEN] | Right Y: 0.233994 [RED] | Diff: 0.125856
+>>> RIGHT FOOT LANDED at Y=0.131921 (cooldown: 0.407017s)
+Frame 410 | Left Y: 0.319568 [RED] | Right Y: 0.110546 [GREEN] | Diff: 0.209022
+Frame 420 | Left Y: 0.332275 [RED] | Right Y: 0.110009 [GREEN] | Diff: 0.222266
+>>> LEFT FOOT LANDED at Y=0.115351 (cooldown: 0.474125s)
+Frame 430 | Left Y: 0.106484 [GREEN] | Right Y: 0.31674 [RED] | Diff: 0.210255
+Frame 440 | Left Y: 0.108706 [GREEN] | Right Y: 0.281221 [RED] | Diff: 0.172516
+>>> RIGHT FOOT LANDED at Y=0.135035 (cooldown: 0.406415s)
+Frame 450 | Left Y: 0.287542 [RED] | Right Y: 0.107704 [GREEN] | Diff: 0.179838
+Frame 460 | Left Y: 0.407568 [RED] | Right Y: 0.115513 [GREEN] | Diff: 0.292055
+>>> LEFT FOOT LANDED at Y=0.111291 (cooldown: 0.477695s)
+Frame 470 | Left Y: 0.106395 [GREEN] | Right Y: 0.285842 [RED] | Diff: 0.179446
+Frame 480 | Left Y: 0.114342 [GREEN] | Right Y: 0.356135 [RED] | Diff: 0.241793
+>>> RIGHT FOOT LANDED at Y=0.127842 (cooldown: 0.412727s)
+Frame 490 | Left Y: 0.208087 [RED] | Right Y: 0.106991 [GREEN] | Diff: 0.101096
+Frame 500 | Left Y: 0.435577 [RED] | Right Y: 0.12319 [GREEN] | Diff: 0.312387
+>>> LEFT FOOT LANDED at Y=0.121663 (cooldown: 0.46613s)
+Frame 510 | Left Y: 0.106898 [GREEN] | Right Y: 0.211907 [RED] | Diff: 0.10501
+Frame 520 | Left Y: 0.217445 [RED] | Right Y: 0.363052 [RED] | Diff: 0.145608
+>>> RIGHT FOOT LANDED at Y=0.122776 (cooldown: 0.420692s)
+Frame 530 | Left Y: 0.109514 [GREEN] | Right Y: 0.10718 [GREEN] | Diff: 0.00233381
+Frame 540 | Left Y: 0.412559 [RED] | Right Y: 0.216032 [RED] | Diff: 0.196527
+>>> LEFT FOOT LANDED at Y=0.105919 (cooldown: 0.472469s)
+Frame 550 | Left Y: 0.10695 [GREEN] | Right Y: 0.185401 [RED] | Diff: 0.0784509
+Frame 560 | Left Y: 0.280716 [RED] | Right Y: 0.324067 [RED] | Diff: 0.0433511
+>>> RIGHT FOOT LANDED at Y=0.131229 (cooldown: 0.404492s)
+Frame 570 | Left Y: 0.108867 [GREEN] | Right Y: 0.107284 [GREEN] | Diff: 0.00158246
+Frame 580 | Left Y: 0.388582 [RED] | Right Y: 0.269921 [RED] | Diff: 0.118661
+>>> LEFT FOOT LANDED at Y=0.106608 (cooldown: 0.477287s)
+Frame 590 | Left Y: 0.106822 [GREEN] | Right Y: 0.177143 [RED] | Diff: 0.0703214
+Frame 600 | Left Y: 0.35092 [RED] | Right Y: 0.206541 [RED] | Diff: 0.144379
+>>> RIGHT FOOT LANDED at Y=0.143075 (cooldown: 0.397528s)
+Frame 610 | Left Y: 0.123118 [GREEN] | Right Y: 0.106549 [GREEN] | Diff: 0.0165688
+Frame 620 | Left Y: 0.254731 [RED] | Right Y: 0.333945 [RED] | Diff: 0.0792142
+>>> LEFT FOOT LANDED at Y=0.105901 (cooldown: 0.488646s)
+Frame 630 | Left Y: 0.11133 [GREEN] | Right Y: 0.189572 [RED] | Diff: 0.0782423
+Frame 640 | Left Y: 0.358198 [RED] | Right Y: 0.122356 [GREEN] | Diff: 0.235842
+>>> RIGHT FOOT LANDED at Y=0.122356 (cooldown: 0.411412s)
+Frame 650 | Left Y: 0.2268 [RED] | Right Y: 0.105984 [GREEN] | Diff: 0.120816
+Frame 660 | Left Y: 0.112282 [GREEN] | Right Y: 0.335592 [RED] | Diff: 0.22331
+>>> LEFT FOOT LANDED at Y=0.112282 (cooldown: 0.465905s)
+Frame 670 | Left Y: 0.10817 [GREEN] | Right Y: 0.232651 [RED] | Diff: 0.124481
+>>> RIGHT FOOT LANDED at Y=0.127494 (cooldown: 0.412366s)
+Frame 680 | Left Y: 0.312028 [RED] | Right Y: 0.109558 [GREEN] | Diff: 0.20247
+Frame 690 | Left Y: 0.342865 [RED] | Right Y: 0.112263 [GREEN] | Diff: 0.230602
+>>> LEFT FOOT LANDED at Y=0.107185 (cooldown: 0.473767s)
+Frame 700 | Left Y: 0.105907 [GREEN] | Right Y: 0.311606 [RED] | Diff: 0.205699
+Frame 710 | Left Y: 0.110201 [GREEN] | Right Y: 0.3113 [RED] | Diff: 0.201099
+>>> RIGHT FOOT LANDED at Y=0.123479 (cooldown: 0.412983s)
+Frame 720 | Left Y: 0.265164 [RED] | Right Y: 0.107326 [GREEN] | Diff: 0.157838
+Frame 730 | Left Y: 0.429234 [RED] | Right Y: 0.109612 [GREEN] | Diff: 0.319622
+>>> LEFT FOOT LANDED at Y=0.128735 (cooldown: 0.459684s)
+Frame 740 | Left Y: 0.106715 [GREEN] | Right Y: 0.259798 [RED] | Diff: 0.153083
+Frame 750 | Left Y: 0.130986 [GREEN] | Right Y: 0.370658 [RED] | Diff: 0.239672
+>>> RIGHT FOOT LANDED at Y=0.137058 (cooldown: 0.410944s)
+Frame 760 | Left Y: 0.180974 [RED] | Right Y: 0.107056 [GREEN] | Diff: 0.0739177
+Frame 770 | Left Y: 0.43557 [RED] | Right Y: 0.123228 [GREEN] | Diff: 0.312341
+>>> LEFT FOOT LANDED at Y=0.124275 (cooldown: 0.47473s)
+Frame 780 | Left Y: 0.107177 [GREEN] | Right Y: 0.218791 [RED] | Diff: 0.111614
+Frame 790 | Left Y: 0.19497 [RED] | Right Y: 0.366954 [RED] | Diff: 0.171983
+>>> RIGHT FOOT LANDED at Y=0.137268 (cooldown: 0.410143s)
+Frame 800 | Left Y: 0.114338 [GREEN] | Right Y: 0.106765 [GREEN] | Diff: 0.00757287
+Frame 810 | Left Y: 0.416956 [RED] | Right Y: 0.203837 [RED] | Diff: 0.213118
+>>> LEFT FOOT LANDED at Y=0.107176 (cooldown: 0.480396s)
+Frame 820 | Left Y: 0.10688 [GREEN] | Right Y: 0.185938 [RED] | Diff: 0.0790587
+Frame 830 | Left Y: 0.267842 [RED] | Right Y: 0.336467 [RED] | Diff: 0.0686248
+>>> RIGHT FOOT LANDED at Y=0.137832 (cooldown: 0.402174s)
+Frame 840 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 850 | Left Y: 0.402904 [RED] | Right Y: 0.245956 [RED] | Diff: 0.156948
+>>> LEFT FOOT LANDED at Y=0.128435 (cooldown: 0.471117s)
+Frame 860 | Left Y: 0.106658 [GREEN] | Right Y: 0.180914 [RED] | Diff: 0.0742555
+Frame 870 | Left Y: 0.29587 [RED] | Right Y: 0.310671 [RED] | Diff: 0.0148003
+>>> RIGHT FOOT LANDED at Y=0.124234 (cooldown: 0.423822s)
+Frame 880 | Left Y: 0.108433 [GREEN] | Right Y: 0.107046 [GREEN] | Diff: 0.00138664
+Frame 890 | Left Y: 0.386001 [RED] | Right Y: 0.274741 [RED] | Diff: 0.111259
+>>> LEFT FOOT LANDED at Y=0.105987 (cooldown: 0.473475s)
+Frame 900 | Left Y: 0.106576 [GREEN] | Right Y: 0.177296 [RED] | Diff: 0.0707202
+Frame 910 | Left Y: 0.340633 [RED] | Right Y: 0.23495 [RED] | Diff: 0.105683
+>>> RIGHT FOOT LANDED at Y=0.123692 (cooldown: 0.410044s)
+Frame 920 | Left Y: 0.110244 [GREEN] | Right Y: 0.106809 [GREEN] | Diff: 0.00343528
+Frame 930 | Left Y: 0.335361 [RED] | Right Y: 0.316043 [RED] | Diff: 0.0193179
+>>> LEFT FOOT LANDED at Y=0.142912 (cooldown: 0.454948s)
+Frame 940 | Left Y: 0.112433 [GREEN] | Right Y: 0.179758 [RED] | Diff: 0.0673256
+Frame 950 | Left Y: 0.36169 [RED] | Right Y: 0.172124 [RED] | Diff: 0.189566
+>>> RIGHT FOOT LANDED at Y=0.129205 (cooldown: 0.423479s)
+Frame 960 | Left Y: 0.132915 [GREEN] | Right Y: 0.106626 [GREEN] | Diff: 0.0262893
+Frame 970 | Left Y: 0.273793 [RED] | Right Y: 0.331108 [RED] | Diff: 0.0573145
+>>> LEFT FOOT LANDED at Y=0.10782 (cooldown: 0.474325s)
+Frame 980 | Left Y: 0.111817 [GREEN] | Right Y: 0.182494 [RED] | Diff: 0.0706764
+Frame 990 | Left Y: 0.365156 [RED] | Right Y: 0.136316 [GREEN] | Diff: 0.228839
+>>> RIGHT FOOT LANDED at Y=0.136316 (cooldown: 0.405611s)
+Frame 1000 | Left Y: 0.167176 [RED] | Right Y: 0.106103 [GREEN] | Diff: 0.0610727
+Frame 1010 | Left Y: 0.234785 [RED] | Right Y: 0.337027 [RED] | Diff: 0.102242
+>>> LEFT FOOT LANDED at Y=0.140812 (cooldown: 0.462639s)
+Frame 1020 | Left Y: 0.111601 [GREEN] | Right Y: 0.188682 [RED] | Diff: 0.0770802
+Frame 1030 | Left Y: 0.359242 [RED] | Right Y: 0.124128 [GREEN] | Diff: 0.235114
+>>> RIGHT FOOT LANDED at Y=0.124128 (cooldown: 0.427149s)
+Frame 1040 | Left Y: 0.195444 [RED] | Right Y: 0.106073 [GREEN] | Diff: 0.0893711
+Frame 1050 | Left Y: 0.1765 [RED] | Right Y: 0.341161 [RED] | Diff: 0.164661
+>>> LEFT FOOT LANDED at Y=0.115129 (cooldown: 0.467192s)
+Frame 1060 | Left Y: 0.110628 [GREEN] | Right Y: 0.196223 [RED] | Diff: 0.0855945
+Frame 1070 | Left Y: 0.358017 [RED] | Right Y: 0.12206 [GREEN] | Diff: 0.235957
+>>> RIGHT FOOT LANDED at Y=0.12206 (cooldown: 0.419224s)
+Frame 1080 | Left Y: 0.193202 [RED] | Right Y: 0.106224 [GREEN] | Diff: 0.0869781
+Frame 1090 | Left Y: 0.187782 [RED] | Right Y: 0.341151 [RED] | Diff: 0.15337
+>>> LEFT FOOT LANDED at Y=0.119338 (cooldown: 0.46172s)
+Frame 1100 | Left Y: 0.110887 [GREEN] | Right Y: 0.191812 [RED] | Diff: 0.0809246
+Frame 1110 | Left Y: 0.360128 [RED] | Right Y: 0.125719 [GREEN] | Diff: 0.234409
+>>> RIGHT FOOT LANDED at Y=0.125719 (cooldown: 0.42024s)
+Frame 1120 | Left Y: 0.201531 [RED] | Right Y: 0.105771 [GREEN] | Diff: 0.0957594
+Frame 1130 | Left Y: 0.186161 [RED] | Right Y: 0.341149 [RED] | Diff: 0.154988
+>>> LEFT FOOT LANDED at Y=0.119635 (cooldown: 0.463049s)
+Frame 1140 | Left Y: 0.110461 [GREEN] | Right Y: 0.202984 [RED] | Diff: 0.0925237
+>>> RIGHT FOOT LANDED at Y=0.126602 (cooldown: 0.416744s)
+Frame 1150 | Left Y: 0.341693 [RED] | Right Y: 0.115412 [GREEN] | Diff: 0.226281
+Frame 1160 | Left Y: 0.255056 [RED] | Right Y: 0.104884 [GREEN] | Diff: 0.150172
+Frame 1170 | Left Y: 0.106336 [GREEN] | Right Y: 0.332651 [RED] | Diff: 0.226315
+>>> LEFT FOOT LANDED at Y=0.106336 (cooldown: 0.476646s)
+Frame 1180 | Left Y: 0.108189 [GREEN] | Right Y: 0.24103 [RED] | Diff: 0.13284
+>>> RIGHT FOOT LANDED at Y=0.129222 (cooldown: 0.404364s)
+Frame 1190 | Left Y: 0.31814 [RED] | Right Y: 0.110344 [GREEN] | Diff: 0.207795
+Frame 1200 | Left Y: 0.305277 [RED] | Right Y: 0.106544 [GREEN] | Diff: 0.198733
+Frame 1210 | Left Y: 0.10644 [GREEN] | Right Y: 0.332927 [RED] | Diff: 0.226487
+>>> LEFT FOOT LANDED at Y=0.10644 (cooldown: 0.477577s)
+Frame 1220 | Left Y: 0.108156 [GREEN] | Right Y: 0.233149 [RED] | Diff: 0.124993
+>>> RIGHT FOOT LANDED at Y=0.140869 (cooldown: 0.396986s)
+Frame 1230 | Left Y: 0.327215 [RED] | Right Y: 0.111805 [GREEN] | Diff: 0.215411
+Frame 1240 | Left Y: 0.279667 [RED] | Right Y: 0.105312 [GREEN] | Diff: 0.174354
+>>> LEFT FOOT LANDED at Y=0.148632 (cooldown: 0.466351s)
+Frame 1250 | Left Y: 0.105714 [GREEN] | Right Y: 0.330549 [RED] | Diff: 0.224835
+Frame 1260 | Left Y: 0.108379 [GREEN] | Right Y: 0.245384 [RED] | Diff: 0.137005
+>>> RIGHT FOOT LANDED at Y=0.149946 (cooldown: 0.41304s)
+Frame 1270 | Left Y: 0.302941 [RED] | Right Y: 0.108655 [GREEN] | Diff: 0.194285
+Frame 1280 | Left Y: 0.356573 [RED] | Right Y: 0.114176 [GREEN] | Diff: 0.242398
+>>> LEFT FOOT LANDED at Y=0.106817 (cooldown: 0.489391s)
+Frame 1290 | Left Y: 0.105899 [GREEN] | Right Y: 0.311409 [RED] | Diff: 0.205511
+Frame 1300 | Left Y: 0.108788 [GREEN] | Right Y: 0.282921 [RED] | Diff: 0.174132
+>>> RIGHT FOOT LANDED at Y=0.147569 (cooldown: 0.395227s)
+Frame 1310 | Left Y: 0.300291 [RED] | Right Y: 0.108464 [GREEN] | Diff: 0.191826
+Frame 1320 | Left Y: 0.362381 [RED] | Right Y: 0.114217 [GREEN] | Diff: 0.248164
+>>> LEFT FOOT LANDED at Y=0.108221 (cooldown: 0.485428s)
+Frame 1330 | Left Y: 0.10617 [GREEN] | Right Y: 0.314675 [RED] | Diff: 0.208505
+Frame 1340 | Left Y: 0.108366 [GREEN] | Right Y: 0.270427 [RED] | Diff: 0.16206
+>>> RIGHT FOOT LANDED at Y=0.145138 (cooldown: 0.399414s)
+Frame 1350 | Left Y: 0.299474 [RED] | Right Y: 0.108414 [GREEN] | Diff: 0.191061
+Frame 1360 | Left Y: 0.354107 [RED] | Right Y: 0.114173 [GREEN] | Diff: 0.239934
+>>> LEFT FOOT LANDED at Y=0.113308 (cooldown: 0.480772s)
+Frame 1370 | Left Y: 0.10685 [GREEN] | Right Y: 0.318551 [RED] | Diff: 0.211701
+Frame 1380 | Left Y: 0.108332 [GREEN] | Right Y: 0.2645 [RED] | Diff: 0.156168
+>>> RIGHT FOOT LANDED at Y=0.123158 (cooldown: 0.418242s)
+Frame 1390 | Left Y: 0.309493 [RED] | Right Y: 0.109272 [GREEN] | Diff: 0.200221
+Frame 1400 | Left Y: 0.309831 [RED] | Right Y: 0.10688 [GREEN] | Diff: 0.202951
+>>> LEFT FOOT LANDED at Y=0.139607 (cooldown: 0.45409s)
+Frame 1410 | Left Y: 0.105391 [GREEN] | Right Y: 0.328526 [RED] | Diff: 0.223135
+Frame 1420 | Left Y: 0.108186 [GREEN] | Right Y: 0.232166 [RED] | Diff: 0.12398
+>>> RIGHT FOOT LANDED at Y=0.14554 (cooldown: 0.410995s)
+Frame 1430 | Left Y: 0.333772 [RED] | Right Y: 0.113321 [GREEN] | Diff: 0.220452
+Frame 1440 | Left Y: 0.246698 [RED] | Right Y: 0.105302 [GREEN] | Diff: 0.141395
+Frame 1450 | Left Y: 0.129064 [GREEN] | Right Y: 0.338618 [RED] | Diff: 0.209555
+>>> LEFT FOOT LANDED at Y=0.129064 (cooldown: 0.47776s)
+Frame 1460 | Left Y: 0.112366 [GREEN] | Right Y: 0.339508 [RED] | Diff: 0.227142
+>>> RIGHT FOOT LANDED at Y=0.145236 (cooldown: 0.406887s)
+Frame 1470 | Left Y: 0.229702 [RED] | Right Y: 0.10709 [GREEN] | Diff: 0.122612
+Frame 1480 | Left Y: 0.436365 [RED] | Right Y: 0.111552 [GREEN] | Diff: 0.324813
+>>> LEFT FOOT LANDED at Y=0.106884 (cooldown: 0.48732s)
+Frame 1490 | Left Y: 0.107193 [GREEN] | Right Y: 0.248077 [RED] | Diff: 0.140884
+Frame 1500 | Left Y: 0.133977 [GREEN] | Right Y: 0.370754 [RED] | Diff: 0.236777
+>>> RIGHT FOOT LANDED at Y=0.141874 (cooldown: 0.397827s)
+Frame 1510 | Left Y: 0.190812 [RED] | Right Y: 0.106915 [GREEN] | Diff: 0.0838966
+Frame 1520 | Left Y: 0.435517 [RED] | Right Y: 0.109162 [GREEN] | Diff: 0.326355
+>>> LEFT FOOT LANDED at Y=0.106956 (cooldown: 0.484787s)
+Frame 1530 | Left Y: 0.106892 [GREEN] | Right Y: 0.22629 [RED] | Diff: 0.119397
+Frame 1540 | Left Y: 0.188052 [RED] | Right Y: 0.36804 [RED] | Diff: 0.179988
+>>> RIGHT FOOT LANDED at Y=0.125651 (cooldown: 0.412975s)
+Frame 1550 | Left Y: 0.108922 [GREEN] | Right Y: 0.107317 [GREEN] | Diff: 0.00160506
+Frame 1560 | Left Y: 0.396923 [RED] | Right Y: 0.25541 [RED] | Diff: 0.141514
+>>> LEFT FOOT LANDED at Y=0.115979 (cooldown: 0.466778s)
+Frame 1570 | Left Y: 0.10673 [GREEN] | Right Y: 0.176987 [RED] | Diff: 0.0702564
+Frame 1580 | Left Y: 0.355395 [RED] | Right Y: 0.19393 [RED] | Diff: 0.161465
+>>> RIGHT FOOT LANDED at Y=0.136185 (cooldown: 0.408718s)
+Frame 1590 | Left Y: 0.152627 [RED] | Right Y: 0.106264 [GREEN] | Diff: 0.0463631
+Frame 1600 | Left Y: 0.160887 [RED] | Right Y: 0.341286 [RED] | Diff: 0.180399
+>>> LEFT FOOT LANDED at Y=0.105873 (cooldown: 0.483524s)
+Frame 1610 | Left Y: 0.109209 [GREEN] | Right Y: 0.209489 [RED] | Diff: 0.10028
+>>> RIGHT FOOT LANDED at Y=0.127567 (cooldown: 0.40361s)
+Frame 1620 | Left Y: 0.342838 [RED] | Right Y: 0.115575 [GREEN] | Diff: 0.227263
+Frame 1630 | Left Y: 0.252637 [RED] | Right Y: 0.104974 [GREEN] | Diff: 0.147664
+Frame 1640 | Left Y: 0.117605 [GREEN] | Right Y: 0.336561 [RED] | Diff: 0.218955
+>>> LEFT FOOT LANDED at Y=0.117605 (cooldown: 0.469318s)
+Frame 1650 | Left Y: 0.108791 [GREEN] | Right Y: 0.218225 [RED] | Diff: 0.109434
+>>> RIGHT FOOT LANDED at Y=0.123867 (cooldown: 0.417362s)
+Frame 1660 | Left Y: 0.339265 [RED] | Right Y: 0.114814 [GREEN] | Diff: 0.22445
+Frame 1670 | Left Y: 0.263045 [RED] | Right Y: 0.104765 [GREEN] | Diff: 0.158281
+Frame 1680 | Left Y: 0.109413 [GREEN] | Right Y: 0.335065 [RED] | Diff: 0.225653
+>>> LEFT FOOT LANDED at Y=0.109413 (cooldown: 0.469971s)
+Frame 1690 | Left Y: 0.108414 [GREEN] | Right Y: 0.24599 [RED] | Diff: 0.137576
+>>> RIGHT FOOT LANDED at Y=0.131241 (cooldown: 0.406765s)
+Frame 1700 | Left Y: 0.321353 [RED] | Right Y: 0.110807 [GREEN] | Diff: 0.210546
+Frame 1710 | Left Y: 0.314704 [RED] | Right Y: 0.107356 [GREEN] | Diff: 0.207347
+>>> LEFT FOOT LANDED at Y=0.127845 (cooldown: 0.46756s)
+Frame 1720 | Left Y: 0.105754 [GREEN] | Right Y: 0.323736 [RED] | Diff: 0.217982
+Frame 1730 | Left Y: 0.108357 [GREEN] | Right Y: 0.269797 [RED] | Diff: 0.16144
+>>> RIGHT FOOT LANDED at Y=0.120541 (cooldown: 0.427582s)
+Frame 1740 | Left Y: 0.30321 [RED] | Right Y: 0.108677 [GREEN] | Diff: 0.194533
+Frame 1750 | Left Y: 0.342836 [RED] | Right Y: 0.112256 [GREEN] | Diff: 0.23058
+>>> LEFT FOOT LANDED at Y=0.148783 (cooldown: 0.447353s)
+Frame 1760 | Left Y: 0.105876 [GREEN] | Right Y: 0.309002 [RED] | Diff: 0.203126
+Frame 1770 | Left Y: 0.109387 [GREEN] | Right Y: 0.2926 [RED] | Diff: 0.183213
+>>> RIGHT FOOT LANDED at Y=0.136843 (cooldown: 0.41914s)
+Frame 1780 | Left Y: 0.295223 [RED] | Right Y: 0.108181 [GREEN] | Diff: 0.187041
+Frame 1790 | Left Y: 0.355909 [RED] | Right Y: 0.114174 [GREEN] | Diff: 0.241735
+>>> LEFT FOOT LANDED at Y=0.106713 (cooldown: 0.485794s)
+Frame 1800 | Left Y: 0.105872 [GREEN] | Right Y: 0.30918 [RED] | Diff: 0.203308
+Frame 1810 | Left Y: 0.108864 [GREEN] | Right Y: 0.284374 [RED] | Diff: 0.17551
+>>> RIGHT FOOT LANDED at Y=0.139698 (cooldown: 0.396896s)
+Frame 1820 | Left Y: 0.295702 [RED] | Right Y: 0.108216 [GREEN] | Diff: 0.187485
+Frame 1830 | Left Y: 0.354762 [RED] | Right Y: 0.114173 [GREEN] | Diff: 0.24059
+>>> LEFT FOOT LANDED at Y=0.11451 (cooldown: 0.47887s)
+Frame 1840 | Left Y: 0.106824 [GREEN] | Right Y: 0.318436 [RED] | Diff: 0.211611
+Frame 1850 | Left Y: 0.10833 [GREEN] | Right Y: 0.265092 [RED] | Diff: 0.156761
+>>> RIGHT FOOT LANDED at Y=0.12577 (cooldown: 0.415504s)
+Frame 1860 | Left Y: 0.312197 [RED] | Right Y: 0.109578 [GREEN] | Diff: 0.202619
+Frame 1870 | Left Y: 0.35307 [RED] | Right Y: 0.114174 [GREEN] | Diff: 0.238896
+>>> LEFT FOOT LANDED at Y=0.105969 (cooldown: 0.475216s)
+Frame 1880 | Left Y: 0.105868 [GREEN] | Right Y: 0.309416 [RED] | Diff: 0.203547
+Frame 1890 | Left Y: 0.110017 [GREEN] | Right Y: 0.30106 [RED] | Diff: 0.191043
+>>> RIGHT FOOT LANDED at Y=0.133956 (cooldown: 0.400726s)
+Frame 1900 | Left Y: 0.288865 [RED] | Right Y: 0.107776 [GREEN] | Diff: 0.181089
+Frame 1910 | Left Y: 0.373336 [RED] | Right Y: 0.114419 [GREEN] | Diff: 0.258917
+>>> LEFT FOOT LANDED at Y=0.144963 (cooldown: 0.463299s)
+Frame 1920 | Left Y: 0.105989 [GREEN] | Right Y: 0.306782 [RED] | Diff: 0.200793
+Frame 1930 | Left Y: 0.109677 [GREEN] | Right Y: 0.296379 [RED] | Diff: 0.186703
+>>> RIGHT FOOT LANDED at Y=0.136334 (cooldown: 0.418278s)

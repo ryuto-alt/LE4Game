@@ -81,11 +81,95 @@ void GamePlayScene::Initialize() {
         }
     }
 
-    // Orbの初期化（1個のみ）
+    // Orbの初期化（70個）
     orbs_.clear();
-    auto orb = std::make_unique<Orb>();
-    orb->Initialize(Vector3{0.0f, 0.5f, 5.0f}, camera_);  // Y座標を0に設定
-    orbs_.push_back(std::move(orb));
+
+    // 70個のOrbの位置（orb.gltfから抽出した位置）
+    const std::vector<Vector3> orbPositions = {
+        {0.0f, 0.342f, 0.0f},           // Orb 0
+        {9.0f, 0.342f, 0.0f},            // Orb 1
+        {9.0f, 0.342f, -12.0f},          // Orb 2
+        {21.0f, 0.342f, -12.0f},         // Orb 3
+        {27.0f, 0.342f, -24.0f},         // Orb 4
+        {21.0f, 0.342f, -24.0f},         // Orb 5
+        {9.0f, 0.342f, -24.0f},          // Orb 6
+        {3.0f, 0.342f, -12.0f},          // Orb 7
+        {-3.0f, 0.342f, -12.0f},         // Orb 8
+        {-9.0f, 0.342f, -12.0f},         // Orb 9
+        {-15.0f, 0.342f, -12.0f},        // Orb 10
+        {-21.0f, 0.342f, -12.0f},        // Orb 11
+        {-27.0f, 0.342f, -12.0f},        // Orb 12
+        {-27.0f, 0.342f, -18.0f},        // Orb 13
+        {-27.0f, 0.342f, -24.0f},        // Orb 14
+        {-27.0f, 0.342f, -30.0f},        // Orb 15
+        {-27.0f, 0.342f, -36.0f},        // Orb 16
+        {-21.0f, 0.342f, -36.0f},        // Orb 17
+        {-15.0f, 0.342f, -36.0f},        // Orb 18
+        {-9.0f, 0.342f, -36.0f},         // Orb 19
+        {-3.0f, 0.342f, -36.0f},         // Orb 20
+        {3.0f, 0.342f, -36.0f},          // Orb 21
+        {9.0f, 0.342f, -36.0f},          // Orb 22
+        {15.0f, 0.342f, -36.0f},         // Orb 23
+        {21.0f, 0.342f, -36.0f},         // Orb 24
+        {27.0f, 0.342f, -36.0f},         // Orb 25
+        {33.0f, 0.342f, -36.0f},         // Orb 26
+        {39.0f, 0.342f, -36.0f},         // Orb 27
+        {45.0f, 0.342f, -36.0f},         // Orb 28
+        {45.0f, 0.342f, -30.0f},         // Orb 29
+        {45.0f, 0.342f, -24.0f},         // Orb 30
+        {45.0f, 0.342f, -18.0f},         // Orb 31
+        {45.0f, 0.342f, -12.0f},         // Orb 32
+        {45.0f, 0.342f, -6.0f},          // Orb 33
+        {45.0f, 0.342f, 0.0f},           // Orb 34
+        {39.0f, 0.342f, 0.0f},           // Orb 35
+        {33.0f, 0.342f, 0.0f},           // Orb 36
+        {27.0f, 0.342f, 0.0f},           // Orb 37
+        {21.0f, 0.342f, 0.0f},           // Orb 38
+        {15.0f, 0.342f, 0.0f},           // Orb 39
+        {27.0f, 0.342f, 12.0f},          // Orb 40
+        {21.0f, 0.342f, 12.0f},          // Orb 41
+        {15.0f, 0.342f, 12.0f},          // Orb 42
+        {9.0f, 0.342f, 12.0f},           // Orb 43
+        {3.0f, 0.342f, 12.0f},           // Orb 44
+        {-3.0f, 0.342f, 12.0f},          // Orb 45
+        {-9.0f, 0.342f, 12.0f},          // Orb 46
+        {-15.0f, 0.342f, 12.0f},         // Orb 47
+        {-21.0f, 0.342f, 12.0f},         // Orb 48
+        {-27.0f, 0.342f, 12.0f},         // Orb 49
+        {-27.0f, 0.342f, 6.0f},          // Orb 50
+        {-27.0f, 0.342f, 0.0f},          // Orb 51
+        {-27.0f, 0.342f, -6.0f},         // Orb 52
+        {-21.0f, 0.342f, 0.0f},          // Orb 53
+        {-15.0f, 0.342f, 0.0f},          // Orb 54
+        {-9.0f, 0.342f, 0.0f},           // Orb 55
+        {-3.0f, 0.342f, 0.0f},           // Orb 56
+        {-39.0f, 0.342f, -48.0f},        // Orb 57
+        {-33.0f, 0.342f, -48.0f},        // Orb 58
+        {-27.0f, 0.342f, -48.0f},        // Orb 59
+        {-21.0f, 0.342f, -48.0f},        // Orb 60
+        {-15.0f, 0.342f, -48.0f},        // Orb 61
+        {-9.0f, 0.342f, -48.0f},         // Orb 62
+        {-3.0f, 0.342f, -48.0f},         // Orb 63
+        {3.0f, 0.342f, -48.0f},          // Orb 64
+        {9.0f, 0.342f, -48.0f},          // Orb 65
+        {15.0f, 0.342f, -48.0f},         // Orb 66
+        {21.0f, 0.342f, -48.0f},         // Orb 67
+        {27.0f, 0.342f, -48.0f},         // Orb 68
+        {33.0f, 0.342f, -48.0f},         // Orb 69
+    };
+
+    // 各位置にOrbを生成
+    for (const auto& pos : orbPositions) {
+        auto orb = std::make_unique<Orb>();
+        orb->Initialize(pos, camera_);
+        orbs_.push_back(std::move(orb));
+    }
+
+    OutputDebugStringA("GamePlayScene: Initialized 70 Orbs\n");
+
+    // Orb取得音の読み込み
+    AudioManager::GetInstance()->LoadMP3("orbGet", "Resources/Audio/get.mp3");
+    AudioManager::GetInstance()->SetVolume("orbGet", 0.5f);
 }
 
 
@@ -307,7 +391,7 @@ void GamePlayScene::Update() {
 
     // Orbの更新と衝突判定
     for (auto& orb : orbs_) {
-        if (orb && orb->IsActive()) {
+        if (orb) {
             // ライト設定
             orb->SetDirectionalLight(dirLight);
             orb->SetSpotLight(spotLight);
@@ -318,11 +402,29 @@ void GamePlayScene::Update() {
             // プレイヤーとの衝突判定（簡易的な球体判定）
             if (player_) {
                 Vector3 playerPos = player_->GetPosition();
-                float playerRadius = 1.0f;  // プレイヤーの衝突半径
+                float playerRadius = 0.5f;  // プレイヤーの衝突半径（小さくしてより近づく必要がある）
 
                 if (orb->CheckCollisionWithPlayer(playerPos, playerRadius)) {
-                    orb->SetActive(false);  // Orbを消す
                     OutputDebugStringA("Orb collected!\n");
+
+                    // Orb取得音を再生
+                    AudioManager::GetInstance()->Play("orbGet", false);
+
+                    // 残りのOrbを数える
+                    int remainingOrbs = 0;
+                    for (const auto& o : orbs_) {
+                        if (o && !o->IsCollected()) {
+                            remainingOrbs++;
+                        }
+                    }
+
+                    char debugMsg[256];
+                    sprintf_s(debugMsg, "Remaining Orbs: %d / 70\n", remainingOrbs);
+                    OutputDebugStringA(debugMsg);
+
+                    if (remainingOrbs == 0) {
+                        OutputDebugStringA("All Orbs collected! Congratulations!\n");
+                    }
                 }
             }
         }
@@ -377,9 +479,9 @@ void GamePlayScene::Draw() {
         player_->Draw();
     }
 
-    // Orbの描画
+    // Orbの描画（常に描画する）
     for (auto& orb : orbs_) {
-        if (orb && orb->IsActive()) {
+        if (orb) {
             orb->Draw();
         }
     }

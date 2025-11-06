@@ -28,6 +28,10 @@ public:
     // プレイヤーとの当たり判定チェック
     bool CheckCollisionWithPlayer(const Vector3& playerPos, float playerRadius);
 
+    // このOrbが取得されたかどうか
+    bool IsCollected() const { return isCollected_; }
+    void SetCollected(bool collected) { isCollected_ = collected; }
+
 private:
     // スポットライトの照射判定
     void CheckSpotLightIllumination();
@@ -47,8 +51,8 @@ private:
     float floatAmplitude_ = 0.3f;
     Vector3 basePosition_ = Vector3{0.0f, 0.0f, 0.0f};
 
-    // 衝突判定用半径
-    const float collisionRadius_ = 1.0f;
+    // 衝突判定用半径（小さくしてより近づく必要がある）
+    const float collisionRadius_ = 0.5f;
 
     Camera* camera_ = nullptr;
 
@@ -56,4 +60,7 @@ private:
     bool isIlluminatedBySpotLight_ = false;
     float glowIntensity_ = 0.0f;
     const SpotLight* currentSpotLight_ = nullptr;
+
+    // このOrb単体の取得状態
+    bool isCollected_ = false;
 };
