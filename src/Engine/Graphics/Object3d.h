@@ -60,6 +60,10 @@ public:
     void SetColor(const Vector4& color) { materialData_->baseColorFactor = color; }
     const Vector4& GetColor() const { return materialData_->baseColorFactor; }
 
+    // エミッシブカラーの設定
+    void SetEmissiveFactor(const Vector3& emissive) { materialData_->emissiveFactor = emissive; }
+    const Vector3& GetEmissiveFactor() const { return materialData_->emissiveFactor; }
+
     // ライトを有効にするか
     void SetEnableLighting(bool enable) { materialData_->enableLighting = enable ? 1 : 0; }
     bool GetEnableLighting() const { return materialData_->enableLighting != 0; }
