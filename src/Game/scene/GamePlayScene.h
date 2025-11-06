@@ -10,6 +10,7 @@
 #include "PostProcess.h"
 #include "Scene/SceneConfigurator.h"
 #include "NavMesh/NavMeshSystem.h"
+#include "../Utils/JsonLoader.h"
 #include <memory>
 #include <vector>
 

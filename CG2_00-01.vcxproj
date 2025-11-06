@@ -165,6 +165,7 @@
     <ClCompile Include="src\Game\NavMesh\NavMesh.cpp" />
     <ClCompile Include="src\Game\NavMesh\NavMeshBuilder.cpp" />
     <ClCompile Include="src\Game\NavMesh\NavMeshHelper.cpp" />
+    <ClCompile Include="src\Game\Utils\JsonLoader.cpp" />
     <ClCompile Include="src\Engine\NavMesh\EnemyAI.cpp" />
     <ClCompile Include="src\Engine\NavMesh\NavMeshSystem.cpp" />
     <ClCompile Include="src\Engine\Animation\AnimatedModel.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="src\Game\NavMesh\NavMesh.h" />
     <ClInclude Include="src\Game\NavMesh\NavMeshBuilder.h" />
     <ClInclude Include="src\Game\NavMesh\NavMeshHelper.h" />
+    <ClInclude Include="src\Game\Utils\JsonLoader.h" />
     <ClInclude Include="src\Engine\NavMesh\EnemyAI.h" />
     <ClInclude Include="src\Engine\NavMesh\NavMeshSystem.h" />
     <ClInclude Include="src\Engine\Animation\Animation.h" />
