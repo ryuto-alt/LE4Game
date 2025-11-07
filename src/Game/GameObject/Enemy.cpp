@@ -487,6 +487,13 @@ void Enemy::UpdateFootstepAudio(float deltaTime) {
 			if (footstepSource1_) {
 				footstepSource1_->SetPosition(position_);
 				footstepSource1_->Update(listenerPos, listenerForward);
+
+				// 恐怖演出: 距離に応じた音量の非線形減衰
+				Vector3 diff = listenerPos - position_;
+				float distanceToPlayer = sqrtf(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+				float horrorVolume = CalculateHorrorVolume(distanceToPlayer);
+				footstepSource1_->SetVolume(horrorVolume);
+
 				footstepSource1_->Play(false);  // ループなし
 
 				lastLeftFootLandTime_ = totalTime;  // 着地時刻を記録
@@ -520,6 +527,13 @@ void Enemy::UpdateFootstepAudio(float deltaTime) {
 			if (footstepSource2_) {
 				footstepSource2_->SetPosition(position_);
 				footstepSource2_->Update(listenerPos, listenerForward);
+
+				// 恐怖演出: 距離に応じた音量の非線形減衰
+				Vector3 diff = listenerPos - position_;
+				float distanceToPlayer = sqrtf(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+				float horrorVolume = CalculateHorrorVolume(distanceToPlayer);
+				footstepSource2_->SetVolume(horrorVolume);
+
 				footstepSource2_->Play(false);  // ループなし
 
 				lastRightFootLandTime_ = totalTime;  // 着地時刻を記録
@@ -1433,4 +1447,26 @@ bool Enemy::IsPlayerInVision() {
 
 	// 視野角以内ならtrue（Enemyの前方±60度、合計120度の視野）
 	return angleInDegrees <= VISION_ANGLE;
+}
+
+// ========================================
+// 恐怖演出用ヘルパー関数
+// ========================================
+
+float Enemy::CalculateHorrorVolume(float distance) {
+	const float CLOSE_RANGE = 5.0f;
+	const float MID_RANGE = 15.0f;
+	const float FAR_RANGE = 30.0f;
+
+	if (distance < CLOSE_RANGE) {
+		return 1.2f;
+	} else if (distance < MID_RANGE) {
+		float t = (distance - CLOSE_RANGE) / (MID_RANGE - CLOSE_RANGE);
+		return 1.2f * powf(0.3f, t);
+	} else if (distance < FAR_RANGE) {
+		float t = (distance - MID_RANGE) / (FAR_RANGE - MID_RANGE);
+		return 0.36f * (1.0f - t);
+	} else {
+		return 0.0f;
+	}
 }

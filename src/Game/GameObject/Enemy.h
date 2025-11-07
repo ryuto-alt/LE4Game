@@ -105,6 +105,9 @@ private:
 	Vector3 GetRandomPatrolPoint();  // 徘徊用ランダムポイント取得
 	void DrawFootBoneDebug();  // 足のボーンデバッグ描画
 
+	// 恐怖演出用ヘルパー関数
+	float CalculateHorrorVolume(float distance);  // 距離に応じた恐怖的な音量計算
+
 	// 3D object and model
 	std::unique_ptr<Object3d> object3d_;
 	std::unique_ptr<AnimatedModel> animatedModel_;
