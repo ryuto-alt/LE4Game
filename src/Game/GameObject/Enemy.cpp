@@ -127,9 +127,11 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	barkSound_->SetMaxDistance(35.0f);
 	barkSound_->SetMinDistance(1.0f);
 
-	// 足のボーンデバッグ用LineRenderer初期化
+#ifdef _DEBUG
+	// 足のボーンデバッグ用LineRenderer初期化（Debugビルドのみ）
 	footDebugLineRenderer_ = std::make_unique<LineRenderer>();
 	footDebugLineRenderer_->Initialize(engine->GetDXCom(), camera);
+#endif
 }
 
 void Enemy::Update(UnoEngine* engine) {
@@ -593,11 +595,6 @@ void Enemy::UpdateDetectionSound() {
 }
 
 void Enemy::UpdateBarkSound(float deltaTime) {
-	// 追跡中でない場合は何もしない
-	if (!isChasing_) {
-		return;
-	}
-
 	// リスナーが設定されていない場合はスキップ
 	if (!audioListener_ || !barkSound_) {
 		return;
@@ -610,6 +607,42 @@ void Enemy::UpdateBarkSound(float deltaTime) {
 	// 3D位置を常に更新
 	barkSound_->SetPosition(position_);
 	barkSound_->Update(listenerPos, listenerForward);
+
+	// 追跡状態が変化したか確認（見つかった瞬間）
+	bool justStartedChasing = isChasing_ && !wasChasing_;
+
+	// 前フレームの状態を保存
+	wasChasing_ = isChasing_;
+
+	// 追跡開始時は即座に吠える
+	if (justStartedChasing) {
+		// 現在再生中でも停止して最初から再生
+		if (barkSound_->IsPlaying()) {
+			barkSound_->Stop();
+		}
+		barkSound_->Play(false);  // ループなし
+
+		// 現在の時刻を取得（秒単位）
+		static float totalTime = 0.0f;
+		totalTime += deltaTime;
+		lastBarkTime_ = totalTime;
+
+		// 次の吠え声までのランダムな間隔を設定（8〜12秒）
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_real_distribution<float> dist(BARK_MIN_INTERVAL, BARK_MAX_INTERVAL);
+		nextBarkInterval_ = dist(gen);
+
+#ifdef _DEBUG
+		OutputDebugStringA("[Enemy] Bark sound played - Player spotted!\n");
+#endif
+		return;  // この後の処理はスキップ
+	}
+
+	// 追跡中でない場合はここで終了
+	if (!isChasing_) {
+		return;
+	}
 
 	// 現在の時刻を取得（秒単位）
 	static float totalTime = 0.0f;

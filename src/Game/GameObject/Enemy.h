@@ -76,7 +76,11 @@ public:
 	// Debug
 	bool debugDrawVision_{false};  // 視界デバッグ描画フラグ
 	bool debugStopMovement_{false};  // デバッグ用：移動停止フラグ
-	bool debugDrawFootBones_{true};  // 足のボーンデバッグ描画フラグ（デフォルトON）
+#ifdef _DEBUG
+	bool debugDrawFootBones_{true};  // 足のボーンデバッグ描画フラグ（DebugビルドのみデフォルトON）
+#else
+	bool debugDrawFootBones_{false};  // 足のボーンデバッグ描画フラグ（ReleaseビルドはOFF）
+#endif
 	float debugAnimationSpeed_{1.0f};  // アニメーション速度（1.0 = 通常速度）
 	bool debugManualAnimationControl_{false};  // 手動アニメーション制御フラグ
 	float debugManualAnimationTime_{0.0f};  // 手動アニメーション時間
@@ -137,6 +141,7 @@ private:
 	Player* player_{nullptr};
 	float moveSpeed_{8.0f};  // 1秒あたり8ユニット（60FPSで約0.133/frame）
 	bool isChasing_{false};
+	bool wasChasing_{false};  // 前フレームの追跡状態（追跡開始検出用）
 
 	// Vision-based detection
 	const float VISION_RANGE = 30.0f;  // 視界範囲30m
