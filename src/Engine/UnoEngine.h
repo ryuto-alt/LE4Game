@@ -1,10 +1,10 @@
 #pragma once
-#include <chrono>
 // 基本システム
 #include "WinApp.h"
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Camera.h"
+#include "StepTimer.h"
 
 // グラフィックス関連
 #include "SpriteCommon.h"
@@ -256,8 +256,15 @@ public:
     float SmoothRot(float current, float target, float speed, float deltaTime);
 
     // 時間管理
-    float GetDelta() const { return deltaTime_; }
-    void UpdateDt();
+    float GetDelta() const { return static_cast<float>(timer_.GetElapsedSeconds()); }
+    double GetDeltaTime() const { return timer_.GetElapsedSeconds(); }
+    uint32_t GetFPS() const { return timer_.GetFramesPerSecond(); }
+    uint32_t GetFrameCount() const { return timer_.GetFrameCount(); }
+    double GetTotalTime() const { return timer_.GetTotalSeconds(); }
+
+    // FPS制限設定（Unreal Engine風）
+    void SetTargetFPS(uint32_t fps);
+    void SetDeltaSmoothing(bool enabled) { timer_.SetDeltaTimeSmoothing(enabled); }
 
     // シーン管理
     void ChgScene(const std::string& sceneName);
@@ -405,8 +412,7 @@ private:
 
     // 終了リクエストフラグ
     bool endRequest_ = false;
-    
-    // 時間管理
-    float deltaTime_ = 0.0f;  // 前フレームからの経過時間（秒）
-    std::chrono::steady_clock::time_point lastFrameTime_;  // 前フレームの時刻
+
+    // 時間管理（高精度タイマー）
+    StepTimer timer_;
 };

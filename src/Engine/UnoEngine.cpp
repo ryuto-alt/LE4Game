@@ -133,9 +133,6 @@ void UnoEngine::Initialize() {
 // 更新
 void UnoEngine::Update() {
     try {
-        // デルタタイムを更新
-        UpdateDt();
-
         // Windowsのメッセージ処理
         if (winApp_->ProcessMessage()) {
             endRequest_ = true;
@@ -306,16 +303,19 @@ void UnoEngine::Finalize() {
 void UnoEngine::Run() {
     // ゲームループ
     while (!IsEnding()) {
-        // ImGuiの新しいフレーム
-        ImGui_ImplDX12_NewFrame();
-        ImGui_ImplWin32_NewFrame();
-        ImGui::NewFrame();
+        // StepTimerを使用してフレーム更新
+        timer_.Tick([&]() {
+            // ImGuiの新しいフレーム
+            ImGui_ImplDX12_NewFrame();
+            ImGui_ImplWin32_NewFrame();
+            ImGui::NewFrame();
 
-        // 更新
-        Update();
+            // 更新
+            Update();
 
-        // 描画
-        Draw();
+            // 描画
+            Draw();
+        });
     }
 }
 
@@ -717,32 +717,14 @@ float UnoEngine::SmoothRot(float current, float target, float speed, float delta
 // ⏱️ 時間管理
 // ========================================
 
-// デルタタイムを更新
-void UnoEngine::UpdateDt() {
-    // 初回呼び出し時の処理
-    static bool firstCall = true;
-    if (firstCall) {
-        lastFrameTime_ = std::chrono::steady_clock::now();
-        deltaTime_ = 1.0f / 120.0f; // 初回は120FPSと仮定
-        firstCall = false;
-        return;
+// 目標FPSを設定（フレームレート制限）
+void UnoEngine::SetTargetFPS(uint32_t fps) {
+    if (fps > 0) {
+        timer_.SetFixedTimeStep(true);
+        timer_.SetTargetElapsedSeconds(1.0 / static_cast<double>(fps));
+    } else {
+        timer_.SetFixedTimeStep(false);
     }
-    
-    // 現在時刻を取得
-    auto currentTime = std::chrono::steady_clock::now();
-    
-    // 前フレームからの経過時間を計算（マイクロ秒→秒に変換）
-    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - lastFrameTime_);
-    deltaTime_ = elapsed.count() / 1000000.0f;
-    
-    // デルタタイムの上限を設定（1/30秒 = 約33.3ms）
-    // これにより、デバッグ時の一時停止などで極端に大きな値にならないようにする
-    if (deltaTime_ > 1.0f / 30.0f) {
-        deltaTime_ = 1.0f / 30.0f;
-    }
-    
-    // 次フレームのために現在時刻を保存
-    lastFrameTime_ = currentTime;
 }
 
 // ========================================
