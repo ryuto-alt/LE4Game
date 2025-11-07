@@ -21,11 +21,16 @@ void Enemy::ApplyAIConfig() {
 	pathUpdateInterval_ = 2.0f - (aiConfig_.intelligence * 0.19f);
 
 	// Mobility: 0.0~10.0 → 移動速度 0.0~15.0 units/sec
-	// 5.0で約8.0 units/sec（デフォルト）
+	// 5.0で約7.5 units/sec（デフォルト）
 	moveSpeed_ = aiConfig_.mobility * 1.5f;
 
 	// Patrol Mobility: 徘徊時の移動速度
+	// 3.0で約4.5 units/sec（デフォルト）
 	patrolMoveSpeed_ = aiConfig_.patrolMobility * 1.5f;
+
+	// Search Mobility: 捜索時の移動速度（音検知後）
+	// 3.67で約5.5 units/sec（デフォルト）
+	searchMoveSpeed_ = aiConfig_.searchMobility * 1.5f;
 }
 
 void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
@@ -164,16 +169,10 @@ void Enemy::Update(UnoEngine* engine) {
 					float distance = std::sqrt(dx * dx + dz * dz);
 
 					if (distance <= soundDetectionRange_) {
-						// 壁チェック: 音源への視線が通るか確認
-						Vector3 enemyEyePos = {position_.x, position_.y + 1.5f, position_.z};
-						Vector3 soundEyePos = {footstepPos.x, footstepPos.y + 1.5f, footstepPos.z};
-
-						if (navMesh_->Raycast(enemyEyePos, soundEyePos)) {
-							// 音を検知: 最後に聞いた音の位置を記録
-							lastHeardSoundPosition_ = footstepPos;
-							lastSoundTime_ = static_cast<float>(UnoEngine::GetInstance()->GetTotalTime());
-							soundDetected = true;
-						}
+						// 音を検知: 最後に聞いた音の位置を記録（壁チェックなし）
+						lastHeardSoundPosition_ = footstepPos;
+						lastSoundTime_ = static_cast<float>(UnoEngine::GetInstance()->GetTotalTime());
+						soundDetected = true;
 					}
 				}
 			}
@@ -188,32 +187,59 @@ void Enemy::Update(UnoEngine* engine) {
 			};
 			float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.y * toPlayer.y + toPlayer.z * toPlayer.z);
 
-			// 音検知時の処理（視覚より優先度は低い）
-			if (soundDetected && !playerVisible) {
-				// 音を聞いた位置に向かう（視覚検知していない場合のみ）
-				lastSeenPlayerPosition_ = lastHeardSoundPosition_;
-			}
+			// 音検知時の処理: 音を聞いた位置に向かう（捜索モード）
+			if (soundDetected) {
+				// 視覚検知していない場合は音の位置をターゲットに
+				if (!playerVisible) {
+					// 音の位置が大きく変わった場合のみパスを更新
+					Vector3 soundDiff = {
+						lastHeardSoundPosition_.x - lastSeenPlayerPosition_.x,
+						0.0f,
+						lastHeardSoundPosition_.z - lastSeenPlayerPosition_.z
+					};
+					float soundMoveDist = std::sqrt(soundDiff.x * soundDiff.x + soundDiff.z * soundDiff.z);
 
-			// 追跡条件：視界内にいる OR 音を検知 OR (視界を失って5秒以内 AND 15m以内)
-			bool shouldChase = playerVisible || soundDetected ||
-			                   (isChasing_ && lostSightTimer_ < LOST_SIGHT_GRACE_PERIOD && distanceToPlayer <= CHASE_RELEASE_DISTANCE);
+					// 音の位置が2m以上変わったら即座にパス更新
+					if (soundMoveDist > 2.0f) {
+						lastSeenPlayerPosition_ = lastHeardSoundPosition_;
+						pathUpdateTimer_ = 0.0f;  // 即座に更新
+					}
+
+					// 捜索モードに入る（歩きで向かう）
+					if (!isSearching_ && !isChasing_) {
+						ChangeAnimation("Walk");
+						isSearching_ = true;
+						lastSeenPlayerPosition_ = lastHeardSoundPosition_;
+						pathUpdateTimer_ = 0.0f;  // 初回は即座に更新
+					}
+				}
+			}
 
 			if (playerVisible) {
 				// プレイヤーが見えている：最後に見た位置を更新
 				lastSeenPlayerPosition_ = playerPos;
 				lostSightTimer_ = 0.0f;
+
+				// 視認したら捜索モードを終了し、追跡モードに移行
+				if (!isChasing_) {
+					ChangeAnimation("Run");
+					isChasing_ = true;
+					isSearching_ = false;
+				}
 			} else if (isChasing_) {
 				// 視界を失ったがまだ追跡中：タイマーを進める
 				lostSightTimer_ += deltaTime;
 			}
 
+			// 追跡条件：視界内にいる OR (視界を失って10秒以内 AND 25m以内)
+			bool shouldChase = playerVisible ||
+			                   (isChasing_ && lostSightTimer_ < LOST_SIGHT_GRACE_PERIOD && distanceToPlayer <= CHASE_RELEASE_DISTANCE);
+
+			// 捜索条件：音を検知したが視認していない
+			bool shouldSearch = soundDetected && !playerVisible && !isChasing_;
+
 			if (shouldChase) {
-				// プレイヤーを追跡
-				if (!isChasing_) {
-					ChangeAnimation("Run");
-					isChasing_ = true;
-					lostSightTimer_ = 0.0f;
-				}
+				// プレイヤーを追跡（Runモード）
 
 				// パス更新タイマーを減算
 				pathUpdateTimer_ -= deltaTime;
@@ -229,12 +255,29 @@ void Enemy::Update(UnoEngine* engine) {
 				if (!currentPath_.empty()) {
 					FollowPath(deltaTime);
 				}
+			} else if (shouldSearch) {
+				// 捜索モード：音を聞いた位置に向かう（Walkモード）
+				// パス更新タイマーを減算
+				pathUpdateTimer_ -= deltaTime;
+
+				// 捜索中は頻繁に経路を更新（0.2秒間隔）
+				float searchUpdateInterval = 0.2f;
+				if (pathUpdateTimer_ <= 0.0f) {
+					UpdateNavMeshPath();
+					pathUpdateTimer_ = searchUpdateInterval;
+				}
+
+				// パスに沿って移動
+				if (!currentPath_.empty()) {
+					FollowPath(deltaTime);
+				}
 			} else {
 				// プレイヤーが視界外 & 追跡時間切れ - 徘徊モード
-				if (isChasing_) {
-					// 追跡終了：徘徊状態に
+				if (isChasing_ || isSearching_) {
+					// 追跡/捜索終了：徘徊状態に
 					ChangeAnimation("Walk");
 					isChasing_ = false;
+					isSearching_ = false;
 					currentPath_.clear();
 					currentWaypointIndex_ = 0;
 					lostSightTimer_ = 0.0f;
@@ -1077,8 +1120,15 @@ void Enemy::UpdateNavMeshPath() {
 
 // パスに沿って移動（先読みで滑らかに）
 void Enemy::FollowPath(float deltaTime) {
-	// 追跡中か徘徊中かで速度を変更
-	float currentMoveSpeed = isChasing_ ? moveSpeed_ : patrolMoveSpeed_;
+	// 状態に応じて速度を変更
+	float currentMoveSpeed;
+	if (isChasing_) {
+		currentMoveSpeed = moveSpeed_;  // 追跡: 6.80 (mobility)
+	} else if (isSearching_) {
+		currentMoveSpeed = searchMoveSpeed_;  // 捜索: 5.5
+	} else {
+		currentMoveSpeed = patrolMoveSpeed_;  // 徘徊: 4.5 (patrolMobility)
+	}
 
 	NavMeshHelper::FollowPath(
 		position_,

@@ -22,7 +22,7 @@ struct EnemyAIConfig {
     /// 100.0: 検知範囲 100m
     /// 値をそのまま検知距離（メートル）として使用
     /// </summary>
-    float aggressiveness = 0.0f;
+    float aggressiveness = 20.0f;
 
     /// <summary>
     /// 機動力（移動速度）
@@ -39,6 +39,13 @@ struct EnemyAIConfig {
     float patrolMobility = 4.5f;
 
     /// <summary>
+    /// 捜索時の機動力（音検知後の移動速度）
+    /// 0.0 ~ 10.0 → 移動速度 0.0 ~ 15.0 units/sec
+    /// 3.67: 約5.5 units/sec（デフォルト）
+    /// </summary>
+    float searchMobility = 5.5f;
+
+    /// <summary>
     /// パラメータを有効範囲にクランプ
     /// </summary>
     void Clamp() {
@@ -46,5 +53,6 @@ struct EnemyAIConfig {
         aggressiveness = std::clamp(aggressiveness, 0.0f, 100.0f);
         mobility = std::clamp(mobility, 0.0f, 10.0f);
         patrolMobility = std::clamp(patrolMobility, 0.0f, 10.0f);
+        searchMobility = std::clamp(searchMobility, 0.0f, 10.0f);
     }
 };
