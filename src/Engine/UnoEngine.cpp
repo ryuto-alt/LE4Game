@@ -900,7 +900,7 @@ void UnoEngine::SetFisheyeRadius(float radius) {
 // ライト更新
 void UnoEngine::UpdateLights() {
     if (lightManager_) {
-        lightManager_->Update();
+        lightManager_->Update(GetDelta());
     }
 }
 

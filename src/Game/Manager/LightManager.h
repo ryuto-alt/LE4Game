@@ -7,7 +7,7 @@ public:
     ~LightManager();
 
     void Initialize();
-    void Update();
+    void Update(float deltaTime);
     void DrawImGui();
 
     // スポットライトをプレイヤー視点に追従させる
@@ -35,7 +35,7 @@ public:
 private:
     void NormalizeDirectionalLightDirection();
     void UpdateLightIntensity();
-    void UpdateFlickerEffect();  // ちらつき効果の更新
+    void UpdateFlickerEffect(float deltaTime);  // ちらつき効果の更新
 
     // ライトデータ
     DirectionalLight directionalLight_;

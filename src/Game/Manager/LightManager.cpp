@@ -42,9 +42,9 @@ void LightManager::Initialize() {
     srand(static_cast<unsigned int>(time(nullptr)));
 }
 
-void LightManager::Update() {
+void LightManager::Update(float deltaTime) {
     UpdateLightIntensity();
-    UpdateFlickerEffect();
+    UpdateFlickerEffect(deltaTime);
 
 #ifdef _DEBUG
     // F2キーでデバッグ明るさモードの切り替え
@@ -182,9 +182,7 @@ void LightManager::UpdateLightIntensity() {
     }
 }
 
-void LightManager::UpdateFlickerEffect() {
-    const float deltaTime = 0.016f;  // 約60FPSと仮定
-
+void LightManager::UpdateFlickerEffect(float deltaTime) {
     // 点滅タイマーを進める
     blinkTimer_ += deltaTime;
 

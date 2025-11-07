@@ -271,7 +271,7 @@ void GamePlayScene::Update() {
         player_->UpdateCameraSystem(engine);
     }
 
-    lightManager_->Update();
+    lightManager_->Update(engine->GetDelta());
 
     // スポットライトをプレイヤー視点に追従させる
     if (fpsCamera_) {
