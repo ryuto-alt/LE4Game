@@ -3,14 +3,11 @@
 #include "NavMesh/NavMesh.h"
 #include "NavMesh/NavMeshBuilder.h"
 #include "NavMesh/NavMeshHelper.h"
-#include "NavMesh/EnemyAI.h"
-#include "NavMesh/NavMeshSystem.h"
 #include <cmath>
 #include <random>
 #include <fstream>
 #include "Collision/AABBCollision.h"
 #include "Collision/CollisionHelper.h"
-#include "DetourNavMeshQuery.h"
 #include "imgui.h"
 
 Enemy::Enemy() = default;
@@ -26,6 +23,9 @@ void Enemy::ApplyAIConfig() {
 	// Mobility: 0.0~10.0 → 移動速度 0.0~15.0 units/sec
 	// 5.0で約8.0 units/sec（デフォルト）
 	moveSpeed_ = aiConfig_.mobility * 1.5f;
+
+	// Patrol Mobility: 徘徊時の移動速度
+	patrolMoveSpeed_ = aiConfig_.patrolMobility * 1.5f;
 }
 
 void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
@@ -142,48 +142,8 @@ void Enemy::Update(UnoEngine* engine) {
 	if (!debugStopMovement_) {
 #endif
 
-	// 新しいAIシステムを使用する場合
-	if (useNewAI_ && enemyAI_ && player_) {
-		// EnemyAIを更新
-		enemyAI_->Update(deltaTime, player_->GetPosition());
-
-		// AIの状態に基づいてアニメーションを更新
-		EnemyState aiState = enemyAI_->GetState();
-		switch (aiState) {
-			case EnemyState::Patrol:
-				if (GetCurrentAnimationName() != "Walk") {
-					ChangeAnimation("Walk");
-				}
-				break;
-			case EnemyState::Chase:
-				if (GetCurrentAnimationName() != "Run") {
-					ChangeAnimation("Run");
-				}
-				break;
-			case EnemyState::Attack:
-				if (GetCurrentAnimationName() != "Run") {
-					ChangeAnimation("Run");
-				}
-				break;
-			default:
-				break;
-		}
-
-		// AIから位置と回転を取得
-		position_ = enemyAI_->GetPosition();
-		currentRotationY_ = enemyAI_->GetRotationY();
-
-		// 検知サウンドの更新
-		if (aiState == EnemyState::Chase && !isChasing_) {
-			// 追跡開始時のサウンド処理
-			isChasing_ = true;
-		} else if (aiState != EnemyState::Chase && isChasing_) {
-			// 追跡終了
-			isChasing_ = false;
-		}
-	}
-	// 旧システム（徘徊機能付き）
-	else {
+	// 旧システム（壁チェック・音検知・徘徊速度対応済み）
+	{
 		// 代替経路タイマーの更新
 		if (alternativeTimer_ > 0.0f) {
 			alternativeTimer_ -= deltaTime;
@@ -191,6 +151,33 @@ void Enemy::Update(UnoEngine* engine) {
 
 		// プレイヤー検知と追跡 (NavMeshベース)
 		if (player_ && navMesh_ && navMesh_->IsValid()) {
+			// Playerの足音を検知（30m範囲内）
+			bool soundDetected = false;
+			if (player_->HasRecentFootstep(SOUND_REACTION_TIME)) {
+				Vector3 footstepPos = player_->GetLastFootstepPosition();
+				float timeSinceFootstep = player_->GetTimeSinceLastFootstep();
+
+				if (timeSinceFootstep <= SOUND_REACTION_TIME) {
+					// 足音との距離を計算
+					float dx = footstepPos.x - position_.x;
+					float dz = footstepPos.z - position_.z;
+					float distance = std::sqrt(dx * dx + dz * dz);
+
+					if (distance <= soundDetectionRange_) {
+						// 壁チェック: 音源への視線が通るか確認
+						Vector3 enemyEyePos = {position_.x, position_.y + 1.5f, position_.z};
+						Vector3 soundEyePos = {footstepPos.x, footstepPos.y + 1.5f, footstepPos.z};
+
+						if (navMesh_->Raycast(enemyEyePos, soundEyePos)) {
+							// 音を検知: 最後に聞いた音の位置を記録
+							lastHeardSoundPosition_ = footstepPos;
+							lastSoundTime_ = static_cast<float>(UnoEngine::GetInstance()->GetTotalTime());
+							soundDetected = true;
+						}
+					}
+				}
+			}
+
 			// 視界内にプレイヤーがいるかチェック
 			bool playerVisible = IsPlayerInVision();
 			Vector3 playerPos = player_->GetPosition();
@@ -201,8 +188,14 @@ void Enemy::Update(UnoEngine* engine) {
 			};
 			float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.y * toPlayer.y + toPlayer.z * toPlayer.z);
 
-			// 追跡条件：視界内にいる OR (視界を失って5秒以内 AND 15m以内)
-			bool shouldChase = playerVisible ||
+			// 音検知時の処理（視覚より優先度は低い）
+			if (soundDetected && !playerVisible) {
+				// 音を聞いた位置に向かう（視覚検知していない場合のみ）
+				lastSeenPlayerPosition_ = lastHeardSoundPosition_;
+			}
+
+			// 追跡条件：視界内にいる OR 音を検知 OR (視界を失って5秒以内 AND 15m以内)
+			bool shouldChase = playerVisible || soundDetected ||
 			                   (isChasing_ && lostSightTimer_ < LOST_SIGHT_GRACE_PERIOD && distanceToPlayer <= CHASE_RELEASE_DISTANCE);
 
 			if (playerVisible) {
@@ -902,34 +895,6 @@ void Enemy::SetPosition(const Vector3& position) {
 	if (object3d_) {
 		object3d_->SetPosition(position_);
 	}
-	// 新しいAIシステムにも位置を設定
-	if (enemyAI_) {
-		enemyAI_->SetPosition(position_);
-	}
-}
-
-void Enemy::SetNavMeshSystem(NavMeshSystem* navMeshSystem) {
-	// 新しいAIシステムを作成・初期化
-	if (!enemyAI_) {
-		enemyAI_ = std::make_unique<EnemyAI>();
-	}
-
-	// NavMeshSystemを設定して初期化
-	enemyAI_->Initialize(navMeshSystem);
-	enemyAI_->SetPosition(position_);
-
-	// AI設定を適用
-	enemyAI_->SetDetectionRange(aiConfig_.aggressiveness);
-	enemyAI_->SetMoveSpeed(aiConfig_.mobility);
-	enemyAI_->SetUpdateRate(2.0f - (aiConfig_.intelligence * 0.19f));
-
-	// 徘徊モードを有効化
-	enemyAI_->EnablePatrolMode(true);
-	enemyAI_->SetPatrolRadius(50.0f);  // 50m範囲で徘徊
-	enemyAI_->SetPatrolCenter(position_);  // 現在位置を中心に
-
-	// 新しいAIを使用
-	useNewAI_ = true;
 }
 
 void Enemy::PauseAnimation() {
@@ -1112,13 +1077,16 @@ void Enemy::UpdateNavMeshPath() {
 
 // パスに沿って移動（先読みで滑らかに）
 void Enemy::FollowPath(float deltaTime) {
+	// 追跡中か徘徊中かで速度を変更
+	float currentMoveSpeed = isChasing_ ? moveSpeed_ : patrolMoveSpeed_;
+
 	NavMeshHelper::FollowPath(
 		position_,
 		currentRotationY_,
 		currentSpeed_,
 		currentPath_,
 		currentWaypointIndex_,
-		moveSpeed_,
+		currentMoveSpeed,
 		deltaTime,
 		navMesh_,
 		&isAtCorner_,
@@ -1445,8 +1413,24 @@ bool Enemy::IsPlayerInVision() {
 	float angleInRadians = std::acos(dotProduct);
 	float angleInDegrees = angleInRadians * (180.0f / 3.14159f);
 
-	// 視野角以内ならtrue（Enemyの前方±60度、合計120度の視野）
-	return angleInDegrees <= VISION_ANGLE;
+	// 視野角外なら検知しない
+	if (angleInDegrees > VISION_ANGLE) {
+		return false;
+	}
+
+	// 壁チェック: NavMeshを使って視線が通るか確認
+	if (navMesh_ && navMesh_->IsValid()) {
+		Vector3 enemyEyePos = {position_.x, position_.y + 1.5f, position_.z};
+		Vector3 playerEyePos = {playerPos.x, playerPos.y + 1.5f, playerPos.z};
+
+		if (!navMesh_->Raycast(enemyEyePos, playerEyePos)) {
+			// レイキャストが遮られた = 壁がある
+			return false;
+		}
+	}
+
+	// 視野角以内かつ壁に遮られていない
+	return true;
 }
 
 // ========================================

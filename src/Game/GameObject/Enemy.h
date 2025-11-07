@@ -2,14 +2,12 @@
 #include "UnoEngine.h"
 #include "EnemyAIConfig.h"
 #include "LineRenderer.h"
-#include "NavMesh/EnemyAI.h"  // EnemyStateの定義のため
 #include <memory>
 #include <vector>
 
 // Forward declaration
 class Player;
 class NavMesh;
-class NavMeshSystem;  // forward declarationのまま（cppでインクルード）
 
 class Enemy {
 public:
@@ -55,9 +53,6 @@ public:
 	// NavMesh
 	void SetNavMesh(NavMesh* navMesh) { navMesh_ = navMesh; }
 
-	// NavMeshSystem (for new AI)
-	void SetNavMeshSystem(NavMeshSystem* navMeshSystem);
-
 	// AI parameters
 	void SetIntelligence(float value);
 	void SetAggressiveness(float value);
@@ -84,10 +79,6 @@ public:
 	float debugAnimationSpeed_{1.0f};  // アニメーション速度（1.0 = 通常速度）
 	bool debugManualAnimationControl_{false};  // 手動アニメーション制御フラグ
 	float debugManualAnimationTime_{0.0f};  // 手動アニメーション時間
-
-	// Debug accessors for ImGui (public for debugging)
-	std::unique_ptr<EnemyAI> enemyAI_;
-	bool useNewAI_{true};
 
 private:
 	void UpdateAnimation(float deltaTime);
@@ -143,8 +134,15 @@ private:
 	// Player tracking
 	Player* player_{nullptr};
 	float moveSpeed_{8.0f};  // 1秒あたり8ユニット（60FPSで約0.133/frame）
+	float patrolMoveSpeed_{4.5f};  // 徘徊時の移動速度（EnemyAIConfigから設定）
 	bool isChasing_{false};
 	bool wasChasing_{false};  // 前フレームの追跡状態（追跡開始検出用）
+
+	// Sound detection
+	float soundDetectionRange_{30.0f};  // 音検知範囲（デフォルト30m）
+	Vector3 lastHeardSoundPosition_{0, 0, 0};  // 最後に聞いた音の位置
+	float lastSoundTime_{-999.0f};  // 最後に音を聞いた時刻
+	const float SOUND_REACTION_TIME = 0.5f;  // 音に反応する時間閾値
 
 	// Vision-based detection
 	const float VISION_RANGE = 30.0f;  // 視界範囲30m

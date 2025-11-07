@@ -178,6 +178,39 @@ bool NavMesh::FindPath(const float* startPos, const float* endPos, NavMeshPath& 
     return true;
 }
 
+bool NavMesh::Raycast(const Vector3& start, const Vector3& end) {
+    if (!navQuery_ || !builder_ || !builder_->GetNavMesh()) {
+        return false;  // NavMesh無効時は通る
+    }
+
+    float startPos[3] = { start.x, start.y, start.z };
+    float endPos[3] = { end.x, end.y, end.z };
+
+    // 開始点の最近接ポリゴンを検索
+    const float extents[3] = { 2.0f, 4.0f, 2.0f };
+    dtPolyRef startRef = 0;
+    float nearestStartPos[3];
+
+    navQuery_->findNearestPoly(startPos, extents, &filter_, &startRef, nearestStartPos);
+
+    if (!startRef) {
+        return false;  // 開始点が無効な場合は遮られている
+    }
+
+    // レイキャスト実行
+    float hitNormal[3];
+    dtPolyRef polys[MAX_POLYS];
+    int npolys = 0;
+    float t = 0;
+
+    dtStatus status = navQuery_->raycast(startRef, startPos, endPos, &filter_,
+                                         &t, hitNormal, polys, &npolys, MAX_POLYS);
+
+    // t == 1.0f なら障害物なし（終点まで到達）
+    // t < 1.0f なら途中で障害物に当たった
+    return (dtStatusSucceed(status) && t >= 1.0f);
+}
+
 NavMesh::DebugMeshData NavMesh::GetDebugMeshData() const {
     DebugMeshData data;
 

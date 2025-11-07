@@ -156,6 +156,22 @@ void Player::Update(UnoEngine* engine) {
 
     // 衝突応答処理
     HandleCollisionResponse();
+
+    // 足音タイマーの更新（移動中のみ）
+    if (isMoving_ && isGrounded_) {
+        footstepTimer_ += deltaTime;
+        // 走っている時は足音の間隔を短く
+        float currentInterval = isRunning_ ? footstepInterval_ * 0.6f : footstepInterval_;
+
+        if (footstepTimer_ >= currentInterval) {
+            // 足音を記録
+            lastFootstepTime_ = static_cast<float>(engine->GetTotalTime());
+            lastFootstepPosition_ = position_;
+            footstepTimer_ = 0.0f;
+        }
+    } else {
+        footstepTimer_ = 0.0f;
+    }
 }
 
 // ゲームパッド固有機能処理（スニーク切り替えなど）
@@ -857,4 +873,18 @@ void Player::HandleCollisionResponse() {
     // 最終的な位置を更新
     object3d_->SetPosition(position_);
     object3d_->Update();
+}
+
+// ========================================
+// 足音検知用メソッド（Enemy用）
+// ========================================
+
+float Player::GetTimeSinceLastFootstep() const {
+    UnoEngine* engine = UnoEngine::GetInstance();
+    float currentTime = static_cast<float>(engine->GetTotalTime());
+    return currentTime - lastFootstepTime_;
+}
+
+bool Player::HasRecentFootstep(float timeThreshold) const {
+    return GetTimeSinceLastFootstep() <= timeThreshold;
 }

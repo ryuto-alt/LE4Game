@@ -80,6 +80,11 @@ public:
     void Jump();
     bool IsGrounded() const { return isGrounded_; }
 
+    // 足音検知用（Enemy用）
+    float GetTimeSinceLastFootstep() const;
+    Vector3 GetLastFootstepPosition() const { return lastFootstepPosition_; }
+    bool HasRecentFootstep(float timeThreshold) const;
+
 private:
     void HandleMovement(UnoEngine* engine, float deltaTime);
     void HandleGamepadFeatures(UnoEngine* engine, float deltaTime);  // ゲームパッド固有機能
@@ -124,4 +129,10 @@ private:
 
     // カメラ参照
     Camera* camera_ = nullptr;
+
+    // 足音検知用
+    float lastFootstepTime_ = -999.0f;  // 最後に足音が鳴った時刻
+    Vector3 lastFootstepPosition_{0.0f, 0.0f, 0.0f};  // 最後に足音が鳴った位置
+    float footstepInterval_ = 0.5f;  // 足音の間隔（秒）
+    float footstepTimer_ = 0.0f;  // 足音タイマー
 };

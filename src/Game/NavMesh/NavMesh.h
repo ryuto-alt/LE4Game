@@ -1,6 +1,7 @@
 #pragma once
 #include "NavMeshBuilder.h"
 #include "DetourNavMeshQuery.h"
+#include "Math/Mymath.h"
 #include <vector>
 #include <memory>
 
@@ -41,6 +42,9 @@ public:
 
     // パスファインディング
     bool FindPath(const float* startPos, const float* endPos, NavMeshPath& outPath);
+
+    // レイキャスト: 2点間に障害物がないかチェック
+    bool Raycast(const Vector3& start, const Vector3& end);
 
     // ナビメッシュが有効か
     bool IsValid() const { return builder_ && builder_->GetNavMesh() != nullptr; }

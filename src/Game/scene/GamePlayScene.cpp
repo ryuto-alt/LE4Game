@@ -3,8 +3,6 @@
 #include "UnoEngine.h"
 #include "SceneManager.h"
 #include "InstancedRenderer.h"
-#include "NavMesh/NavMeshSystem.h"
-#include "NavMesh/EnemyAI.h"
 #include <cmath>
 #include <algorithm>
 #include <filesystem>
@@ -56,11 +54,6 @@ void GamePlayScene::Initialize() {
         if (navMeshManager && navMeshManager->GetNavMesh()) {
             enemy_->SetNavMesh(navMeshManager->GetNavMesh());
             AddNavMeshLog("NavMesh set to Enemy");
-
-            
-            // 旧システムを使用
-            enemy_->useNewAI_ = false;
-            AddNavMeshLog("Using old AI system (NavMeshSystem load failed)");
         }
         if (player_) {
             enemy_->SetPlayer(player_.get());
@@ -671,13 +664,6 @@ void GamePlayScene::Draw() {
             if (enemy_ && navMesh) {
                 enemy_->SetNavMesh(navMesh);
                 AddNavMeshLog("NavMesh re-set to Enemy");
-
-                // 新しいAIシステムも更新
-                navMeshSystem_ = std::make_unique<NavMeshSystem>();
-                if (navMeshSystem_->LoadNavMeshFromFile("externals/navimap/stage.navmesh")) {
-                    enemy_->SetNavMeshSystem(navMeshSystem_.get());
-                    AddNavMeshLog("New AI System re-initialized");
-                }
             }
 
             // 可視化が有効な場合は次のフレームで更新
@@ -695,13 +681,6 @@ void GamePlayScene::Draw() {
                 NavMesh* navMesh = navMeshManager->GetNavMesh();
                 if (enemy_ && navMesh) {
                     enemy_->SetNavMesh(navMesh);
-
-                    // 新しいAIシステムも更新
-                    navMeshSystem_ = std::make_unique<NavMeshSystem>();
-                    if (navMeshSystem_->LoadNavMeshFromFile(navMeshPath)) {
-                        enemy_->SetNavMeshSystem(navMeshSystem_.get());
-                        AddNavMeshLog("New AI System loaded");
-                    }
                 }
             }
         }
@@ -747,37 +726,7 @@ void GamePlayScene::Draw() {
                 enemy_->GetPosition().y,
                 enemy_->GetPosition().z);
 
-            ImGui::Text("Using New AI: %s", enemy_->useNewAI_ ? "YES" : "NO");
-
-            if (enemy_->enemyAI_) {
-                const char* stateNames[] = { "Idle", "Patrol", "Chase", "Attack", "Search" };
-                int stateIndex = static_cast<int>(enemy_->enemyAI_->GetState());
-                ImGui::Text("EnemyAI State: %s (%d)",
-                    (stateIndex >= 0 && stateIndex < 5) ? stateNames[stateIndex] : "Unknown",
-                    stateIndex);
-                ImGui::Text("EnemyAI Position: (%.2f, %.2f, %.2f)",
-                    enemy_->enemyAI_->GetPosition().x,
-                    enemy_->enemyAI_->GetPosition().y,
-                    enemy_->enemyAI_->GetPosition().z);
-                ImGui::Text("Patrol Mode: %s", enemy_->enemyAI_->IsPatrolModeEnabled() ? "Enabled" : "Disabled");
-                ImGui::Text("Target Position: (%.2f, %.2f, %.2f)",
-                    enemy_->enemyAI_->GetTargetPosition().x,
-                    enemy_->enemyAI_->GetTargetPosition().y,
-                    enemy_->enemyAI_->GetTargetPosition().z);
-                ImGui::Text("Current Path Size: %d", static_cast<int>(enemy_->enemyAI_->GetCurrentPath().size()));
-                ImGui::Text("Current Waypoint: %d", enemy_->enemyAI_->GetCurrentWaypointIndex());
-
-                Vector3 moveDir = enemy_->enemyAI_->GetMoveDirection();
-                ImGui::Text("Move Direction: (%.2f, %.2f, %.2f)", moveDir.x, moveDir.y, moveDir.z);
-            } else {
-                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "EnemyAI is NULL!");
-            }
-
-            if (navMeshSystem_) {
-                ImGui::Text("NavMeshSystem: Valid (%s)", navMeshSystem_->IsValid() ? "OK" : "Invalid");
-            } else {
-                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "NavMeshSystem is NULL!");
-            }
+            ImGui::Text("Is Chasing: %s", enemy_->IsChasing() ? "Yes" : "No");
         } else {
             ImGui::Text("Enemy: Not Initialized");
         }

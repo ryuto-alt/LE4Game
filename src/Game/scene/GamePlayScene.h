@@ -9,7 +9,6 @@
 #include "InstancedRenderer.h"
 #include "PostProcess.h"
 #include "Scene/SceneConfigurator.h"
-#include "NavMesh/NavMeshSystem.h"
 #include "../Utils/JsonLoader.h"
 #include <memory>
 #include <vector>
@@ -36,9 +35,6 @@ private:
     std::unique_ptr<FPSCamera> fpsCamera_;
     std::unique_ptr<PostProcess> postProcess_;
     std::unique_ptr<SpatialAudioListener> audioListener_;
-
-    // New AI System
-    std::unique_ptr<NavMeshSystem> navMeshSystem_;
 
     SceneData sceneData_;
     bool skyboxEnabled_ = false;
