@@ -55,6 +55,16 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 	Animation runAnim = runModel->GetAnimationPlayer().GetAnimation();
 	animatedModel_->AddAnimation("Run", runAnim);
 
+	// Jumpscareアニメーションも読み込む
+	std::unique_ptr<AnimatedModel> jumpscareModel = engine->CreateAnim();
+	jumpscareModel->LoadFromFile("Resources/Models/Enemy/Enemy_Jumpscare", "Enemy_Jumpscare.gltf");
+	Animation jumpscareAnim = jumpscareModel->GetAnimationPlayer().GetAnimation();
+	animatedModel_->AddAnimation("Jumpscare", jumpscareAnim);
+
+	// アニメーションの長さを取得（ジャンプスケア用）
+	jumpscareDuration_ = jumpscareAnim.duration;
+	OutputDebugStringA(("Enemy: Jumpscare animation duration: " + std::to_string(jumpscareDuration_) + " seconds\n").c_str());
+
 	// Playerと同じ: アニメーションを変更して再生
 	animatedModel_->ChangeAnimation("Walk");
 	animatedModel_->PlayAnimation();
@@ -141,6 +151,23 @@ void Enemy::Initialize(Camera* camera, const EnemyAIConfig& aiConfig) {
 
 void Enemy::Update(UnoEngine* engine) {
 	const float deltaTime = engine->GetDelta();
+
+	// ジャンプスケア中の処理
+	if (isJumpscaring_) {
+		jumpscareTimer_ += deltaTime;
+
+		// アニメーションの更新
+		UpdateAnimation(deltaTime);
+
+		// オブジェクトの位置と回転を更新
+		if (object3d_) {
+			object3d_->SetPosition(position_);
+			object3d_->SetRotation(Vector3{0.0f, currentRotationY_, 0.0f});
+			object3d_->Update();
+		}
+
+		return;  // ジャンプスケア中は他の処理をスキップ
+	}
 
 #ifdef _DEBUG
 	// デバッグ用：移動停止フラグが有効な場合は移動処理をスキップ（オーディオは継続）
@@ -1503,4 +1530,27 @@ float Enemy::CalculateHorrorVolume(float distance) {
 	} else {
 		return 0.0f;
 	}
+}
+
+// ========================================
+// ジャンプスケア
+// ========================================
+
+void Enemy::StartJumpscare() {
+	if (isJumpscaring_) return;  // 既にジャンプスケア中なら何もしない
+
+	isJumpscaring_ = true;
+	jumpscareTimer_ = 0.0f;
+
+	// アニメーションをJumpscareに切り替え（ブレンドあり）
+	if (animatedModel_) {
+		animatedModel_->ChangeAnimation("Jumpscare");
+		animatedModel_->PlayAnimation();
+	}
+
+	OutputDebugStringA("Enemy: Jumpscare started!\n");
+}
+
+bool Enemy::IsJumpscareFinished() const {
+	return isJumpscaring_ && jumpscareTimer_ >= jumpscareDuration_;
 }

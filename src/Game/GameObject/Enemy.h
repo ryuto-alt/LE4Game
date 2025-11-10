@@ -65,6 +65,11 @@ public:
 	AnimatedModel* GetModel() { return animatedModel_.get(); }
 	bool IsChasing() const { return isChasing_; }
 
+	// Jumpscare
+	void StartJumpscare();
+	bool IsJumpscaring() const { return isJumpscaring_; }
+	bool IsJumpscareFinished() const;
+
 	// Collision response
 	void HandleCollisionResponse();
 
@@ -227,4 +232,9 @@ private:
 
 	// Foot debug visualization
 	std::unique_ptr<LineRenderer> footDebugLineRenderer_;
+
+	// Jumpscare
+	bool isJumpscaring_{false};
+	float jumpscareTimer_{0.0f};
+	float jumpscareDuration_{0.0f};
 };

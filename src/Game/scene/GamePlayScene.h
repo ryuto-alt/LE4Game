@@ -61,4 +61,8 @@ private:
         int culledMeshes = 0;
         float cullingRate = 0.0f;
     } cullingStats_;
+
+    // ゲームオーバー関連
+    bool isGameOver_ = false;
+    const float GAMEOVER_DISTANCE = 5.0f;  // エネミーとプレイヤーの距離5m
 };
