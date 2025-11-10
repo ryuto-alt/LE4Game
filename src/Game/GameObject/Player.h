@@ -85,6 +85,10 @@ public:
     Vector3 GetLastFootstepPosition() const { return lastFootstepPosition_; }
     bool HasRecentFootstep(float timeThreshold) const;
 
+    // ジャンプスケア制御
+    void SetJumpscareMode(bool enable) { isInJumpscare_ = enable; }
+    bool IsInJumpscare() const { return isInJumpscare_; }
+
 private:
     void HandleMovement(UnoEngine* engine, float deltaTime);
     void HandleGamepadFeatures(UnoEngine* engine, float deltaTime);  // ゲームパッド固有機能
@@ -135,4 +139,7 @@ private:
     Vector3 lastFootstepPosition_{0.0f, 0.0f, 0.0f};  // 最後に足音が鳴った位置
     float footstepInterval_ = 0.5f;  // 足音の間隔（秒）
     float footstepTimer_ = 0.0f;  // 足音タイマー
+
+    // ジャンプスケア関連
+    bool isInJumpscare_ = false;  // ジャンプスケア中フラグ
 };

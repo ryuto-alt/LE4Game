@@ -249,20 +249,23 @@ void GamePlayScene::Update() {
 	player_->HandleInput(engine);
 	HandleInput();
 
-	// FPSカメラモードかどうかでカメラ更新を切り替え
-	if (fpsCamera_ && fpsCamera_->IsFPSMode()) {
-		// FPSモード: FPSカメラ専用の更新
-		fpsCamera_->UpdateCameraRotation(camera_, engine);
+	// ジャンプスケア中は通常のカメラ更新をスキップ
+	if (!jumpscareStarted_) {
+		// FPSカメラモードかどうかでカメラ更新を切り替え
+		if (fpsCamera_ && fpsCamera_->IsFPSMode()) {
+			// FPSモード: FPSカメラ専用の更新
+			fpsCamera_->UpdateCameraRotation(camera_, engine);
 
-		// カメラシェイクを更新（プレイヤーの移動状態に基づく）
-		fpsCamera_->UpdateCameraShake(player_->IsMoving(), player_->IsRunning(), deltaTime, engine);
+			// カメラシェイクを更新（プレイヤーの移動状態に基づく）
+			fpsCamera_->UpdateCameraShake(player_->IsMoving(), player_->IsRunning(), deltaTime, engine);
 
-		player_->UpdateFPSCamera(fpsCamera_.get());
-		camera_->Update();
-	}
-	else {
-		// 三人称モード: 通常のカメラシステム
-		player_->UpdateCameraSystem(engine);
+			player_->UpdateFPSCamera(fpsCamera_.get());
+			camera_->Update();
+		}
+		else {
+			// 三人称モード: 通常のカメラシステム
+			player_->UpdateCameraSystem(engine);
+		}
 	}
 
 	lightManager_->Update(engine->GetDelta());
@@ -307,9 +310,75 @@ void GamePlayScene::Update() {
 			float dz = enemyPos.z - playerPos.z;
 			float distance = sqrtf(dx * dx + dy * dy + dz * dz);
 
-			// 距離が5m以内ならジャンプスケア開始
-			if (distance <= GAMEOVER_DISTANCE) {
+			// 距離が5m未満ならジャンプスケア開始
+			if (distance < GAMEOVER_DISTANCE) {
 				enemy_->StartJumpscare();
+				// プレイヤーを動けなくする
+				player_->SetJumpscareMode(true);
+				jumpscareStarted_ = true;
+				OutputDebugStringA("Jumpscare started! Player movement disabled.\n");
+			}
+		}
+
+		// ジャンプスケア中のカメラ制御
+		if (enemy_->IsJumpscaring() && jumpscareStarted_ && camera_ && player_) {
+			Vector3 playerPos = player_->GetPosition();
+			Vector3 enemyHeadPos = enemy_->GetHeadPosition();  // 顔の位置を取得
+
+			// カメラをエネミーの顔の近くに配置
+			Vector3 playerToHead = {
+				enemyHeadPos.x - playerPos.x,
+				enemyHeadPos.y - playerPos.y,
+				enemyHeadPos.z - playerPos.z
+			};
+
+			// 正規化
+			float length = std::sqrt(playerToHead.x * playerToHead.x +
+			                         playerToHead.y * playerToHead.y +
+			                         playerToHead.z * playerToHead.z);
+
+			if (length > 0.0f) {
+				playerToHead.x /= length;
+				playerToHead.y /= length;
+				playerToHead.z /= length;
+			}
+
+			// カメラを顔の前に配置（顔から少し離れた位置）
+			const float cameraDistance = 1.2f;
+			Vector3 cameraPos = {
+				enemyHeadPos.x - playerToHead.x * cameraDistance,
+				enemyHeadPos.y - playerToHead.y * cameraDistance * 0.5f,  // 高さは少し下から
+				enemyHeadPos.z - playerToHead.z * cameraDistance
+			};
+			camera_->SetTranslate(cameraPos);
+
+			// エネミーの顔を見るようにカメラの回転を計算
+			Vector3 cameraToHead = {
+				enemyHeadPos.x - cameraPos.x,
+				enemyHeadPos.y - cameraPos.y,
+				enemyHeadPos.z - cameraPos.z
+			};
+
+			float horizontalDist = std::sqrt(cameraToHead.x * cameraToHead.x + cameraToHead.z * cameraToHead.z);
+			float rotY = std::atan2(cameraToHead.x, cameraToHead.z);
+			float rotX = -std::atan2(cameraToHead.y, horizontalDist);
+
+			camera_->SetRotate({rotX, rotY, 0.0f});
+			camera_->Update();
+
+			// スポットライトを顔全体に向けて強く照らす
+			if (lightManager_) {
+				SpotLight jumpscareLight;
+				jumpscareLight.position = cameraPos;  // カメラと同じ位置
+				jumpscareLight.direction = cameraToHead;  // 顔に向ける
+				jumpscareLight.color = {1.0f, 1.0f, 1.0f, 1.0f};  // 白色
+				jumpscareLight.intensity = 15.0f;  // 強い光
+				jumpscareLight.innerCone = std::cos(45.0f * 3.14159f / 180.0f);  // 45度の内側角度
+				jumpscareLight.outerCone = std::cos(60.0f * 3.14159f / 180.0f);  // 60度の外側角度
+				jumpscareLight.attenuation = {1.0f, 0.1f, 0.01f};  // 減衰パラメータ（定数、線形、二次）
+
+				// 一時的にスポットライトを更新
+				lightManager_->SetJumpscareLight(jumpscareLight);
 			}
 		}
 

@@ -64,5 +64,8 @@ private:
 
     // ゲームオーバー関連
     bool isGameOver_ = false;
-    const float GAMEOVER_DISTANCE = 5.0f;  // エネミーとプレイヤーの距離5m
+    const float GAMEOVER_DISTANCE = 1.5f;  // エネミーとプレイヤーの距離5m
+
+    // ジャンプスケア関連
+    bool jumpscareStarted_ = false;  // ジャンプスケアが開始されたか
 };

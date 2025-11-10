@@ -64,6 +64,7 @@ public:
 	Object3d* GetObject() { return object3d_.get(); }
 	AnimatedModel* GetModel() { return animatedModel_.get(); }
 	bool IsChasing() const { return isChasing_; }
+	Vector3 GetHeadPosition() const;  // 頭の位置を取得
 
 	// Jumpscare
 	void StartJumpscare();

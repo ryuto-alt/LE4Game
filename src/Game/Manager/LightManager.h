@@ -32,6 +32,12 @@ public:
     // 恐怖による点滅速度の設定
     void SetFearFlickerIntensity(float intensity) { fearFlickerIntensity_ = intensity; }
 
+    // ジャンプスケア時のライト設定
+    void SetJumpscareLight(const SpotLight& light) {
+        spotLight_ = light;
+        enableSpotLight_ = true;
+    }
+
 private:
     void NormalizeDirectionalLightDirection();
     void UpdateLightIntensity();

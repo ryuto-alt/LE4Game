@@ -1,0 +1,74 @@
+
+	// ジャンプスケア中のカメラ制御
+	if (enemy_->IsJumpscaring() && camera_) {
+		// 頭のボーン位置を取得
+		Vector3 headPos = enemy_->GetHeadPosition();
+
+		// 初回のみカメラ位置を計算して固定
+		if (!jumpscareStarted_) {
+			jumpscareStarted_ = true;
+
+			// プレイヤー位置を基準にカメラ位置を計算
+			Vector3 playerPos = player_->GetPosition();
+			const float cameraDistance = 1.0f;  // 頭から1.0m離れた位置
+
+			// プレイヤーから頭への方向ベクトル
+			Vector3 playerToHead = {
+				headPos.x - playerPos.x,
+				headPos.y - playerPos.y,
+				headPos.z - playerPos.z
+			};
+
+			// 正規化
+			float length = std::sqrt(playerToHead.x * playerToHead.x +
+			                         playerToHead.y * playerToHead.y +
+			                         playerToHead.z * playerToHead.z);
+
+			if (length > 0.0f) {
+				playerToHead.x /= length;
+				playerToHead.y /= length;
+				playerToHead.z /= length;
+			}
+
+			// カメラをプレイヤー側（頭の手前）に配置
+			jumpscareCameraPos_ = {
+				headPos.x - playerToHead.x * cameraDistance,
+				headPos.y - playerToHead.y * cameraDistance * 0.3f,  // 高さは控えめに
+				headPos.z - playerToHead.z * cameraDistance
+			};
+
+			OutputDebugStringA(("Jumpscare camera position set: (" +
+			                   std::to_string(jumpscareCameraPos_.x) + ", " +
+			                   std::to_string(jumpscareCameraPos_.y) + ", " +
+			                   std::to_string(jumpscareCameraPos_.z) + ")\n").c_str());
+		}
+
+		// 固定カメラ位置を設定
+		camera_->SetTranslate(jumpscareCameraPos_);
+
+		// カメラを常に頭の位置に向ける
+		Vector3 cameraToHead = {
+			headPos.x - jumpscareCameraPos_.x,
+			headPos.y - jumpscareCameraPos_.y,
+			headPos.z - jumpscareCameraPos_.z
+		};
+
+		// 正規化
+		float dist = std::sqrt(cameraToHead.x * cameraToHead.x +
+		                       cameraToHead.y * cameraToHead.y +
+		                       cameraToHead.z * cameraToHead.z);
+
+		if (dist > 0.0f) {
+			cameraToHead.x /= dist;
+			cameraToHead.y /= dist;
+			cameraToHead.z /= dist;
+		}
+
+		// カメラの回転角を計算（頭を見る方向）
+		float rotY = std::atan2(cameraToHead.x, cameraToHead.z);
+		float horizontalDist = std::sqrt(cameraToHead.x * cameraToHead.x + cameraToHead.z * cameraToHead.z);
+		float rotX = -std::atan2(cameraToHead.y, horizontalDist);
+
+		camera_->SetRotate({rotX, rotY, 0.0f});
+		camera_->Update();
+	}

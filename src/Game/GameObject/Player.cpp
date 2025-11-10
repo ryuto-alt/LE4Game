@@ -596,6 +596,11 @@ void Player::SetupCamera(UnoEngine* engine) {
 void Player::HandleInput(UnoEngine* engine) {
     float deltaTime = engine->GetDelta();
 
+    // ジャンプスケア中は入力を受け付けない
+    if (isInJumpscare_) {
+        return;
+    }
+
     if (engine->IsKeyTrig(DIK_ESCAPE)) {
         engine->RequestEnd();
         return;

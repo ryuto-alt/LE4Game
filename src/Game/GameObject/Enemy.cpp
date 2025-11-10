@@ -1554,3 +1554,40 @@ void Enemy::StartJumpscare() {
 bool Enemy::IsJumpscareFinished() const {
 	return isJumpscaring_ && jumpscareTimer_ >= jumpscareDuration_;
 }
+
+Vector3 Enemy::GetHeadPosition() const {
+	if (!animatedModel_) {
+		// モデルがない場合は本体の位置を返す
+		return position_;
+	}
+
+	const Skeleton& skeleton = animatedModel_->GetSkeleton();
+
+	// 頭のボーンを検索（Mixamoの標準的な命名）
+	auto headIt = skeleton.jointMap.find("mixamorig:Head");
+
+	if (headIt == skeleton.jointMap.end()) {
+		// 頭ボーンが見つからない場合は本体の位置＋推定の高さを返す
+		return Vector3{position_.x, position_.y + 2.0f, position_.z};
+	}
+
+	// 頭のジョイントを取得
+	const Joint& headJoint = skeleton.joints[headIt->second];
+
+	// スケルトン空間での頭の位置
+	Vector3 headSkeletonPos = {
+		headJoint.skeletonSpaceMatrix.m[3][0],
+		headJoint.skeletonSpaceMatrix.m[3][1],
+		headJoint.skeletonSpaceMatrix.m[3][2]
+	};
+
+	// モデルのスケール（0.05f）を考慮してワールド座標に変換
+	const float modelScale = 0.05f;
+	Vector3 headWorldPos = {
+		position_.x + headSkeletonPos.x * modelScale,
+		position_.y + headSkeletonPos.y * modelScale,
+		position_.z + headSkeletonPos.z * modelScale
+	};
+
+	return headWorldPos;
+}
