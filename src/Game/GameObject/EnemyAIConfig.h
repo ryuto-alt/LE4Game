@@ -29,7 +29,7 @@ struct EnemyAIConfig {
     /// 0.0 ~ 10.0 → 移動速度 0.0 ~ 15.0 units/sec
     /// 5.0: 約7.5 units/sec（デフォルト）
     /// </summary>
-    float mobility = 6.80f;
+    float mobility = 6.5f;
 
     /// <summary>
     /// 徘徊時の機動力（徘徊移動速度）

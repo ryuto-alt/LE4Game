@@ -325,7 +325,7 @@ void GamePlayScene::Update() {
 			Vector3 playerPos = player_->GetPosition();
 			Vector3 enemyHeadPos = enemy_->GetHeadPosition();  // 顔の位置を取得
 
-			// カメラをエネミーの顔の近くに配置
+			// プレイヤーから顔への方向ベクトル
 			Vector3 playerToHead = {
 				enemyHeadPos.x - playerPos.x,
 				enemyHeadPos.y - playerPos.y,
@@ -343,12 +343,25 @@ void GamePlayScene::Update() {
 				playerToHead.z /= length;
 			}
 
-			// カメラを顔の前に配置（顔から少し離れた位置）
-			const float cameraDistance = 2.5f;  // 距離を2.5mに増加
+			// 元の方向から少し左に回転（-30度）
+			const float angleOffset = -30.0f * 3.14159f / 180.0f;  // ラジアンに変換
+			float cosAngle = std::cos(angleOffset);
+			float sinAngle = std::sin(angleOffset);
+
+			// Y軸周りの回転（水平方向のみ）
+			Vector3 adjustedDirection = {
+				playerToHead.x * cosAngle - playerToHead.z * sinAngle,
+				playerToHead.y,
+				playerToHead.x * sinAngle + playerToHead.z * cosAngle
+			};
+
+			// カメラを顔の前に配置（調整した方向で）
+			const float cameraDistance = 3.0f;  // 顔から3.0m離れた位置
+			const float heightOffset = -0.4f;  // 顔より少し下（見上げる角度）
 			Vector3 cameraPos = {
-				enemyHeadPos.x - playerToHead.x * cameraDistance,
-				enemyHeadPos.y - playerToHead.y * cameraDistance * 0.3f,  // 高さは少し下から
-				enemyHeadPos.z - playerToHead.z * cameraDistance
+				enemyHeadPos.x - adjustedDirection.x * cameraDistance,
+				enemyHeadPos.y + heightOffset,  // 顔より少し下から
+				enemyHeadPos.z - adjustedDirection.z * cameraDistance
 			};
 			camera_->SetTranslate(cameraPos);
 

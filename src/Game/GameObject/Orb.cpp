@@ -34,7 +34,7 @@ void Orb::Initialize(const Vector3& position, Camera* camera) {
     object3d_->SetEnableLighting(true);
     object3d_->SetCamera(camera_);
     // orbtestを真っ白に強く発光させる
-    object3d_->SetEmissiveFactor(Vector3{5.0f, 5.0f, 5.0f}); // 白色の強い発光
+    object3d_->SetEmissiveFactor(Vector3{20.0f, 20.0f, 20.0f }); // 白色の強い発光
     object3d_->Update();
 
     char debugMsg[256];
