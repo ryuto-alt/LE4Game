@@ -344,10 +344,10 @@ void GamePlayScene::Update() {
 			}
 
 			// カメラを顔の前に配置（顔から少し離れた位置）
-			const float cameraDistance = 1.2f;
+			const float cameraDistance = 2.5f;  // 距離を2.5mに増加
 			Vector3 cameraPos = {
 				enemyHeadPos.x - playerToHead.x * cameraDistance,
-				enemyHeadPos.y - playerToHead.y * cameraDistance * 0.5f,  // 高さは少し下から
+				enemyHeadPos.y - playerToHead.y * cameraDistance * 0.3f,  // 高さは少し下から
 				enemyHeadPos.z - playerToHead.z * cameraDistance
 			};
 			camera_->SetTranslate(cameraPos);
