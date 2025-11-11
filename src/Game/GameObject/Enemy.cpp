@@ -1555,6 +1555,96 @@ bool Enemy::IsJumpscareFinished() const {
 	return isJumpscaring_ && jumpscareTimer_ >= jumpscareDuration_;
 }
 
+void Enemy::ResetJumpscare() {
+	isJumpscaring_ = false;
+	jumpscareTimer_ = 0.0f;
+	
+	// アニメーションを待機状態に戻す
+	ChangeAnimation("Idle");
+	
+	OutputDebugStringA("Enemy jumpscare state reset\n");
+}
+
+void Enemy::ResetAIState() {
+	// AI状態のリセット
+	isChasing_ = false;
+	wasChasing_ = false;
+	isSearching_ = false;
+	
+	// 音の検出状態をクリア
+	lastHeardSoundPosition_ = {};
+	lastSoundTime_ = -999.0f;
+	
+	// 視覚追跡のリセット
+	lastSeenPlayerPosition_ = {};
+	lostSightTimer_ = 0.0f;
+	
+	// パスファインディングのクリア
+	currentPath_.clear();
+	currentWaypointIndex_ = 0;
+	
+	// 全てのオーディオソースを停止
+	AudioManager* engine = AudioManager::GetInstance();
+	if (engine) {
+		// 足音を停止
+		if (footstepSource1_) {
+			footstepSource1_->Stop();
+		}
+		if (footstepSource2_) {
+			footstepSource2_->Stop();
+		}
+		
+		// 検知音を停止
+		if (detectionSound_ && isDetectionSoundPlaying_) {
+			detectionSound_->Stop();
+			isDetectionSoundPlaying_ = false;
+		}
+		
+		// 吠え声を停止
+		if (barkSound_) {
+			barkSound_->Stop();
+		}
+		
+		// Chase BGMを停止してStage BGMを再開
+		if (chaseBGMPlaying_) {
+			engine->Stop("chaseBGM");
+			chaseBGMPlaying_ = false;
+			chaseBGMVolume_ = 0.0f;
+			isFadingIn_ = false;
+			isFadingOut_ = false;
+			
+			// Stage BGMが停止していたら再開
+			if (!engine->IsPlaying("stageBGM")) {
+				engine->Play("stageBGM", true);
+			}
+			engine->SetVolume("stageBGM", 0.15f);
+		}
+		
+		// Stage BGMがループ再生されているか確認（念のため）
+		if (!engine->IsPlaying("stageBGM")) {
+			engine->Play("stageBGM", true);
+			engine->SetVolume("stageBGM", 0.15f);
+		}
+	}
+	
+	// 音関連のタイマーをリセット
+	lastBarkTime_ = -999.0f;
+	lastDetectionSoundEndTime_ = -10.0f;
+	
+	// スタック検出のリセット
+	stuckTimer_ = 0.0f;
+	isRecoveringFromStuck_ = false;
+	stuckRecoveryAttempts_ = 0;
+	
+	// パス更新タイマーをリセット
+	pathUpdateTimer_ = 0.0f;
+	
+	// ジャンプスケア状態もリセット
+	ResetJumpscare();
+	
+	OutputDebugStringA("[Enemy] AI state completely reset\n");
+}
+
 Vector3 Enemy::GetHeadPosition() const {
 	if (!animatedModel_) {
 		// モデルがない場合は本体の位置を返す

@@ -70,6 +70,8 @@ public:
 	void StartJumpscare();
 	bool IsJumpscaring() const { return isJumpscaring_; }
 	bool IsJumpscareFinished() const;
+	void ResetJumpscare();  // ジャンプスケア状態をリセット
+	void ResetAIState();  // AI状態を完全にリセット
 
 	// Collision response
 	void HandleCollisionResponse();

@@ -1,5 +1,6 @@
 #pragma once
 #include "IScene.h"
+#include "Sprite.h"
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
 #include "GameObject/Orb.h"
@@ -35,6 +36,7 @@ private:
     std::unique_ptr<FPSCamera> fpsCamera_;
     std::unique_ptr<PostProcess> postProcess_;
     std::unique_ptr<SpatialAudioListener> audioListener_;
+    std::unique_ptr<Sprite> fadeSprite_;  // 暗転用スプライト
 
     SceneData sceneData_;
     bool skyboxEnabled_ = false;
@@ -68,4 +70,28 @@ private:
 
     // ジャンプスケア関連
     bool jumpscareStarted_ = false;  // ジャンプスケアが開始されたか
+
+    // キャプチャカウンター（3回まで）
+    int captureCount_ = 0;
+    static constexpr int MAX_CAPTURES = 3;
+
+    // 初期位置
+    Vector3 playerInitialPos_ = {0.0f, 0.0f, 0.0f};
+    Vector3 enemyInitialPos_ = {15.0f, 0.0f, 0.0f};
+
+    // リスポーン処理用
+    enum class RespawnState {
+        None,
+        FadeOut,
+        Respawning,
+        FadeIn
+    };
+    RespawnState respawnState_ = RespawnState::None;
+    float respawnTimer_ = 0.0f;
+    static constexpr float FADE_DURATION = 1.0f;  // 暗転の長さ
+    float fadeAlpha_ = 0.0f;  // 0.0f = 透明, 1.0f = 完全に黒
+
+    void UpdateRespawn(float deltaTime);
+    void StartRespawn();
+    void ResetPositions();
 };

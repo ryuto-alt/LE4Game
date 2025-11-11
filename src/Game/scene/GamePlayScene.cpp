@@ -89,12 +89,33 @@ void GamePlayScene::Initialize() {
 	// Orb取得音の読み込み
 	AudioManager::GetInstance()->LoadMP3("orbGet", "Resources/Audio/get.mp3");
 	AudioManager::GetInstance()->SetVolume("orbGet", 0.5f);
+
+	// 暗転用スプライトの初期化（黒い四角形）
+	fadeSprite_ = std::make_unique<Sprite>();
+	fadeSprite_->Initialize(spriteCommon_, "Resources/textures/white1x1.png");
+	fadeSprite_->SetPosition({0.0f, 0.0f});
+	fadeSprite_->SetSize({1280.0f, 720.0f});  // 画面全体をカバー
+	fadeSprite_->setColor({0.0f, 0.0f, 0.0f, 0.0f});  // 初期状態は透明
 }
 
 
 void GamePlayScene::Update() {
 	UnoEngine* engine = UnoEngine::GetInstance();
 	const float deltaTime = engine->GetDelta();
+
+	// リスポーン処理の更新
+	UpdateRespawn(deltaTime);
+
+	// フェードスプライトのアルファ値を更新
+	if (fadeSprite_) {
+		fadeSprite_->setColor({0.0f, 0.0f, 0.0f, fadeAlpha_});
+		fadeSprite_->Update();
+	}
+
+	// リスポーン処理中は通常のゲームロジックをスキップ
+	if (respawnState_ != RespawnState::None) {
+		return;
+	}
 
 	// ウィンドウサイズが変わったときにPostProcessのレンダーターゲットをリサイズ
 	static uint32_t previousWidth = 0;
@@ -395,14 +416,23 @@ void GamePlayScene::Update() {
 			}
 		}
 
-		// ジャンプスケア終了後にゲームオーバーシーンへ遷移
+		// ジャンプスケア終了後の処理
 		if (enemy_->IsJumpscareFinished() && !isGameOver_) {
-			isGameOver_ = true;
-			if (sceneManager_) {
-				sceneManager_->ChangeScene("GameOver");
+			captureCount_++;
+			OutputDebugStringA(("Captured! Count: " + std::to_string(captureCount_) + "/" + std::to_string(MAX_CAPTURES) + "\n").c_str());
+
+			if (captureCount_ >= MAX_CAPTURES) {
+				// 3回目はゲームオーバー
+				isGameOver_ = true;
+				if (sceneManager_) {
+					sceneManager_->ChangeScene("GameOver");
+				}
+				OutputDebugStringA("Max captures reached, transitioning to GameOver scene\n");
+				return;
+			} else {
+				// 3回未満ならリスポーン開始
+				StartRespawn();
 			}
-			OutputDebugStringA("Jumpscare finished, transitioning to GameOver scene\n");
-			return;
 		}
 
 		// 追跡モード時の距離に応じたビネット効果とカメラ振動
@@ -602,6 +632,12 @@ void GamePlayScene::Draw() {
 	// ポストプロセスを適用して画面に描画
 	if (postProcess_) {
 		postProcess_->PostDraw();
+	}
+
+	// 暗転エフェクトを最前面に描画（リスポーン中）
+	if (fadeAlpha_ > 0.0f && fadeSprite_) {
+		spriteCommon_->CommonDraw();
+		fadeSprite_->Draw();
 	}
 
 #ifdef _DEBUG
@@ -911,6 +947,7 @@ void GamePlayScene::Finalize() {
 	lightManager_.reset();
 	fpsCamera_.reset();
 	postProcess_.reset();
+	fadeSprite_.reset();
 }
 
 void GamePlayScene::AddNavMeshLog(const std::string& message) {
@@ -962,5 +999,95 @@ void GamePlayScene::HandleInput() {
 			AddNavMeshLog("NavMesh visualization will update next frame");
 		}
 	}
+}
+
+void GamePlayScene::UpdateRespawn(float deltaTime) {
+	// リスポーン処理中でない場合は何もしない
+	if (respawnState_ == RespawnState::None) {
+		return;
+	}
+
+	respawnTimer_ += deltaTime;
+
+	switch (respawnState_) {
+	case RespawnState::FadeOut:
+		// 暗転開始
+		fadeAlpha_ = respawnTimer_ / FADE_DURATION;
+		if (fadeAlpha_ >= 1.0f) {
+			fadeAlpha_ = 1.0f;
+			// 完全に暗転したら位置をリセット
+			ResetPositions();
+			respawnState_ = RespawnState::Respawning;
+			respawnTimer_ = 0.0f;
+		}
+		break;
+
+	case RespawnState::Respawning:
+		// 少し待機(0.5秒)
+		if (respawnTimer_ >= 0.5f) {
+			respawnState_ = RespawnState::FadeIn;
+			respawnTimer_ = 0.0f;
+		}
+		break;
+
+	case RespawnState::FadeIn:
+		// 明転開始
+		fadeAlpha_ = 1.0f - (respawnTimer_ / FADE_DURATION);
+		if (fadeAlpha_ <= 0.0f) {
+			fadeAlpha_ = 0.0f;
+			// 完全に明るくなったらリスポーン終了
+			respawnState_ = RespawnState::None;
+			respawnTimer_ = 0.0f;
+		}
+		break;
+	}
+}
+
+void GamePlayScene::StartRespawn() {
+	OutputDebugStringA("Starting respawn process...\n");
+	respawnState_ = RespawnState::FadeOut;
+	respawnTimer_ = 0.0f;
+	fadeAlpha_ = 0.0f;
+}
+
+void GamePlayScene::ResetPositions() {
+	OutputDebugStringA("Resetting player and enemy positions...\n");
+
+	// プレイヤーを初期位置に戻す
+	if (player_) {
+		player_->SetPosition(playerInitialPos_);
+		player_->SetJumpscareMode(false);  // 動けるようにする
+		OutputDebugStringA(("Player reset to position: (" + 
+			std::to_string(playerInitialPos_.x) + ", " +
+			std::to_string(playerInitialPos_.y) + ", " +
+			std::to_string(playerInitialPos_.z) + ")\n").c_str());
+	}
+
+	// エネミーを初期位置に戻して全ての状態をリセット
+	if (enemy_) {
+		enemy_->SetPosition(enemyInitialPos_);
+		enemy_->ResetAIState();  // AI状態、BGM、アニメーション全てをリセット
+		OutputDebugStringA(("Enemy reset to position: (" + 
+			std::to_string(enemyInitialPos_.x) + ", " +
+			std::to_string(enemyInitialPos_.y) + ", " +
+			std::to_string(enemyInitialPos_.z) + ")\n").c_str());
+	}
+
+	// ジャンプスケアフラグをリセット
+	jumpscareStarted_ = false;
+
+	// ライティングを初期状態にリセット
+	if (lightManager_) {
+		lightManager_->Initialize();
+		OutputDebugStringA("Lighting reset to initial state\n");
+	}
+
+	// カメラをプレイヤー位置に戻す
+	if (camera_) {
+		camera_->SetTranslate({playerInitialPos_.x, playerInitialPos_.y + 1.5f, playerInitialPos_.z - 5.0f});
+		camera_->Update();
+	}
+
+	OutputDebugStringA("Position reset complete. Orbs preserved.\n");
 }
 
