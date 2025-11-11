@@ -422,13 +422,49 @@ void GamePlayScene::Update() {
 			OutputDebugStringA(("Captured! Count: " + std::to_string(captureCount_) + "/" + std::to_string(MAX_CAPTURES) + "\n").c_str());
 
 			if (captureCount_ >= MAX_CAPTURES) {
-				// 3回目はゲームオーバー
+				// 3回目はゲームオーバー - 先にジャンプスケアプロセスを起動してからゲーム終了
 				isGameOver_ = true;
-				if (sceneManager_) {
-					sceneManager_->ChangeScene("GameOver");
+				OutputDebugStringA("Max captures reached, launching jumpscare process and exiting immediately...\n");
+
+				// 自分自身を--jumpscareオプション付きで起動
+				char exePath[MAX_PATH];
+				GetModuleFileNameA(nullptr, exePath, MAX_PATH);
+
+				STARTUPINFOA si = {};
+				si.cb = sizeof(si);
+				si.dwFlags = STARTF_USESHOWWINDOW;
+				si.wShowWindow = SW_HIDE;
+
+				PROCESS_INFORMATION pi = {};
+
+				// --jumpscareオプションを付けて起動
+				char cmdLine[MAX_PATH + 20];
+				sprintf_s(cmdLine, "\"%s\" --jumpscare", exePath);
+
+				BOOL processCreated = CreateProcessA(
+					nullptr,
+					cmdLine,
+					nullptr,
+					nullptr,
+					FALSE,
+					DETACHED_PROCESS,  // 完全に独立したプロセスとして起動
+					nullptr,
+					nullptr,
+					&si,
+					&pi
+				);
+
+				if (processCreated) {
+					CloseHandle(pi.hProcess);
+					CloseHandle(pi.hThread);
+					OutputDebugStringA("Jumpscare process launched successfully.\n");
+				} else {
+					OutputDebugStringA("Failed to launch jumpscare process!\n");
 				}
-				OutputDebugStringA("Max captures reached, transitioning to GameOver scene\n");
-				return;
+
+				// ゲームを即座に強制終了
+				OutputDebugStringA("Terminating game immediately...\n");
+				ExitProcess(0);  // PostQuitMessageではなくExitProcessで即座に終了
 			} else {
 				// 3回未満ならリスポーン開始
 				StartRespawn();
