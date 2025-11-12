@@ -437,7 +437,10 @@ void Object3d::Draw() {
 	assert(dxCommon_);
 	assert(model_);
 
-	// パイプラインの設定（PBRとアニメーションの組み合わせに対応）
+	// ルートシグネチャの設定
+	dxCommon_->GetCommandList()->SetGraphicsRootSignature(spriteCommon_->GetRootSignature().Get());
+
+	// パイプラインの設定(PBRとアニメーションの組み合わせに対応)
 	bool usePBR = false;
 	if (model_) {
 		const MaterialData& material = model_->GetMaterial();
@@ -649,6 +652,9 @@ void Object3d::Draw(Camera* camera, int* visibleMeshCount, int* culledMeshCount)
 	assert(dxCommon_);
 	assert(model_);
 	assert(camera);
+
+	// ルートシグネチャの設定
+	dxCommon_->GetCommandList()->SetGraphicsRootSignature(spriteCommon_->GetRootSignature().Get());
 
 	// パイプラインの設定
 	bool usePBR = false;

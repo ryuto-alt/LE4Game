@@ -1023,6 +1023,19 @@ void GamePlayScene::HandleInput() {
 		}
 	}
 
+	// F4キーで魚眼レンズのON/OFF切り替え
+	if (engine->IsKeyTrig(DIK_F4)) {
+		static bool fisheyeEnabled = true;
+		fisheyeEnabled = !fisheyeEnabled;
+		if (fisheyeEnabled) {
+			fisheyeStrength_ = 2.58f;  // デフォルト値に戻す
+			OutputDebugStringA("Fisheye lens: ON\n");
+		} else {
+			fisheyeStrength_ = 0.0f;   // 魚眼レンズを無効化
+			OutputDebugStringA("Fisheye lens: OFF\n");
+		}
+	}
+
 	// R キーでナビメッシュ再生成
 	if (engine->IsKeyTrig(DIK_R)) {
 		ClearNavMeshLogs();
