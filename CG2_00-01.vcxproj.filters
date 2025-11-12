@@ -344,6 +344,24 @@
     <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNode.cpp">
       <Filter>externals\recastnavigation\Detour</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\LineRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\CullingSystem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\StepTimer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\scene\GameOverScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\GameObject\Orb.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Utils\JsonLoader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -553,6 +571,12 @@
     <ClInclude Include="src\Game\NavMesh\NavMeshHelper.h">
       <Filter>src\Game\NavMesh</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\LineRenderer.h" />
+    <ClInclude Include="src\Engine\Graphics\CullingSystem.h" />
+    <ClInclude Include="src\Engine\StepTimer.h" />
+    <ClInclude Include="src\Game\scene\GameOverScene.h" />
+    <ClInclude Include="src\Game\GameObject\Orb.h" />
+    <ClInclude Include="src\Game\Utils\JsonLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
