@@ -1,8 +1,9 @@
 #pragma once
 #include "IScene.h"
 #include "Sprite.h"
-#include "PostProcess.h"
 #include <memory>
+#include <vector>
+#include <string>
 
 class GameClearScene : public IScene {
 public:
@@ -15,20 +16,28 @@ public:
     void Finalize() override;
 
 private:
-    std::unique_ptr<Sprite> gameClearTextSprite_;
-    std::unique_ptr<Sprite> retrySprite_;
-    std::unique_ptr<Sprite> titleSprite_;
     float time_ = 0.0f;
 
-    // メニュー選択
-    enum class MenuSelection {
-        Retry = 0,  // リトライ
-        Title = 1   // タイトルへ
-    };
-    MenuSelection currentSelection_ = MenuSelection::Retry;
-    bool CheckMouseHover(const Vector2& mousePos, const Vector2& spritePos, const Vector2& spriteSize);
+    // 黒背景用スプライト
+    std::unique_ptr<Sprite> blackBgSprite_;
 
-    // 選択エフェクト用
-    Vector2 retryOriginalSize_;
-    Vector2 titleOriginalSize_;
+    // タイトル画像用スプライト
+    std::unique_ptr<Sprite> titleImageSprite_;
+
+    // ロゴ画像用スプライト
+    std::unique_ptr<Sprite> logoImageSprite_;
+
+    // エンドロール用
+    struct CreditLine {
+        std::string text;
+        bool isTitle;  // タイトル行かどうか
+        bool isImage;  // 画像として表示するかどうか
+    };
+    std::vector<CreditLine> credits_;
+    float scrollOffset_ = 0.0f;
+    const float scrollSpeed_ = 30.0f;  // ピクセル/秒
+    bool creditsFinished_ = false;
+
+    void InitializeCredits();
+    void DrawCredits();
 };

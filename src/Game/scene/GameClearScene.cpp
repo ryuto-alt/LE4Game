@@ -6,142 +6,263 @@
 #endif
 
 void GameClearScene::Initialize() {
-    if (!dxCommon_ || !srvManager_ || !camera_) {
-        OutputDebugStringA("GameClearScene::Initialize - Critical error: Required pointers are null!\n");
-        return;
-    }
+	if (!dxCommon_ || !srvManager_ || !camera_) {
+		OutputDebugStringA("GameClearScene::Initialize - Critical error: Required pointers are null!\n");
+		return;
+	}
 
-    camera_->SetTranslate({0.0f, 0.0f, -10.0f});
+	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
 
-    // ゲームクリアテキストスプライトのみ初期化
-    gameClearTextSprite_ = std::make_unique<Sprite>();
-    gameClearTextSprite_->Initialize(spriteCommon_, "Resources/textures/Title/Title_moji.png");
-    gameClearTextSprite_->SetPosition({640.0f, 360.0f});
-    gameClearTextSprite_->SetAnchorPoint({0.5f, 0.5f});
+	// 黒背景スプライトの初期化
+	blackBgSprite_ = std::make_unique<Sprite>();
+	blackBgSprite_->Initialize(spriteCommon_, "Resources/textures/white1x1.png");
+	blackBgSprite_->SetPosition({ 0.0f, 0.0f });
+	blackBgSprite_->SetSize({ 1280.0f, 720.0f });
+	blackBgSprite_->setColor({ 0.0f, 0.0f, 0.0f, 1.0f });  // 黒色
 
-    retrySprite_ = std::make_unique<Sprite>();
-    retrySprite_->Initialize(spriteCommon_, "Resources/textures/Title/hazimeru.png");
-    retryOriginalSize_ = retrySprite_->GetSize();
-    retrySprite_->SetPosition({640.0f, 500.0f});
-    retrySprite_->SetAnchorPoint({0.5f, 0.5f});
+	// タイトル画像スプライトの初期化
+	titleImageSprite_ = std::make_unique<Sprite>();
+	titleImageSprite_->Initialize(spriteCommon_, "Resources/textures/Title/Title_moji.png");
+	titleImageSprite_->SetAnchorPoint({ 0.5f, 0.5f });  // 中心基準
 
-    titleSprite_ = std::make_unique<Sprite>();
-    titleSprite_->Initialize(spriteCommon_, "Resources/textures/Title/owaru.png");
-    titleOriginalSize_ = titleSprite_->GetSize();
-    titleSprite_->SetPosition({640.0f, 590.0f});
-    titleSprite_->SetAnchorPoint({0.5f, 0.5f});
+	// ロゴ画像スプライトの初期化
+	logoImageSprite_ = std::make_unique<Sprite>();
+	logoImageSprite_->Initialize(spriteCommon_, "Resources/textures/logo/logo.png");
+	logoImageSprite_->SetAnchorPoint({ 0.5f, 0.5f });  // 中心基準
+
+	// エンドロールの初期化
+	InitializeCredits();
+}
+
+void GameClearScene::InitializeCredits() {
+	credits_.clear();
+
+	// タイトル（画像として表示）
+	credits_.push_back({ "TITLE_IMAGE", true, true });  // isImage = true
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+
+	// ディレクター
+	credits_.push_back({ "Director", true, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うの　りゅうと", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+
+	// プログラマー
+	credits_.push_back({ "Programmer", true, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うの　りゅうと", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+
+	// デザイナー
+	credits_.push_back({ "Designer", true, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うの　りゅうと", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+
+	// サウンド
+	credits_.push_back({ "Sound", true, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "AudioStock", false, false });
+	credits_.push_back({ "Suno AI", false, false });
+	credits_.push_back({ "pixta", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+
+	// 使用ライブラリ
+	credits_.push_back({ "Special Thanks", true, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うちぼり　ゆうた", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うちぼり　ゆうたのお父さん", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うちぼり　ゆうたのお母さん", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うちぼり　ゆうたのおばあさん", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うちぼり　ゆうたの友達", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うちぼり　ゆうたの猫x2", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うちぼり　ゆうたの従妹x3", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "うちぼり　ゆうたのAirPods", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+
+	// 使用エンジン（画像として表示）
+	credits_.push_back({ "LOGO_IMAGE", true, true });  // isImage = true
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+
+	// 最終クレジット
+	credits_.push_back({ "Thank you for playing!", true, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
 }
 
 void GameClearScene::Update() {
-    if (!camera_ || !input_) {
-        return;
-    }
+	if (!camera_ || !input_) {
+		return;
+	}
 
-    camera_->Update();
+	camera_->Update();
 
-    float deltaTime = 1.0f / 60.0f;
-    time_ += deltaTime;
+	float deltaTime = 1.0f / 60.0f;
+	time_ += deltaTime;
 
-    // キーボード入力フラグ
-    bool keyPressed = false;
+	// エンドロールのスクロール
+	if (!creditsFinished_) {
+		scrollOffset_ += scrollSpeed_ * deltaTime;
 
-    // W/上矢印キーでメニュー選択を上に
-    if (input_->TriggerKey(DIK_W) || input_->TriggerKey(DIK_UP)) {
-        currentSelection_ = MenuSelection::Retry;
-        keyPressed = true;
-    }
-    // S/下矢印キーでメニュー選択を下に
-    if (input_->TriggerKey(DIK_S) || input_->TriggerKey(DIK_DOWN)) {
-        currentSelection_ = MenuSelection::Title;
-        keyPressed = true;
-    }
+		// 全てのクレジットがスクロールし終わったかチェック
+		float totalHeight = credits_.size() * 40.0f;  // 行間40ピクセル
+		if (scrollOffset_ > totalHeight + 720.0f) {  // 画面高さ分余分にスクロール
+			creditsFinished_ = true;
+			scrollOffset_ = 0.0f;  // リセット
+		}
+	}
 
-    // マウスでホバー検知（キーが押されていない時のみ）
-    bool retryHovered = false;
-    bool titleHovered = false;
-    if (!keyPressed) {
-        POINT cursorPos;
-        GetCursorPos(&cursorPos);
-        ScreenToClient(FindWindowW(L"CG2WindowClass", nullptr), &cursorPos);
-        Vector2 mousePos = { static_cast<float>(cursorPos.x), static_cast<float>(cursorPos.y) };
+	// 黒背景スプライトの更新
+	if (blackBgSprite_) {
+		blackBgSprite_->Update();
+	}
 
-        // アンカーポイントを考慮した判定範囲を計算
-        Vector2 retryPos = retrySprite_->GetPosition();
-        Vector2 retryMin = { retryPos.x - retryOriginalSize_.x * 0.5f, retryPos.y - retryOriginalSize_.y * 0.5f };
-        Vector2 retryMax = { retryPos.x + retryOriginalSize_.x * 0.5f, retryPos.y + retryOriginalSize_.y * 0.5f };
+	// 画像スプライトの位置更新（スクロールに合わせて）
+	float startY = 720.0f - scrollOffset_;
 
-        Vector2 titlePos = titleSprite_->GetPosition();
-        Vector2 titleMin = { titlePos.x - titleOriginalSize_.x * 0.5f, titlePos.y - titleOriginalSize_.y * 0.5f };
-        Vector2 titleMax = { titlePos.x + titleOriginalSize_.x * 0.5f, titlePos.y + titleOriginalSize_.y * 0.5f };
+	// タイトル画像（インデックス0）
+	if (titleImageSprite_) {
+		float yPos = startY;  // インデックス0なので (0 * 40.0f) = 0
+		titleImageSprite_->SetPosition({ 640.0f, yPos });
+		titleImageSprite_->Update();
+	}
 
-        if (mousePos.x >= retryMin.x && mousePos.x <= retryMax.x &&
-            mousePos.y >= retryMin.y && mousePos.y <= retryMax.y) {
-            retryHovered = true;
-            currentSelection_ = MenuSelection::Retry;
-        }
-        if (mousePos.x >= titleMin.x && mousePos.x <= titleMax.x &&
-            mousePos.y >= titleMin.y && mousePos.y <= titleMax.y) {
-            titleHovered = true;
-            currentSelection_ = MenuSelection::Title;
-        }
-    }
+	// ロゴ画像の位置を計算（配列内でLOGO_IMAGEのインデックスを探す）
+	if (logoImageSprite_) {
+		for (size_t i = 0; i < credits_.size(); ++i) {
+			if (credits_[i].text == "LOGO_IMAGE") {
+				float yPos = startY + (i * 40.0f);
+				logoImageSprite_->SetPosition({ 640.0f, yPos });
+				logoImageSprite_->Update();
+				break;
+			}
+		}
+	}
 
-    // 選択状態に応じた視覚フィードバック
-    if (currentSelection_ == MenuSelection::Retry || retryHovered) {
-        retrySprite_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-        titleSprite_->setColor({ 0.5f, 0.5f, 0.5f, 1.0f });
-    } else {
-        titleSprite_->setColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-        retrySprite_->setColor({ 0.5f, 0.5f, 0.5f, 1.0f });
-    }
-
-    // スプライトの更新
-    gameClearTextSprite_->Update();
-    retrySprite_->Update();
-    titleSprite_->Update();
-
-
-    // マウスクリックで決定
-    DIMOUSESTATE mouseState;
-    if (SUCCEEDED(input_->GetMouseState(&mouseState))) {
-        if (mouseState.rgbButtons[0] & 0x80) { // 左クリック
-            if (retryHovered) {
-                sceneManager_->ChangeScene("GamePlay");
-            }
-            if (titleHovered) {
-                sceneManager_->ChangeScene("Title");
-            }
-        }
-    }
-
-    // SPACEまたはENTERで決定
-    if (input_->TriggerKey(DIK_SPACE) || input_->TriggerKey(DIK_RETURN)) {
-        if (currentSelection_ == MenuSelection::Retry) {
-            sceneManager_->ChangeScene("GamePlay");
-        } else {
-            sceneManager_->ChangeScene("Title");
-        }
-    }
+	// SPACEまたはENTERでタイトルに戻る
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerKey(DIK_RETURN)) {
+		sceneManager_->ChangeScene("Title");
+	}
 }
 
 void GameClearScene::Draw() {
-    if (spriteCommon_) {
-        spriteCommon_->CommonDraw();
-    }
+	if (spriteCommon_) {
+		spriteCommon_->CommonDraw();
+	}
 
-    // テキストとメニューのみ描画
-    if (gameClearTextSprite_) gameClearTextSprite_->Draw();
-    if (retrySprite_) retrySprite_->Draw();
-    if (titleSprite_) titleSprite_->Draw();
+	// 黒背景を描画
+	if (blackBgSprite_) {
+		blackBgSprite_->Draw();
+	}
+
+	// タイトル画像を描画（画面内にある場合のみ）
+	if (titleImageSprite_) {
+		Vector2 pos = titleImageSprite_->GetPosition();
+		if (pos.y > -200.0f && pos.y < 920.0f) {  // 画面内判定
+			titleImageSprite_->Draw();
+		}
+	}
+
+	// ロゴ画像を描画（画面内にある場合のみ）
+	if (logoImageSprite_) {
+		Vector2 pos = logoImageSprite_->GetPosition();
+		if (pos.y > -200.0f && pos.y < 920.0f) {  // 画面内判定
+			logoImageSprite_->Draw();
+		}
+	}
+
+	// エンドロール描画
+	DrawCredits();
+}
+
+void GameClearScene::DrawCredits() {
+#ifdef _DEBUG
+	// デバッグビルドではImGuiでテキストを表示
+	ImGuiWindowFlags windowFlags =
+		ImGuiWindowFlags_NoTitleBar |
+		ImGuiWindowFlags_NoResize |
+		ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoScrollbar |
+		ImGuiWindowFlags_NoScrollWithMouse |
+		ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoBackground |
+		ImGuiWindowFlags_NoBringToFrontOnFocus |
+		ImGuiWindowFlags_NoFocusOnAppearing |
+		ImGuiWindowFlags_NoNav;
+
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+	ImGui::SetNextWindowSize(ImVec2(1280, 720));
+
+	if (ImGui::Begin("Credits", nullptr, windowFlags)) {
+		float startY = 720.0f - scrollOffset_;  // 画面下から開始
+
+		for (size_t i = 0; i < credits_.size(); ++i) {
+			const auto& credit = credits_[i];
+			float yPos = startY + (i * 40.0f);
+
+			// 画像として表示する行はスキップ（Spriteで描画済み）
+			if (credit.isImage) {
+				continue;
+			}
+
+			// 画面内にある場合のみ描画
+			if (yPos > -50.0f && yPos < 770.0f) {
+				if (credit.isTitle) {
+					// タイトル行
+					ImGui::SetWindowFontScale(2.5f);
+					float textWidth = ImGui::CalcTextSize(credit.text.c_str()).x;
+					ImGui::SetCursorPos(ImVec2(640.0f - textWidth / 2.0f, yPos));
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+					ImGui::Text("%s", credit.text.c_str());
+					ImGui::PopStyleColor();
+					ImGui::SetWindowFontScale(1.0f);
+				}
+				else if (!credit.text.empty()) {
+					// 通常行
+					ImGui::SetWindowFontScale(1.6f);
+					float textWidth = ImGui::CalcTextSize(credit.text.c_str()).x;
+					ImGui::SetCursorPos(ImVec2(640.0f - textWidth / 2.0f, yPos));
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
+					ImGui::Text("%s", credit.text.c_str());
+					ImGui::PopStyleColor();
+					ImGui::SetWindowFontScale(1.0f);
+				}
+			}
+		}
+	}
+	ImGui::End();
+#endif
+	// リリースビルドでは黒背景のみ表示（テキストはなし）
+	// TODO: リリース用にテキスト画像を用意する必要があります
 }
 
 void GameClearScene::Finalize() {
-    gameClearTextSprite_.reset();
-    retrySprite_.reset();
-    titleSprite_.reset();
-}
-
-bool GameClearScene::CheckMouseHover(const Vector2& mousePos, const Vector2& spritePos, const Vector2& spriteSize) {
-    return mousePos.x >= spritePos.x && mousePos.x <= spritePos.x + spriteSize.x &&
-           mousePos.y >= spritePos.y && mousePos.y <= spritePos.y + spriteSize.y;
+	// エンドロール用のクリーンアップ
+	credits_.clear();
+	blackBgSprite_.reset();
+	titleImageSprite_.reset();
+	logoImageSprite_.reset();
 }
