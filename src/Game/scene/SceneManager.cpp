@@ -3,6 +3,7 @@
 #include "TitleScene.h"
 #include "GamePlayScene.h"
 #include "GameOverScene.h"
+#include "GameClearScene.h"
 #include <cassert>
 
 // 静的メンバ変数の実体化
@@ -18,9 +19,9 @@ SceneManager* SceneManager::GetInstance() {
 void SceneManager::Initialize() {
     // 最初のシーンを設定
 #ifdef _DEBUG
-    nextScene_ = "GamePlay";  // デバッグ時は直接GamePlayから
+    nextScene_ = "GameClear";  // デバッグ時は直接GameClearから
 #else
-    nextScene_ = "Logo";      // リリース時はLogoから
+    nextScene_ = "Logo";       // リリース時はLogoから
 #endif
 
     // デバッグ出力
@@ -53,6 +54,8 @@ void SceneManager::Update() {
             currentScene_ = std::make_unique<GamePlayScene>();
         } else if (nextScene_ == "GameOver") {
             currentScene_ = std::make_unique<GameOverScene>();
+        } else if (nextScene_ == "GameClear") {
+            currentScene_ = std::make_unique<GameClearScene>();
         }
 
         // シーンマネージャーのポインタをセット

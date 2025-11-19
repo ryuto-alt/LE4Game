@@ -155,6 +155,7 @@
     <ClCompile Include="src\Game\Core\MyGame.cpp" />
     <ClCompile Include="src\Game\scene\GamePlayScene.cpp" />
     <ClCompile Include="src\Game\scene\GameOverScene.cpp" />
+    <ClCompile Include="src\Game\scene\GameClearScene.cpp" />
     <ClCompile Include="src\Game\scene\LogoScene.cpp" />
     <ClCompile Include="src\Game\scene\SceneManager.cpp" />
     <ClCompile Include="src\Game\scene\TitleScene.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="src\Game\Core\MyGame.h" />
     <ClInclude Include="src\Game\scene\GamePlayScene.h" />
     <ClInclude Include="src\Game\scene\GameOverScene.h" />
+    <ClInclude Include="src\Game\scene\GameClearScene.h" />
     <ClInclude Include="src\Game\scene\IScene.h" />
     <ClInclude Include="src\Game\scene\LogoScene.h" />
     <ClInclude Include="src\Game\scene\SceneManager.h" />
