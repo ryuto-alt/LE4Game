@@ -1,9 +1,7 @@
 #include "GameClearScene.h"
 #include "../../Engine/Resource/ResourcePreloader.h"
 #include "SceneManager.h"
-#ifdef _DEBUG
 #include "imgui.h"
-#endif
 
 void GameClearScene::Initialize() {
 	if (!dxCommon_ || !srvManager_ || !camera_) {
@@ -75,23 +73,28 @@ void GameClearScene::InitializeCredits() {
 	credits_.push_back({ "", false, false });
 
 	// 使用ライブラリ
-	credits_.push_back({ "Special Thanks", true, false });
+	credits_.push_back({ "library", true, false });
 	credits_.push_back({ "", false, false });
-	credits_.push_back({ "うちぼり　ゆうた", false, false });
+	credits_.push_back({ "DirectX12", false, false });
 	credits_.push_back({ "", false, false });
-	credits_.push_back({ "うちぼり　ゆうたのお父さん", false, false });
+	credits_.push_back({ "ImGui", false, false });
 	credits_.push_back({ "", false, false });
-	credits_.push_back({ "うちぼり　ゆうたのお母さん", false, false });
+	credits_.push_back({ "recastNavigationMap", false, false });
 	credits_.push_back({ "", false, false });
-	credits_.push_back({ "うちぼり　ゆうたのおばあさん", false, false });
+	credits_.push_back({ "pix", false, false });
 	credits_.push_back({ "", false, false });
-	credits_.push_back({ "うちぼり　ゆうたの友達", false, false });
+	credits_.push_back({ "Assimp", false, false });
 	credits_.push_back({ "", false, false });
-	credits_.push_back({ "うちぼり　ゆうたの猫x2", false, false });
+	credits_.push_back({ "TinyGLTF", false, false });
 	credits_.push_back({ "", false, false });
-	credits_.push_back({ "うちぼり　ゆうたの従妹x3", false, false });
+	credits_.push_back({ "Blender", false, false });
 	credits_.push_back({ "", false, false });
-	credits_.push_back({ "うちぼり　ゆうたのAirPods", false, false });
+	credits_.push_back({ "Visual Studio", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
+	credits_.push_back({ "", false, false });
 	credits_.push_back({ "", false, false });
 	credits_.push_back({ "", false, false });
 	credits_.push_back({ "", false, false });
@@ -123,16 +126,13 @@ void GameClearScene::Update() {
 	float deltaTime = 1.0f / 60.0f;
 	time_ += deltaTime;
 
-	// エンドロールのスクロール
-	if (!creditsFinished_) {
-		scrollOffset_ += scrollSpeed_ * deltaTime;
+	// エンドロールのスクロール（無限ループ）
+	scrollOffset_ += scrollSpeed_ * deltaTime;
 
-		// 全てのクレジットがスクロールし終わったかチェック
-		float totalHeight = credits_.size() * 40.0f;  // 行間40ピクセル
-		if (scrollOffset_ > totalHeight + 720.0f) {  // 画面高さ分余分にスクロール
-			creditsFinished_ = true;
-			scrollOffset_ = 0.0f;  // リセット
-		}
+	// 全てのクレジットがスクロールし終わったら最初から繰り返す
+	float totalHeight = credits_.size() * 40.0f;  // 行間40ピクセル
+	if (scrollOffset_ > totalHeight + 720.0f) {  // 画面高さ分余分にスクロール
+		scrollOffset_ = 0.0f;  // リセットして最初から
 	}
 
 	// 黒背景スプライトの更新
@@ -199,8 +199,7 @@ void GameClearScene::Draw() {
 }
 
 void GameClearScene::DrawCredits() {
-#ifdef _DEBUG
-	// デバッグビルドではImGuiでテキストを表示
+	// ImGuiでテキストを表示（デバッグ・リリース共通）
 	ImGuiWindowFlags windowFlags =
 		ImGuiWindowFlags_NoTitleBar |
 		ImGuiWindowFlags_NoResize |
@@ -254,9 +253,6 @@ void GameClearScene::DrawCredits() {
 		}
 	}
 	ImGui::End();
-#endif
-	// リリースビルドでは黒背景のみ表示（テキストはなし）
-	// TODO: リリース用にテキスト画像を用意する必要があります
 }
 
 void GameClearScene::Finalize() {

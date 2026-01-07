@@ -78,7 +78,7 @@ public:
 
 	// Debug
 	bool debugDrawVision_{false};  // 視界デバッグ描画フラグ
-	bool debugStopMovement_{false};  // デバッグ用：移動停止フラグ
+	bool debugStopMovement_{false};  // デバッグ用：移動停止フラグ（falseで徘徊開始）
 #ifdef _DEBUG
 	bool debugDrawFootBones_{true};  // 足のボーンデバッグ描画フラグ（DebugビルドのみデフォルトON）
 #else

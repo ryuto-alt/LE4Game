@@ -36,7 +36,6 @@ private:
     std::vector<CreditLine> credits_;
     float scrollOffset_ = 0.0f;
     const float scrollSpeed_ = 30.0f;  // ピクセル/秒
-    bool creditsFinished_ = false;
 
     void InitializeCredits();
     void DrawCredits();

@@ -169,10 +169,8 @@ void Enemy::Update(UnoEngine* engine) {
 		return;  // ジャンプスケア中は他の処理をスキップ
 	}
 
-#ifdef _DEBUG
-	// デバッグ用：移動停止フラグが有効な場合は移動処理をスキップ（オーディオは継続）
+// 移動停止フラグが有効な場合は移動処理をスキップ（オーディオは継続）
 	if (!debugStopMovement_) {
-#endif
 
 	// 旧システム（壁チェック・音検知・徘徊速度対応済み）
 	{
@@ -182,88 +180,11 @@ void Enemy::Update(UnoEngine* engine) {
 		}
 
 		// プレイヤー検知と追跡 (NavMeshベース)
-		if (player_ && navMesh_ && navMesh_->IsValid()) {
-			// Playerの足音を検知（30m範囲内）
-			bool soundDetected = false;
-			if (player_->HasRecentFootstep(SOUND_REACTION_TIME)) {
-				Vector3 footstepPos = player_->GetLastFootstepPosition();
-				float timeSinceFootstep = player_->GetTimeSinceLastFootstep();
-
-				if (timeSinceFootstep <= SOUND_REACTION_TIME) {
-					// 足音との距離を計算
-					float dx = footstepPos.x - position_.x;
-					float dz = footstepPos.z - position_.z;
-					float distance = std::sqrt(dx * dx + dz * dz);
-
-					if (distance <= soundDetectionRange_) {
-						// 音を検知: 最後に聞いた音の位置を記録（壁チェックなし）
-						lastHeardSoundPosition_ = footstepPos;
-						lastSoundTime_ = static_cast<float>(UnoEngine::GetInstance()->GetTotalTime());
-						soundDetected = true;
-					}
-				}
-			}
-
-			// 視界内にプレイヤーがいるかチェック
-			bool playerVisible = IsPlayerInVision();
-			Vector3 playerPos = player_->GetPosition();
-			Vector3 toPlayer = {
-				playerPos.x - position_.x,
-				playerPos.y - position_.y,
-				playerPos.z - position_.z
-			};
-			float distanceToPlayer = std::sqrt(toPlayer.x * toPlayer.x + toPlayer.y * toPlayer.y + toPlayer.z * toPlayer.z);
-
-			// 音検知時の処理: 音を聞いた位置に向かう（捜索モード）
-			if (soundDetected) {
-				// 視覚検知していない場合は音の位置をターゲットに
-				if (!playerVisible) {
-					// 音の位置が大きく変わった場合のみパスを更新
-					Vector3 soundDiff = {
-						lastHeardSoundPosition_.x - lastSeenPlayerPosition_.x,
-						0.0f,
-						lastHeardSoundPosition_.z - lastSeenPlayerPosition_.z
-					};
-					float soundMoveDist = std::sqrt(soundDiff.x * soundDiff.x + soundDiff.z * soundDiff.z);
-
-					// 音の位置が2m以上変わったら即座にパス更新
-					if (soundMoveDist > 2.0f) {
-						lastSeenPlayerPosition_ = lastHeardSoundPosition_;
-						pathUpdateTimer_ = 0.0f;  // 即座に更新
-					}
-
-					// 捜索モードに入る（歩きで向かう）
-					if (!isSearching_ && !isChasing_) {
-						ChangeAnimation("Walk");
-						isSearching_ = true;
-						lastSeenPlayerPosition_ = lastHeardSoundPosition_;
-						pathUpdateTimer_ = 0.0f;  // 初回は即座に更新
-					}
-				}
-			}
-
-			if (playerVisible) {
-				// プレイヤーが見えている：最後に見た位置を更新
-				lastSeenPlayerPosition_ = playerPos;
-				lostSightTimer_ = 0.0f;
-
-				// 視認したら捜索モードを終了し、追跡モードに移行
-				if (!isChasing_) {
-					ChangeAnimation("Run");
-					isChasing_ = true;
-					isSearching_ = false;
-				}
-			} else if (isChasing_) {
-				// 視界を失ったがまだ追跡中：タイマーを進める
-				lostSightTimer_ += deltaTime;
-			}
-
-			// 追跡条件：視界内にいる OR (視界を失って10秒以内 AND 25m以内)
-			bool shouldChase = playerVisible ||
-			                   (isChasing_ && lostSightTimer_ < LOST_SIGHT_GRACE_PERIOD && distanceToPlayer <= CHASE_RELEASE_DISTANCE);
-
-			// 捜索条件：音を検知したが視認していない
-			bool shouldSearch = soundDetected && !playerVisible && !isChasing_;
+		// コンテスト用：プレイヤーなしでも徘徊できるように
+		if (navMesh_ && navMesh_->IsValid()) {
+			// コンテスト用：追跡と捜索を無効化（徘徊のみ）
+			bool shouldChase = false;
+			bool shouldSearch = false;
 
 			if (shouldChase) {
 				// プレイヤーを追跡（Runモード）
@@ -363,9 +284,7 @@ void Enemy::Update(UnoEngine* engine) {
 		CheckAndHandleStuck(deltaTime);
 	}
 
-#ifdef _DEBUG
-	}  // debugStopMovement_のif文の終わり
-#endif
+}  // debugStopMovement_のif文の終わり
 
 	// 重力処理
 	// 地面より上にいる場合、重力を適用
@@ -1559,8 +1478,8 @@ void Enemy::ResetJumpscare() {
 	isJumpscaring_ = false;
 	jumpscareTimer_ = 0.0f;
 	
-	// アニメーションを待機状態に戻す
-	ChangeAnimation("Idle");
+	// アニメーションを歩行状態に戻す
+	ChangeAnimation("Walk");
 	
 	OutputDebugStringA("Enemy jumpscare state reset\n");
 }

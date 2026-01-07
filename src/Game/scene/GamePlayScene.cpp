@@ -90,12 +90,19 @@ void GamePlayScene::Initialize() {
 	AudioManager::GetInstance()->LoadMP3("orbGet", "Resources/Audio/get.mp3");
 	AudioManager::GetInstance()->SetVolume("orbGet", 0.5f);
 
+	// Orb取得時のパーティクルグループを作成（激しいエフェクト）
+	ParticleManager::GetInstance()->CreateParticleGroup("orbCollect", "Resources/textures/white1x1.png");
+
 	// 暗転用スプライトの初期化（黒い四角形）
 	fadeSprite_ = std::make_unique<Sprite>();
 	fadeSprite_->Initialize(spriteCommon_, "Resources/textures/white1x1.png");
 	fadeSprite_->SetPosition({0.0f, 0.0f});
 	fadeSprite_->SetSize({1280.0f, 720.0f});  // 画面全体をカバー
 	fadeSprite_->setColor({0.0f, 0.0f, 0.0f, 0.0f});  // 初期状態は透明
+
+	// コンテスト用：NavMesh可視化を有効にする
+	engine->CreateNavVis();
+	engine->SetNavVis(true);
 }
 
 
@@ -267,34 +274,64 @@ void GamePlayScene::Update() {
 		postProcess_->SetFisheyeRadius(fisheyeRadius_);
 	}
 
-	player_->HandleInput(engine);
+	// コンテスト用：プレイヤー入力無効化
+	// player_->HandleInput(engine);
 	HandleInput();
 
-	// ジャンプスケア中は通常のカメラ更新をスキップ
-	if (!jumpscareStarted_) {
-		// FPSカメラモードかどうかでカメラ更新を切り替え
-		if (fpsCamera_ && fpsCamera_->IsFPSMode()) {
-			// FPSモード: FPSカメラ専用の更新
-			fpsCamera_->UpdateCameraRotation(camera_, engine);
+	// コンテスト用：カメラをenemyの真上から追従
+	if (enemy_ && camera_) {
+		Vector3 enemyPos = enemy_->GetPosition();
 
-			// カメラシェイクを更新（プレイヤーの移動状態に基づく）
-			fpsCamera_->UpdateCameraShake(player_->IsMoving(), player_->IsRunning(), deltaTime, engine);
+		// カメラをenemyの真上に配置（高さ8m）
+		const float cameraHeight = 8.0f;
+		camera_->SetTranslate({enemyPos.x, enemyPos.y + cameraHeight, enemyPos.z});
 
-			player_->UpdateFPSCamera(fpsCamera_.get());
-			camera_->Update();
-		}
-		else {
-			// 三人称モード: 通常のカメラシステム
-			player_->UpdateCameraSystem(engine);
-		}
+		// 真下を向く（+90度 = +π/2 ラジアン）
+		camera_->SetRotate({1.5708f, 0.0f, 0.0f});  // +π/2 ≈ 1.5708
+		camera_->Update();
 	}
+
+	// ジャンプスケア中は通常のカメラ更新をスキップ
+	// if (!jumpscareStarted_) {
+	// 	// FPSカメラモードかどうかでカメラ更新を切り替え
+	// 	if (fpsCamera_ && fpsCamera_->IsFPSMode()) {
+	// 		// FPSモード: FPSカメラ専用の更新
+	// 		fpsCamera_->UpdateCameraRotation(camera_, engine);
+
+	// 		// カメラシェイクを更新（プレイヤーの移動状態に基づく）
+	// 		fpsCamera_->UpdateCameraShake(player_->IsMoving(), player_->IsRunning(), deltaTime, engine);
+
+	// 		player_->UpdateFPSCamera(fpsCamera_.get());
+	// 		camera_->Update();
+	// 	}
+	// 	else {
+	// 		// 三人称モード: 通常のカメラシステム
+	// 		player_->UpdateCameraSystem(engine);
+	// 	}
+	// }
 
 	lightManager_->Update(engine->GetDelta());
 
-	// スポットライトをプレイヤー視点に追従させる
-	if (fpsCamera_) {
-		lightManager_->UpdateFlashlight(player_->GetPosition(), fpsCamera_->GetCameraRotation());
+	// コンテスト用：ライトを大幅に強化
+	lightManager_->SetLightBoost(50.0f);
+
+	// コンテスト用：スポットライトをenemyの上から照らす
+	if (enemy_ && lightManager_) {
+		Vector3 enemyPos = enemy_->GetPosition();
+		SpotLight contestLight;
+		contestLight.position = {enemyPos.x, enemyPos.y + 8.0f, enemyPos.z};  // カメラと同じ高さ
+		contestLight.direction = {0.0f, -1.0f, 0.0f};  // 真下向き
+		contestLight.color = {1.0f, 1.0f, 1.0f, 1.0f};
+		contestLight.intensity = 200.0f;  // もっと強く
+		contestLight.innerCone = std::cos(60.0f * 3.14159f / 180.0f);
+		contestLight.outerCone = std::cos(120.0f * 3.14159f / 180.0f);  // 超広角
+		contestLight.attenuation = {1.0f, 0.0f, 0.0f};  // 減衰なし
+		lightManager_->SetJumpscareLight(contestLight);
 	}
+	// スポットライトをプレイヤー視点に追従させる
+	// if (fpsCamera_) {
+	// 	lightManager_->UpdateFlashlight(player_->GetPosition(), fpsCamera_->GetCameraRotation());
+	// }
 
 	const DirectionalLight& dirLight = lightManager_->GetDirectionalLight();
 	const SpotLight& spotLight = lightManager_->GetSpotLight();
@@ -320,8 +357,9 @@ void GamePlayScene::Update() {
 		enemy_->SetSpotLight(const_cast<SpotLight*>(&spotLight));
 		enemy_->Update(UnoEngine::GetInstance());
 
+		// コンテスト用：ジャンプスケア判定無効化
 		// プレイヤーとの距離をチェック（ジャンプスケア判定）
-		if (player_ && !isGameOver_ && !enemy_->IsJumpscaring()) {
+		if (false && player_ && !isGameOver_ && !enemy_->IsJumpscaring()) {
 			Vector3 playerPos = player_->GetPosition();
 			Vector3 enemyPos = enemy_->GetPosition();
 
@@ -549,7 +587,8 @@ void GamePlayScene::Update() {
 	if (skyboxEnabled_ && skybox_) {
 		skybox_->Update();
 	}
-	player_->Update(engine);
+	// コンテスト用：プレイヤー更新無効化
+	// player_->Update(engine);
 
 	// Orbの更新と衝突判定
 	for (auto& orb : orbs_) {
@@ -571,6 +610,47 @@ void GamePlayScene::Update() {
 
 					// Orb取得音を再生
 					AudioManager::GetInstance()->Play("orbGet", false);
+
+					// 激しいパーティクルエフェクトを発生！
+					Vector3 orbPos = orb->GetPosition();
+					// 複数回Emitして激しいエフェクトに
+					ParticleManager::GetInstance()->Emit(
+						"orbCollect",
+						orbPos,
+						50,  // パーティクル数（多め）
+						Vector3{-8.0f, -8.0f, -8.0f},  // 速度最小（激しく飛び散る）
+						Vector3{8.0f, 15.0f, 8.0f},   // 速度最大（上方向に多め）
+						Vector3{0.0f, -15.0f, 0.0f},   // 加速度最小（重力）
+						Vector3{0.0f, -5.0f, 0.0f},    // 加速度最大
+						0.3f, 0.8f,   // 開始サイズ
+						0.0f, 0.1f,   // 終了サイズ（消えていく）
+						Vector4{1.0f, 0.8f, 0.0f, 1.0f},  // 開始色：黄色（明るい）
+						Vector4{1.0f, 1.0f, 0.5f, 1.0f},  // 開始色：白〜黄色
+						Vector4{1.0f, 0.3f, 0.0f, 0.0f},  // 終了色：オレンジ（フェードアウト）
+						Vector4{1.0f, 0.5f, 0.0f, 0.0f},  // 終了色
+						0.0f, 6.28f,  // 回転（ランダム）
+						-10.0f, 10.0f, // 回転速度（激しく回転）
+						0.3f, 1.0f    // 寿命
+					);
+					// 2回目のEmit（さらに激しく）
+					ParticleManager::GetInstance()->Emit(
+						"orbCollect",
+						orbPos,
+						30,
+						Vector3{-12.0f, 5.0f, -12.0f},
+						Vector3{12.0f, 20.0f, 12.0f},
+						Vector3{0.0f, -8.0f, 0.0f},
+						Vector3{0.0f, -3.0f, 0.0f},
+						0.2f, 0.5f,
+						0.0f, 0.05f,
+						Vector4{1.0f, 1.0f, 1.0f, 1.0f},  // 白（キラキラ）
+						Vector4{1.0f, 1.0f, 0.8f, 1.0f},
+						Vector4{0.8f, 0.8f, 0.0f, 0.0f},
+						Vector4{1.0f, 0.8f, 0.2f, 0.0f},
+						0.0f, 6.28f,
+						-15.0f, 15.0f,
+						0.2f, 0.8f
+					);
 
 					// 残りのOrbを数える
 					int remainingOrbs = 0;
@@ -638,9 +718,10 @@ void GamePlayScene::Draw() {
 		cullingStats_.cullingRate = (float)cullingStats_.culledObjects / cullingStats_.totalObjects * 100.0f;
 	}
 
-	if (!fpsCamera_ || !fpsCamera_->IsFPSMode()) {
-		player_->Draw();
-	}
+	// コンテスト用：プレイヤー描画無効化
+	// if (!fpsCamera_ || !fpsCamera_->IsFPSMode()) {
+	// 	player_->Draw();
+	// }
 
 	// Orbの描画（常に描画する）
 	for (auto& orb : orbs_) {

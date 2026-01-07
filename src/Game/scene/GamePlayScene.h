@@ -73,11 +73,11 @@ private:
 
     // キャプチャカウンター（3回まで）
     int captureCount_ = 0;
-    static constexpr int MAX_CAPTURES = 3;
+    static constexpr int MAX_CAPTURES = 9999;
 
     // 初期位置
-    Vector3 playerInitialPos_ = {0.0f, 0.0f, 0.0f};
     Vector3 enemyInitialPos_ = {15.0f, 0.0f, 0.0f};
+    Vector3 playerInitialPos_ = {15.0f, 0.0f, -3.0f};  // Enemyの後ろにスポーン
 
     // リスポーン処理用
     enum class RespawnState {

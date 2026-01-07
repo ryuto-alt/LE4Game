@@ -29,7 +29,7 @@
     }
   },
   "player": {
-    "position": [0.0, 0.0, 0.0],
+    "position": [15.0, 0.0, -3.0],
     "useFPSCamera": true,
     "enableCollision": false
   },

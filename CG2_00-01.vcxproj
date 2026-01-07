@@ -58,11 +58,15 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /Zc:inline %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\Engine\Graphics;$(ProjectDir)src\Engine\Math;$(ProjectDir)src\Engine\Input;$(ProjectDir)src\Engine\Utility;$(ProjectDir)imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\DirectXTex\Common;$(ProjectDir)src\Engine\Camera;$(ProjectDir)src\Engine\Particle;$(ProjectDir)src\Engine\Audio;$(ProjectDir)src\Engine\core;$(ProjectDir)src\Game\scene;$(ProjectDir)src\Game;$(ProjectDir)src\Engine;$(ProjectDir)src\Engine\Collision;$(ProjectDir)src\Engine\Animation;$(ProjectDir)src\Engine\Scene;$(ProjectDir)src\Engine\Resource;$(ProjectDir)src\Game\Manager;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\recastnavigation\Recast\Include;$(ProjectDir)externals\recastnavigation\Detour\Include;$(ProjectDir)externals\recastnavigation\DetourCrowd\Include;$(ProjectDir)externals\recastnavigation\DebugUtils\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\Engine\Graphics;$(ProjectDir)src\Engine\Math;$(ProjectDir)src\Engine\Input;$(ProjectDir)src\Engine\Utility;$(ProjectDir)imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\DirectXTex\Common;$(ProjectDir)src\Engine\Camera;$(ProjectDir)src\Engine\Particle;$(ProjectDir)src\Engine\Audio;$(ProjectDir)src\Engine\core;$(ProjectDir)src\Game\scene;$(ProjectDir)src\Game;$(ProjectDir)src\Engine;$(ProjectDir)src\Engine\Collision;$(ProjectDir)src\Engine\Animation;$(ProjectDir)src\Engine\Scene;$(ProjectDir)src\Engine\Resource;$(ProjectDir)src\Game\Manager;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\recastnavigation\Recast\Include;$(ProjectDir)externals\recastnavigation\Detour\Include;$(ProjectDir)externals\recastnavigation\DetourCrowd\Include;$(ProjectDir)externals\recastnavigation\DebugUtils\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -72,6 +76,7 @@
       <AdditionalLibraryDirectories>$(ProjectDir)externals\assimp\lib\Debug;$(ProjectDir)externals\DirectXTex\Bin\Desktop_2022_Win10\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>WinMainCRTStartup</EntryPointSymbol>
+      <LinkIncremental>true</LinkIncremental>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll" 2&gt;NUL &amp; copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dxil.dll" 2&gt;NUL &amp; xcopy /D /Y /E /I "$(ProjectDir)Resources" "$(TargetDir)Resources"</Command>
@@ -86,10 +91,14 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /Zc:inline %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\Engine\Graphics;$(ProjectDir)src\Engine\Math;$(ProjectDir)src\Engine\Input;$(ProjectDir)src\Engine\Utility;$(ProjectDir)imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\DirectXTex\Common;$(ProjectDir)src\Engine\Camera;$(ProjectDir)src\Engine\Particle;$(ProjectDir)src\Engine\Audio;$(ProjectDir)src\Engine\core;$(ProjectDir)src\Game\scene;$(ProjectDir)src\Game;$(ProjectDir)src\Engine;$(ProjectDir)src\Engine\Collision;$(ProjectDir)src\Engine\Animation;$(ProjectDir)src\Engine\Scene;$(ProjectDir)src\Engine\Resource;$(ProjectDir)src\Game\Manager;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\recastnavigation\Recast\Include;$(ProjectDir)externals\recastnavigation\Detour\Include;$(ProjectDir)externals\recastnavigation\DetourCrowd\Include;$(ProjectDir)externals\recastnavigation\DebugUtils\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\Engine\Graphics;$(ProjectDir)src\Engine\Math;$(ProjectDir)src\Engine\Input;$(ProjectDir)src\Engine\Utility;$(ProjectDir)imgui;$(ProjectDir)externals\DirectXTex;$(ProjectDir)externals\DirectXTex\Common;$(ProjectDir)src\Engine\Camera;$(ProjectDir)src\Engine\Particle;$(ProjectDir)src\Engine\Audio;$(ProjectDir)src\Engine\core;$(ProjectDir)src\Game\scene;$(ProjectDir)src\Game;$(ProjectDir)src\Engine;$(ProjectDir)src\Engine\Collision;$(ProjectDir)src\Engine\Animation;$(ProjectDir)src\Engine\Scene;$(ProjectDir)src\Engine\Resource;$(ProjectDir)src\Game\Manager;$(ProjectDir)externals\assimp\include;$(ProjectDir)externals\recastnavigation\Recast\Include;$(ProjectDir)externals\recastnavigation\Detour\Include;$(ProjectDir)externals\recastnavigation\DetourCrowd\Include;$(ProjectDir)externals\recastnavigation\DebugUtils\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -105,13 +114,30 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="externals\imgui\imgui.cpp" />
-    <ClCompile Include="externals\imgui\imgui_demo.cpp" />
-    <ClCompile Include="externals\imgui\imgui_draw.cpp" />
-    <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp" />
-    <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="externals\imgui\imgui_tables.cpp" />
-    <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_demo.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_draw.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_impl_win32.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_tables.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\imgui\imgui_widgets.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="src\Engine\Audio\AudioSource.cpp" />
     <ClCompile Include="src\Engine\Audio\Mp3File.cpp" />
@@ -176,24 +202,60 @@
     <ClCompile Include="src\Engine\Resource\ResourcePreloader.cpp" />
     <ClCompile Include="src\Engine\Scene\SceneLoader.cpp" />
     <ClCompile Include="src\Engine\Scene\SceneConfigurator.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\Recast.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAlloc.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastArea.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAssert.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastContour.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastFilter.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastLayers.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastMesh.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastMeshDetail.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastRasterization.cpp" />
-    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastRegion.cpp" />
-    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourAlloc.cpp" />
-    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourAssert.cpp" />
-    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourCommon.cpp" />
-    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMesh.cpp" />
-    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMeshBuilder.cpp" />
-    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMeshQuery.cpp" />
-    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNode.cpp" />
+    <ClCompile Include="externals\recastnavigation\Recast\Source\Recast.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAlloc.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastArea.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastAssert.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastContour.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastFilter.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastLayers.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastMesh.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastMeshDetail.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastRasterization.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Recast\Source\RecastRegion.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourAlloc.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourAssert.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourCommon.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMesh.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMeshBuilder.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNavMeshQuery.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\recastnavigation\Detour\Source\DetourNode.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -272,6 +334,7 @@
     <ClInclude Include="src\Engine\Resource\ResourcePreloader.h" />
     <ClInclude Include="src\Engine\Scene\SceneLoader.h" />
     <ClInclude Include="src\Engine\Scene\SceneConfigurator.h" />
+    <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
